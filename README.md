@@ -1,4 +1,6 @@
-# nextarter-chakra
+# MONNOMLOG
+
+예쁘고 편리하고 모던한 개발자 블로그 패키지
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/import/git?s=https://github.com/sozonome/nextarter-chakra) [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/sozonome/nextarter-chakra)
 

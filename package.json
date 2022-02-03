@@ -16,7 +16,8 @@
     "up-latest": "yarn up --latest",
     "release": "standard-version",
     "push-release": "git push --follow-tags origin main",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "make-hook-executable": "chmod ug+x .husky/* && chmod ug+x .git/hooks/*"
   },
   "dependencies": {
     "@chakra-ui/react": "^1.8.1",
