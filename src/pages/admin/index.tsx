@@ -1,5 +1,5 @@
 import AdminLayout from "@lib/components/layout/AdminLayout";
-import { useAdminPageGuard } from "@lib/hooks/auth";
+import { useAdminPageGuard } from "@lib/hooks";
 import type { Post } from "@prisma/client";
 import type { ReactElement } from "react";
 
