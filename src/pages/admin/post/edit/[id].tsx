@@ -1,9 +1,10 @@
-import React from "react";
+import type { MonnomlogPage } from "@lib/types";
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface IPostEditProps {}
 
-const PostEdit: React.FC<IPostEditProps> = () => {
-  return <></>;
+const PostEdit: MonnomlogPage<IPostEditProps> = () => {
+  return <div />;
 };
 
 export default PostEdit;

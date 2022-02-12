@@ -1,13 +1,13 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import { ChakraProvider } from "@chakra-ui/react";
-import type { EmotionCache } from "@emotion/cache";
+import type { EmotionCache } from "@emotion/react";
 import { CacheProvider } from "@emotion/react";
-import type { NextPage } from "next";
+import type { MonnomlogPage } from "@lib/types";
 import { SessionProvider } from "next-auth/react";
 import { DefaultSeo } from "next-seo";
 import type { AppProps } from "next/app";
 import Head from "next/head";
-import type { ReactElement, ReactNode } from "react";
+import type { ReactElement } from "react";
 
 import defaultSEOConfig from "../../next-seo.config";
 import Layout from "lib/components/layout";
@@ -19,16 +19,12 @@ import "lib/styles/globals.css";
 
 const clientSideEmotionCache = createEmotionCache();
 
-type NextPageWithLayout = NextPage & {
-  wrap?: (page: ReactElement) => ReactNode;
-};
+const defaultGetLayout = (page: ReactElement) => <Layout>{page}</Layout>;
 
 interface IMyAppProps extends AppProps {
   emotionCache?: EmotionCache;
-  Component: NextPageWithLayout;
+  Component: MonnomlogPage;
 }
-
-const defaultGetLayout = (page: ReactElement) => <Layout>{page}</Layout>;
 
 const MyApp = ({
   Component,

@@ -8,10 +8,11 @@ import {
   Td,
   TableCaption,
 } from "@chakra-ui/react";
+import { wrapAdminLayout } from "@lib/components/layout/AdminLayout";
 import prisma from "@lib/prisma";
+import type { MonnomlogPage } from "@lib/types";
 import type { Post } from "@prisma/client";
 import type { GetServerSideProps } from "next";
-import type React from "react";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface IPostListProps {
@@ -22,7 +23,9 @@ interface IPostListProps {
   })[];
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps<
+  IPostListProps
+> = async () => {
   const posts = await prisma.post.findMany({
     include: {
       author: {
@@ -37,7 +40,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-const PostList: React.FC<IPostListProps> = ({ posts }) => {
+const PostList: MonnomlogPage<IPostListProps> = ({ posts }) => {
   return (
     <Table>
       <TableCaption>Posts</TableCaption>
@@ -69,5 +72,7 @@ const PostList: React.FC<IPostListProps> = ({ posts }) => {
     </Table>
   );
 };
+
+PostList.wrap = wrapAdminLayout;
 
 export default PostList;

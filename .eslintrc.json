@@ -5,6 +5,9 @@
     "plugin:@next/next/recommended"
   ],
   "rules": {
+    // const PostList: MonnomlogPage<IPostListProps> = (props) => { ... } 와 같이 썼을 때
+    // props 에 타입이 없다고 오진하고 에러를 발생시킴.
+    "react/prop-types": "off",
     "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": [
       "error",
