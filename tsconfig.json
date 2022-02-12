@@ -18,7 +18,12 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "baseUrl": "src",
-    "incremental": true
+    "incremental": true,
+    "paths": {
+      "@lib/*": [
+        "lib/*"
+      ],
+    }
   },
   "include": [
     "next-env.d.ts",

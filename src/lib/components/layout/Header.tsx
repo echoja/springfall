@@ -1,15 +1,10 @@
 import { Box, Button, Flex, Heading } from "@chakra-ui/react";
-import { useSession, signOut } from "next-auth/react";
+import { useSession, signOut, signIn } from "next-auth/react";
 import Link from "next/link";
-import { useRouter } from "next/router";
 
 import ThemeToggle from "./ThemeToggle";
 
 const Header = () => {
-  const router = useRouter();
-  const isActive: (pathname: string) => boolean = (pathname) =>
-    router.pathname === pathname;
-
   const { data: session, status } = useSession();
 
   if (status === "loading") {
@@ -22,17 +17,16 @@ const Header = () => {
         <Link href="/">nextarter-chakra</Link>
       </Heading>
 
-      <Box marginLeft="auto">
+      <Box marginLeft="auto" marginRight="3">
         {!session ? (
-          <Link href="/api/auth/signin">
-            <a data-active={isActive("/signup")}>Log in</a>
-          </Link>
+          <Button onClick={() => signIn("github")}>로그인</Button>
         ) : (
           <Button onClick={() => signOut()}>
-            <a>Log out</a>
+            <a>로그아웃</a>
           </Button>
         )}
-
+      </Box>
+      <Box>
         <ThemeToggle />
       </Box>
     </Flex>
