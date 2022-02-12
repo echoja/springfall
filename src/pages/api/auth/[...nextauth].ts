@@ -28,4 +28,11 @@ export default NextAuth({
   },
   adapter: PrismaAdapter(prisma),
   secret: process.env.NEXTAUTH_SESSION_SECRET,
+  callbacks: {
+    async signIn(params) {
+      // eslint-disable-next-line no-console
+      console.log(params);
+      return true;
+    },
+  },
 });
