@@ -8,11 +8,12 @@ import {
   Td,
   TableCaption,
 } from "@chakra-ui/react";
-import { wrapAdminLayout } from "@lib/components/layout/AdminLayout";
+import { adminLayoutWrap } from "@lib/components/layout/AdminLayout";
 import prisma from "@lib/prisma";
 import type { MonnomlogPage } from "@lib/types";
 import type { Post } from "@prisma/client";
 import type { GetServerSideProps } from "next";
+import Link from "next/link";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface IPostListProps {
@@ -54,7 +55,11 @@ const PostList: MonnomlogPage<IPostListProps> = ({ posts }) => {
       <Tbody>
         {posts.map((post) => (
           <Tr key={post.id}>
-            <Td>{post.title}</Td>
+            <Td>
+              <Link href={`/admin/post/edit/${post.id}`}>
+                <a>{post.title}</a>
+              </Link>
+            </Td>
             <Td>{post.author?.name}</Td>
             <Td>{post.published ? "Yes" : "No"}</Td>
           </Tr>
@@ -73,6 +78,6 @@ const PostList: MonnomlogPage<IPostListProps> = ({ posts }) => {
   );
 };
 
-PostList.wrap = wrapAdminLayout;
+PostList.wrap = adminLayoutWrap;
 
 export default PostList;

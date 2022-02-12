@@ -1,4 +1,4 @@
-import { wrapAdminLayout } from "@lib/components/layout/AdminLayout";
+import { adminLayoutWrap } from "@lib/components/layout/AdminLayout";
 import { useAdminPageGuard } from "@lib/hooks";
 import type { Post } from "@prisma/client";
 
@@ -15,4 +15,4 @@ export default function Admin({ feed: _feed }: IPagesProps) {
   return <div>hello admin!</div>;
 }
 
-Admin.wrap = wrapAdminLayout;
+Admin.wrap = adminLayoutWrap;
