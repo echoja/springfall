@@ -1,9 +1,8 @@
+import prisma from "@lib/prisma";
 import type { Post } from "@prisma/client";
 import type { GetStaticProps } from "next";
 
-import prisma from "../lib/prisma";
-
-interface PagesProps {
+interface IPagesProps {
   feed: (Post & {
     author: {
       name: string | null;
@@ -12,7 +11,7 @@ interface PagesProps {
 }
 
 // eslint-disable-next-line import/prefer-default-export
-export const getStaticProps: GetStaticProps<PagesProps> = async () => {
+export const getStaticProps: GetStaticProps<IPagesProps> = async () => {
   const feed = await prisma.post.findMany({
     where: { published: true },
     include: {
@@ -24,7 +23,7 @@ export const getStaticProps: GetStaticProps<PagesProps> = async () => {
   return { props: { feed } };
 };
 
-export default function Pages({ feed }: PagesProps) {
+export default function Pages({ feed }: IPagesProps) {
   return feed.map((post) => (
     <div>
       <h2>{post.title}</h2>

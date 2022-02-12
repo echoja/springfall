@@ -1,10 +1,9 @@
 // pages/api/auth/[...nextauth].ts
 
+import prisma from "@lib/prisma";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import NextAuth from "next-auth";
 import GitHubProvider from "next-auth/providers/github";
-
-import prisma from "../../../lib/prisma";
 
 export default NextAuth({
   providers: [
@@ -14,7 +13,16 @@ export default NextAuth({
     }),
   ],
   callbacks: {
-    signIn: async (_params) => {
+    signIn: async ({ profile }) => {
+      const users = await prisma.user.findMany();
+      if (users.length > 1) {
+        throw new Error("Multiple users found");
+      }
+
+      if (users[0]?.email !== profile.email) {
+        throw new Error("user is not admin");
+      }
+
       return true;
     },
   },

@@ -2,21 +2,22 @@
 import { ChakraProvider } from "@chakra-ui/react";
 import type { EmotionCache } from "@emotion/cache";
 import { CacheProvider } from "@emotion/react";
+import { SessionProvider } from "next-auth/react";
 import { DefaultSeo } from "next-seo";
 import type { AppProps } from "next/app";
 import Head from "next/head";
-import "@fontsource/lexend/latin.css";
-import { SessionProvider } from "next-auth/react";
 
 import defaultSEOConfig from "../../next-seo.config";
 import Layout from "lib/components/layout";
 import createEmotionCache from "lib/styles/createEmotionCache";
 import customTheme from "lib/styles/customTheme";
+
+import "@fontsource/lexend/latin.css";
 import "lib/styles/globals.css";
 
 const clientSideEmotionCache = createEmotionCache();
 
-interface MyAppProps extends AppProps {
+interface IMyAppProps extends AppProps {
   emotionCache?: EmotionCache;
 }
 
@@ -24,7 +25,7 @@ const MyApp = ({
   Component,
   pageProps,
   emotionCache = clientSideEmotionCache,
-}: MyAppProps) => {
+}: IMyAppProps) => {
   return (
     <CacheProvider value={emotionCache}>
       <ChakraProvider theme={customTheme}>

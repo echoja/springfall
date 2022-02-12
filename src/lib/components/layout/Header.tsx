@@ -14,7 +14,7 @@ const Header = () => {
   return (
     <Flex as="header" width="full" align="center">
       <Heading as="h1" size="md">
-        <Link href="/">nextarter-chakra</Link>
+        <Link href="/">monnomlog</Link>
       </Heading>
 
       <Box marginLeft="auto" marginRight="3">
