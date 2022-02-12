@@ -1,4 +1,5 @@
-import { Box, Flex, Heading } from "@chakra-ui/react";
+import { Box, Flex, Heading, Divider } from "@chakra-ui/react";
+import Link from "next/link";
 import type { ReactNode } from "react";
 
 interface ILayoutProps {
@@ -12,6 +13,10 @@ const AdminLayout = ({ children }: ILayoutProps) => {
         <Heading as="h2" size="md">
           관리자
         </Heading>
+        <Divider marginTop={3} marginBottom={4} />
+        <Link href="/admin/post/list">
+          <a>게시글 목록</a>
+        </Link>
       </Box>
       <Box margin="8" as="main" flex="1">
         {children}
