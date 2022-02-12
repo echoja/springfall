@@ -7,7 +7,7 @@
     "db:studio": "prisma studio",
     "db:push": "prisma db push",
     "db:generate": "prisma generate",
-    "build": "next-sitemap --config next-sitemap.config.js && yarn db:push && next build",
+    "build": "yarn db:push && next build && next-sitemap --config next-sitemap.config.js",
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --noEmit",
