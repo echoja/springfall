@@ -1,0 +1,18 @@
+{
+  "Default Next.js Page Component": {
+    "prefix": "nextjs-component",
+    "body": [
+      "import React from 'react';",
+      "",
+      "interface I${TM_FILENAME_BASE/(^[a-z])|\\-([0-9a-z])/${1:/capitalize}${2:/capitalize}/g}Props {}",
+      "",
+      "const ${TM_FILENAME_BASE/(^[a-z])|\\-([0-9a-z])/${1:/capitalize}${2:/capitalize}/g}: React.FC<I${TM_FILENAME_BASE/(^[a-z])|\\-([0-9a-z])/${1:/capitalize}${2:/capitalize}/g}Props> = () => {",
+      "  return (<></>);",
+      "};",
+      "",
+      "export default ${TM_FILENAME_BASE/(^[a-z])|\\-([0-9a-z])/${1:/capitalize}${2:/capitalize}/g};",
+      ""
+    ],
+    "description": "Default Next.js"
+  }
+}
