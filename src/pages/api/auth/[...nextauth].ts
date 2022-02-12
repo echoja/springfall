@@ -19,7 +19,7 @@ export default NextAuth({
         throw new Error("Multiple users found");
       }
 
-      if (users[0]?.email !== profile.email) {
+      if (users[0]?.email && users[0]?.email !== profile.email) {
         throw new Error("user is not admin");
       }
 
