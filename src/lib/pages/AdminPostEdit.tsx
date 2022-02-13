@@ -1,18 +1,22 @@
 import { Box, Input } from "@chakra-ui/react";
 import type { Post } from "@prisma/client";
-import { useRouter } from "next/router";
+import MarkdownIt from "markdown-it";
 import type React from "react";
 import { useCallback, useState } from "react";
+import MdEditor from "react-markdown-editor-lite";
+// import style manually
+import "react-markdown-editor-lite/lib/index.css";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface IAdminPostEditProps {
   post: Post;
 }
 
+const mdParser = new MarkdownIt(/* Markdown-it options */);
+
 const AdminPostEdit: React.FC<IAdminPostEditProps> = ({ post }) => {
-  const [_content, _setContent] = useState(post.content);
+  const [content, setContent] = useState(post.content ?? undefined);
   const [title, setTitle] = useState(post.title);
-  const router = useRouter();
 
   const onTitlechange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,7 +28,12 @@ const AdminPostEdit: React.FC<IAdminPostEditProps> = ({ post }) => {
   return (
     <Box>
       <Input value={title} onChange={onTitlechange} />
-      {router.query.id}
+      <MdEditor
+        style={{ height: "500px" }}
+        value={content}
+        renderHTML={(text) => mdParser.render(text)}
+        onChange={({ text }) => setContent(text)}
+      />
     </Box>
   );
 };
