@@ -1,3 +1,5 @@
+// 예시를 위해 남겨둡니다.
+
 import prisma from "@lib/prisma";
 import type { Post } from "@prisma/client";
 import type { GetStaticProps } from "next";

@@ -1,7 +1,6 @@
 import { Box, Flex, Link, Text, useColorMode } from "@chakra-ui/react";
+import MotionBox from "@lib/components/motion/MotionBox";
 import Image from "next/image";
-
-import MotionBox from "lib/components/motion/Box";
 
 import HelperImage from "./HelperImage";
 
