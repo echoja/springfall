@@ -45,3 +45,6 @@ sitemap*.xml
 
 # TS
 *.tsbuildinfo
+
+# generated files
+generated

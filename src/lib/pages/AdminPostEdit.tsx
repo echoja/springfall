@@ -1,7 +1,16 @@
-import { Box, Button, ButtonGroup, Flex, Input, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  ButtonGroup,
+  Flex,
+  Input,
+  Text,
+  useToast,
+} from "@chakra-ui/react";
 import { faAngleLeft, faFloppyDisk } from "@fortawesome/pro-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { Post } from "@prisma/client";
+import ky from "ky";
 import MarkdownIt from "markdown-it";
 import type React from "react";
 import { useCallback, useState } from "react";
@@ -18,6 +27,7 @@ const mdParser = new MarkdownIt(/* Markdown-it options */);
 
 const AdminPostEdit: React.FC<IAdminPostEditProps> = ({ post }) => {
   const [content, setContent] = useState(post.content ?? undefined);
+  const toast = useToast();
   const [title, setTitle] = useState(post.title);
 
   const onTitlechange = useCallback(
@@ -26,6 +36,32 @@ const AdminPostEdit: React.FC<IAdminPostEditProps> = ({ post }) => {
     },
     []
   );
+
+  const onSaveButtonClick = useCallback(async () => {
+    try {
+      const result = await ky
+        .post(`/api/post/${post.id}/save`, {
+          json: { title, content },
+        })
+        .json<Post>();
+
+      toast({
+        status: "success",
+        title: "포스팅이 성공적으로 저장었습니다.",
+      });
+
+      // eslint-disable-next-line no-console
+      console.log("result", result);
+    } catch (e: unknown) {
+      toast({
+        status: "error",
+        title: "포스팅 저장이 실패했습니다.",
+      });
+
+      // eslint-disable-next-line no-console
+      console.log("error", e);
+    }
+  }, [content, post, title, toast]);
 
   return (
     <Box>
@@ -49,7 +85,7 @@ const AdminPostEdit: React.FC<IAdminPostEditProps> = ({ post }) => {
             </Box>
             <Text>목록으로 돌아가기</Text>
           </Button>
-          <Button>
+          <Button onClick={onSaveButtonClick}>
             <Box mr={2}>
               <FontAwesomeIcon icon={faFloppyDisk} />
             </Box>
