@@ -1,4 +1,6 @@
-import { Box, Input } from "@chakra-ui/react";
+import { Box, Button, ButtonGroup, Flex, Input, Text } from "@chakra-ui/react";
+import { faAngleLeft, faFloppyDisk } from "@fortawesome/pro-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { Post } from "@prisma/client";
 import MarkdownIt from "markdown-it";
 import type React from "react";
@@ -34,6 +36,27 @@ const AdminPostEdit: React.FC<IAdminPostEditProps> = ({ post }) => {
         renderHTML={(text) => mdParser.render(text)}
         onChange={({ text }) => setContent(text)}
       />
+      <Flex justify="end">
+        <ButtonGroup
+          justifyContent="end"
+          w="100%"
+          colorScheme="blackAlpha"
+          mt={4}
+        >
+          <Button variant="outline">
+            <Box mr={2}>
+              <FontAwesomeIcon icon={faAngleLeft} />
+            </Box>
+            <Text>목록으로 돌아가기</Text>
+          </Button>
+          <Button>
+            <Box mr={2}>
+              <FontAwesomeIcon icon={faFloppyDisk} />
+            </Box>
+            <Text>저장</Text>
+          </Button>
+        </ButtonGroup>
+      </Flex>
     </Box>
   );
 };
