@@ -2,14 +2,9 @@
 
 예쁘고 편리하고 모던한 개발자 블로그 패키지
 
-https://www.notion.so/ezkorry/MONNOMLOG-177f0ecce08043669bfc24797272cd1b
+[기획 문서](https://www.notion.so/ezkorry/MONNOMLOG-177f0ecce08043669bfc24797272cd1b)
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/import/git?s=https://github.com/sozonome/nextarter-chakra) [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/sozonome/nextarter-chakra)
-
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/sozonome/nextarter-chakra)
-
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app), added with [**Chakra UI**](https://chakra-ui.com) and [**TypeScript**](https://www.typescriptlang.org) setup.
-Start developing right away!
+[![Depfu](https://badges.depfu.com/badges/37441f284b6c8a355e802d0667137107/status.svg)](https://depfu.com)
 
 ## 🔋⚡ Battery Packed template
 
