@@ -1,10 +1,8 @@
+import { authGuard } from "@lib/api-guard";
 import prisma from "@lib/prisma";
 import type { NextApiRequest, NextApiResponse } from "next";
 
-export default async function createNew(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export default authGuard(async (req: NextApiRequest, res: NextApiResponse) => {
   const post = await prisma.post.create({
     data: {
       title: req.body.title,
@@ -14,4 +12,4 @@ export default async function createNew(
 
   res.statusCode = 200;
   res.json(post);
-}
+});

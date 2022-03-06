@@ -10,3 +10,7 @@ export function parseQueryToNumber(
     10
   );
 }
+
+export function noopFunction() {
+  // noop
+}
