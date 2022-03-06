@@ -1,5 +1,6 @@
-import { adminLayoutWrap } from "@lib/components/layout/AdminLayout";
+import { adminLayoutWrapper } from "@lib/components/layout/AdminLayout";
 import { useAdminPageGuard } from "@lib/hooks";
+import type { MonnomlogPage } from "@lib/types";
 import type { Post } from "@prisma/client";
 
 interface IPagesProps {
@@ -10,9 +11,11 @@ interface IPagesProps {
   })[];
 }
 
-export default function Admin({ feed: _feed }: IPagesProps) {
+export const Admin: MonnomlogPage<IPagesProps> = ({ feed: _feed }) => {
   useAdminPageGuard();
   return <div>hello admin!</div>;
-}
+};
 
-Admin.wrap = adminLayoutWrap;
+Admin.layoutWrapper = adminLayoutWrapper;
+
+export default Admin;

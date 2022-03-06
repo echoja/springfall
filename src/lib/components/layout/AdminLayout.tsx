@@ -25,7 +25,7 @@ const AdminLayout = ({ children }: ILayoutProps) => {
   );
 };
 
-export const adminLayoutWrap = (page: ReactNode) => {
+export const adminLayoutWrapper = (page: ReactNode) => {
   return <AdminLayout>{page}</AdminLayout>;
 };
 export default AdminLayout;
