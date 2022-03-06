@@ -3,45 +3,34 @@ import {
   Button,
   ButtonGroup,
   Flex,
-  Input,
-  Text,
   useToast,
+  Text,
 } from "@chakra-ui/react";
 import { faAngleLeft, faFloppyDisk } from "@fortawesome/pro-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { adminLayoutWrapper } from "@lib/components/layout/AdminLayout";
+import type { PostEditArgs } from "@lib/pages/PostEditor";
+import PostEditor from "@lib/pages/PostEditor";
+import type { MonnomlogPage } from "@lib/types";
 import type { Post } from "@prisma/client";
 import ky from "ky";
-import MarkdownIt from "markdown-it";
-import type React from "react";
+import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
-import MdEditor from "react-markdown-editor-lite";
-// import style manually
-import "react-markdown-editor-lite/lib/index.css";
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface IAdminPostEditProps {
-  post: Post;
-}
-
-const mdParser = new MarkdownIt(/* Markdown-it options */);
-
-const AdminPostEdit: React.FC<IAdminPostEditProps> = ({ post }) => {
-  const [content, setContent] = useState(post.content ?? undefined);
+const PostEdit: MonnomlogPage = () => {
+  const router = useRouter();
   const toast = useToast();
-  const [title, setTitle] = useState(post.title);
 
-  const onTitlechange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setTitle(e.target.value);
-    },
-    []
-  );
+  const [postEditing, setPostEditing] = useState<PostEditArgs>({
+    title: "",
+    content: "",
+  });
 
   const onSaveButtonClick = useCallback(async () => {
     try {
       const result = await ky
-        .post(`/api/post/${post.id}/save`, {
-          json: { title, content },
+        .post(`/api/post/save-new`, {
+          json: postEditing,
         })
         .json<Post>();
 
@@ -51,7 +40,8 @@ const AdminPostEdit: React.FC<IAdminPostEditProps> = ({ post }) => {
       });
 
       // eslint-disable-next-line no-console
-      console.log("result", result);
+      console.log("# result", result);
+      router.push(`/admin/post/edit/${result.id}`);
     } catch (e: unknown) {
       toast({
         status: "error",
@@ -61,17 +51,20 @@ const AdminPostEdit: React.FC<IAdminPostEditProps> = ({ post }) => {
       // eslint-disable-next-line no-console
       console.log("error", e);
     }
-  }, [content, post, title, toast]);
+  }, [postEditing, router, toast]);
+
+  const onChangePost = useCallback((post: PostEditArgs) => {
+    if (!post) {
+      return;
+    }
+    setPostEditing(post);
+  }, []);
 
   return (
-    <Box>
-      <Input value={title} onChange={onTitlechange} />
-      <MdEditor
-        style={{ height: "500px" }}
-        value={content}
-        renderHTML={(text) => mdParser.render(text)}
-        onChange={({ text }) => setContent(text)}
-      />
+    <>
+      {postEditing && (
+        <PostEditor post={postEditing} onChangePost={onChangePost} />
+      )}
       <Flex justify="end">
         <ButtonGroup
           justifyContent="end"
@@ -93,8 +86,10 @@ const AdminPostEdit: React.FC<IAdminPostEditProps> = ({ post }) => {
           </Button>
         </ButtonGroup>
       </Flex>
-    </Box>
+    </>
   );
 };
 
-export default AdminPostEdit;
+PostEdit.layoutWrapper = adminLayoutWrapper;
+
+export default PostEdit;

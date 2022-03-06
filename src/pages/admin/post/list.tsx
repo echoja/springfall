@@ -7,15 +7,20 @@ import {
   Th,
   Td,
   TableCaption,
+  Button,
+  Box,
+  Text,
+  Link as ChakraLink,
 } from "@chakra-ui/react";
-import { adminLayoutWrap } from "@lib/components/layout/AdminLayout";
+import { faPen } from "@fortawesome/pro-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { adminLayoutWrapper } from "@lib/components/layout/AdminLayout";
 import prisma from "@lib/prisma";
 import type { MonnomlogPage } from "@lib/types";
 import type { Post } from "@prisma/client";
 import type { GetServerSideProps } from "next";
 import Link from "next/link";
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface IPostListProps {
   posts: (Post & {
     author: {
@@ -43,41 +48,51 @@ export const getServerSideProps: GetServerSideProps<
 
 const PostList: MonnomlogPage<IPostListProps> = ({ posts }) => {
   return (
-    <Table>
-      <TableCaption>Posts</TableCaption>
-      <Thead>
-        <Tr>
-          <Th>Title</Th>
-          <Th>Author</Th>
-          <Th>Published</Th>
-        </Tr>
-      </Thead>
-      <Tbody>
-        {posts.map((post) => (
-          <Tr key={post.id}>
-            <Td>
-              <Link href={`/admin/post/edit/${post.id}`}>
-                <a>{post.title}</a>
-              </Link>
-            </Td>
-            <Td>{post.author?.name}</Td>
-            <Td>{post.published ? "Yes" : "No"}</Td>
+    <Box>
+      <Table>
+        <TableCaption>Posts</TableCaption>
+        <Thead>
+          <Tr>
+            <Th>Title</Th>
+            <Th>Author</Th>
+            <Th>Published</Th>
           </Tr>
-        ))}
-      </Tbody>
-      <Tfoot>
-        <Tr>
-          <Td colSpan={3}>
-            <p>
-              <strong>{posts.length}</strong> posts
-            </p>
-          </Td>
-        </Tr>
-      </Tfoot>
-    </Table>
+        </Thead>
+        <Tbody>
+          {posts.map((post) => (
+            <Tr key={post.id}>
+              <Td>
+                <Link href={`/admin/post/edit/${post.id}`} passHref>
+                  <ChakraLink>{post.title}</ChakraLink>
+                </Link>
+              </Td>
+              <Td>{post.author?.name}</Td>
+              <Td>{post.published ? "Yes" : "No"}</Td>
+            </Tr>
+          ))}
+        </Tbody>
+        <Tfoot>
+          <Tr>
+            <Td colSpan={3}>
+              <p>
+                <strong>{posts.length}</strong> posts
+              </p>
+            </Td>
+          </Tr>
+        </Tfoot>
+      </Table>
+      <Link href="/admin/post/new" passHref>
+        <Button as="a">
+          <Box mr={2}>
+            <FontAwesomeIcon icon={faPen} />
+          </Box>
+          <Text>새 글 쓰기</Text>
+        </Button>
+      </Link>
+    </Box>
   );
 };
 
-PostList.wrap = adminLayoutWrap;
+PostList.layoutWrapper = adminLayoutWrapper;
 
 export default PostList;

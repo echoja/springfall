@@ -1,6 +1,10 @@
 // lib/prisma.ts
 import { PrismaClient } from "@prisma/client";
 
-const prisma: PrismaClient = new PrismaClient();
+import { isDevelopment } from "./config";
+
+const prisma: PrismaClient = new PrismaClient({
+  log: isDevelopment() ? ["query", "info", "warn", "error"] : undefined,
+});
 
 export default prisma;

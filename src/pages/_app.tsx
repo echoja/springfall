@@ -35,7 +35,7 @@ const MyApp = ({
   pageProps,
   emotionCache = clientSideEmotionCache,
 }: IMyAppProps) => {
-  const wrap = Component.wrap ?? defaultGetLayout;
+  const wrap = Component.layoutWrapper ?? defaultGetLayout;
 
   return (
     <CacheProvider value={emotionCache}>
@@ -45,6 +45,13 @@ const MyApp = ({
             <meta
               name="viewport"
               content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, viewport-fit=cover"
+            />
+            <link
+              rel="preload"
+              href="/IropkeBatangM.woff"
+              as="font"
+              type="font/woff"
+              crossOrigin="anonymous"
             />
           </Head>
           <DefaultSeo {...defaultSEOConfig} />

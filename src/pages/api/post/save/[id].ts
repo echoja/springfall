@@ -1,11 +1,11 @@
 import prisma from "@lib/prisma";
-import { roughlyParseQueryToNumber } from "@lib/util";
+import { parseQueryToNumber } from "@lib/util";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function save(req: NextApiRequest, res: NextApiResponse) {
   const post = await prisma.post.update({
     where: {
-      id: roughlyParseQueryToNumber(req.query.id),
+      id: parseQueryToNumber(req.query.id),
     },
     data: {
       title: req.body.title,

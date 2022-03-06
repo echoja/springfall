@@ -1,17 +1,13 @@
 // pages/api/auth/[...nextauth].ts
 
+import { getGithubCredentials, getNextauthSecret } from "@lib/config";
 import prisma from "@lib/prisma";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import NextAuth from "next-auth";
 import GitHubProvider from "next-auth/providers/github";
 
 export default NextAuth({
-  providers: [
-    GitHubProvider({
-      clientId: process.env.GITHUB_ID,
-      clientSecret: process.env.GITHUB_SECRET,
-    }),
-  ],
+  providers: [GitHubProvider(getGithubCredentials())],
   callbacks: {
     signIn: async ({ profile }) => {
       const users = await prisma.user.findMany();
@@ -27,5 +23,5 @@ export default NextAuth({
     },
   },
   adapter: PrismaAdapter(prisma),
-  secret: process.env.NEXTAUTH_SESSION_SECRET,
+  secret: getNextauthSecret(),
 });

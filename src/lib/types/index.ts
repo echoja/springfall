@@ -5,5 +5,5 @@ export * from "./merge";
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type MonnomlogPage<P = {}> = NextPage<P> & {
-  wrap?: (page: ReactElement) => ReactNode;
+  layoutWrapper?: (page: ReactElement) => ReactNode;
 };
