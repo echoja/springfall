@@ -1,8 +1,9 @@
+import { authGuard } from "@lib/api-guard";
 import prisma from "@lib/prisma";
 import { parseQueryToNumber } from "@lib/util";
 import type { NextApiRequest, NextApiResponse } from "next";
 
-export default async function save(req: NextApiRequest, res: NextApiResponse) {
+export default authGuard(async (req: NextApiRequest, res: NextApiResponse) => {
   const post = await prisma.post.update({
     where: {
       id: parseQueryToNumber(req.query.id),
@@ -15,4 +16,4 @@ export default async function save(req: NextApiRequest, res: NextApiResponse) {
 
   res.statusCode = 200;
   res.json(post);
-}
+});
