@@ -11,40 +11,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { adminLayoutWrapper } from "@lib/components/layout/AdminLayout";
 import type { PostEditArgs } from "@lib/pages/PostEditor";
 import PostEditor from "@lib/pages/PostEditor";
-import prisma from "@lib/prisma";
 import type { MonnomlogPage } from "@lib/types";
 import type { Post } from "@prisma/client";
 import ky from "ky";
-import type { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
-interface IPostNewProps {}
-
-// export const getServerSideProps: GetServerSideProps<IPostEditProps> = async (
-//   context
-// ) => {
-//   const id = context?.params?.id;
-
-//   if (!id) {
-//     return {
-//       props: {
-//         post: null,
-//       },
-//     };
-//   }
-//   const post = await prisma.post.findUnique({
-//     where: {
-//       id: Number(id),
-//     },
-//   });
-
-//   return {
-//     props: { post }, // will be passed to the page component as props
-//   };
-// };
-
-const PostEdit: MonnomlogPage<IPostNewProps> = (props) => {
+const PostEdit: MonnomlogPage = () => {
   const router = useRouter();
   const toast = useToast();
 

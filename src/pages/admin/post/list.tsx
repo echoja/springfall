@@ -20,7 +20,6 @@ import type { MonnomlogPage } from "@lib/types";
 import type { Post } from "@prisma/client";
 import type { GetServerSideProps } from "next";
 import Link from "next/link";
-import { useRouter } from "next/router";
 
 interface IPostListProps {
   posts: (Post & {
