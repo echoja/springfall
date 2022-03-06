@@ -1,17 +1,7 @@
-import {
-  Box,
-  Grid,
-  Heading,
-  useBreakpointValue,
-  useColorMode,
-} from "@chakra-ui/react";
+import { Box, Grid, Heading, useColorMode } from "@chakra-ui/react";
 
 const SomeText = () => {
   const { colorMode } = useColorMode();
-  const textSize = useBreakpointValue({
-    base: "xs",
-    sm: "sm",
-  });
 
   return (
     <Grid gap={2}>
@@ -24,7 +14,13 @@ const SomeText = () => {
         padding={4}
         borderRadius={4}
       >
-        <Box fontSize={textSize}>
+        <Box
+          fontSize={{
+            base: "xs",
+            sm: "sm",
+            md: "md",
+          }}
+        >
           This is a Next.js app with Chakra-UI and TypeScript setup.
         </Box>
       </Box>
