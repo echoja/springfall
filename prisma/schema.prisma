@@ -13,7 +13,7 @@ generator client {
 model Post {
   id        Int     @id @default(autoincrement())
   title     String
-  content   String?
+  content   Json?
   published Boolean @default(false)
   author    User?   @relation(fields: [authorId], references: [id])
   authorId  Int?

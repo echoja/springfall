@@ -9,8 +9,8 @@ import {
 import { faAngleLeft, faFloppyDisk } from "@fortawesome/pro-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { adminLayoutWrapper } from "@lib/components/layout/AdminLayout";
-import type { PostEditArgs } from "@lib/pages/PostEditor";
-import PostEditor from "@lib/pages/PostEditor";
+import type { PostEditArgs } from "@lib/components/PostEditorWrapper";
+import PostEditorWrapper from "@lib/components/PostEditorWrapper";
 import prisma from "@lib/prisma";
 import type { MonnomlogPage } from "@lib/types";
 import type { Post } from "@prisma/client";
@@ -108,7 +108,7 @@ const PostEdit: MonnomlogPage<IPostEditProps> = (props) => {
   return (
     <>
       {postEditing && (
-        <PostEditor post={postProp} onChangePost={onChangePost} />
+        <PostEditorWrapper post={postProp} onChangePost={onChangePost} />
       )}
       <Flex justify="end">
         <ButtonGroup
