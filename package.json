@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "concurrently \"next dev\" \"yarn db:studio\"",
     "db:studio": "prisma studio",
-    "db:push": "prisma db push",
+    "db:push": "prisma db push --accept-data-loss",
     "db:generate": "prisma generate",
     "build": "yarn db:push && next build && next-sitemap --config next-sitemap.config.js",
     "start": "next start",
