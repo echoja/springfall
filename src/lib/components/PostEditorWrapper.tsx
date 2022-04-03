@@ -1,11 +1,10 @@
 import { Box, Input } from "@chakra-ui/react";
 import type { Post } from "@prisma/client";
-import MarkdownIt from "markdown-it";
 import type React from "react";
 import { useEffect, useCallback, useState } from "react";
-import MdEditor from "react-markdown-editor-lite";
-// import style manually
-import "react-markdown-editor-lite/lib/index.css";
+import type { Descendant } from "slate";
+
+import { ContentEditor } from "./ContentEditor";
 
 export type PostEditArgs = Pick<Post, "title" | "content">;
 
@@ -14,10 +13,15 @@ interface IAdminPostEditProps {
   onChangePost: (post: PostEditArgs) => void;
 }
 
-const mdParser = new MarkdownIt(/* Markdown-it options */);
+type ContentType = { data: Descendant[] };
 
-const PostEditor: React.FC<IAdminPostEditProps> = ({ post, onChangePost }) => {
-  const [content, setContent] = useState(post.content ?? "");
+const PostEditorWrapper: React.FC<IAdminPostEditProps> = ({
+  post,
+  onChangePost,
+}) => {
+  const [content, setContent] = useState<ContentType>(
+    post.content as ContentType
+  );
   const [title, setTitle] = useState(post.title);
 
   const onTitlechange = useCallback(
@@ -37,14 +41,14 @@ const PostEditor: React.FC<IAdminPostEditProps> = ({ post, onChangePost }) => {
   return (
     <Box>
       <Input value={title} onChange={onTitlechange} />
-      <MdEditor
-        style={{ height: "500px" }}
-        value={content}
-        renderHTML={(text) => mdParser.render(text)}
-        onChange={({ text }) => setContent(text)}
+      <ContentEditor
+        value={content.data}
+        onChange={(value) => {
+          setContent({ data: value });
+        }}
       />
     </Box>
   );
 };
 
-export default PostEditor;
+export default PostEditorWrapper;

@@ -30,7 +30,7 @@ export default function Pages({ feed }: IPagesProps) {
     <div>
       <h2>{post.title}</h2>
       <span>{post.author?.name}</span>
-      <p>{post.content}</p>
+      <p>{JSON.stringify(post.content)}</p>
     </div>
   ));
 }
