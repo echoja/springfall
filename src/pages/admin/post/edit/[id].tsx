@@ -1,14 +1,5 @@
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  Flex,
-  useToast,
-  Text,
-} from "@chakra-ui/react";
-import { faAngleLeft, faFloppyDisk } from "@fortawesome/pro-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { adminLayoutWrapper } from "@lib/components/layout/AdminLayout";
+import { useToast } from "@chakra-ui/react";
+import { NoLayoutWrapper } from "@lib/components/layout/NoLayout";
 import type { PostEditArgs } from "@lib/components/PostEditorWrapper";
 import PostEditorWrapper from "@lib/components/PostEditorWrapper";
 import prisma from "@lib/prisma";
@@ -16,7 +7,6 @@ import type { MonnomlogPage } from "@lib/types";
 import type { Post } from "@prisma/client";
 import ky from "ky";
 import type { GetServerSideProps } from "next";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 
@@ -106,37 +96,16 @@ const PostEdit: MonnomlogPage<IPostEditProps> = (props) => {
   }
 
   return (
-    <>
-      {postEditing && (
-        <PostEditorWrapper post={postProp} onChangePost={onChangePost} />
-      )}
-      <Flex justify="end">
-        <ButtonGroup
-          justifyContent="end"
-          w="100%"
-          colorScheme="blackAlpha"
-          mt={4}
-        >
-          <Link href="/admin/post/list" passHref>
-            <Button as="a" variant="outline">
-              <Box mr={2}>
-                <FontAwesomeIcon icon={faAngleLeft} />
-              </Box>
-              <Text>목록으로 돌아가기</Text>
-            </Button>
-          </Link>
-          <Button onClick={onSaveButtonClick}>
-            <Box mr={2}>
-              <FontAwesomeIcon icon={faFloppyDisk} />
-            </Box>
-            <Text>저장</Text>
-          </Button>
-        </ButtonGroup>
-      </Flex>
-    </>
+    postEditing && (
+      <PostEditorWrapper
+        onSaveButtonClick={onSaveButtonClick}
+        post={postProp}
+        onChangePost={onChangePost}
+      />
+    )
   );
 };
 
-PostEdit.layoutWrapper = adminLayoutWrapper;
+PostEdit.layoutWrapper = NoLayoutWrapper;
 
 export default PostEdit;

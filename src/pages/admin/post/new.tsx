@@ -1,13 +1,4 @@
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  Flex,
-  useToast,
-  Text,
-} from "@chakra-ui/react";
-import { faAngleLeft, faFloppyDisk } from "@fortawesome/pro-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useToast } from "@chakra-ui/react";
 import { adminLayoutWrapper } from "@lib/components/layout/AdminLayout";
 import type { PostEditArgs } from "@lib/components/PostEditorWrapper";
 import PostEditorWrapper from "@lib/components/PostEditorWrapper";
@@ -73,32 +64,13 @@ const PostEdit: MonnomlogPage = () => {
   }, []);
 
   return (
-    <>
-      {postEditing && (
-        <PostEditorWrapper post={postEditing} onChangePost={onChangePost} />
-      )}
-      <Flex justify="end">
-        <ButtonGroup
-          justifyContent="end"
-          w="100%"
-          colorScheme="blackAlpha"
-          mt={4}
-        >
-          <Button variant="outline">
-            <Box mr={2}>
-              <FontAwesomeIcon icon={faAngleLeft} />
-            </Box>
-            <Text>목록으로 돌아가기</Text>
-          </Button>
-          <Button onClick={onSaveButtonClick}>
-            <Box mr={2}>
-              <FontAwesomeIcon icon={faFloppyDisk} />
-            </Box>
-            <Text>저장</Text>
-          </Button>
-        </ButtonGroup>
-      </Flex>
-    </>
+    postEditing && (
+      <PostEditorWrapper
+        onSaveButtonClick={onSaveButtonClick}
+        post={postEditing}
+        onChangePost={onChangePost}
+      />
+    )
   );
 };
 

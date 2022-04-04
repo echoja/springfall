@@ -2,11 +2,7 @@ import { Box, Flex, Heading, Divider } from "@chakra-ui/react";
 import Link from "next/link";
 import type { ReactNode } from "react";
 
-interface ILayoutProps {
-  children: ReactNode;
-}
-
-const AdminLayout = ({ children }: ILayoutProps) => {
+export const adminLayoutWrapper = (page: ReactNode) => {
   return (
     <Flex margin="0 auto" transition="0.5s ease-out">
       <Box padding={8} className="admin-sidebar" width={250}>
@@ -19,13 +15,8 @@ const AdminLayout = ({ children }: ILayoutProps) => {
         </Link>
       </Box>
       <Box margin="8" as="main" flex="1">
-        {children}
+        {page}
       </Box>
     </Flex>
   );
 };
-
-export const adminLayoutWrapper = (page: ReactNode) => {
-  return <AdminLayout>{page}</AdminLayout>;
-};
-export default AdminLayout;
