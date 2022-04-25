@@ -1310,9 +1310,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/eslintrc@npm:^1.2.1":
-  version: 1.2.1
-  resolution: "@eslint/eslintrc@npm:1.2.1"
+"@eslint/eslintrc@npm:^1.2.2":
+  version: 1.2.2
+  resolution: "@eslint/eslintrc@npm:1.2.2"
   dependencies:
     ajv: ^6.12.4
     debug: ^4.3.2
@@ -1323,7 +1323,7 @@ __metadata:
     js-yaml: ^4.1.0
     minimatch: ^3.0.4
     strip-json-comments: ^3.1.1
-  checksum: 1f797b9f94d71b965992cf6c44e3bcb574643014fd1e3d4862d25056bd5568f59c488461a7e9a1c1758ca7f0def5d3cb69c3d8b38581bcf4a53af74371243797
+  checksum: d891036bbffb0efec1462aa4a603ed6e349d546b1632dde7d474ddd15c2a8b6895671b25293f1d3ba10ff629c24a3649ad049373fe695a0e44b612537088563c
   languageName: node
   linkType: hard
 
@@ -3459,11 +3459,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^8.13.0":
-  version: 8.13.0
-  resolution: "eslint@npm:8.13.0"
+"eslint@npm:^8.14.0":
+  version: 8.14.0
+  resolution: "eslint@npm:8.14.0"
   dependencies:
-    "@eslint/eslintrc": ^1.2.1
+    "@eslint/eslintrc": ^1.2.2
     "@humanwhocodes/config-array": ^0.9.2
     ajv: ^6.10.0
     chalk: ^4.0.0
@@ -3500,7 +3500,7 @@ __metadata:
     v8-compile-cache: ^2.0.3
   bin:
     eslint: bin/eslint.js
-  checksum: bc7d2fc9a046d42cb2c8987573ecaf534c1fae14747c4695e32388e179c5f21b83eefdb3e4f35924bf76152e226d7cc9dfb21f12348baf12c803109005b17439
+  checksum: 87d2e3e5eb93216d4ab36006e7b8c0bfad02f40b0a0f193f1d42754512cd3a9d8244152f1c69df5db2e135b3c4f1c10d0ed2f0881fe8a8c01af55465968174c1
   languageName: node
   linkType: hard
 
@@ -3726,9 +3726,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"framer-motion@npm:^6.3.0":
-  version: 6.3.0
-  resolution: "framer-motion@npm:6.3.0"
+"framer-motion@npm:^6.3.1":
+  version: 6.3.1
+  resolution: "framer-motion@npm:6.3.1"
   dependencies:
     "@emotion/is-prop-valid": ^0.8.2
     framesync: 6.0.1
@@ -3742,7 +3742,7 @@ __metadata:
   dependenciesMeta:
     "@emotion/is-prop-valid":
       optional: true
-  checksum: 1ccf3b5c8479b10e0b978c9e100f2f5397ff67b1185f05fb4a98f28e5627b0c7bc2fc5cc24f758c372be0ff3da5a581562dd086dadc558f109ba8adbaf1cd803
+  checksum: 23971369855d0d6504ad126ff33e393dc153edf470f7150e6b74667ef0104089daf28105d9841a8f0aea35e459bffabbda6b682b7722e014eef5a54214ee1680
   languageName: node
   linkType: hard
 
@@ -4565,9 +4565,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lint-staged@npm:^12.3.8":
-  version: 12.3.8
-  resolution: "lint-staged@npm:12.3.8"
+"lint-staged@npm:^12.4.0":
+  version: 12.4.0
+  resolution: "lint-staged@npm:12.4.0"
   dependencies:
     cli-truncate: ^3.1.0
     colorette: ^2.0.16
@@ -4585,7 +4585,7 @@ __metadata:
     yaml: ^1.10.2
   bin:
     lint-staged: bin/lint-staged.js
-  checksum: af6a89ae4244e4eac7180c6e7da452f378fd156ff38eaa666ecbb78f1e2efb7f1a9fc766dcc1cdde2bd76e03da68e602056ca9d2f1c6e46cf10aa83d20bf4d49
+  checksum: e25b273a73b79f224ff1ccb22432c34a9050fe8318b9cf7e08c748e2efc80e1f48ed4f2aa61cd16a701bb7fd6323ecf0d94a497c97732db04f2b5382d6b70131
   languageName: node
   linkType: hard
 
@@ -4874,17 +4874,17 @@ __metadata:
     commitlint: ^16.2.3
     concurrently: ^7.0.0
     cuid: ^2.1.8
-    eslint: ^8.13.0
+    eslint: ^8.14.0
     eslint-config-next: ^12.1.5
     eslint-config-prettier: ^8.5.0
     eslint-config-sznm: ^0.2.1
-    framer-motion: ^6.3.0
+    framer-motion: ^6.3.1
     husky: ^7.0.4
     ky: ^0.30.0
-    lint-staged: ^12.3.8
+    lint-staged: ^12.4.0
     markdown-it: ^12.3.2
     next: ^12.1.5
-    next-auth: ^4.3.2
+    next-auth: ^4.3.3
     next-seo: ^5.4.0
     next-sitemap: ^2.5.20
     prettier: ^2.6.1
@@ -4944,9 +4944,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next-auth@npm:^4.3.2":
-  version: 4.3.2
-  resolution: "next-auth@npm:4.3.2"
+"next-auth@npm:^4.3.3":
+  version: 4.3.3
+  resolution: "next-auth@npm:4.3.3"
   dependencies:
     "@babel/runtime": ^7.16.3
     "@panva/hkdf": ^1.0.1
@@ -4964,7 +4964,7 @@ __metadata:
   peerDependenciesMeta:
     nodemailer:
       optional: true
-  checksum: b8bbcc87f1831efc7ea4fc4868128defaac7b8c1331b00be5d732135dec2d60425aba7302308ea1b90fec4746fad717821bb0cfe3ea030452d252d01c08d3a29
+  checksum: 7c90d34fd9af04a582f7dbf20612d39a9930b1a4df4ed0aa8086d0fe4617072c280e11856090d60e8ad1ffbf943ed1bb68ef9f937c6b869b829d7777c93f5f0d
   languageName: node
   linkType: hard
 
