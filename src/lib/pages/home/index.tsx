@@ -1,24 +1,32 @@
-import { Box } from "@chakra-ui/react";
-
-import CTASection from "lib/components/samples/CTASection";
-import SomeImage from "lib/components/samples/SomeImage";
-import SomeText from "lib/components/samples/SomeText";
+import { Box, Image } from "@chakra-ui/react";
+import MotionBox from "@lib/components/motion/MotionBox";
 
 const Home = () => {
   return (
     <Box
       display={{ md: "flex" }}
       alignItems="center"
+      justifyContent="center"
       minHeight="70vh"
       gap={8}
       mb={8}
       w="full"
     >
-      <SomeImage />
-
       <Box>
-        <SomeText />
-        <CTASection />
+        <MotionBox
+          animate={{ y: 20, scale: 0.97 }}
+          transition={{ repeat: Infinity, duration: 2, repeatType: "reverse" }}
+          marginY={8}
+          maxWidth={[240, 320]}
+          marginX="auto"
+        >
+          <Image
+            src="/Launching-amico.svg"
+            width={400}
+            height={400}
+            alt="Launching Illustration"
+          />
+        </MotionBox>
       </Box>
     </Box>
   );

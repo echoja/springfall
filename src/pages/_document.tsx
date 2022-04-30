@@ -19,6 +19,12 @@ class MyDocument extends Document {
             href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap"
             rel="stylesheet"
           />
+          <link
+            type="image/png"
+            sizes="96x96"
+            rel="icon"
+            href="icons8-spa-flower-96.png"
+          />
 
           <meta name="application-name" content={APP_NAME} />
           <meta name="apple-mobile-web-app-capable" content="yes" />
