@@ -1549,24 +1549,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@prisma/client@npm:^3.12.0":
-  version: 3.12.0
-  resolution: "@prisma/client@npm:3.12.0"
+"@prisma/client@npm:^3.13.0":
+  version: 3.13.0
+  resolution: "@prisma/client@npm:3.13.0"
   dependencies:
-    "@prisma/engines-version": 3.12.0-37.22b822189f46ef0dc5c5b503368d1bee01213980
+    "@prisma/engines-version": 3.13.0-17.efdf9b1183dddfd4258cd181a72125755215ab7b
   peerDependencies:
     prisma: "*"
   peerDependenciesMeta:
     prisma:
       optional: true
-  checksum: b342c6e771e671a49684f69a2cb27df1d5083fb97a55aa0d07db3e6ad5bf16e27ee566e528b97b1c501be2c46b98eb7577996e1be6e029910537538107eba471
+  checksum: 8c1e6c91208158b71684a9b03a27d8240315002340ca3ad5c298beaedf4ca29fda949e934a55e1f238ff215388c77348acf05f0cea7636f3236d66d6510d0c56
   languageName: node
   linkType: hard
 
-"@prisma/engines-version@npm:3.12.0-37.22b822189f46ef0dc5c5b503368d1bee01213980":
-  version: 3.12.0-37.22b822189f46ef0dc5c5b503368d1bee01213980
-  resolution: "@prisma/engines-version@npm:3.12.0-37.22b822189f46ef0dc5c5b503368d1bee01213980"
-  checksum: e69f48def4b5761d594ebe7c87f04772fd03f2fb3cc2eacee92188b244d6c2d9aeff75be88d10bfd2a3c05b1da8d04d2a4d4a977b7a23671cc0617fb811b2855
+"@prisma/engines-version@npm:3.13.0-17.efdf9b1183dddfd4258cd181a72125755215ab7b":
+  version: 3.13.0-17.efdf9b1183dddfd4258cd181a72125755215ab7b
+  resolution: "@prisma/engines-version@npm:3.13.0-17.efdf9b1183dddfd4258cd181a72125755215ab7b"
+  checksum: 80238c778333eb0d9bc993e933cb83ed82488d53980d2cdc68ff25ef719de1a63ec05a32bb2af505115e4c179ea43389c8650c297c2f8dbda0c122e9c00197ee
   languageName: node
   linkType: hard
 
@@ -3028,10 +3028,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"entities@npm:~2.1.0":
-  version: 2.1.0
-  resolution: "entities@npm:2.1.0"
-  checksum: a10a877e489586a3f6a691fe49bf3fc4e58f06c8e80522f08214a5150ba457e7017b447d4913a3fa041bda06ee4c92517baa4d8d75373eaa79369e9639225ffd
+"entities@npm:~3.0.1":
+  version: 3.0.1
+  resolution: "entities@npm:3.0.1"
+  checksum: aaf7f12033f0939be91f5161593f853f2da55866db55ccbf72f45430b8977e2b79dbd58c53d0fdd2d00bd7d313b75b0968d09f038df88e308aa97e39f9456572
   languageName: node
   linkType: hard
 
@@ -3726,9 +3726,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"framer-motion@npm:^6.3.1":
-  version: 6.3.1
-  resolution: "framer-motion@npm:6.3.1"
+"framer-motion@npm:^6.3.3":
+  version: 6.3.3
+  resolution: "framer-motion@npm:6.3.3"
   dependencies:
     "@emotion/is-prop-valid": ^0.8.2
     framesync: 6.0.1
@@ -3742,7 +3742,7 @@ __metadata:
   dependenciesMeta:
     "@emotion/is-prop-valid":
       optional: true
-  checksum: 23971369855d0d6504ad126ff33e393dc153edf470f7150e6b74667ef0104089daf28105d9841a8f0aea35e459bffabbda6b682b7722e014eef5a54214ee1680
+  checksum: 905ccf2679a45b00f6fd3fa6220f73f176e0c14b43d65ceb5feb93e23b12098def275930b98926c9bd4320f0436564745ebcfd488d7a477646a7a4600362fdbf
   languageName: node
   linkType: hard
 
@@ -4556,12 +4556,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"linkify-it@npm:^3.0.1":
-  version: 3.0.3
-  resolution: "linkify-it@npm:3.0.3"
+"linkify-it@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "linkify-it@npm:4.0.0"
   dependencies:
     uc.micro: ^1.0.1
-  checksum: 31367a4bb70c5bbc9703246236b504b0a8e049bcd4e0de4291fa50f0ebdebf235b5eb54db6493cb0b1319357c6eeafc4324c9f4aa34b0b943d9f2e11a1268fbc
+  checksum: 40b7b02482ecf2f9f7a4b1e276ed75028ba4e356c1ee3af88457d08e04692dfa0ebaa93ccfd6ef09ae072927d640b47a3ba5a2a62ceb0918619f4cedc36b3f9b
   languageName: node
   linkType: hard
 
@@ -4741,18 +4741,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"markdown-it@npm:^12.3.2":
-  version: 12.3.2
-  resolution: "markdown-it@npm:12.3.2"
+"markdown-it@npm:^13.0.0":
+  version: 13.0.0
+  resolution: "markdown-it@npm:13.0.0"
   dependencies:
     argparse: ^2.0.1
-    entities: ~2.1.0
-    linkify-it: ^3.0.1
+    entities: ~3.0.1
+    linkify-it: ^4.0.0
     mdurl: ^1.0.1
     uc.micro: ^1.0.5
   bin:
     markdown-it: bin/markdown-it.js
-  checksum: 890555711c1c00fa03b936ca2b213001a3b9b37dea140d8445ae4130ce16628392aad24b12e2a0a9935336ca5951f2957a38f4e5309a2e38eab44e25ff32a41e
+  checksum: aa355b3f08928c746bda88c19602152d8af70d5eee3caca61a66065e1878bdd2074b2d73947b6ed5dcc6f975a9560b6c026044c4d80cd861d5d5d6757093eaba
   languageName: node
   linkType: hard
 
@@ -4867,7 +4867,7 @@ __metadata:
     "@fortawesome/pro-solid-svg-icons": ^6.1.1
     "@fortawesome/react-fontawesome": ^0.1.18
     "@next-auth/prisma-adapter": ^1.0.3
-    "@prisma/client": ^3.12.0
+    "@prisma/client": ^3.13.0
     "@reduxjs/toolkit": ^1.8.0
     "@types/markdown-it": ^12.2.3
     "@types/react": ^17.0.44
@@ -4878,23 +4878,23 @@ __metadata:
     eslint-config-next: ^12.1.5
     eslint-config-prettier: ^8.5.0
     eslint-config-sznm: ^0.2.1
-    framer-motion: ^6.3.1
+    framer-motion: ^6.3.3
     husky: ^7.0.4
     ky: ^0.30.0
     lint-staged: ^12.4.0
-    markdown-it: ^12.3.2
+    markdown-it: ^13.0.0
     next: ^12.1.5
     next-auth: ^4.3.3
     next-seo: ^5.4.0
     next-sitemap: ^2.5.20
     prettier: ^2.6.1
     prisma: ^3.12.0
-    react: ^17.0.2
-    react-dom: ^17.0.2
+    react: ^18.1.0
+    react-dom: ^18.1.0
     react-icons: ^4.3.1
     react-markdown-editor-lite: ^1.3.2
-    slate: ^0.76.1
-    slate-react: ^0.76.1
+    slate: ^0.78.0
+    slate-react: ^0.78.1
     standard-version: ^9.3.2
     typescript: ^4.6.3
   languageName: unknown
@@ -5592,16 +5592,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:^17.0.2":
-  version: 17.0.2
-  resolution: "react-dom@npm:17.0.2"
+"react-dom@npm:^18.1.0":
+  version: 18.1.0
+  resolution: "react-dom@npm:18.1.0"
   dependencies:
     loose-envify: ^1.1.0
-    object-assign: ^4.1.1
-    scheduler: ^0.20.2
+    scheduler: ^0.22.0
   peerDependencies:
-    react: 17.0.2
-  checksum: 1c1eaa3bca7c7228d24b70932e3d7c99e70d1d04e13bb0843bbf321582bc25d7961d6b8a6978a58a598af2af496d1cedcfb1bf65f6b0960a0a8161cb8dab743c
+    react: ^18.1.0
+  checksum: bb0d48eeb0b297c79c2a03978baa29f5b3ff7ba3d070b21e34c9af1a6e7fdf0ca8b8d73e41f9214d91ad40eeb6d1f3559f884cbbc338713374a51320637c23df
   languageName: node
   linkType: hard
 
@@ -5710,13 +5709,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:^17.0.2":
-  version: 17.0.2
-  resolution: "react@npm:17.0.2"
+"react@npm:^18.1.0":
+  version: 18.1.0
+  resolution: "react@npm:18.1.0"
   dependencies:
     loose-envify: ^1.1.0
-    object-assign: ^4.1.1
-  checksum: b254cc17ce3011788330f7bbf383ab653c6848902d7936a87b09d835d091e3f295f7e9dd1597c6daac5dc80f90e778c8230218ba8ad599f74adcc11e33b9d61b
+  checksum: 5bb296b561b43ef2220395da4faac86c14a087c8c80e1a7598a5740f01ee605c11eaf249985c1e2000971c4cd32ccb46d40f00479bbd9fb6b1c7cf857393b7d4
   languageName: node
   linkType: hard
 
@@ -6001,13 +5999,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"scheduler@npm:^0.20.2":
-  version: 0.20.2
-  resolution: "scheduler@npm:0.20.2"
+"scheduler@npm:^0.22.0":
+  version: 0.22.0
+  resolution: "scheduler@npm:0.22.0"
   dependencies:
     loose-envify: ^1.1.0
-    object-assign: ^4.1.1
-  checksum: c4b35cf967c8f0d3e65753252d0f260271f81a81e427241295c5a7b783abf4ea9e905f22f815ab66676f5313be0a25f47be582254db8f9241b259213e999b8fc
+  checksum: a8ef5cab769c020cd6382ad9ecc3f72dbde56a50a36639b3a42ad9c11f7724f03700bcad373044059b8067d4a6365154dc7c0ca8027ef20ff4900cf58a0fc2c5
   languageName: node
   linkType: hard
 
@@ -6090,9 +6087,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"slate-react@npm:^0.76.1":
-  version: 0.76.1
-  resolution: "slate-react@npm:0.76.1"
+"slate-react@npm:^0.78.1":
+  version: 0.78.1
+  resolution: "slate-react@npm:0.78.1"
   dependencies:
     "@types/is-hotkey": ^0.1.1
     "@types/lodash": ^4.14.149
@@ -6106,18 +6103,18 @@ __metadata:
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
     slate: ">=0.65.3"
-  checksum: 29b30f7db2940ec52e5631f127c881ced89379770e449a9d5d77d4271bae90eca729d86e3656a7499e3279ddb6c9d96eec4f3604ffd8262f1a6e0e66f477f680
+  checksum: bf55f9d392ce6ea1e139e62c8806bb3d87f2e69223e79efc6d15bdf618635ce4f7820a7445ed3937d17ccf8762dd34744b0ca840c8277aa99b944b6602f35982
   languageName: node
   linkType: hard
 
-"slate@npm:^0.76.1":
-  version: 0.76.1
-  resolution: "slate@npm:0.76.1"
+"slate@npm:^0.78.0":
+  version: 0.78.0
+  resolution: "slate@npm:0.78.0"
   dependencies:
     immer: ^9.0.6
     is-plain-object: ^5.0.0
     tiny-warning: ^1.0.3
-  checksum: 825d93b4f9f8735abcd58aade88e3e65eec83530c57ce2fd88029d4a88245cc928b36eddadfaf932d0d744c20201303dc279553f4e8392ab7968b60bd9eea77a
+  checksum: 203f1a0a09a877efc4ebb8e256368ee72f71b699be064cfb4cba0f396199ea3c28a7679363a9d2c2d58011b5685c8c20f57f38bce56dbe78835d402add27cc2b
   languageName: node
   linkType: hard
 
