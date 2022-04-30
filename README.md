@@ -1,55 +1,32 @@
 # MONNOMLOG
 
-예쁘고 편리하고 모던한 개발자 블로그 패키지
+심플하고 빠른 개발자 블로그
 
-[기획 문서](https://www.notion.so/ezkorry/MONNOMLOG-177f0ecce08043669bfc24797272cd1b)
+[기획 문서 (내부 링크)](https://www.notion.so/ezkorry/MONNOMLOG-177f0ecce08043669bfc24797272cd1b)
 
-[![Depfu](https://badges.depfu.com/badges/37441f284b6c8a355e802d0667137107/status.svg)](https://depfu.com)
-
-## 🔋⚡ Battery Packed template
-
-- ✔️ toolings for linting, formatting, and conventions configured
-
-  `eslint`, `prettier`, `husky`, `lint-staged`, and `standard-version`
-
-- 🔎 SEO optimization configured
-
-  with `next-seo` and `next-sitemap`. you'll need to reconfigure or tinker with it to get it right according to your needs, but it's there if you need it.
-
-- 🎨 basic responsive layout configured
-
-  필요 없나요? 그럼 삭제하세용! 😃
-
-[![CodeFactor](https://www.codefactor.io/repository/github/sozonome/nextarter-chakra/badge)](https://www.codefactor.io/repository/github/sozonome/nextarter-chakra)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=sozonome_nextarter-chakra&metric=alert_status)](https://sonarcloud.io/dashboard?id=sozonome_nextarter-chakra) [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=sozonome_nextarter-chakra&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=sozonome_nextarter-chakra) [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=sozonome_nextarter-chakra&metric=bugs)](https://sonarcloud.io/dashboard?id=sozonome_nextarter-chakra) [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=sozonome_nextarter-chakra&metric=code_smells)](https://sonarcloud.io/dashboard?id=sozonome_nextarter-chakra) [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=sozonome_nextarter-chakra&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=sozonome_nextarter-chakra)
-
-[![Depfu](https://badges.depfu.com/badges/9e426e58f99c3bd470987a3c6b014a96/overview.svg)](https://depfu.com/github/sozonome/nextarter-chakra?project_id=26148) [![Depfu](https://badges.depfu.com/badges/9e426e58f99c3bd470987a3c6b014a96/count.svg)](https://depfu.com/github/sozonome/nextarter-chakra?project_id=26148)
+![Vercel](https://vercelbadge.vercel.app/api/monnomlog-donkasu/monnomlog-alpha) [![Depfu](https://badges.depfu.com/badges/37441f284b6c8a355e802d0667137107/count.svg)](https://depfu.com/github/monnomlog-donkasu/monnomlog-alpha?project_id=34653)
 
 [![forthebadge](https://forthebadge.com/images/badges/made-with-typescript.svg)](https://forthebadge.com)
 
-## Getting Started
+---
 
-You can either click `Use this template` button on this repository and clone the repo or directly from your terminal:
+## 개발환경 세팅
+
+- vscode - 개발 에디터
+- [direnv](https://direnv.net/)로 환경 변수를 관리합니다.
+- Node.js 와 yarn 은 [asdf](https://asdf-vm.com/)로 설치합니다. (`.tool-versions` 파일 참고)
+
+개발 서버를 실행시키려면 다음 명령을 실행합니다.
 
 ```bash
-npx degit sozonome/nextarter-chakra <YOUR_APP_NAME>
-```
-
-Then, run the development server:
-
-```bash
-npm run dev
-# or
 yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 개발 유의사항
 
-You can start editing the page by modifying `src/pages/index.js`. The page auto-updates as you edit the file.
-
-## References
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-- [Chakra UI](https://chakra-ui.com)
-- [TypeScript](https://www.typescriptlang.org)
+- [Next.js](https://nextjs.org)
+- [Chakra UI](https://chakra-ui.com): 스타일 관리
+- PostreSQL: 데이터베이스 (Amazon Lightsail)
+- [Prisma](https://www.prisma.io/): ORM
+- REST API (GraphQL 사용하지 않음)
+- [slate.js](https://www.slatejs.org/): 내부 에디터
