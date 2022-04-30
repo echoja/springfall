@@ -9,10 +9,10 @@ import type { ReactElement } from "react";
 
 import defaultSEOConfig from "../../next-seo.config";
 import Layout from "lib/components/layout";
-import customTheme from "lib/styles/customTheme";
+import { customTheme } from "lib/style";
 
 import "@fortawesome/fontawesome-svg-core/styles.css";
-import "lib/styles/globals.css";
+import "lib/globals.css";
 
 fontAwesomeConfig.autoAddCss = false;
 
