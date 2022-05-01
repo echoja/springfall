@@ -16,3 +16,5 @@ export function isDevelopment() {
 export function isProduction() {
   return process.env.NODE_ENV === "production";
 }
+
+export const POSTS_PER_PAGE = 10;

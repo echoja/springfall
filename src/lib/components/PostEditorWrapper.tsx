@@ -1,4 +1,3 @@
-import { Box, Button, Input, Stack, Text, Tooltip } from "@chakra-ui/react";
 import { faAngleLeft } from "@fortawesome/pro-regular-svg-icons";
 import { faFloppyDisk } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -45,40 +44,31 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
   }, [content, onChangePost, title]);
 
   return (
-    <Box>
-      <Box padding={2} shadow="sm" mb={10}>
-        <Stack direction="row" align="center" justify="space-between">
-          <Stack direction="row" align="center">
-            <Link href="/admin/post/list" passHref>
-              <Button as="a" variant="ghost">
+    <div>
+      <div className="p-2 shadow-md mb-10">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center">
+            <Link href="/admin/post/list">
+              <a className="btn mr-2">
                 <FontAwesomeIcon icon={faAngleLeft} />
-              </Button>
+              </a>
             </Link>
+            <span className="font-semibold">글 편집</span>
+          </div>
 
-            <Text fontWeight="bold">글 편집</Text>
-          </Stack>
-
-          <Tooltip label="저장">
-            <Button size="sm" colorScheme="blue" onClick={onSaveButtonClick}>
-              <Box>
-                <FontAwesomeIcon icon={faFloppyDisk} />
-              </Box>
-            </Button>
-          </Tooltip>
-        </Stack>
-      </Box>
+          <button type="button" className="btn" onClick={onSaveButtonClick}>
+            <FontAwesomeIcon icon={faFloppyDisk} />
+          </button>
+        </div>
+      </div>
 
       {/* 목차 사이드바 */}
-      <Box />
-      <Box>
-        <Input
+      <div>
+        <input
+          type="text"
           value={title}
           onChange={onTitlechange}
-          variant="solid"
-          border={0}
-          fontSize="xl"
-          fontWeight="bold"
-          mb={3}
+          className="norder-0 text-xl font-semibold mb-3"
         />
         <ContentEditor
           value={content.data}
@@ -86,8 +76,8 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
             setContent({ data: value });
           }}
         />
-      </Box>
-    </Box>
+      </div>
+    </div>
   );
 };
 

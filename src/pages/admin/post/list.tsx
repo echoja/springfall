@@ -1,17 +1,3 @@
-import {
-  Table,
-  Thead,
-  Tbody,
-  Tfoot,
-  Tr,
-  Th,
-  Td,
-  TableCaption,
-  Button,
-  Box,
-  Text,
-  Link as ChakraLink,
-} from "@chakra-ui/react";
 import { faPen } from "@fortawesome/pro-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { adminLayoutWrapper } from "@lib/components/layout/AdminLayout";
@@ -48,48 +34,48 @@ export const getServerSideProps: GetServerSideProps<
 
 const PostList: MonnomlogPage<IPostListProps> = ({ posts }) => {
   return (
-    <Box>
-      <Table>
-        <TableCaption>Posts</TableCaption>
-        <Thead>
-          <Tr>
-            <Th>Title</Th>
-            <Th>Author</Th>
-            <Th>Published</Th>
-          </Tr>
-        </Thead>
-        <Tbody>
+    <div>
+      <table>
+        <caption>Posts</caption>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Published</th>
+          </tr>
+        </thead>
+        <tbody>
           {posts.map((post) => (
-            <Tr key={post.id}>
-              <Td>
-                <Link href={`/admin/post/edit/${post.id}`} passHref>
-                  <ChakraLink>{post.title}</ChakraLink>
+            <tr key={post.id}>
+              <td>
+                <Link href={`/admin/post/edit/${post.id}`}>
+                  <a>{post.title}</a>
                 </Link>
-              </Td>
-              <Td>{post.author?.name}</Td>
-              <Td>{post.published ? "Yes" : "No"}</Td>
-            </Tr>
+              </td>
+              <td>{post.author?.name}</td>
+              <td>{post.published ? "Yes" : "No"}</td>
+            </tr>
           ))}
-        </Tbody>
-        <Tfoot>
-          <Tr>
-            <Td colSpan={3}>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colSpan={3}>
               <p>
                 <strong>{posts.length}</strong> posts
               </p>
-            </Td>
-          </Tr>
-        </Tfoot>
-      </Table>
-      <Link href="/admin/post/new" passHref>
-        <Button as="a">
-          <Box mr={2}>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+      <Link href="/admin/post/new">
+        <a>
+          <div className="mr-2">
             <FontAwesomeIcon icon={faPen} />
-          </Box>
-          <Text>새 글 쓰기</Text>
-        </Button>
+          </div>
+          <span>새 글 쓰기</span>
+        </a>
       </Link>
-    </Box>
+    </div>
   );
 };
 

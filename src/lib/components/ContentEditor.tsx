@@ -1,31 +1,16 @@
-// TypeScript users only add this code
-import {
-  Box,
-  Divider,
-  Flex,
-  Heading,
-  OrderedList,
-  Table,
-  Td,
-  Th,
-  Text as ChakraText,
-  UnorderedList,
-  chakra,
-  Button,
-  HStack,
-  useOutsideClick,
-  Portal,
-  VStack,
-  Fade,
-} from "@chakra-ui/react";
+// import {
+//   useFloating,
+//   useInteractions,
+//   useClick,
+//   shift,
+// } from "@floating-ui/react-dom-interactions";
+// import useOutsideClick from "@lib/hooks/use-outside-click";
 import type { MouseEvent } from "react";
-import { useCallback, useEffect, useRef, useState } from "react";
-import type { BaseEditor, Descendant, Location } from "slate";
+import { useCallback, useState } from "react";
+import type { BaseEditor, Descendant } from "slate";
 import { createEditor, Editor, Transforms, Text } from "slate";
 import type { RenderElementProps, RenderLeafProps } from "slate-react";
 import { ReactEditor, Editable, Slate, withReact } from "slate-react";
-
-const StyledEditable = chakra(Editable);
 
 // Define our own custom set of helpers.
 const CustomEditor = {
@@ -190,20 +175,11 @@ const CodeBlockComponent = (props: RenderElementProps) => {
 
 const ParagraphComponent = (props: RenderElementProps) => {
   const { attributes, children } = props;
-  // const selected = useSelected();
-  // const focused = useFocused();
 
   return (
-    <ChakraText
-      marginBottom={2}
-      transition="ease"
-      // borderWidth={1}
-      // borderColor={focused && selected ? "gray.200" : "transparent"}
-      // shadow={focused && selected ? "xl" : undefined}
-      {...attributes}
-    >
+    <p className="mb-2" {...attributes}>
       {children}
-    </ChakraText>
+    </p>
   );
 };
 
@@ -213,11 +189,22 @@ export interface IRenderHeadingProps extends RenderElementProps {
 
 const HeadingComponent = (props: IRenderHeadingProps) => {
   const { attributes, children, element } = props;
-  return (
-    <Heading as={`h${element.level}`} {...attributes}>
-      {children}
-    </Heading>
-  );
+  switch (element.level) {
+    case 1:
+      return <h1 {...attributes}>{children}</h1>;
+    case 2:
+      return <h2 {...attributes}>{children}</h2>;
+    case 3:
+      return <h3 {...attributes}>{children}</h3>;
+    case 4:
+      return <h4 {...attributes}>{children}</h4>;
+    case 5:
+      return <h5 {...attributes}>{children}</h5>;
+    case 6:
+      return <h6 {...attributes}>{children}</h6>;
+    default:
+      throw new Error("Invalid heading level");
+  }
 };
 
 export interface IRenderListProps extends RenderElementProps {
@@ -227,9 +214,9 @@ export interface IRenderListProps extends RenderElementProps {
 const ListComponent = (props: IRenderListProps) => {
   const { element, attributes, children } = props;
   if (element.ordered) {
-    return <OrderedList {...attributes}>{children}</OrderedList>;
+    return <ol {...attributes}>{children}</ol>;
   }
-  return <UnorderedList {...attributes}>{children}</UnorderedList>;
+  return <ul {...attributes}>{children}</ul>;
 };
 
 export interface IRenderCalloutProps extends RenderElementProps {
@@ -239,10 +226,10 @@ export interface IRenderCalloutProps extends RenderElementProps {
 const CalloutComponent = (props: IRenderCalloutProps) => {
   const { element, attributes, children } = props;
   return (
-    <Flex {...attributes}>
-      <Box>icon: {element.icon}</Box>
-      <Box>{children}</Box>
-    </Flex>
+    <div className="flex" {...attributes}>
+      <div>icon: {element.icon}</div>
+      <div>{children}</div>
+    </div>
   );
 };
 
@@ -253,13 +240,13 @@ export interface IRenderTableProps extends RenderElementProps {
 const TableComponent = (props: IRenderTableProps) => {
   const { attributes, children } = props;
   return (
-    <Table {...attributes}>
-      <Th>
-        <Td>
-          <Box>{children}</Box>
-        </Td>
-      </Th>
-    </Table>
+    <table {...attributes}>
+      <th>
+        <td>
+          <div>{children}</div>
+        </td>
+      </th>
+    </table>
   );
 };
 
@@ -269,7 +256,7 @@ export interface IRenderHrProps extends RenderElementProps {
 
 const HrComponent = (props: IRenderHrProps) => {
   const { attributes } = props;
-  return <Divider {...attributes} />;
+  return <hr {...attributes} />;
 };
 
 export interface IRenderYoutubeProps extends RenderElementProps {
@@ -332,7 +319,7 @@ declare module "slate" {
   }
 }
 
-function insertSomeWords(editor: Editor) {
+export function insertSomeWords(editor: Editor) {
   Transforms.insertText(editor, "some words", {
     at: {
       anchor: { path: [0, 0], offset: 0 },
@@ -340,7 +327,8 @@ function insertSomeWords(editor: Editor) {
     },
   });
 }
-function insertSomeWords2(editor: Editor) {
+
+export function insertSomeWords2(editor: Editor) {
   Transforms.insertText(editor, "some words", {
     at: {
       path: [0, 0],
@@ -359,22 +347,23 @@ export const ContentEditor: React.FC<IContentEditorProps> = ({
   value,
 }) => {
   const [editor] = useState(() => withReact(createEditor()));
-  const [contextMenuAnchorPoint, setContextMenuAnchorPoint] = useState<{
-    x: number;
-    y: number;
-  }>({ x: 0, y: 0 });
-  const [contextMenuVisible, setContextMenuVisible] = useState(false);
-  const [contextMenuPath, setContextMenuPath] = useState<Location | null>(null);
-  const contextMenuRef = useRef(null);
+  // const [contextMenuAnchorPoint, setContextMenuAnchorPoint] = useState<{
+  //   x: number;
+  //   y: number;
+  // }>({ x: 0, y: 0 });
+  // const [contextMenuVisible, setContextMenuVisible] = useState(false);
+  // const [contextMenuPath, setContextMenuPath] = useState<Location | null>(null);
 
-  const closeContextMenu = useCallback(() => {
-    setContextMenuVisible(false);
-  }, [setContextMenuVisible]);
+  // const closeContextMenu = useCallback(() => {
+  //   setContextMenuVisible(false);
+  // }, [setContextMenuVisible]);
 
-  useOutsideClick({
-    ref: contextMenuRef,
-    handler: closeContextMenu,
-  });
+  // const { setDom: setContextMenu } = useOutsideClick(closeContextMenu);
+
+  // const { x, y, reference, floating, strategy, context } = useFloating({
+  //   placement: "right",
+  //   middleware: [shift()],
+  // });
 
   const renderElement = useCallback((props: RenderElementProps) => {
     const { element } = props;
@@ -400,7 +389,7 @@ export const ContentEditor: React.FC<IContentEditorProps> = ({
     }
   }, []);
 
-  const renderLeaf = useCallback((props) => {
+  const renderLeaf = useCallback((props: RenderLeafProps) => {
     return <Leaf {...props} />;
   }, []);
 
@@ -412,147 +401,98 @@ export const ContentEditor: React.FC<IContentEditorProps> = ({
         match: (n) => Editor.isBlock(editor, n),
       });
       if (resultEntry) {
-        setContextMenuAnchorPoint({ x: event.clientX, y: event.clientY });
-        setContextMenuVisible(true);
-        setContextMenuPath(resultEntry[1]);
+        // setContextMenuAnchorPoint({ x: event.clientX, y: event.clientY });
+        // setContextMenuVisible(true);
+        // setContextMenuPath(resultEntry[1]);
       }
     },
     [editor]
   );
 
-  useEffect(() => {
-    // eslint-disable-next-line no-console
-    console.table(contextMenuAnchorPoint);
-  }, [contextMenuAnchorPoint]);
+  // useEffect(() => {
+  //   // eslint-disable-next-line no-console
+  //   console.table(contextMenuAnchorPoint);
+  // }, [contextMenuAnchorPoint]);
 
   return (
-    <>
-      <HStack>
-        <Button onClick={() => insertSomeWords(editor)}>썸워드 1</Button>
-        <Button onClick={() => insertSomeWords2(editor)}>썸워드 2</Button>
-      </HStack>
+    <Slate value={value} onChange={onChange} editor={editor}>
+      <div className="relative">
+        <Editable
+          className="p-3 border max-w-screen-lg "
+          renderElement={renderElement}
+          renderLeaf={renderLeaf}
+          onKeyDown={(event) => {
+            if (!event.ctrlKey) {
+              return;
+            }
 
-      <Slate value={value} onChange={onChange} editor={editor}>
-        <Box position="relative">
-          <StyledEditable
-            padding={3}
-            borderWidth={1}
-            maxWidth={900}
-            // borderColor="black"
-            renderElement={renderElement}
-            renderLeaf={renderLeaf}
-            onKeyDown={(event) => {
-              if (!event.ctrlKey) {
-                return;
-              }
+            switch (event.key) {
+              case "`":
+                event.preventDefault();
+                CustomEditor.toggleCodeBlock(editor);
+                break;
 
-              switch (event.key) {
-                case "`":
-                  event.preventDefault();
-                  CustomEditor.toggleCodeBlock(editor);
-                  break;
+              case "b":
+                event.preventDefault();
+                CustomEditor.toggleBoldMark(editor);
+                break;
 
-                case "b":
-                  event.preventDefault();
-                  CustomEditor.toggleBoldMark(editor);
-                  break;
-
-                default:
-                  break;
+              default:
+                break;
+            }
+          }}
+          onContextMenu={handleContextMenu}
+        />
+        {/* <div
+          ref={(el) => {
+            setContextMenu(el);
+            floating(el);
+          }}
+          className="shadow-xl bg-white"
+          style={{
+            position: strategy,
+            top: y ?? "",
+            left: x ?? "",
+          }}
+        >
+          <button
+            type="button"
+            onClick={() => {
+              if (contextMenuPath) {
+                Transforms.setNodes<ElementNode>(
+                  editor,
+                  {
+                    type: "CODE_BLOCK",
+                  },
+                  {
+                    at: contextMenuPath,
+                  }
+                );
               }
             }}
-            onContextMenu={handleContextMenu}
-          />
-          {contextMenuVisible && (
-            <Portal>
-              <Fade in={contextMenuVisible}>
-                <Box
-                  ref={contextMenuRef}
-                  // padding={3}
-                  shadow="xl"
-                  background="white"
-                  position="absolute"
-                  top={contextMenuAnchorPoint.y}
-                  left={contextMenuAnchorPoint.x}
-                >
-                  <VStack spacing={0} padding={0}>
-                    <Button
-                      borderRadius={0}
-                      bgColor="transparent"
-                      onClick={() => {
-                        if (contextMenuPath) {
-                          Transforms.setNodes<ElementNode>(
-                            editor,
-                            {
-                              type: "CODE_BLOCK",
-                            },
-                            {
-                              at: contextMenuPath,
-                            }
-                          );
-                        }
-                      }}
-                    >
-                      코드블록으로 전환
-                    </Button>
-                    <Button
-                      borderRadius={0}
-                      bgColor="transparent"
-                      onClick={() => {
-                        if (contextMenuPath) {
-                          Transforms.setNodes<ElementNode>(
-                            editor,
-                            {
-                              type: "PARAGRAPH",
-                            },
-                            {
-                              at: contextMenuPath,
-                            }
-                          );
-                        }
-                      }}
-                    >
-                      문단으로 전환
-                    </Button>
-                  </VStack>
-                </Box>
-              </Fade>
-            </Portal>
-          )}
-        </Box>
-      </Slate>
-    </>
+          >
+            코드블록으로 전환
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              if (contextMenuPath) {
+                Transforms.setNodes<ElementNode>(
+                  editor,
+                  {
+                    type: "PARAGRAPH",
+                  },
+                  {
+                    at: contextMenuPath,
+                  }
+                );
+              }
+            }}
+          >
+            문단으로 전환
+          </button>
+        </div> */}
+      </div>
+    </Slate>
   );
 };
-
-// const getClosestParentElement = (
-//   editor: Editor,
-//   node: Node
-// ): ElementNode | null => {
-//   if (!editor.selection) {
-//     return null;
-//   }
-
-//   const result = Editor.above<ElementNode>(editor, {
-//     at: editor.selection,
-//     match: (matchingNode) =>
-//       matchingNode.type !== "EDITOR" && Editor.isBlock(editor, matchingNode),
-//   });
-
-//   if (!result) {
-//     return null;
-//   }
-
-//   const [resultElement] = result;
-//   return resultElement;
-// };
-
-// interface IEditorLayoutWrapperProps {}
-
-// const EditorLayoutWrapper: React.FC<IEditorLayoutWrapperProps> = (props) => {
-//   return (
-//     <Box position="relative" ref={}>
-//       {props.children}
-//     </Box>
-//   );
-// };

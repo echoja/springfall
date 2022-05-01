@@ -1,32 +1,21 @@
-import { Box, Button, Flex, Heading } from "@chakra-ui/react";
 import Link from "next/link";
 
 import ThemeToggle from "./ThemeToggle";
 
 const Header = () => {
-  // const { data: session, status } = useSession();
-
-  // if (status === "loading") {
-  //   return <div>Authenticating ...</div>;
-  // }
-
   return (
-    <Flex as="header" width="full" align="center">
-      <Heading as="h1" size="md">
+    <header className="w-full flex items-center">
+      <h1 className="text-2xl font-semibold">
         <Link href="/">봄가을</Link>
-      </Heading>
+      </h1>
 
-      <Box marginLeft="auto" marginRight="3">
-        <Link href="/list" passHref>
-          <Button as="a" variant="ghost">
-            글 목록
-          </Button>
+      <div className="ml-auto mr-3">
+        <Link href="/list">
+          <a className="hover:underline">글 목록</a>
         </Link>
-      </Box>
-      <Box>
-        <ThemeToggle />
-      </Box>
-    </Flex>
+      </div>
+      <ThemeToggle />
+    </header>
   );
 };
 

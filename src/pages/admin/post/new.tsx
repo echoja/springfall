@@ -1,7 +1,7 @@
-import { useToast } from "@chakra-ui/react";
 import { adminLayoutWrapper } from "@lib/components/layout/AdminLayout";
 import type { PostEditArgs } from "@lib/components/PostEditorWrapper";
 import PostEditorWrapper from "@lib/components/PostEditorWrapper";
+import useToast from "@lib/hooks/use-toast";
 import type { MonnomlogPage } from "@lib/types";
 import type { Post } from "@prisma/client";
 import ky from "ky";
