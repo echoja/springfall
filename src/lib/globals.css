@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply transition-all duration-300;
+  }
+
+  html.dark {
+    @apply bg-slate-700 text-white;
+  }
+
+  body {
+    @apply font-serif keep-all;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-sans;
+  }
+
+  a {
+    @apply hover:underline;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply transition-colors inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md  bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300;
+  }
+
+  .btn-blue {
+    @apply bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded;
+  }
+}
+
+@layer utilities {
+  .keep-all {
+    word-break: keep-all;
+  }
+}
+
+@font-face {
+  font-family: "Iropke Batang";
+  src: url("/IropkeBatangM.woff") format("woff");
+  font-display: swap;
+}

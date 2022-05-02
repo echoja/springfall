@@ -1,24 +1,24 @@
 /** @type {import('next-seo').DefaultSeoProps} */
 const defaultSEOConfig = {
-  title: "nextarter-chakra",
-  titleTemplate: "%s | nextarter-chakra",
-  defaultTitle: "nextarter-chakra",
-  description: "Next.js + chakra-ui + TypeScript template",
-  canonical: "https://nextarter-chakra.sznm.dev",
+  title: "봄가을",
+  titleTemplate: "%s | 봄가을",
+  defaultTitle: "봄가을",
+  description: "봄가을 개발 블로그",
+  canonical: "https://springfall.cc",
   openGraph: {
-    url: "https://nextarter-chakra.sznm.dev",
-    title: "nextarter-chakra",
-    description: "Next.js + chakra-ui + TypeScript template",
-    images: [
-      {
-        url: "https://og-image.sznm.dev/**nextarter-chakra**.sznm.dev.png?theme=dark&md=1&fontSize=125px&images=https%3A%2F%2Fsznm.dev%2Favataaars.svg&widths=250",
-        alt: "nextarter-chakra.sznm.dev og-image",
-      },
-    ],
-    site_name: "nextarter-chakra",
+    url: "https://springfall.cc",
+    title: "봄가을",
+    description: "봄가을 개발 블로그",
+    // images: [
+    //   {
+    //     url: "https://og-image.sznm.dev/**springfall**.sznm.dev.png?theme=dark&md=1&fontSize=125px&images=https%3A%2F%2Fsznm.dev%2Favataaars.svg&widths=250",
+    //     alt: "springfall.sznm.dev og-image",
+    //   },
+    // ],
+    site_name: "springfall",
   },
   twitter: {
-    handle: "@sozonome",
+    handle: "@springfall_cc",
     cardType: "summary_large_image",
   },
 };

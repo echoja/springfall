@@ -1,35 +1,21 @@
-import { Box, Button, Flex, Heading } from "@chakra-ui/react";
-import { useSession, signOut, signIn } from "next-auth/react";
 import Link from "next/link";
 
 import ThemeToggle from "./ThemeToggle";
 
 const Header = () => {
-  const { data: session, status } = useSession();
-
-  if (status === "loading") {
-    return <div>Authenticating ...</div>;
-  }
-
   return (
-    <Flex as="header" width="full" align="center">
-      <Heading as="h1" size="md">
-        <Link href="/">monnomlog</Link>
-      </Heading>
+    <header className="w-full flex items-center">
+      <h1 className="text-2xl font-semibold">
+        <Link href="/">봄가을</Link>
+      </h1>
 
-      <Box marginLeft="auto" marginRight="3">
-        {!session ? (
-          <Button onClick={() => signIn("github")}>로그인</Button>
-        ) : (
-          <Button onClick={() => signOut()}>
-            <a>로그아웃</a>
-          </Button>
-        )}
-      </Box>
-      <Box>
-        <ThemeToggle />
-      </Box>
-    </Flex>
+      <div className="ml-auto mr-3">
+        <Link href="/list">
+          <a className="hover:underline">글 목록</a>
+        </Link>
+      </div>
+      <ThemeToggle />
+    </header>
   );
 };
 
