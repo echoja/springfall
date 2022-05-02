@@ -2,33 +2,21 @@ import { faPen } from "@fortawesome/pro-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { adminLayoutWrapper } from "@lib/components/layout/AdminLayout";
 import prisma from "@lib/prisma";
-import type { MonnomlogPage } from "@lib/types";
-import type { Post } from "@prisma/client";
+import { serializePost } from "@lib/serialize";
+import type { MonnomlogPage, SerializedPost } from "@lib/types";
 import type { GetServerSideProps } from "next";
 import Link from "next/link";
 
 interface IPostListProps {
-  posts: (Post & {
-    author: {
-      name: string | null;
-    } | null;
-  })[];
+  posts: SerializedPost[];
 }
 
 export const getServerSideProps: GetServerSideProps<
   IPostListProps
 > = async () => {
-  const posts = await prisma.post.findMany({
-    include: {
-      author: {
-        select: {
-          name: true,
-        },
-      },
-    },
-  });
+  const posts = await prisma.post.findMany();
   return {
-    props: { posts }, // will be passed to the page component as props
+    props: { posts: posts.map((post) => serializePost(post)) }, // will be passed to the page component as props
   };
 };
 
@@ -40,7 +28,6 @@ const PostList: MonnomlogPage<IPostListProps> = ({ posts }) => {
         <thead>
           <tr>
             <th>Title</th>
-            <th>Author</th>
             <th>Published</th>
           </tr>
         </thead>
@@ -52,14 +39,13 @@ const PostList: MonnomlogPage<IPostListProps> = ({ posts }) => {
                   <a>{post.title}</a>
                 </Link>
               </td>
-              <td>{post.author?.name}</td>
               <td>{post.published ? "Yes" : "No"}</td>
             </tr>
           ))}
         </tbody>
         <tfoot>
           <tr>
-            <td colSpan={3}>
+            <td colSpan={2}>
               <p>
                 <strong>{posts.length}</strong> posts
               </p>

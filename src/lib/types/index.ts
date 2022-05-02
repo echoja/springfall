@@ -2,7 +2,8 @@ import type { Post } from "@prisma/client";
 import type { NextPage } from "next";
 import type { ReactElement, ReactNode } from "react";
 import type { BaseEditor, Descendant } from "slate";
-import type { ReactEditor } from "slate-react";
+import type { ReactEditor, RenderElementProps } from "slate-react";
+import type { SetOptional } from "type-fest";
 
 export * from "./merge";
 
@@ -21,6 +22,15 @@ export type MonnomlogPage<P = {}> = NextPage<P> & {
 };
 
 export type ContentType = { data: Descendant[] };
+
+export type RenderPublicElementProps = SetOptional<
+  RenderElementProps,
+  "attributes"
+>;
+
+export type PublicElementComponent<T extends RenderElementProps> = React.FC<
+  SetOptional<T, "attributes">
+>;
 
 export type SerializedPost = Omit<
   Post,

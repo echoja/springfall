@@ -1,6 +1,9 @@
 import type { RenderLeafProps } from "slate-react";
+import type { SetOptional } from "type-fest";
 
-function Leaf(props: RenderLeafProps) {
+export function PublicLeaf(
+  props: SetOptional<RenderLeafProps, "attributes" | "text">
+) {
   let { children } = props;
   const { attributes, leaf } = props;
 
@@ -39,6 +42,10 @@ function Leaf(props: RenderLeafProps) {
   }
 
   return <span {...attributes}>{children}</span>;
+}
+
+function Leaf(props: RenderLeafProps) {
+  return <PublicLeaf {...props} />;
 }
 
 export default Leaf;

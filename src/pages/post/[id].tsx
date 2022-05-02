@@ -1,6 +1,7 @@
 import { faAxe } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import prisma from "@lib/prisma";
+import { renderPublic } from "@lib/render";
 import { serializePost } from "@lib/serialize";
 import type { MonnomlogPage, SerializedPost } from "@lib/types";
 import { format } from "date-fns";
@@ -9,8 +10,6 @@ import type { GetStaticPaths, GetStaticProps } from "next";
 import { NextSeo } from "next-seo";
 import { useMemo } from "react";
 import type { Descendant } from "slate";
-import { createEditor } from "slate";
-import { Slate, Editable, withReact } from "slate-react";
 
 interface IPostViewProps {
   post: SerializedPost;
@@ -59,7 +58,14 @@ export const getStaticProps: GetStaticProps<IPostViewProps> = async ({
 };
 
 const PostView: MonnomlogPage<IPostViewProps> = ({ post }) => {
-  const editor = useMemo(() => withReact(createEditor()), []);
+  const data = useMemo(() => {
+    return (post.content ? post.content.data : []) as Descendant[];
+  }, [post.content]);
+
+  const rendered = useMemo(() => {
+    return renderPublic(data);
+  }, [data]);
+
   return (
     <article>
       <NextSeo title={post.title} />
@@ -72,11 +78,7 @@ const PostView: MonnomlogPage<IPostViewProps> = ({ post }) => {
         </span>
         <span>{format(new Date(post.updatedAt), "yyyy.MM.dd.")}</span>
       </div>
-      <div className="article">
-        <Slate editor={editor} value={post.content?.data as Descendant[]}>
-          <Editable readOnly placeholder="Enter some plain text..." />
-        </Slate>
-      </div>
+      <div className="article">{rendered}</div>
     </article>
   );
 };

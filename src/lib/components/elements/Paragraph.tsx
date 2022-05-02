@@ -1,13 +1,17 @@
+import { createElementComponent } from "@lib/editor";
 import type { RenderElementProps } from "slate-react";
 
-function Paragraph(props: RenderElementProps) {
-  const { attributes, children } = props;
+export type IParagraphProps = RenderElementProps;
 
-  return (
-    <p className="mb-2" {...attributes}>
-      {children}
-    </p>
-  );
-}
+const { EditorComponent: Paragraph, PublicComponent } =
+  createElementComponent<IParagraphProps>(({ children, attributes }) => {
+    return (
+      <p className="mb-2" {...attributes}>
+        {children}
+      </p>
+    );
+  });
+
+export const PublicParagraph = PublicComponent;
 
 export default Paragraph;

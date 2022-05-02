@@ -1,16 +1,19 @@
+import { createElementComponent } from "@lib/editor";
 import type { RenderElementProps } from "slate-react";
 
-export interface ICodeBlockComponentProps extends RenderElementProps {
+export interface ICodeBlockProps extends RenderElementProps {
   lang?: string;
 }
 
-function CodeBlock(props: RenderElementProps) {
-  const { attributes, children } = props;
-  return (
-    <pre {...attributes}>
-      <code>{children}</code>
-    </pre>
-  );
-}
+const { EditorComponent: CodeBlock, PublicComponent } =
+  createElementComponent<ICodeBlockProps>(({ children, attributes }) => {
+    return (
+      <pre {...attributes}>
+        <code>{children}</code>
+      </pre>
+    );
+  });
+
+export const PublicCodeBlock = PublicComponent;
 
 export default CodeBlock;

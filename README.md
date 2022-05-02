@@ -31,3 +31,19 @@ yarn dev
 - [Prisma](https://www.prisma.io/): ORM
 - REST API (GraphQL 사용하지 않음)
 - [slate.js](https://www.slatejs.org/): 내부 에디터
+
+## 컨벤션
+
+함수영 컴포넌트는 아래와 같이 선언합니다.
+
+```ts
+export interface IRenderHrProps extends RenderElementProps {
+  element: IHr;
+}
+
+const Hr: React.FC<IRenderHrProps> = ({ attributes }) => {
+  return <hr {...attributes} />;
+};
+
+export default Hr;
+```

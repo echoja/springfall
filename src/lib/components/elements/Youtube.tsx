@@ -1,13 +1,16 @@
+import { createElementComponent } from "@lib/editor";
 import type { IYoutube } from "@lib/types";
 import type { RenderElementProps } from "slate-react";
 
-export interface IRenderYoutubeProps extends RenderElementProps {
+export interface IYoutubeProps extends RenderElementProps {
   element: IYoutube;
 }
 
-function Youtube(props: IRenderYoutubeProps) {
-  const { element, attributes } = props;
-  return <div {...attributes}>iframeUrl: {element.iframeUrl}</div>;
-}
+const { EditorComponent: Youtube, PublicComponent } =
+  createElementComponent<IYoutubeProps>(({ element, attributes }) => {
+    return <div {...attributes}>iframeUrl: {element.iframeUrl}</div>;
+  });
+
+export const PublicYoutube = PublicComponent;
 
 export default Youtube;

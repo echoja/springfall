@@ -3,7 +3,8 @@ import type { PostEditArgs } from "@lib/components/PostEditorWrapper";
 import PostEditorWrapper from "@lib/components/PostEditorWrapper";
 import useToast from "@lib/hooks/use-toast";
 import prisma from "@lib/prisma";
-import type { MonnomlogPage } from "@lib/types";
+import { serializePost } from "@lib/serialize";
+import type { MonnomlogPage, SerializedPost } from "@lib/types";
 import type { Post } from "@prisma/client";
 import ky from "ky";
 import type { GetServerSideProps } from "next";
@@ -11,7 +12,7 @@ import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 
 interface IPostEditProps {
-  post: Post | null;
+  post: SerializedPost;
 }
 
 export const getServerSideProps: GetServerSideProps<IPostEditProps> = async (
@@ -21,19 +22,24 @@ export const getServerSideProps: GetServerSideProps<IPostEditProps> = async (
 
   if (!id) {
     return {
-      props: {
-        post: null,
-      },
+      notFound: true,
     };
   }
+
   const post = await prisma.post.findUnique({
     where: {
       id: Number(id),
     },
   });
 
+  if (!post) {
+    return {
+      notFound: true,
+    };
+  }
+
   return {
-    props: { post }, // will be passed to the page component as props
+    props: { post: serializePost(post) }, // will be passed to the page component as props
   };
 };
 
