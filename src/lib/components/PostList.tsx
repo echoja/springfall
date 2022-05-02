@@ -4,12 +4,12 @@ import {
 } from "@fortawesome/pro-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { POSTS_PER_PAGE } from "@lib/config";
-import type { Post } from "@prisma/client";
+import type { SerializedPost } from "@lib/types";
 import Link from "next/link";
 import { useMemo } from "react";
 
 interface IPostListProps {
-  posts: Post[];
+  posts: SerializedPost[];
   count: number;
   currentPage: number;
 }

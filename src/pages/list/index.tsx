@@ -1,13 +1,13 @@
 import PostList from "@lib/components/PostList";
 import { POSTS_PER_PAGE } from "@lib/config";
 import prisma from "@lib/prisma";
-import type { MonnomlogPage } from "@lib/types";
-import type { Post } from "@prisma/client";
+import { serializePost } from "@lib/serialize";
+import type { MonnomlogPage, SerializedPost } from "@lib/types";
 import type { GetServerSideProps } from "next";
 import { NextSeo } from "next-seo";
 
 interface IListIndexProps {
-  posts: Post[];
+  posts: SerializedPost[];
   count: number;
 }
 
@@ -24,7 +24,12 @@ export const getServerSideProps: GetServerSideProps<
     prisma.post.count(),
   ]);
 
-  return { props: { posts, count } };
+  return {
+    props: {
+      posts: posts.map(serializePost),
+      count,
+    },
+  };
 };
 
 const ListIndex: MonnomlogPage<IListIndexProps> = ({ posts, count }) => {

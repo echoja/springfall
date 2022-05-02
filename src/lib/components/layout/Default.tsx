@@ -12,7 +12,7 @@ const Default = ({ children }: LayoutProps) => {
     <div className="mx-auto max-w-screen-lg">
       <div className="p-8">
         <Header />
-        <main className="my-24">{children}</main>
+        <main className="mt-12 mb-24">{children}</main>
         <Footer />
       </div>
     </div>

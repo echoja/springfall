@@ -22,22 +22,19 @@ const Page404 = () => {
         </motion.div>
         <p className="text-center font-xs">
           <a
-            className="text-xs"
-            href="https://stories.freepik.com/web"
+            className="text-xs text-slate-400"
+            href="https://storyset.com/illustration/404-error/pana"
+            target="_blank"
             rel="noopener noreferrer"
           >
-            Illustration by Freepik Stories
+            Illustration by Storyset
           </a>
         </p>
 
         <div className="my-4">
-          <h2 className="text-lg mb-4 font-bold text-center">404</h2>
-
           <div className="text-center">
             <Link href="/">
-              <a className="text-lg font-bold bg-gray-300 dark:bg-teal-500">
-                홈으로 가봅시다.
-              </a>
+              <a>앞뜰로 이동</a>
             </Link>
           </div>
         </div>

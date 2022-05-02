@@ -1,11 +1,11 @@
 import { faAngleLeft } from "@fortawesome/pro-regular-svg-icons";
 import { faFloppyDisk } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import type { ContentType } from "@lib/types";
 import type { Post } from "@prisma/client";
 import Link from "next/link";
 import type React from "react";
 import { useEffect, useCallback, useState } from "react";
-import type { Descendant } from "slate";
 
 import { ContentEditor } from "./ContentEditor";
 
@@ -16,8 +16,6 @@ interface IPostEditorWrapperProps {
   onChangePost: (post: PostEditArgs) => void;
   onSaveButtonClick: () => void;
 }
-
-type ContentType = { data: Descendant[] };
 
 const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
   post,

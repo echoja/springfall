@@ -25,8 +25,13 @@ const Home = () => {
             />
           </motion.div>
           <p className="text-center font-xs">
-            <a href="https://stories.freepik.com/web" rel="noopener noreferrer">
-              Illustration by Freepik Stories
+            <a
+              className="text-xs text-slate-400"
+              href="https://storyset.com/illustration/launching/amico"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Illustration by Storyset
             </a>
           </p>
         </div>
