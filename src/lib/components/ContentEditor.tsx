@@ -1,17 +1,9 @@
-// import {
-//   useFloating,
-//   useInteractions,
-//   useClick,
-//   shift,
-// } from "@floating-ui/react-dom-interactions";
-// import useOutsideClick from "@lib/hooks/use-outside-click";
+import { useHotkeys } from "@lib/hooks/use-hotkeys";
 import { renderElement, renderLeaf } from "@lib/render";
-import type { ElementNode } from "@lib/types";
-import type { MouseEvent } from "react";
 import { useCallback, useState } from "react";
 import type { Descendant } from "slate";
 import { createEditor, Editor, Transforms, Text } from "slate";
-import { ReactEditor, Editable, Slate, withReact } from "slate-react";
+import { Editable, Slate, withReact } from "slate-react";
 
 // Define our own custom set of helpers.
 const CustomEditor = {
@@ -81,44 +73,16 @@ export const ContentEditor: React.FC<IContentEditorProps> = ({
   value,
 }) => {
   const [editor] = useState(() => withReact(createEditor()));
-  // const [contextMenuAnchorPoint, setContextMenuAnchorPoint] = useState<{
-  //   x: number;
-  //   y: number;
-  // }>({ x: 0, y: 0 });
-  // const [contextMenuVisible, setContextMenuVisible] = useState(false);
-  // const [contextMenuPath, setContextMenuPath] = useState<Location | null>(null);
 
-  // const closeContextMenu = useCallback(() => {
-  //   setContextMenuVisible(false);
-  // }, [setContextMenuVisible]);
+  const openCmdPalette = useCallback(() => {
+    // eslint-disable-next-line no-console
+    console.log("open it!");
+  }, []);
 
-  // const { setDom: setContextMenu } = useOutsideClick(closeContextMenu);
-
-  // const { x, y, reference, floating, strategy, context } = useFloating({
-  //   placement: "right",
-  //   middleware: [shift()],
-  // });
-
-  const handleContextMenu = useCallback(
-    (event: MouseEvent<HTMLDivElement>) => {
-      event.preventDefault();
-      const resultEntry = Editor.above<ElementNode>(editor, {
-        at: ReactEditor.findEventRange(editor, event),
-        match: (n) => Editor.isBlock(editor, n),
-      });
-      if (resultEntry) {
-        // setContextMenuAnchorPoint({ x: event.clientX, y: event.clientY });
-        // setContextMenuVisible(true);
-        // setContextMenuPath(resultEntry[1]);
-      }
-    },
-    [editor]
-  );
-
-  // useEffect(() => {
-  //   // eslint-disable-next-line no-console
-  //   console.table(contextMenuAnchorPoint);
-  // }, [contextMenuAnchorPoint]);
+  useHotkeys({
+    keys: "ctrl+shift+p, cmd+shift+p",
+    callback: openCmdPalette,
+  });
 
   return (
     <Slate value={value} onChange={onChange} editor={editor}>
@@ -147,57 +111,7 @@ export const ContentEditor: React.FC<IContentEditorProps> = ({
                 break;
             }
           }}
-          onContextMenu={handleContextMenu}
         />
-        {/* <div
-          ref={(el) => {
-            setContextMenu(el);
-            floating(el);
-          }}
-          className="shadow-xl bg-white"
-          style={{
-            position: strategy,
-            top: y ?? "",
-            left: x ?? "",
-          }}
-        >
-          <button
-            type="button"
-            onClick={() => {
-              if (contextMenuPath) {
-                Transforms.setNodes<ElementNode>(
-                  editor,
-                  {
-                    type: "CODE_BLOCK",
-                  },
-                  {
-                    at: contextMenuPath,
-                  }
-                );
-              }
-            }}
-          >
-            코드블록으로 전환
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              if (contextMenuPath) {
-                Transforms.setNodes<ElementNode>(
-                  editor,
-                  {
-                    type: "PARAGRAPH",
-                  },
-                  {
-                    at: contextMenuPath,
-                  }
-                );
-              }
-            }}
-          >
-            문단으로 전환
-          </button>
-        </div> */}
       </div>
     </Slate>
   );

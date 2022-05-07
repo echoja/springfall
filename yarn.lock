@@ -3392,6 +3392,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"hotkeys-js@npm:^3.9.3":
+  version: 3.9.3
+  resolution: "hotkeys-js@npm:3.9.3"
+  checksum: cb18742598098935d2af50372eb185c4d24a1641872c9aed617d11606b66bf8402eee943abf9dc15ff1d612a5e84df5251746dc738fe0c2d3f33b294a1038ff4
+  languageName: node
+  linkType: hard
+
 "http-cache-semantics@npm:^4.1.0":
   version: 4.1.0
   resolution: "http-cache-semantics@npm:4.1.0"
@@ -4377,6 +4384,7 @@ __metadata:
     eslint-config-prettier: ^8.5.0
     eslint-config-sznm: ^0.2.1
     framer-motion: ^6.3.3
+    hotkeys-js: ^3.9.3
     husky: ^7.0.4
     joi: ^17.6.0
     ky: ^0.30.0
