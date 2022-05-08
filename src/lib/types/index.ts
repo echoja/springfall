@@ -1,5 +1,6 @@
 import type { Post } from "@prisma/client";
 import type { NextPage } from "next";
+import type { DefaultSession } from "next-auth";
 import type { ReactElement, ReactNode } from "react";
 import type { BaseEditor, Descendant, Element } from "slate";
 import type { ReactEditor, RenderElementProps } from "slate-react";
@@ -13,6 +14,15 @@ declare module "slate" {
     Editor: BaseEditor & ReactEditor & { type: "EDITOR" };
     Element: ElementNode;
     Text: InlineNode;
+  }
+}
+
+declare module "next-auth" {
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  interface Session {
+    user: {
+      id: number;
+    } & DefaultSession["user"];
   }
 }
 
@@ -38,6 +48,13 @@ export type SerializedPost = Omit<
 > & {
   updatedAt: string;
   createdAt: string;
+  content: ContentType;
+};
+
+export type CreatePostInput = Omit<
+  Post,
+  "content" | "createdAt" | "updatedAt" | "id"
+> & {
   content: ContentType;
 };
 

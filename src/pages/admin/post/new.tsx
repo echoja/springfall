@@ -1,8 +1,8 @@
-import { adminLayoutWrapper } from "@lib/components/layout/AdminLayout";
-import type { PostEditArgs } from "@lib/components/PostEditorWrapper";
+import { NoLayoutWrapper } from "@lib/components/layout/NoLayout";
 import PostEditorWrapper from "@lib/components/PostEditorWrapper";
 import useToast from "@lib/hooks/use-toast";
-import type { MonnomlogPage } from "@lib/types";
+import { convertPostSerializedToCreate } from "@lib/serialize";
+import type { MonnomlogPage, SerializedPost } from "@lib/types";
 import type { Post } from "@prisma/client";
 import ky from "ky";
 import { useRouter } from "next/router";
@@ -12,7 +12,7 @@ const PostEdit: MonnomlogPage = () => {
   const router = useRouter();
   const toast = useToast();
 
-  const [postEditing, setPostEditing] = useState<PostEditArgs>({
+  const [postEditing, setPostEditing] = useState<SerializedPost>({
     title: "",
     content: {
       data: [
@@ -27,13 +27,19 @@ const PostEdit: MonnomlogPage = () => {
         },
       ],
     },
+    authorId: -1,
+    published: false,
+    createdAt: "",
+    id: -1,
+    summary: "",
+    updatedAt: "",
   });
 
   const onSaveButtonClick = useCallback(async () => {
     try {
       const result = await ky
         .post(`/api/post/save-new`, {
-          json: postEditing,
+          json: convertPostSerializedToCreate(postEditing),
         })
         .json<Post>();
 
@@ -56,7 +62,7 @@ const PostEdit: MonnomlogPage = () => {
     }
   }, [postEditing, router, toast]);
 
-  const onChangePost = useCallback((post: PostEditArgs) => {
+  const onChangePost = useCallback((post: SerializedPost) => {
     if (!post) {
       return;
     }
@@ -74,6 +80,6 @@ const PostEdit: MonnomlogPage = () => {
   );
 };
 
-PostEdit.layoutWrapper = adminLayoutWrapper;
+PostEdit.layoutWrapper = NoLayoutWrapper;
 
 export default PostEdit;

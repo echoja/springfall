@@ -78,7 +78,6 @@ const commands: Command[] = [
 ];
 
 interface ICommandPaletteProps {
-  onCommand: (command: Command) => void;
   open: boolean;
   setOpen: (open: boolean) => void;
 }
@@ -160,7 +159,7 @@ const CommandPalette: React.FC<ICommandPaletteProps> = ({ open, setOpen }) => {
                     className={({ active }) =>
                       twMerge(
                         "cursor-default select-none px-4 py-2 font-sans",
-                        active && "bg-indigo-600 text-white"
+                        active && "bg-brand-600 text-white"
                       )
                     }
                   >
