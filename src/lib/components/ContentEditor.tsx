@@ -1,47 +1,12 @@
 import { useHotkeys } from "@lib/hooks/use-hotkeys";
-import { renderElement, renderLeaf } from "@lib/render";
-import { useCallback, useState } from "react";
-import type { Descendant } from "slate";
-import { createEditor, Editor, Transforms, Text } from "slate";
-import { Editable, Slate, withReact } from "slate-react";
+import type { Command } from "@lib/types";
+import { useEffect, useCallback, useState } from "react";
+import type { Descendant, Editor } from "slate";
+import { createEditor, Transforms } from "slate";
+import { Slate, withReact, ReactEditor } from "slate-react";
 
-// Define our own custom set of helpers.
-const CustomEditor = {
-  isBoldMarkActive(editor: Editor) {
-    const [match] = Editor.nodes(editor, {
-      match: (n) => n.type === "TEXT" && n.bold === true,
-      universal: true,
-    });
-
-    return Boolean(match);
-  },
-
-  isCodeBlockActive(editor: Editor) {
-    const [match] = Editor.nodes(editor, {
-      match: (n) => n.type === "CODE_BLOCK",
-    });
-
-    return Boolean(match);
-  },
-
-  toggleBoldMark(editor: Editor) {
-    const isActive = CustomEditor.isBoldMarkActive(editor);
-    Transforms.setNodes(
-      editor,
-      { bold: isActive ? undefined : true },
-      { match: (n) => Text.isText(n), split: true }
-    );
-  },
-
-  toggleCodeBlock(editor: Editor) {
-    const isActive = CustomEditor.isCodeBlockActive(editor);
-    Transforms.setNodes(
-      editor,
-      { type: isActive ? undefined : "CODE_BLOCK" },
-      { match: (n) => Editor.isBlock(editor, n) }
-    );
-  },
-};
+import CommandPalette from "./CommandPalette";
+import ContentEditorEditable from "./ContentEditorEditable";
 
 // Define a React component to render leaves with bold text.
 
@@ -73,45 +38,35 @@ export const ContentEditor: React.FC<IContentEditorProps> = ({
   value,
 }) => {
   const [editor] = useState(() => withReact(createEditor()));
+  const [openCmdPalette, setOpenCmdPalette] = useState(false);
 
-  const openCmdPalette = useCallback(() => {
+  const cmdPaletteShortcutHandler = useCallback(() => {
     // eslint-disable-next-line no-console
-    console.log("open it!");
+    setOpenCmdPalette(true);
   }, []);
 
   useHotkeys({
     keys: "ctrl+shift+p, cmd+shift+p",
-    callback: openCmdPalette,
+    callback: cmdPaletteShortcutHandler,
   });
+
+  const onCommand = useCallback((_command: Command) => {}, []);
+
+  useEffect(() => {
+    if (openCmdPalette) {
+      ReactEditor.blur(editor);
+    }
+  }, [editor, openCmdPalette]);
 
   return (
     <Slate value={value} onChange={onChange} editor={editor}>
+      <CommandPalette
+        open={openCmdPalette}
+        setOpen={setOpenCmdPalette}
+        onCommand={onCommand}
+      />
       <div className="relative">
-        <Editable
-          className="p-3 border max-w-screen-lg "
-          renderElement={renderElement}
-          renderLeaf={renderLeaf}
-          onKeyDown={(event) => {
-            if (!event.ctrlKey) {
-              return;
-            }
-
-            switch (event.key) {
-              case "`":
-                event.preventDefault();
-                CustomEditor.toggleCodeBlock(editor);
-                break;
-
-              case "b":
-                event.preventDefault();
-                CustomEditor.toggleBoldMark(editor);
-                break;
-
-              default:
-                break;
-            }
-          }}
-        />
+        <ContentEditorEditable />
       </div>
     </Slate>
   );

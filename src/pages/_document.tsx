@@ -18,7 +18,7 @@ export default function MyDocument() {
           type="image/png"
           sizes="96x96"
           rel="icon"
-          href="icons8-spa-flower-96.png"
+          href="/icons8-spa-flower-96.png"
         />
 
         <meta name="application-name" content={APP_NAME} />

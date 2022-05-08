@@ -1,7 +1,7 @@
 import type { Post } from "@prisma/client";
 import type { NextPage } from "next";
 import type { ReactElement, ReactNode } from "react";
-import type { BaseEditor, Descendant } from "slate";
+import type { BaseEditor, Descendant, Element } from "slate";
 import type { ReactEditor, RenderElementProps } from "slate-react";
 import type { SetOptional } from "type-fest";
 
@@ -150,3 +150,12 @@ export type IIcon = {
   type: "ICON";
   icon: string;
 };
+
+export type Command =
+  | {
+      type: "CONVERT";
+      to: Element["type"];
+      label: string;
+      hiddenLabel?: string;
+    }
+  | { type: "NOOP"; label: "noop" };
