@@ -149,7 +149,7 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
           </div>
 
           {/* Editor Sidebar */}
-          <div className="border-l flex-auto">
+          <div className="border-l flex-auto w-80">
             <div className="sticky top-0 max-h-screen overflow-auto">
               {/* Editor Sidebar Tabs */}
               <div className="border-b border-gray-200">
