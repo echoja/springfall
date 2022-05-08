@@ -10,6 +10,17 @@
     // props 에 타입이 없다고 오진하고 에러를 발생시킴.
     "react/prop-types": "off",
     "no-unused-vars": "off",
+
+    "jsx-a11y/label-has-associated-control": [
+      2,
+      {
+        // "labelComponents": ["CustomInputLabel"],
+        // "labelAttributes": ["label"],
+        "controlComponents": [/* "CustomInput"*/ "input", "select", "textarea"],
+        "depth": 3
+      }
+    ],
+
     "@typescript-eslint/no-unused-vars": [
       "error",
       { "varsIgnorePattern": "^_", "argsIgnorePattern": "^_" }

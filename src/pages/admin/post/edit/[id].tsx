@@ -1,5 +1,4 @@
 import { NoLayoutWrapper } from "@lib/components/layout/NoLayout";
-import type { PostEditArgs } from "@lib/components/PostEditorWrapper";
 import PostEditorWrapper from "@lib/components/PostEditorWrapper";
 import useToast from "@lib/hooks/use-toast";
 import prisma from "@lib/prisma";
@@ -48,10 +47,7 @@ const PostEdit: MonnomlogPage<IPostEditProps> = (props) => {
   const router = useRouter();
   const toast = useToast();
 
-  const [postEditing, setPostEditing] = useState<PostEditArgs>({
-    title: postProp?.title ?? "",
-    content: postProp?.content ?? "",
-  });
+  const [postEditing, setPostEditing] = useState(postProp);
 
   useEffect(() => {
     if (!postProp) {
@@ -89,7 +85,7 @@ const PostEdit: MonnomlogPage<IPostEditProps> = (props) => {
     }
   }, [postEditing, postProp, toast]);
 
-  const onChangePost = useCallback((post: PostEditArgs) => {
+  const onChangePost = useCallback((post: SerializedPost) => {
     if (!post) {
       return;
     }
@@ -105,7 +101,7 @@ const PostEdit: MonnomlogPage<IPostEditProps> = (props) => {
     postEditing && (
       <PostEditorWrapper
         onSaveButtonClick={onSaveButtonClick}
-        post={postProp}
+        post={postEditing}
         onChangePost={onChangePost}
       />
     )

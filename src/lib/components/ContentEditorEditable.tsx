@@ -46,6 +46,7 @@ const CustomEditor = {
 const ContentEditorEditable = () => {
   const editor = useSlate();
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [focused, setFocused] = useState(false);
 
   const editableOnBlur = useCallback(() => {
@@ -80,18 +81,12 @@ const ContentEditorEditable = () => {
     [editor]
   );
 
-  const className = useMemo(
-    () =>
-      twMerge(
-        "p-3 border max-w-screen-lg",
-        focused && "focus:ring-brand-500 focus:border-brand-500"
-      ),
-    [focused]
-  );
+  const className = useMemo(() => twMerge("p-3 min-h-[80vh]"), []);
 
   return (
     <Editable
       className={className}
+      placeholder="내용을 입력하세요"
       renderElement={renderElement}
       renderLeaf={renderLeaf}
       onBlur={editableOnBlur}

@@ -24,7 +24,9 @@ export const getServerSideProps: GetServerSideProps<IListPageProps> = async ({
   const schema = Joi.number().integer().min(1);
   const result = schema.validate(pageNum);
   if (result.error) {
-    throw new Error("page number is not valid");
+    return {
+      notFound: true,
+    };
   }
 
   const [posts, count] = await Promise.all([

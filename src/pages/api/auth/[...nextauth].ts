@@ -8,6 +8,7 @@ import GitHubProvider from "next-auth/providers/github";
 
 export default NextAuth({
   providers: [GitHubProvider(getGithubCredentials())],
+
   callbacks: {
     signIn: async ({ profile }) => {
       const users = await prisma.user.findMany();
@@ -20,6 +21,13 @@ export default NextAuth({
       }
 
       return true;
+    },
+
+    async session({ session, user }) {
+      return {
+        ...session,
+        user: { ...session.user, id: parseInt(user.id, 10) },
+      };
     },
   },
   adapter: PrismaAdapter(prisma),

@@ -5,7 +5,7 @@ import Image from "next/image";
 const Home = () => {
   return (
     <>
-      <NextSeo title="앞뜰" />
+      <NextSeo title="홈" />
       <div className="flex items-center justify-center min-h-[70vh] gap-8 mb-8 w-full">
         <div>
           <motion.div

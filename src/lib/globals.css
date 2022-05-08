@@ -4,11 +4,11 @@
 
 @layer base {
   html {
-    @apply transition-all duration-300;
+    @apply transition-all duration-300 text-gray-800 ;
   }
 
   html.dark {
-    @apply bg-slate-700 text-white;
+    @apply bg-slate-800 text-gray-200;
   }
 
   body {
@@ -25,7 +25,7 @@
   }
 
   a {
-    @apply hover:underline;
+    @apply text-gray-600 hover:text-gray-800 hover:underline;
   }
 }
 
@@ -42,6 +42,14 @@
 @layer utilities {
   .keep-all {
     word-break: keep-all;
+  }
+
+  .max-content {
+    width: max-content;
+  }
+
+  .ring-b {
+    @apply ring-b-2;
   }
 }
 
