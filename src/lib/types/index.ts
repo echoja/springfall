@@ -13,7 +13,7 @@ declare module "slate" {
   interface CustomTypes {
     Editor: BaseEditor & ReactEditor & { type: "EDITOR" };
     Element: ElementNode;
-    Text: InlineNode;
+    Text: InlineNode | EmptyText;
   }
 }
 
@@ -111,9 +111,19 @@ export type IListItem = {
 
 export type IImage = {
   type: "IMAGE";
-  id: string;
+  id?: string;
+  size:
+    | {
+        type: "FIT";
+      }
+    | {
+        type: "EXACT";
+        width: number;
+        height: number;
+      };
   caption?: IParagraph;
   alt?: string;
+  children: EmptyText[];
 };
 
 export type IQuote = {
@@ -156,6 +166,11 @@ export type IText = {
   kbd?: boolean;
 };
 
+export type EmptyText = {
+  type: "NOOP";
+  text: "";
+};
+
 export type ILink = {
   type: "LINK";
   text: string;
@@ -188,4 +203,56 @@ export interface IConvertHeadingCommand extends IBaseCommand {
   level: 1 | 2 | 3 | 4 | 5 | 6;
 }
 
-export type Command = IConvertCommand | INoopCommand | IConvertHeadingCommand;
+export interface IInsertImageCommand extends IBaseCommand {
+  type: "INSERT_IMAGE";
+}
+
+export type Command =
+  | IConvertCommand
+  | INoopCommand
+  | IConvertHeadingCommand
+  | IInsertImageCommand;
+
+export interface IFileManager {
+  /**
+   *  PresignedUrl 을 활용하여 업로드 링크를 생성합니다.
+   *
+   *  AWS 사용 시 리턴값 예시
+   *  ```json
+   *  {
+   *    "headers": {
+   *      "Policy": "abcde...",
+   *      "X-Amz-Algorithm": "AWS4-HMAC-SHA256",
+   *      "X-Amz-Credential": "AKIAVYN6O3HUQNZ5JQHO/20220508/ap-northeast-2/s3/aws4_request",
+   *      "X-Amz-Date": "20220508T132432Z",
+   *      "X-Amz-Signature": "834f39e6a07a5344d39722c94c2b0aa3c90d20922674b13ca26c9c5d429e4288",
+   *      "acl": "public-read",
+   *      "bucket": "monnomlog-test",
+   *      "key": "user/eric/1",
+   *    },
+   *    "method": "POST",
+   *    "url": "https://s3.ap-northeast-2.amazonaws.com/monnomlog-test",
+   *  }
+   *  ```
+   */
+  getUploadUrl: () => Promise<{
+    url: string;
+    method: "POST" | "PUT";
+    headers: {
+      [key: string]: string;
+    };
+  }>;
+
+  getFileInfo: (id: string) => Promise<{
+    type: "IMAGE" | "FILE";
+    name: string;
+    fullUrl: string;
+    size: number;
+    mimeType: string;
+    alt?: string;
+  }>;
+
+  removeFile: (
+    id: string
+  ) => Promise<{ success: true } | { success: false; reason: string }>;
+}

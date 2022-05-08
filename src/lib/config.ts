@@ -17,4 +17,19 @@ export function isProduction() {
   return process.env.NODE_ENV === "production";
 }
 
+export function getS3Credentials() {
+  return {
+    accessKeyId: process.env.MONNOMLOG_S3_ACCESS_KEY_ID ?? "",
+    secretAccessKey: process.env.MONNOMLOG_S3_PRIVATE_ACCESS_KEY ?? "",
+  };
+}
+
+export function getS3BucketName() {
+  return process.env.MONNOMLOG_S3_BUCKET ?? "monnomlog-test";
+}
+
+export function getS3Region() {
+  return process.env.MONNOMLOG_S3_REGION ?? "ap-northeast-2";
+}
+
 export const POSTS_PER_PAGE = 10;

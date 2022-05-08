@@ -13,7 +13,8 @@ export function parseQueryToNumber(
   );
 }
 
-export function noopFunction() {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function noopFunction(..._args: any): any {
   // noop
 }
 

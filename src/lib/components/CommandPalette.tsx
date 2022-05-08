@@ -71,12 +71,6 @@ const commands: Command[] = [
   },
   {
     type: "CONVERT",
-    to: "IMAGE",
-    label: "이미지로 변환 (개발중)",
-    hiddenLabel: "image",
-  },
-  {
-    type: "CONVERT",
     to: "LIST",
     label: "리스트로 변환 (개발중)",
     hiddenLabel: "list",
@@ -105,14 +99,24 @@ const commands: Command[] = [
     label: "유튜브 블록으로 변환 (개발중)",
     hiddenLabel: "youtube",
   },
+  {
+    type: "INSERT_IMAGE",
+    label: "이미지 삽입",
+    hiddenLabel: "insert image",
+  },
 ];
 
 interface ICommandPaletteProps {
   open: boolean;
   setOpen: (open: boolean) => void;
+  onCommand?: (command: Command) => void;
 }
 
-const CommandPalette: React.FC<ICommandPaletteProps> = ({ open, setOpen }) => {
+const CommandPalette: React.FC<ICommandPaletteProps> = ({
+  open,
+  setOpen,
+  onCommand,
+}) => {
   const [query, setQuery] = useState("");
   const editor = useSlate();
 
@@ -126,14 +130,11 @@ const CommandPalette: React.FC<ICommandPaletteProps> = ({ open, setOpen }) => {
     query === ""
       ? commands
       : commands.filter((command) => {
-          if (command.type === "CONVERT") {
-            return `${command.label} | ${
-              command.hiddenLabel ? command.hiddenLabel : ""
-            }`
-              .toLowerCase()
-              .includes(query.toLowerCase());
-          }
-          return false;
+          return `${command.label} | ${
+            command.hiddenLabel ? command.hiddenLabel : ""
+          }`
+            .toLowerCase()
+            .includes(query.toLowerCase());
         });
 
   const onSelected = useCallback(
@@ -167,12 +168,14 @@ const CommandPalette: React.FC<ICommandPaletteProps> = ({ open, setOpen }) => {
           }
           break;
         }
-        default:
-          break;
+        default: {
+          onCommand?.(command);
+        }
       }
       setOpen(false);
+      setQuery("");
     },
-    [editor, setOpen]
+    [editor, onCommand, setOpen]
   );
 
   return (

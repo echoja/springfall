@@ -2,7 +2,7 @@ import { faAngleLeft } from "@fortawesome/pro-regular-svg-icons";
 import { faFloppyDisk } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useHotkeys } from "@lib/hooks/use-hotkeys";
-import type { SerializedPost } from "@lib/types";
+import type { SerializedPost, Command } from "@lib/types";
 import Link from "next/link";
 import type React from "react";
 import { useCallback, useState, useMemo, memo } from "react";
@@ -13,6 +13,7 @@ import { twMerge } from "tailwind-merge";
 
 import CommandPalette from "./CommandPalette";
 import ContentEditorEditable from "./ContentEditorEditable";
+import InsertImageDialog from "./InsertImageDialog";
 import SwitchGroup from "./SwitchGroup";
 
 interface IPostEditorWrapperProps {
@@ -49,6 +50,7 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
 
   const [editor] = useState(() => withReact(createEditor()));
   const [openCmdPalette, setOpenCmdPalette] = useState(false);
+  const [openInsertImageDialog, setOpenInsertImageDialog] = useState(false);
   const [tabs, setTabs] = useState([
     { label: "글", id: "post", current: true },
     { label: "블록", id: "block", current: false },
@@ -108,6 +110,45 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
     ));
   }, [tabs]);
 
+  const onCommand = useCallback(
+    (command: Command) => {
+      // eslint-disable-next-line sonarjs/no-small-switch
+      switch (command.type) {
+        case "INSERT_IMAGE": {
+          const focus = editor.selection?.focus;
+          if (!focus) {
+            break;
+          }
+
+          // const point = Editor.after(editor, focus, {
+          //   unit: "block",
+          // });
+
+          setOpenInsertImageDialog(true);
+
+          // Transforms.insertNodes(
+          //   editor,
+
+          //   [
+          //     {
+          //       type: "IMAGE",
+          //       size: { type: "FIT" },
+          //       children: [{ type: "NOOP", text: "" }],
+          //     },
+          //   ],
+
+          //   { at: point || undefined, select: true }
+          // );
+          break;
+        }
+
+        default:
+          break;
+      }
+    },
+    [editor]
+  );
+
   return (
     <div>
       <div className="p-2 shadow-md">
@@ -118,7 +159,13 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
                 <FontAwesomeIcon icon={faAngleLeft} />
               </a>
             </Link>
-            <span className="font-semibold font-sans">글 편집</span>
+            <span className="font-semibold font-sans inline-flex pr-2">
+              글 편집
+            </span>
+            <span className="text-xs text-gray-500">
+              <kbd>⌘</kbd> (또는 <kbd>Ctrl</kbd>) + <kbd>⇧</kbd> + <kbd>P</kbd>
+              로 Command Palette 를 여세요!
+            </span>
           </div>
 
           <button type="button" className="btn" onClick={onSaveButtonClick}>
@@ -132,6 +179,17 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
         onChange={onSlateChange}
         editor={editor}
       >
+        <CommandPalette
+          open={openCmdPalette}
+          setOpen={setOpenCmdPalette}
+          onCommand={onCommand}
+        />
+
+        <InsertImageDialog
+          open={openInsertImageDialog}
+          setOpen={setOpenInsertImageDialog}
+        />
+
         <div className="flex gap-2 items-stretch">
           {/* Editor Main */}
           <div className="w-full max-w-screen-lg p-2 mt-6">
@@ -142,7 +200,7 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
               onChange={onTitlechange}
               className="border-0 text-xl font-semibold mb-3 w-full focus:ring-0"
             />
-            <CommandPalette open={openCmdPalette} setOpen={setOpenCmdPalette} />
+
             <div className="relative">
               <ContentEditorEditable />
             </div>
