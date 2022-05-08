@@ -1,3 +1,5 @@
+const colors = require("tailwindcss/colors");
+
 module.exports = {
   content: ["./src/**/*.{ts,tsx,js,jsx}"],
   darkMode: "class",
@@ -9,7 +11,7 @@ module.exports = {
         "-apple-system",
         "BlinkMacSystemFont",
         '"Segoe UI"',
-        "Roboto",
+        "Roboto", 
         '"Helvetica Neue"',
         "Arial",
         '"Noto Sans"',
@@ -39,7 +41,11 @@ module.exports = {
         "monospace",
       ],
     },
-    extend: {},
+    extend: {
+      colors: {
+        brand: colors.emerald,
+      }
+    },
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/forms")],
 };
