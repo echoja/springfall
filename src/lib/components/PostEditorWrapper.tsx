@@ -68,6 +68,11 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
     callback: cmdPaletteShortcutHandler,
   });
 
+  useHotkeys({
+    keys: "ctrl+s, cmd+s",
+    callback: onSaveButtonClick,
+  });
+
   const onSlateChange = useCallback(
     (data: Descendant[]) => {
       onChangePost({ ...post, content: { data } });
