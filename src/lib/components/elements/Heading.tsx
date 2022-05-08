@@ -1,28 +1,74 @@
 import { createElementComponent } from "@lib/editor";
 import type { IHeading } from "@lib/types";
 import type { RenderElementProps } from "slate-react";
+import { twMerge } from "tailwind-merge";
 
 export interface IHeadingProps extends RenderElementProps {
   element: IHeading;
 }
 
+const defaultHeadingClassName = "font-semibold mb-[2em]";
+
 const { EditorComponent: Heading, PublicComponent } =
   createElementComponent<IHeadingProps>(({ children, element, attributes }) => {
-    switch (element.level) {
+    const { level = 2 } = element;
+    switch (level) {
       case 1:
-        return <h1 {...attributes}>{children}</h1>;
-      case 2:
-        return <h2 {...attributes}>{children}</h2>;
+        return (
+          <h1
+            className={twMerge(defaultHeadingClassName, "text-4xl")}
+            {...attributes}
+          >
+            {children}
+          </h1>
+        );
+      /** case 2 is default! */
       case 3:
-        return <h3 {...attributes}>{children}</h3>;
+        return (
+          <h3
+            className={twMerge(defaultHeadingClassName, "text-xl")}
+            {...attributes}
+          >
+            {children}
+          </h3>
+        );
       case 4:
-        return <h4 {...attributes}>{children}</h4>;
+        return (
+          <h4
+            className={twMerge(defaultHeadingClassName, "text-lg")}
+            {...attributes}
+          >
+            {children}
+          </h4>
+        );
       case 5:
-        return <h5 {...attributes}>{children}</h5>;
+        return (
+          <h5
+            className={twMerge(defaultHeadingClassName, "text-md")}
+            {...attributes}
+          >
+            {children}
+          </h5>
+        );
       case 6:
-        return <h6 {...attributes}>{children}</h6>;
+        return (
+          <h6
+            className={twMerge(defaultHeadingClassName, "text-sm")}
+            {...attributes}
+          >
+            {children}
+          </h6>
+        );
+      case 2:
       default:
-        throw new Error("Invalid heading level");
+        return (
+          <h2
+            className={twMerge(defaultHeadingClassName, "text-2xl")}
+            {...attributes}
+          >
+            {children}
+          </h2>
+        );
     }
   });
 
