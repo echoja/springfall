@@ -12,67 +12,97 @@ const commands: Command[] = [
   {
     type: "CONVERT",
     to: "CALLOUT",
-    label: "콜아웃으로 변환",
+    label: "콜아웃으로 변환 (개발중)",
     hiddenLabel: "callout",
   },
   {
     type: "CONVERT",
     to: "CODE_BLOCK",
-    label: "코드블럭으로 변환",
+    label: "코드블럭으로 변환 (개발중)",
     hiddenLabel: "codeblock",
   },
   {
     type: "CONVERT",
     to: "GITHUB_BLOCK",
-    label: "깃허브 블록으로 변환",
+    label: "깃허브 블록으로 변환 (개발중)",
     hiddenLabel: "githubblock",
   },
   {
-    type: "CONVERT",
-    to: "HEADING",
-    label: "제목으로 변환",
+    type: "CONVERT_HEADING",
+    level: 1,
+    label: "h1 제목으로 변환",
+    hiddenLabel: "heading",
+  },
+  {
+    type: "CONVERT_HEADING",
+    level: 2,
+    label: "h2 제목으로 변환",
+    hiddenLabel: "heading",
+  },
+  {
+    type: "CONVERT_HEADING",
+    level: 3,
+    label: "h3 제목으로 변환",
+    hiddenLabel: "heading",
+  },
+  {
+    type: "CONVERT_HEADING",
+    level: 4,
+    label: "h4 제목으로 변환",
+    hiddenLabel: "heading",
+  },
+  {
+    type: "CONVERT_HEADING",
+    level: 5,
+    label: "h5 제목으로 변환",
+    hiddenLabel: "heading",
+  },
+  {
+    type: "CONVERT_HEADING",
+    level: 6,
+    label: "h6 제목으로 변환",
     hiddenLabel: "heading",
   },
   {
     type: "CONVERT",
     to: "HR",
-    label: "가로선으로 변환",
+    label: "가로선으로 변환 (개발중)",
     hiddenLabel: "hr",
   },
   {
     type: "CONVERT",
     to: "IMAGE",
-    label: "이미지로 변환",
+    label: "이미지로 변환 (개발중)",
     hiddenLabel: "image",
   },
   {
     type: "CONVERT",
     to: "LIST",
-    label: "리스트로 변환",
+    label: "리스트로 변환 (개발중)",
     hiddenLabel: "list",
   },
   {
     type: "CONVERT",
     to: "PARAGRAPH",
-    label: "문단으로 변환",
+    label: "문단으로 변환 (개발중)",
     hiddenLabel: "paragraph",
   },
   {
     type: "CONVERT",
     to: "QUOTE",
-    label: "인용구로 변환",
+    label: "인용구로 변환 (개발중)",
     hiddenLabel: "quote",
   },
   {
     type: "CONVERT",
     to: "TABLE",
-    label: "표로 변환",
+    label: "표로 변환 (개발중)",
     hiddenLabel: "table",
   },
   {
     type: "CONVERT",
     to: "YOUTUBE",
-    label: "유튜브 블록으로 변환",
+    label: "유튜브 블록으로 변환 (개발중)",
     hiddenLabel: "youtube",
   },
 ];
@@ -108,18 +138,37 @@ const CommandPalette: React.FC<ICommandPaletteProps> = ({ open, setOpen }) => {
 
   const onSelected = useCallback(
     (command: Command) => {
-      if (command.type === "CONVERT") {
-        const resultEntry = Editor.above<ElementNode>(editor, {
-          at: editor.selection?.anchor,
-          match: (n) => Editor.isBlock(editor, n),
-        });
-        if (resultEntry) {
-          Transforms.setNodes(
-            editor,
-            { type: command.to },
-            { at: resultEntry[1] }
-          );
+      switch (command.type) {
+        case "CONVERT": {
+          const resultEntry = Editor.above<ElementNode>(editor, {
+            at: editor.selection?.anchor,
+            match: (n) => Editor.isBlock(editor, n),
+          });
+          if (resultEntry) {
+            Transforms.setNodes(
+              editor,
+              { type: command.to },
+              { at: resultEntry[1] }
+            );
+          }
+          break;
         }
+        case "CONVERT_HEADING": {
+          const resultEntry = Editor.above<ElementNode>(editor, {
+            at: editor.selection?.anchor,
+            match: (n) => Editor.isBlock(editor, n),
+          });
+          if (resultEntry) {
+            Transforms.setNodes(
+              editor,
+              { type: "HEADING", level: command.level },
+              { at: resultEntry[1] }
+            );
+          }
+          break;
+        }
+        default:
+          break;
       }
       setOpen(false);
     },

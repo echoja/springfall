@@ -168,11 +168,24 @@ export type IIcon = {
   icon: string;
 };
 
-export type Command =
-  | {
-      type: "CONVERT";
-      to: Element["type"];
-      label: string;
-      hiddenLabel?: string;
-    }
-  | { type: "NOOP"; label: "noop" };
+export interface IBaseCommand {
+  label: string;
+  hiddenLabel?: string;
+}
+
+export interface IConvertCommand extends IBaseCommand {
+  type: "CONVERT";
+  to: Exclude<Element["type"], "HEADING">;
+}
+
+export interface INoopCommand extends IBaseCommand {
+  type: "NOOP";
+  label: "noop";
+}
+
+export interface IConvertHeadingCommand extends IBaseCommand {
+  type: "CONVERT_HEADING";
+  level: 1 | 2 | 3 | 4 | 5 | 6;
+}
+
+export type Command = IConvertCommand | INoopCommand | IConvertHeadingCommand;
