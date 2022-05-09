@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "es2018",
-    "lib": ["es2018", "esnext.asynciterable", "DOM"],
+    "lib": [
+      "es2018",
+      "esnext.asynciterable",
+      "DOM"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -13,11 +17,13 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "react-jsx",
+    "jsx": "preserve",
     "baseUrl": "src",
     "incremental": true,
     "paths": {
-      "@lib/*": ["lib/*"],
+      "@lib/*": [
+        "lib/*"
+      ]
     }
   },
   "include": [
@@ -27,5 +33,7 @@
     "src",
     "commitlint.config.js"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }
