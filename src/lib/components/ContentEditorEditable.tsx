@@ -43,7 +43,7 @@ const CustomEditor = {
   },
 };
 
-const ContentEditorEditable = () => {
+const ContentEditorEditable: React.FC = () => {
   const editor = useSlate();
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -85,6 +85,7 @@ const ContentEditorEditable = () => {
 
   return (
     <Editable
+      id="hoho"
       className={className}
       placeholder="내용을 입력하세요"
       renderElement={renderElement}

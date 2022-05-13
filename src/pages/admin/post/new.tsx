@@ -4,9 +4,11 @@ import useToast from "@lib/hooks/use-toast";
 import { convertPostSerializedToCreate } from "@lib/serialize";
 import type { MonnomlogPage, SerializedPost } from "@lib/types";
 import type { Post } from "@prisma/client";
-import ky from "ky";
+import axiosGlobal from "axios";
 import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
+
+const axios = axiosGlobal.create();
 
 const PostEdit: MonnomlogPage = () => {
   const router = useRouter();
@@ -37,11 +39,9 @@ const PostEdit: MonnomlogPage = () => {
 
   const onSaveButtonClick = useCallback(async () => {
     try {
-      const result = await ky
-        .post(`/api/post/save-new`, {
-          json: convertPostSerializedToCreate(postEditing),
-        })
-        .json<Post>();
+      const result = (await axios.post(`/api/post/save-new`, {
+        json: convertPostSerializedToCreate(postEditing),
+      })) as Post;
 
       toast({
         status: "success",

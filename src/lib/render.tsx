@@ -8,6 +8,7 @@ import { PublicCallout } from "./components/elements/Callout";
 import { PublicCodeBlock } from "./components/elements/CodeBlock";
 import { PublicHeading } from "./components/elements/Heading";
 import { PublicHr } from "./components/elements/Hr";
+import { PublicImage } from "./components/elements/Image";
 import { PublicList } from "./components/elements/List";
 import { PublicParagraph } from "./components/elements/Paragraph";
 import { PublicTable } from "./components/elements/Table";
@@ -20,6 +21,7 @@ export function renderPublicElement(props: RenderPublicElementProps) {
   switch (element.type) {
     case "CODE_BLOCK":
       return <PublicCodeBlock {...props} element={element} />;
+    case "IMAGE_CAPTION":
     case "PARAGRAPH":
       return <PublicParagraph {...props} element={element} />;
     case "HEADING":
@@ -34,6 +36,8 @@ export function renderPublicElement(props: RenderPublicElementProps) {
       return <PublicHr {...props} element={element} />;
     case "YOUTUBE":
       return <PublicYoutube {...props} element={element} />;
+    case "IMAGE":
+      return <PublicImage {...props} element={element} />;
     default:
       return <PublicParagraph {...props} element={element} />;
   }

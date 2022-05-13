@@ -13,106 +13,110 @@ const commands: Command[] = [
     type: "CONVERT",
     to: "CALLOUT",
     label: "콜아웃으로 변환 (개발중)",
-    hiddenLabel: "callout",
+    hiddenLabel: "convert to callout",
   },
   {
     type: "CONVERT",
     to: "CODE_BLOCK",
     label: "코드블럭으로 변환 (개발중)",
-    hiddenLabel: "codeblock",
+    hiddenLabel: "convert to codeblock",
   },
   {
     type: "CONVERT",
     to: "GITHUB_BLOCK",
     label: "깃허브 블록으로 변환 (개발중)",
-    hiddenLabel: "githubblock",
+    hiddenLabel: "convert to githubblock",
   },
   {
     type: "CONVERT_HEADING",
     level: 1,
     label: "h1 제목으로 변환",
-    hiddenLabel: "heading",
+    hiddenLabel: "convert to h1",
   },
   {
     type: "CONVERT_HEADING",
     level: 2,
     label: "h2 제목으로 변환",
-    hiddenLabel: "heading",
+    hiddenLabel: "convert to h2",
   },
   {
     type: "CONVERT_HEADING",
     level: 3,
     label: "h3 제목으로 변환",
-    hiddenLabel: "heading",
+    hiddenLabel: "convert to h3",
   },
   {
     type: "CONVERT_HEADING",
     level: 4,
     label: "h4 제목으로 변환",
-    hiddenLabel: "heading",
+    hiddenLabel: "convert to h4",
   },
   {
     type: "CONVERT_HEADING",
     level: 5,
     label: "h5 제목으로 변환",
-    hiddenLabel: "heading",
+    hiddenLabel: "convert to h5",
   },
   {
     type: "CONVERT_HEADING",
     level: 6,
     label: "h6 제목으로 변환",
-    hiddenLabel: "heading",
+    hiddenLabel: "convert to h6",
   },
   {
     type: "CONVERT",
     to: "HR",
     label: "가로선으로 변환 (개발중)",
-    hiddenLabel: "hr",
-  },
-  {
-    type: "CONVERT",
-    to: "IMAGE",
-    label: "이미지로 변환 (개발중)",
-    hiddenLabel: "image",
+    hiddenLabel: "convert to hr",
   },
   {
     type: "CONVERT",
     to: "LIST",
     label: "리스트로 변환 (개발중)",
-    hiddenLabel: "list",
+    hiddenLabel: "convert to list",
   },
   {
     type: "CONVERT",
     to: "PARAGRAPH",
     label: "문단으로 변환 (개발중)",
-    hiddenLabel: "paragraph",
+    hiddenLabel: "convert to paragraph",
   },
   {
     type: "CONVERT",
     to: "QUOTE",
     label: "인용구로 변환 (개발중)",
-    hiddenLabel: "quote",
+    hiddenLabel: "convert to quote",
   },
   {
     type: "CONVERT",
     to: "TABLE",
     label: "표로 변환 (개발중)",
-    hiddenLabel: "table",
+    hiddenLabel: "convert to table",
   },
   {
     type: "CONVERT",
     to: "YOUTUBE",
     label: "유튜브 블록으로 변환 (개발중)",
-    hiddenLabel: "youtube",
+    hiddenLabel: "convert to youtube",
+  },
+  {
+    type: "INSERT_IMAGE",
+    label: "이미지 삽입",
+    hiddenLabel: "insert image",
   },
 ];
 
 interface ICommandPaletteProps {
   open: boolean;
   setOpen: (open: boolean) => void;
+  onCommand?: (command: Command) => void;
 }
 
-const CommandPalette: React.FC<ICommandPaletteProps> = ({ open, setOpen }) => {
+const CommandPalette: React.FC<ICommandPaletteProps> = ({
+  open,
+  setOpen,
+  onCommand,
+}) => {
   const [query, setQuery] = useState("");
   const editor = useSlate();
 
@@ -126,14 +130,11 @@ const CommandPalette: React.FC<ICommandPaletteProps> = ({ open, setOpen }) => {
     query === ""
       ? commands
       : commands.filter((command) => {
-          if (command.type === "CONVERT") {
-            return `${command.label} | ${
-              command.hiddenLabel ? command.hiddenLabel : ""
-            }`
-              .toLowerCase()
-              .includes(query.toLowerCase());
-          }
-          return false;
+          return `${command.label} | ${
+            command.hiddenLabel ? command.hiddenLabel : ""
+          }`
+            .toLowerCase()
+            .includes(query.toLowerCase());
         });
 
   const onSelected = useCallback(
@@ -167,12 +168,14 @@ const CommandPalette: React.FC<ICommandPaletteProps> = ({ open, setOpen }) => {
           }
           break;
         }
-        default:
-          break;
+        default: {
+          onCommand?.(command);
+        }
       }
       setOpen(false);
+      setQuery("");
     },
-    [editor, setOpen]
+    [editor, onCommand, setOpen]
   );
 
   return (

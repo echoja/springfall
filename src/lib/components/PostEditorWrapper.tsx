@@ -2,17 +2,18 @@ import { faAngleLeft } from "@fortawesome/pro-regular-svg-icons";
 import { faFloppyDisk } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useHotkeys } from "@lib/hooks/use-hotkeys";
-import type { SerializedPost } from "@lib/types";
+import type { SerializedPost, Command } from "@lib/types";
 import Link from "next/link";
 import type React from "react";
 import { useCallback, useState, useMemo, memo } from "react";
-import type { Descendant } from "slate";
+import type { Descendant, Selection } from "slate";
 import { createEditor } from "slate";
 import { withReact, Slate } from "slate-react";
 import { twMerge } from "tailwind-merge";
 
 import CommandPalette from "./CommandPalette";
 import ContentEditorEditable from "./ContentEditorEditable";
+import InsertImageDialog from "./InsertImageDialog";
 import SwitchGroup from "./SwitchGroup";
 
 interface IPostEditorWrapperProps {
@@ -49,6 +50,8 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
 
   const [editor] = useState(() => withReact(createEditor()));
   const [openCmdPalette, setOpenCmdPalette] = useState(false);
+  const [savedSelection, setSavedSelection] = useState<Selection | null>(null);
+  const [openInsertImageDialog, setOpenInsertImageDialog] = useState(false);
   const [tabs, setTabs] = useState([
     { label: "글", id: "post", current: true },
     { label: "블록", id: "block", current: false },
@@ -59,9 +62,9 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
   }, [tabs]);
 
   const cmdPaletteShortcutHandler = useCallback(() => {
-    // eslint-disable-next-line no-console
+    setSavedSelection(editor.selection);
     setOpenCmdPalette(true);
-  }, []);
+  }, [editor.selection]);
 
   useHotkeys({
     keys: "ctrl+shift+p, cmd+shift+p",
@@ -75,7 +78,9 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
 
   const onSlateChange = useCallback(
     (data: Descendant[]) => {
-      onChangePost({ ...post, content: { data } });
+      if (data !== post.content?.data) {
+        onChangePost({ ...post, content: { data } });
+      }
     },
     [onChangePost, post]
   );
@@ -108,6 +113,19 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
     ));
   }, [tabs]);
 
+  const onCommand = useCallback((command: Command) => {
+    // eslint-disable-next-line sonarjs/no-small-switch
+    switch (command.type) {
+      case "INSERT_IMAGE": {
+        setOpenInsertImageDialog(true);
+        break;
+      }
+
+      default:
+        break;
+    }
+  }, []);
+
   return (
     <div>
       <div className="p-2 shadow-md">
@@ -118,7 +136,13 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
                 <FontAwesomeIcon icon={faAngleLeft} />
               </a>
             </Link>
-            <span className="font-semibold font-sans">글 편집</span>
+            <span className="font-semibold font-sans inline-flex pr-2">
+              글 편집
+            </span>
+            <span className="text-xs text-gray-500">
+              <kbd>⌘</kbd> (또는 <kbd>Ctrl</kbd>) + <kbd>⇧</kbd> + <kbd>P</kbd>
+              로 Command Palette 를 여세요!
+            </span>
           </div>
 
           <button type="button" className="btn" onClick={onSaveButtonClick}>
@@ -132,6 +156,18 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
         onChange={onSlateChange}
         editor={editor}
       >
+        <CommandPalette
+          open={openCmdPalette}
+          setOpen={setOpenCmdPalette}
+          onCommand={onCommand}
+        />
+
+        <InsertImageDialog
+          open={openInsertImageDialog}
+          setOpen={setOpenInsertImageDialog}
+          selection={savedSelection}
+        />
+
         <div className="flex gap-2 items-stretch">
           {/* Editor Main */}
           <div className="w-full max-w-screen-lg p-2 mt-6">
@@ -142,7 +178,7 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
               onChange={onTitlechange}
               className="border-0 text-xl font-semibold mb-3 w-full focus:ring-0"
             />
-            <CommandPalette open={openCmdPalette} setOpen={setOpenCmdPalette} />
+
             <div className="relative">
               <ContentEditorEditable />
             </div>
@@ -158,7 +194,7 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
                 </nav>
               </div>
 
-              {/* Editor Sidebar Tabs Bocy */}
+              {/* Editor Sidebar Tabs Body */}
               <div className="p-3">
                 {currentTabId === "post" && (
                   <SwitchGroup

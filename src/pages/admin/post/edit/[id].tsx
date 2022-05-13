@@ -5,10 +5,12 @@ import prisma from "@lib/prisma";
 import { serializePost } from "@lib/serialize";
 import type { MonnomlogPage, SerializedPost } from "@lib/types";
 import type { Post } from "@prisma/client";
-import ky from "ky";
+import axiosGlobal from "axios";
 import type { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
+
+const axios = axiosGlobal.create();
 
 interface IPostEditProps {
   post: SerializedPost;
@@ -61,12 +63,9 @@ const PostEdit: MonnomlogPage<IPostEditProps> = (props) => {
 
   const onSaveButtonClick = useCallback(async () => {
     try {
-      const result = await ky
-        .post(`/api/post/save/${postProp?.id}`, {
-          json: postEditing,
-        })
-        .json<Post>();
-
+      const result = (await axios.post(`/api/post/save/${postProp?.id}`, {
+        json: postEditing,
+      })) as Post;
       toast({
         status: "success",
         title: "포스팅이 성공적으로 저장었습니다.",
