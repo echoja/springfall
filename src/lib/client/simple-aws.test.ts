@@ -3,8 +3,11 @@ import AWSUploadManager from "./AWSFileManager";
 describe("AWSUploadManager", () => {
   describe("getUpoadUrl", () => {
     // todo
-    it.skip("잘 동작해야 함 (그때마다 다름)", async () => {
-      const result = await AWSUploadManager.getUploadUrl();
+    it.skip("잘 동작해야 함 (그때마다 달라서 skip 처리)", async () => {
+      const result = await AWSUploadManager.getUploadUrl({
+        filename: "test.png",
+        filetype: "image/png",
+      });
       expect(result).toMatchInlineSnapshot(`
         Object {
           "headers": Object {

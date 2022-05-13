@@ -6,7 +6,7 @@ import type { SerializedPost, Command } from "@lib/types";
 import Link from "next/link";
 import type React from "react";
 import { useCallback, useState, useMemo, memo } from "react";
-import type { Descendant } from "slate";
+import type { Descendant, Selection } from "slate";
 import { createEditor } from "slate";
 import { withReact, Slate } from "slate-react";
 import { twMerge } from "tailwind-merge";
@@ -50,6 +50,7 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
 
   const [editor] = useState(() => withReact(createEditor()));
   const [openCmdPalette, setOpenCmdPalette] = useState(false);
+  const [savedSelection, setSavedSelection] = useState<Selection | null>(null);
   const [openInsertImageDialog, setOpenInsertImageDialog] = useState(false);
   const [tabs, setTabs] = useState([
     { label: "글", id: "post", current: true },
@@ -61,9 +62,9 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
   }, [tabs]);
 
   const cmdPaletteShortcutHandler = useCallback(() => {
-    // eslint-disable-next-line no-console
+    setSavedSelection(editor.selection);
     setOpenCmdPalette(true);
-  }, []);
+  }, [editor.selection]);
 
   useHotkeys({
     keys: "ctrl+shift+p, cmd+shift+p",
@@ -77,7 +78,9 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
 
   const onSlateChange = useCallback(
     (data: Descendant[]) => {
-      onChangePost({ ...post, content: { data } });
+      if (data !== post.content?.data) {
+        onChangePost({ ...post, content: { data } });
+      }
     },
     [onChangePost, post]
   );
@@ -110,44 +113,18 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
     ));
   }, [tabs]);
 
-  const onCommand = useCallback(
-    (command: Command) => {
-      // eslint-disable-next-line sonarjs/no-small-switch
-      switch (command.type) {
-        case "INSERT_IMAGE": {
-          const focus = editor.selection?.focus;
-          if (!focus) {
-            break;
-          }
-
-          // const point = Editor.after(editor, focus, {
-          //   unit: "block",
-          // });
-
-          setOpenInsertImageDialog(true);
-
-          // Transforms.insertNodes(
-          //   editor,
-
-          //   [
-          //     {
-          //       type: "IMAGE",
-          //       size: { type: "FIT" },
-          //       children: [{ type: "NOOP", text: "" }],
-          //     },
-          //   ],
-
-          //   { at: point || undefined, select: true }
-          // );
-          break;
-        }
-
-        default:
-          break;
+  const onCommand = useCallback((command: Command) => {
+    // eslint-disable-next-line sonarjs/no-small-switch
+    switch (command.type) {
+      case "INSERT_IMAGE": {
+        setOpenInsertImageDialog(true);
+        break;
       }
-    },
-    [editor]
-  );
+
+      default:
+        break;
+    }
+  }, []);
 
   return (
     <div>
@@ -188,6 +165,7 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
         <InsertImageDialog
           open={openInsertImageDialog}
           setOpen={setOpenInsertImageDialog}
+          selection={savedSelection}
         />
 
         <div className="flex gap-2 items-stretch">
@@ -216,7 +194,7 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
                 </nav>
               </div>
 
-              {/* Editor Sidebar Tabs Bocy */}
+              {/* Editor Sidebar Tabs Body */}
               <div className="p-3">
                 {currentTabId === "post" && (
                   <SwitchGroup

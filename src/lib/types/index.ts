@@ -58,7 +58,9 @@ export type CreatePostInput = Omit<
   content: ContentType;
 };
 
-export type ElementNode =
+export type ElementNode = StandaloneElementNode | IImageCaption;
+
+export type StandaloneElementNode =
   | IParagraph
   | IHeading
   | ICodeBlock
@@ -75,7 +77,7 @@ export type ICallout = {
   type: "CALLOUT";
   colorScheme: "blue" | "green" | "red" | "yellow";
   icon: string;
-  children: ElementNode[];
+  children: StandaloneElementNode[];
 };
 
 export type IHr = {
@@ -111,7 +113,7 @@ export type IListItem = {
 
 export type IImage = {
   type: "IMAGE";
-  id?: string;
+  url: string;
   size:
     | {
         type: "FIT";
@@ -121,14 +123,13 @@ export type IImage = {
         width: number;
         height: number;
       };
-  caption?: IParagraph;
   alt?: string;
-  children: EmptyText[];
+  children: [IImageCaption] | [EmptyText];
 };
 
 export type IQuote = {
   type: "QUOTE";
-  children: ElementNode[];
+  children: StandaloneElementNode[];
 };
 
 export type ICodeBlock = {
@@ -141,11 +142,16 @@ export type CodeBlockChild = IParagraph | ICodeExplainer;
 
 export type ICodeExplainer = {
   line: number;
-  children: ElementNode[];
+  children: StandaloneElementNode[];
 };
 
 export type IParagraph = {
   type: "PARAGRAPH";
+  children: InlineNode[];
+};
+
+export type IImageCaption = {
+  type: "IMAGE_CAPTION";
   children: InlineNode[];
 };
 
@@ -213,6 +219,19 @@ export type Command =
   | IConvertHeadingCommand
   | IInsertImageCommand;
 
+export interface IUploadRequestInfo {
+  url: string;
+  method: "POST" | "PUT";
+  headers: {
+    [key: string]: string;
+  };
+}
+
+export interface IGetUploadUrlParams {
+  filename: string;
+  filetype: string;
+}
+
 export interface IFileManager {
   /**
    *  PresignedUrl 을 활용하여 업로드 링크를 생성합니다.
@@ -235,13 +254,7 @@ export interface IFileManager {
    *  }
    *  ```
    */
-  getUploadUrl: () => Promise<{
-    url: string;
-    method: "POST" | "PUT";
-    headers: {
-      [key: string]: string;
-    };
-  }>;
+  getUploadUrl: (params: IGetUploadUrlParams) => Promise<IUploadRequestInfo>;
 
   getFileInfo: (id: string) => Promise<{
     type: "IMAGE" | "FILE";
