@@ -1,6 +1,7 @@
 import { faPen } from "@fortawesome/pro-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { adminLayoutWrapper } from "@lib/components/layout/AdminLayout";
+import { useAdminPageGuard } from "@lib/hooks";
 import prisma from "@lib/prisma";
 import { serializePost } from "@lib/serialize";
 import type { MonnomlogPage, SerializedPost } from "@lib/types";
@@ -21,6 +22,7 @@ export const getServerSideProps: GetServerSideProps<
 };
 
 const PostList: MonnomlogPage<IPostListProps> = ({ posts }) => {
+  useAdminPageGuard();
   return (
     <div>
       <table>

@@ -1,7 +1,9 @@
 import { createElementComponent } from "@lib/editor";
 import type { IImage } from "@lib/types";
-import NextImage from "next/image";
+import { useMemo } from "react";
 import type { RenderElementProps } from "slate-react";
+import { useFocused, useSelected } from "slate-react";
+import { twMerge } from "tailwind-merge";
 
 export interface IImageProps extends RenderElementProps {
   element: IImage;
@@ -9,23 +11,34 @@ export interface IImageProps extends RenderElementProps {
 
 const { EditorComponent: Image, PublicComponent } =
   createElementComponent<IImageProps>(({ children, element, attributes }) => {
-    const sizeProps =
-      element.size.type === "FIT"
-        ? {
-            layout: "fill" as const,
-          }
-        : {
-            width: element.size.width,
-            height: element.size.height,
-          };
+    const selected = useSelected();
+    const focused = useFocused();
+    const classes = useMemo(() => {
+      return selected && focused ? "ring-indigo-500" : "";
+    }, [focused, selected]);
+
+    const style = useMemo(
+      () =>
+        element.size.type === "FIT"
+          ? {}
+          : {
+              width: element.size.width,
+              height: element.size.height,
+            },
+      [element.size]
+    );
 
     return (
-      <div
-        {...attributes}
-        className={element.size.type === "FIT" ? "relative" : ""}
-      >
-        <NextImage src={element.url} alt={element.alt} {...sizeProps} />
-        <div className="caption">{children}</div>
+      <div {...attributes}>
+        <div contentEditable={false} className="relative">
+          <img
+            src={element.url}
+            alt={element.alt}
+            className={twMerge("block max-w-full", classes)}
+            style={{ ...style }}
+          />
+        </div>
+        {children}
       </div>
     );
   });

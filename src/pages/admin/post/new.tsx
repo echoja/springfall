@@ -1,5 +1,6 @@
 import { NoLayoutWrapper } from "@lib/components/layout/NoLayout";
 import PostEditorWrapper from "@lib/components/PostEditorWrapper";
+import { useAdminPageGuard } from "@lib/hooks";
 import useToast from "@lib/hooks/use-toast";
 import { convertPostSerializedToCreate } from "@lib/serialize";
 import type { MonnomlogPage, SerializedPost } from "@lib/types";
@@ -11,6 +12,7 @@ import { useCallback, useState } from "react";
 const axios = axiosGlobal.create();
 
 const PostEdit: MonnomlogPage = () => {
+  useAdminPageGuard();
   const router = useRouter();
   const toast = useToast();
 
@@ -39,9 +41,10 @@ const PostEdit: MonnomlogPage = () => {
 
   const onSaveButtonClick = useCallback(async () => {
     try {
-      const result = (await axios.post(`/api/post/save-new`, {
-        json: convertPostSerializedToCreate(postEditing),
-      })) as Post;
+      const { data: result } = await axios.post<Post>(
+        `/api/post/save-new`,
+        convertPostSerializedToCreate(postEditing)
+      );
 
       toast({
         status: "success",

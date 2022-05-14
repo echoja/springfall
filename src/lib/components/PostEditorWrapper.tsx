@@ -1,6 +1,7 @@
 import { faAngleLeft } from "@fortawesome/pro-regular-svg-icons";
 import { faFloppyDisk } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { isDevelopment } from "@lib/config";
 import { useHotkeys } from "@lib/hooks/use-hotkeys";
 import type { SerializedPost, Command } from "@lib/types";
 import Link from "next/link";
@@ -13,6 +14,7 @@ import { twMerge } from "tailwind-merge";
 
 import CommandPalette from "./CommandPalette";
 import ContentEditorEditable from "./ContentEditorEditable";
+import DebugPopover from "./DebugPopover";
 import InsertImageDialog from "./InsertImageDialog";
 import SwitchGroup from "./SwitchGroup";
 
@@ -145,9 +147,12 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
             </span>
           </div>
 
-          <button type="button" className="btn" onClick={onSaveButtonClick}>
-            <FontAwesomeIcon icon={faFloppyDisk} />
-          </button>
+          <div className="inline-flex items-center">
+            {isDevelopment() && <DebugPopover post={post} />}
+            <button type="button" className="btn" onClick={onSaveButtonClick}>
+              <FontAwesomeIcon icon={faFloppyDisk} />
+            </button>
+          </div>
         </div>
       </div>
       {/* Editor Body */}
