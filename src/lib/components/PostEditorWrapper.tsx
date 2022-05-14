@@ -9,6 +9,7 @@ import type React from "react";
 import { useCallback, useState, useMemo, memo } from "react";
 import type { Descendant, Selection } from "slate";
 import { createEditor } from "slate";
+import { withHistory } from "slate-history";
 import { withReact, Slate } from "slate-react";
 import { twMerge } from "tailwind-merge";
 
@@ -50,7 +51,7 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
     [onChangePost, post]
   );
 
-  const [editor] = useState(() => withReact(createEditor()));
+  const [editor] = useState(() => withHistory(withReact(createEditor())));
   const [openCmdPalette, setOpenCmdPalette] = useState(false);
   const [savedSelection, setSavedSelection] = useState<Selection | null>(null);
   const [openInsertImageDialog, setOpenInsertImageDialog] = useState(false);
