@@ -1,5 +1,6 @@
 import { NoLayoutWrapper } from "@lib/components/layout/NoLayout";
 import PostEditorWrapper from "@lib/components/PostEditorWrapper";
+import { useAdminPageGuard } from "@lib/hooks";
 import useToast from "@lib/hooks/use-toast";
 import prisma from "@lib/prisma";
 import { serializePost } from "@lib/serialize";
@@ -45,6 +46,7 @@ export const getServerSideProps: GetServerSideProps<IPostEditProps> = async (
 };
 
 const PostEdit: MonnomlogPage<IPostEditProps> = (props) => {
+  useAdminPageGuard();
   const { post: postProp } = props;
   const router = useRouter();
   const toast = useToast();
@@ -63,9 +65,10 @@ const PostEdit: MonnomlogPage<IPostEditProps> = (props) => {
 
   const onSaveButtonClick = useCallback(async () => {
     try {
-      const result = (await axios.post(`/api/post/save/${postProp?.id}`, {
-        json: postEditing,
-      })) as Post;
+      const { data: result } = await axios.post<Post>(
+        `/api/post/save/${postProp?.id}`,
+        postEditing
+      );
       toast({
         status: "success",
         title: "포스팅이 성공적으로 저장었습니다.",
