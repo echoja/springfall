@@ -1,5 +1,8 @@
-import { Editor, Element } from "slate";
+import { memo } from "react";
+import { createEditor, Editor, Element } from "slate";
+import { withHistory } from "slate-history";
 import type { RenderElementProps } from "slate-react";
+import { withReact } from "slate-react";
 
 import type { PublicElementComponent } from "./types";
 
@@ -26,7 +29,18 @@ export function createElementComponent<T extends RenderElementProps>(
   PublicComponent: PublicElementComponent<T>;
 } {
   return {
-    PublicComponent: Component,
-    EditorComponent: (props) => <Component {...props} />,
+    PublicComponent: memo(Component),
+    EditorComponent: memo((props) => <Component {...props} />),
   };
+}
+
+export function withCodeBlock(editor: Editor): Editor {
+  return editor;
+}
+
+export function getEditor(): Editor {
+  return [withHistory, withReact, withCodeBlock].reduce(
+    (acc, plugin) => plugin(acc),
+    createEditor()
+  );
 }

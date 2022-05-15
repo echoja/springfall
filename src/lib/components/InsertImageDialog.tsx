@@ -1,6 +1,7 @@
 /* This example requires Tailwind CSS v2.0+ */
 import { Dialog } from "@headlessui/react";
 import { useHotkeys } from "@lib/hooks/use-hotkeys";
+import { useMyStoreWithMemoizedSelector } from "@lib/store";
 import type { IUploadRequestInfo } from "@lib/types";
 import axiosGlobal from "axios";
 import type { ChangeEvent } from "react";
@@ -12,17 +13,22 @@ import { useSlate } from "slate-react";
 const axios = axiosGlobal.create();
 
 const InsertImageDialog: React.FC<{
-  open: boolean;
-  setOpen: (open: boolean) => void;
   selection: Selection | null;
-}> = ({ open, setOpen, selection }) => {
+}> = ({ selection }) => {
   const uploadButtonRef = useRef(null);
   const [stage, setStage] = useState<"INITIAL" | "LINK" | "UPLOAD">("INITIAL");
   const editor = useSlate();
 
+  const { isOpen, close } = useMyStoreWithMemoizedSelector((store) => {
+    return {
+      isOpen: store.isOpenImageInsertDialog,
+      close: store.closeImageInsertDialog,
+    };
+  }, []);
+
   const imageUploaded = useCallback(
     (urls: string[]) => {
-      setOpen(false);
+      close();
       urls.forEach((url) => {
         if (!selection) {
           return;
@@ -57,7 +63,7 @@ const InsertImageDialog: React.FC<{
         );
       });
     },
-    [editor, selection, setOpen]
+    [editor, selection, close]
   );
 
   const handleFiles = useCallback(
@@ -152,13 +158,10 @@ const InsertImageDialog: React.FC<{
     keys: "u",
   });
 
-  const onClose = useCallback(
-    (o: boolean) => {
-      setOpen(o);
-      setStage("INITIAL");
-    },
-    [setOpen]
-  );
+  const onClose = useCallback(() => {
+    close();
+    setStage("INITIAL");
+  }, [close]);
 
   return (
     <Dialog
@@ -166,7 +169,7 @@ const InsertImageDialog: React.FC<{
       className="relative z-10"
       initialFocus={uploadButtonRef}
       onClose={onClose}
-      open={open}
+      open={isOpen}
     >
       <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
 

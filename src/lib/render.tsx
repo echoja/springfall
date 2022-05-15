@@ -6,6 +6,7 @@ import type { SetOptional } from "type-fest";
 
 import { PublicCallout } from "./components/elements/Callout";
 import { PublicCodeBlock } from "./components/elements/CodeBlock";
+import { PublicCodeBlockElement } from "./components/elements/CodeBlockElement";
 import { PublicHeading } from "./components/elements/Heading";
 import { PublicHr } from "./components/elements/Hr";
 import { PublicImage } from "./components/elements/Image";
@@ -21,6 +22,8 @@ export function renderPublicElement(props: RenderPublicElementProps) {
   switch (element.type) {
     case "CODE_BLOCK":
       return <PublicCodeBlock {...props} element={element} />;
+    case "CODE_BLOCK_ELEMENT":
+      return <PublicCodeBlockElement {...props} element={element} />;
     case "IMAGE_CAPTION":
     case "PARAGRAPH":
       return <PublicParagraph {...props} element={element} />;

@@ -2,8 +2,11 @@ import { faMagnifyingGlass } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Combobox, Dialog } from "@headlessui/react";
 import useConst from "@lib/hooks/use-const";
+import { getDefaultNodeProps } from "@lib/node";
+import { useMyStoreWithMemoizedSelector } from "@lib/store";
 import type { Command, ElementNode } from "@lib/types";
 import { useCallback, useState, memo } from "react";
+import type { Element } from "slate";
 import { Editor, Transforms } from "slate";
 import { useSlate } from "slate-react";
 import { twMerge } from "tailwind-merge";
@@ -107,18 +110,18 @@ const commands: Command[] = [
 ];
 
 interface ICommandPaletteProps {
-  open: boolean;
-  setOpen: (open: boolean) => void;
   onCommand?: (command: Command) => void;
 }
 
-const CommandPalette: React.FC<ICommandPaletteProps> = ({
-  open,
-  setOpen,
-  onCommand,
-}) => {
+const CommandPalette: React.FC<ICommandPaletteProps> = ({ onCommand }) => {
   const [query, setQuery] = useState("");
   const editor = useSlate();
+  const { isOpen, close } = useMyStoreWithMemoizedSelector((store) => {
+    return {
+      isOpen: store.isOpenCommandPalette,
+      close: store.closeCommandPalette,
+    };
+  }, []);
 
   const initialCommand = useConst<Command>({
     type: "NOOP",
@@ -145,11 +148,22 @@ const CommandPalette: React.FC<ICommandPaletteProps> = ({
             at: editor.selection?.anchor,
             match: (n) => Editor.isBlock(editor, n),
           });
+
           if (resultEntry) {
-            Transforms.setNodes(
+            const [node, path] = resultEntry;
+            Transforms.setNodes<Element>(
               editor,
-              { type: command.to },
-              { at: resultEntry[1] }
+              {
+                // 기본값
+                ...getDefaultNodeProps(command.to),
+
+                // // 본래 노드가 가지고 있던 값
+                ...(node as Omit<Partial<Element>, "type" | "children">),
+
+                // 변경되는 타입
+                type: command.to,
+              },
+              { at: path }
             );
           }
           break;
@@ -172,14 +186,14 @@ const CommandPalette: React.FC<ICommandPaletteProps> = ({
           onCommand?.(command);
         }
       }
-      setOpen(false);
+      close();
       setQuery("");
     },
-    [editor, onCommand, setOpen]
+    [editor, onCommand, close]
   );
 
   return (
-    <Dialog as="div" className="relative z-10" onClose={setOpen} open={open}>
+    <Dialog as="div" className="relative z-10" onClose={close} open={isOpen}>
       <div className="fixed inset-0 bg-gray-500 bg-opacity-25 transition-opacity" />
 
       <div className="fixed inset-0 z-10 overflow-y-auto p-4 sm:p-6 md:p-20">

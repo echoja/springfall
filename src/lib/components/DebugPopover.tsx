@@ -1,4 +1,5 @@
 import { Transition } from "@headlessui/react";
+import { useMyStore } from "@lib/store";
 import type { SerializedPost } from "@lib/types";
 import {
   Fragment,
@@ -8,53 +9,106 @@ import {
   useMemo,
   useState,
 } from "react";
+import { twMerge } from "tailwind-merge";
 
 const emptyArray: ReadonlyArray<number | string> = [];
 
+function reduceByKeys<T>(object: T, keys: ReadonlyArray<number | string>) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return keys.reduce<any>((acc, key) => {
+    if (acc) {
+      return acc[key];
+    }
+    return undefined;
+  }, object);
+}
+
 const DebugPopover: React.FC<{ post: SerializedPost }> = ({ post }) => {
   const [open, setOpen] = useState(false);
-  const [keys, setKeys] = useState<ReadonlyArray<number | string>>(emptyArray);
+  const [keys, setPostKeys] =
+    useState<ReadonlyArray<number | string>>(emptyArray);
+  const [storeKeys, setStoreKeys] = useState(emptyArray);
+  const store = useMyStore();
 
   const toggleOpen = useCallback(() => {
     setOpen((o) => !o);
   }, []);
 
   const currentItem = useMemo(() => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return keys.reduce<any>((acc, key) => {
-      if (acc) {
-        return acc[key];
-      }
-      return undefined;
-    }, post);
+    return reduceByKeys(post, keys);
   }, [keys, post]);
 
-  useEffect(() => {
-    // eslint-disable-next-line no-console
-    console.log(["post", ...keys].join("."), currentItem);
-    if (currentItem === undefined) {
-      setKeys(emptyArray);
-    }
-  }, [currentItem, keys]);
+  const currentItemPath = useMemo(() => {
+    return ["post", ...keys].join(".");
+  }, [keys]);
 
-  const buttons = useMemo(() => {
+  const currentStoreItem = useMemo(() => {
+    return reduceByKeys(store, storeKeys);
+  }, [store, storeKeys]);
+
+  const currentStoreItemPath = useMemo(() => {
+    return ["store", ...storeKeys].join(".");
+  }, [storeKeys]);
+
+  useEffect(() => {
+    if (currentItem !== post) {
+      // eslint-disable-next-line no-console
+      console.log(currentItemPath, currentItem);
+    }
+    if (currentItem === undefined) {
+      setPostKeys(emptyArray);
+    }
+  }, [currentItem, currentItemPath, post]);
+
+  useEffect(() => {
+    if (currentStoreItem !== store) {
+      // eslint-disable-next-line no-console
+      console.log(currentStoreItemPath, currentStoreItem);
+    }
+    if (currentStoreItem === undefined) {
+      setStoreKeys(emptyArray);
+    }
+  }, [currentStoreItem, currentStoreItemPath, store]);
+
+  const postButtons = useMemo(() => {
     if (typeof currentItem === "string") {
       return [];
     }
     return Object.keys(currentItem).map((key, index) => (
       <button
         type="button"
-        className="bg-slate-700 text-white hover:bg-slate-600 transition-all px-2 py-1 text-xs"
+        className="bg-slate-700 text-white hover:bg-slate-600 transition-all px-2 py-1 text-xs rounded"
         // eslint-disable-next-line react/no-array-index-key
-        key={`${key}-${index}`}
+        key={`post-${key}-${index}`}
         onClick={() => {
-          setKeys((prevKeys) => [...prevKeys, key]);
+          setPostKeys((prevKeys) => [...prevKeys, key]);
         }}
       >
         {key}
       </button>
     ));
   }, [currentItem]);
+
+  const storeButtons = useMemo(() => {
+    return Object.entries(store)
+      .filter(([, value]) => typeof value !== "function")
+      .map(([key], index) => (
+        <button
+          type="button"
+          className={twMerge(
+            "bg-slate-700 text-white hover:bg-slate-600 transition-all px-2 py-1 text-xs rounded",
+            storeKeys[0] === key && "bg-slate-500 hover:bg-slate-400"
+          )}
+          // eslint-disable-next-line react/no-array-index-key
+          key={`store-${key}-${index}`}
+          onClick={() => {
+            setStoreKeys([key]);
+          }}
+        >
+          {key}
+        </button>
+      ));
+  }, [store, storeKeys]);
 
   return (
     <>
@@ -75,21 +129,21 @@ const DebugPopover: React.FC<{ post: SerializedPost }> = ({ post }) => {
           <div className="flex flex-wrap gap-1 mb-4">
             <button
               type="button"
-              className="bg-slate-700 text-white hover:bg-slate-600 transition-all px-2 py-1 text-xs"
+              className="bg-slate-700 text-white hover:bg-slate-600 transition-all px-2 py-1 text-xs rounded"
               onClick={() => {
-                setKeys(emptyArray);
+                setPostKeys(emptyArray);
               }}
             >
               초기화
             </button>
             <button
               type="button"
-              className="bg-slate-700 text-white hover:bg-slate-600 transition-all px-2 py-1 text-xs"
+              className="bg-slate-700 text-white hover:bg-slate-600 transition-all px-2 py-1 text-xs rounded"
               onClick={() => {
-                setKeys(["content", "data"]);
+                setPostKeys(["content", "data"]);
               }}
             >
-              content.data
+              post.content.data
             </button>
           </div>
           <div className="flex flex-wrap gap-1 mb-4">
@@ -103,7 +157,21 @@ const DebugPopover: React.FC<{ post: SerializedPost }> = ({ post }) => {
               </span>
             ))}
           </div>
-          <div className="flex flex-wrap gap-1">{buttons}</div>
+          <div className="flex flex-wrap gap-1">{postButtons}</div>
+          <hr className="my-10" />
+          <p className="inline-flex gap-3 mb-3">
+            <span>store</span>{" "}
+            <button
+              type="button"
+              className="bg-slate-700 text-white hover:bg-slate-600 transition-all px-2 py-1 text-xs rounded"
+              onClick={() => {
+                setStoreKeys(emptyArray);
+              }}
+            >
+              초기화
+            </button>
+          </p>
+          <div className="flex flex-wrap gap-1">{storeButtons}</div>
         </div>
       </Transition>
     </>

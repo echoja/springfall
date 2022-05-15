@@ -2,17 +2,18 @@ import { faAngleLeft } from "@fortawesome/pro-regular-svg-icons";
 import { faFloppyDisk } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { isDevelopment } from "@lib/config";
+import { getEditor } from "@lib/editor";
 import { useHotkeys } from "@lib/hooks/use-hotkeys";
-import type { SerializedPost, Command } from "@lib/types";
+import { useMyStoreWithMemoizedSelector } from "@lib/store";
+import type { Command } from "@lib/types";
 import Link from "next/link";
 import type React from "react";
-import { useCallback, useState, useMemo, memo } from "react";
+import { useCallback, useState, useMemo, memo, useEffect } from "react";
 import type { Descendant, Selection } from "slate";
-import { createEditor } from "slate";
-import { withHistory } from "slate-history";
-import { withReact, Slate } from "slate-react";
+import { Slate } from "slate-react";
 import { twMerge } from "tailwind-merge";
 
+import CodeBlockEditModal from "./CodeBlockEditModal";
 import CommandPalette from "./CommandPalette";
 import ContentEditorEditable from "./ContentEditorEditable";
 import DebugPopover from "./DebugPopover";
@@ -20,16 +21,32 @@ import InsertImageDialog from "./InsertImageDialog";
 import SwitchGroup from "./SwitchGroup";
 
 interface IPostEditorWrapperProps {
-  post: SerializedPost;
-  onChangePost: (post: SerializedPost) => void;
   onSaveButtonClick: () => void;
 }
 
 const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
-  post,
-  onChangePost,
   onSaveButtonClick,
 }) => {
+  const {
+    openCmdPallete,
+    openImageDialog,
+    onChangePost,
+    post,
+    postContentData,
+    initialized,
+    setInitialized,
+  } = useMyStoreWithMemoizedSelector((store) => {
+    return {
+      openCmdPallete: store.openCommandPalette,
+      openImageDialog: store.openImageInsertDialog,
+      post: store.editingPost,
+      onChangePost: store.setEditingPost,
+      postContentData: store.editingPost.content.data,
+      initialized: store.editingPostInitialized,
+      setInitialized: store.setEditingPostInitialized,
+    };
+  }, []);
+
   const setTitle = useCallback(
     (title: string) => {
       onChangePost({ ...post, title });
@@ -44,6 +61,13 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
     [setTitle]
   );
 
+  useEffect(() => {
+    setInitialized(true);
+    return () => {
+      setInitialized(false);
+    };
+  }, [setInitialized]);
+
   const onPublishedChange = useCallback(
     (published: boolean) => {
       onChangePost({ ...post, published });
@@ -51,10 +75,8 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
     [onChangePost, post]
   );
 
-  const [editor] = useState(() => withHistory(withReact(createEditor())));
-  const [openCmdPalette, setOpenCmdPalette] = useState(false);
+  const [editor] = useState(getEditor);
   const [savedSelection, setSavedSelection] = useState<Selection | null>(null);
-  const [openInsertImageDialog, setOpenInsertImageDialog] = useState(false);
   const [tabs, setTabs] = useState([
     { label: "글", id: "post", current: true },
     { label: "블록", id: "block", current: false },
@@ -66,8 +88,8 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
 
   const cmdPaletteShortcutHandler = useCallback(() => {
     setSavedSelection(editor.selection);
-    setOpenCmdPalette(true);
-  }, [editor.selection]);
+    openCmdPallete();
+  }, [editor.selection, openCmdPallete]);
 
   useHotkeys({
     keys: "ctrl+shift+p, cmd+shift+p",
@@ -81,9 +103,7 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
 
   const onSlateChange = useCallback(
     (data: Descendant[]) => {
-      if (data !== post.content?.data) {
-        onChangePost({ ...post, content: { data } });
-      }
+      onChangePost({ ...post, content: { data } });
     },
     [onChangePost, post]
   );
@@ -116,18 +136,21 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
     ));
   }, [tabs]);
 
-  const onCommand = useCallback((command: Command) => {
-    // eslint-disable-next-line sonarjs/no-small-switch
-    switch (command.type) {
-      case "INSERT_IMAGE": {
-        setOpenInsertImageDialog(true);
-        break;
-      }
+  const onCommand = useCallback(
+    (command: Command) => {
+      // eslint-disable-next-line sonarjs/no-small-switch
+      switch (command.type) {
+        case "INSERT_IMAGE": {
+          openImageDialog();
+          break;
+        }
 
-      default:
-        break;
-    }
-  }, []);
+        default:
+          break;
+      }
+    },
+    [openImageDialog]
+  );
 
   return (
     <div>
@@ -156,64 +179,57 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
           </div>
         </div>
       </div>
+
       {/* Editor Body */}
-      <Slate
-        value={post.content?.data}
-        onChange={onSlateChange}
-        editor={editor}
-      >
-        <CommandPalette
-          open={openCmdPalette}
-          setOpen={setOpenCmdPalette}
-          onCommand={onCommand}
-        />
+      {initialized && (
+        <Slate value={postContentData} onChange={onSlateChange} editor={editor}>
+          <CommandPalette onCommand={onCommand} />
 
-        <InsertImageDialog
-          open={openInsertImageDialog}
-          setOpen={setOpenInsertImageDialog}
-          selection={savedSelection}
-        />
+          <InsertImageDialog selection={savedSelection} />
 
-        <div className="flex gap-2 items-stretch">
-          {/* Editor Main */}
-          <div className="w-full max-w-screen-lg p-2 mt-6">
-            <input
-              type="text"
-              placeholder="제목"
-              value={post.title}
-              onChange={onTitlechange}
-              className="border-0 text-xl font-semibold mb-3 w-full focus:ring-0"
-            />
+          <CodeBlockEditModal />
 
-            <div className="relative">
-              <ContentEditorEditable />
-            </div>
-          </div>
+          <div className="flex gap-2 items-stretch">
+            {/* Editor Main */}
+            <div className="w-full max-w-screen-lg p-2 mt-6">
+              <input
+                type="text"
+                placeholder="제목"
+                value={post.title}
+                onChange={onTitlechange}
+                className="border-0 text-xl font-semibold mb-3 w-full focus:ring-0"
+              />
 
-          {/* Editor Sidebar */}
-          <div className="border-l flex-auto w-80">
-            <div className="sticky top-0 max-h-screen overflow-auto">
-              {/* Editor Sidebar Tabs */}
-              <div className="border-b border-gray-200">
-                <nav className="-mb-px flex" aria-label="Tabs">
-                  {tabLinks}
-                </nav>
+              <div className="relative">
+                <ContentEditorEditable />
               </div>
+            </div>
 
-              {/* Editor Sidebar Tabs Body */}
-              <div className="p-3">
-                {currentTabId === "post" && (
-                  <SwitchGroup
-                    checked={post.published}
-                    onChange={onPublishedChange}
-                    title="공개"
-                  />
-                )}
+            {/* Editor Sidebar */}
+            <div className="border-l flex-auto w-80">
+              <div className="sticky top-0 max-h-screen overflow-auto">
+                {/* Editor Sidebar Tabs */}
+                <div className="border-b border-gray-200">
+                  <nav className="-mb-px flex" aria-label="Tabs">
+                    {tabLinks}
+                  </nav>
+                </div>
+
+                {/* Editor Sidebar Tabs Body */}
+                <div className="p-3">
+                  {currentTabId === "post" && (
+                    <SwitchGroup
+                      checked={post.published}
+                      onChange={onPublishedChange}
+                      title="공개"
+                    />
+                  )}
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </Slate>
+        </Slate>
+      )}
     </div>
   );
 };

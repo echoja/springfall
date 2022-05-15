@@ -4,44 +4,82 @@ import type { SetOptional } from "type-fest";
 export function PublicLeaf(
   props: SetOptional<RenderLeafProps, "attributes" | "text">
 ) {
-  let { children } = props;
+  const { children } = props;
   const { attributes, leaf } = props;
 
-  if (leaf.type === "TEXT") {
-    if (leaf.bold) {
-      children = <strong>{children}</strong>;
-    }
+  switch (leaf.type) {
+    case "TEXT":
+      if (leaf.bold) {
+        return (
+          <span {...attributes}>
+            <strong>{children}</strong>
+          </span>
+        );
+      }
 
-    if (leaf.code) {
-      children = <code>{children}</code>;
-    }
+      if (leaf.code) {
+        return (
+          <span {...attributes}>
+            <code>{children}</code>
+          </span>
+        );
+      }
 
-    if (leaf.kbd) {
-      children = <kbd>{children}</kbd>;
-    }
+      if (leaf.kbd) {
+        return (
+          <span {...attributes}>
+            <kbd>{children}</kbd>
+          </span>
+        );
+      }
 
-    if (leaf.strikethrough) {
-      children = <s>{children}</s>;
-    }
+      if (leaf.strikethrough) {
+        return (
+          <span {...attributes}>
+            <s>{children}</s>
+          </span>
+        );
+      }
 
-    if (leaf.underline) {
-      children = <u>{children}</u>;
-    }
-  } else if (leaf.type === "ICON") {
-    children = <span>아이콘: {leaf.icon}</span>;
-  } else if (leaf.type === "LINK") {
-    children = (
-      <a
-        href={leaf.url}
-        target={leaf.internal ? undefined : "_blank"}
-        rel="noreferrer"
-      >
-        {children}
-      </a>
-    );
+      if (leaf.underline) {
+        return (
+          <span {...attributes}>
+            <u>{children}</u>
+          </span>
+        );
+      }
+
+      return <span {...attributes}>{children}</span>;
+
+    case "ICON":
+      return (
+        <span {...attributes}>
+          <span>아이콘: {leaf.icon}</span>
+        </span>
+      );
+
+    case "LINK":
+      return (
+        <a
+          {...attributes}
+          href={leaf.url}
+          target={leaf.internal ? undefined : "_blank"}
+          rel="noreferrer"
+        >
+          {children}
+        </a>
+      );
+
+    case "CODE_BLOCK_TEXT":
+      return (
+        <span {...attributes} contentEditable={false}>
+          {children}
+        </span>
+      );
+
+    default:
+      return <span {...attributes}>{children}</span>;
   }
-
-  return <span {...attributes}>{children}</span>;
 }
 
 function Leaf(props: RenderLeafProps) {
