@@ -85,7 +85,6 @@ const ContentEditorEditable: React.FC = () => {
 
   return (
     <Editable
-      id="hoho"
       className={className}
       placeholder="내용을 입력하세요"
       renderElement={renderElement}

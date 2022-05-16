@@ -4,12 +4,13 @@ import { useAdminPageGuard } from "@lib/hooks";
 import useToast from "@lib/hooks/use-toast";
 import prisma from "@lib/prisma";
 import { serializePost } from "@lib/serialize";
+import { useMyStoreWithMemoizedSelector } from "@lib/store";
 import type { MonnomlogPage, SerializedPost } from "@lib/types";
 import type { Post } from "@prisma/client";
 import axiosGlobal from "axios";
 import type { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 
 const axios = axiosGlobal.create();
 
@@ -51,7 +52,17 @@ const PostEdit: MonnomlogPage<IPostEditProps> = (props) => {
   const router = useRouter();
   const toast = useToast();
 
-  const [postEditing, setPostEditing] = useState(postProp);
+  const { post, setPost } = useMyStoreWithMemoizedSelector((store) => {
+    return {
+      post: store.editingPost,
+      setPost: store.setEditingPost,
+    };
+  }, []);
+
+  // 최초 설정
+  useEffect(() => {
+    setPost(postProp);
+  }, [postProp, setPost]);
 
   useEffect(() => {
     if (!postProp) {
@@ -67,7 +78,7 @@ const PostEdit: MonnomlogPage<IPostEditProps> = (props) => {
     try {
       const { data: result } = await axios.post<Post>(
         `/api/post/save/${postProp?.id}`,
-        postEditing
+        post
       );
       toast({
         status: "success",
@@ -85,29 +96,14 @@ const PostEdit: MonnomlogPage<IPostEditProps> = (props) => {
       // eslint-disable-next-line no-console
       console.log("error", e);
     }
-  }, [postEditing, postProp, toast]);
-
-  const onChangePost = useCallback((post: SerializedPost) => {
-    if (!post) {
-      return;
-    }
-    setPostEditing(post);
-  }, []);
+  }, [post, postProp, toast]);
 
   if (!postProp) {
     // eslint-disable-next-line react/jsx-no-useless-fragment
     return <></>;
   }
 
-  return (
-    postEditing && (
-      <PostEditorWrapper
-        onSaveButtonClick={onSaveButtonClick}
-        post={postEditing}
-        onChangePost={onChangePost}
-      />
-    )
-  );
+  return <PostEditorWrapper onSaveButtonClick={onSaveButtonClick} />;
 };
 
 PostEdit.layoutWrapper = NoLayoutWrapper;

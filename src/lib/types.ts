@@ -5,8 +5,9 @@ import type { ReactElement, ReactNode } from "react";
 import type { BaseEditor, Descendant, Element } from "slate";
 import type { ReactEditor, RenderElementProps } from "slate-react";
 import type { SetOptional } from "type-fest";
+import type { SetState, GetState } from "zustand";
 
-export * from "./merge";
+export * from "./util";
 
 declare module "slate" {
   // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -64,6 +65,7 @@ export type StandaloneElementNode =
   | IParagraph
   | IHeading
   | ICodeBlock
+  | ICodeBlockElement
   | ITable
   | ICallout
   | IGithubBlock
@@ -82,15 +84,18 @@ export type ICallout = {
 
 export type IHr = {
   type: "HR";
+  children: [EmptyText];
 };
 
 export type IYoutube = {
   type: "YOUTUBE";
   iframeUrl: string;
+  children: [EmptyText];
 };
 
 export type ITable = {
   type: "TABLE";
+  children: [EmptyText];
   // TODO: 구현 필요
 };
 
@@ -135,10 +140,26 @@ export type IQuote = {
 export type ICodeBlock = {
   type: "CODE_BLOCK";
   lang: string;
-  children: CodeBlockChild[];
+  showLines: boolean;
+  showCopy: boolean;
+  label?: string;
+  url?: string;
+  children: (ICodeBlockElement | ICodeBlockText)[];
 };
 
-export type CodeBlockChild = IParagraph | ICodeExplainer;
+export type ICodeBlockElement = {
+  type: "CODE_BLOCK_ELEMENT";
+  tagName: "span";
+  properties?: {
+    className?: string[];
+  };
+  children: (ICodeBlockElement | ICodeBlockText)[];
+};
+
+export type ICodeBlockText = {
+  type: "CODE_BLOCK_TEXT";
+  text: string;
+};
 
 export type ICodeExplainer = {
   line: number;
@@ -157,10 +178,11 @@ export type IImageCaption = {
 
 export type IGithubBlock = {
   type: "GITHUB_BLOCK";
+  children: [EmptyText];
   url: string;
 };
 
-type InlineNode = IText | ILink | IIcon;
+type InlineNode = IText | ILink | IIcon | ICodeBlockText;
 
 export type IText = {
   type: "TEXT";
@@ -170,6 +192,11 @@ export type IText = {
   strikethrough?: boolean;
   code?: boolean;
   kbd?: boolean;
+};
+
+export type IPlainText = {
+  type: "PLAIN_TEXT";
+  text: string;
 };
 
 export type EmptyText = {
@@ -196,7 +223,7 @@ export interface IBaseCommand {
 
 export interface IConvertCommand extends IBaseCommand {
   type: "CONVERT";
-  to: Exclude<Element["type"], "HEADING">;
+  to: Exclude<Element["type"], "HEADING" | "IMAGE_CAPTION">;
 }
 
 export interface INoopCommand extends IBaseCommand {
@@ -269,3 +296,50 @@ export interface IFileManager {
     id: string
   ) => Promise<{ success: true } | { success: false; reason: string }>;
 }
+
+export type Merge<P, T> = Omit<P, keyof T> & T;
+
+/** Object 에서 모든 key 타입을 가져옵니다. */
+export type Keys<T> = T extends Record<infer K, unknown> ? K : never;
+
+/** Object 에서 key에 따라 해당 Value 타입을 가져옵니다. */
+export type ValueOf<T, K extends string | number | symbol> = T extends Record<
+  K,
+  infer V
+>
+  ? V
+  : never;
+
+export type ColorModeStore = {
+  colorMode: "dark" | "light";
+  toggleColorMode: () => void;
+};
+
+export type AdminStore = {
+  codeBlockEditPath: number[];
+  openCodeBlockEditModal: (path: number[]) => void;
+  closeCodeBlockEditModal: () => void;
+
+  isOpenCommandPalette: boolean;
+  openCommandPalette: () => void;
+  closeCommandPalette: () => void;
+
+  isOpenImageInsertDialog: boolean;
+  openImageInsertDialog: () => void;
+  closeImageInsertDialog: () => void;
+
+  editingPost: SerializedPost;
+  setEditingPost: (post: SerializedPost) => void;
+
+  editingPostInitialized: boolean;
+  setEditingPostInitialized: (initialized: boolean) => void;
+};
+
+export type SplittedStores = ColorModeStore | AdminStore;
+
+export type Stores = {
+  [Key in Keys<SplittedStores>]: ValueOf<SplittedStores, Key>;
+};
+
+export type Set = SetState<Stores>;
+export type Get = GetState<Stores>;

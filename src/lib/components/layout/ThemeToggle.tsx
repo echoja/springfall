@@ -1,8 +1,8 @@
-import { useStore } from "@lib/store";
+import { useMyStore } from "@lib/store";
 import { RiMoonFill, RiSunLine } from "react-icons/ri";
 
 const ThemeToggle = () => {
-  const { colorMode, toggleColorMode } = useStore();
+  const { colorMode, toggleColorMode } = useMyStore();
 
   return (
     <button type="button" aria-label="theme toggle" onClick={toggleColorMode}>
