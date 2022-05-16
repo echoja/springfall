@@ -8,14 +8,12 @@ import type {
   ICodeBlockText,
   IText,
 } from "@lib/types";
-import type { Draft } from "immer";
-import produce from "immer";
 import type { ChangeEvent } from "react";
 import { useEffect, memo, useCallback, useRef, useState } from "react";
 import type { RefractorElement, RefractorRoot, Text } from "refractor";
 import { refractor } from "refractor";
 import tsxLang from "refractor/lang/tsx";
-import type { NodeEntry, Element } from "slate";
+import type { NodeEntry } from "slate";
 import { Transforms, Editor } from "slate";
 import { useSlateStatic } from "slate-react";
 
@@ -75,13 +73,6 @@ const CodeBlockEditModal: React.FC = () => {
   const uploadButtonRef = useRef(null);
   const editor = useSlateStatic();
   const [content, setContent] = useState("");
-  const { editingPost, setEditingPost } = useMyStoreWithMemoizedSelector(
-    (store) => ({
-      editingPost: store.editingPost,
-      setEditingPost: store.setEditingPost,
-    }),
-    []
-  );
 
   const { isOpen, close, path } = useMyStoreWithMemoizedSelector((store) => {
     return {
@@ -100,6 +91,7 @@ const CodeBlockEditModal: React.FC = () => {
   useHotkeys({
     callback: onKeyDownKeyCtrlEnter,
     keys: "cmd+enter, ctrl+enter",
+    enabled: isOpen,
   });
 
   const onClose = useCallback(() => {
@@ -107,32 +99,18 @@ const CodeBlockEditModal: React.FC = () => {
     const formatted = refractor.highlight(content, "tsx");
     try {
       const converted = refractorRootToCodeBlock(formatted);
-      Transforms.setNodes<ICodeBlock>(
-        editor,
-        { children: converted.children },
-        {
-          at: path,
-        }
-      );
-      setEditingPost(
-        produce(editingPost, (draft) => {
-          const copiedPath = [...path];
-          const firstIndex = copiedPath.shift() as number;
-          const firstBlock = draft.content.data[firstIndex] as Draft<Element>;
-          const block = copiedPath.reduce<Element>(
-            (acc, cur) => (acc as Element).children[cur] as Element,
-            firstBlock
-          );
-          block.children = converted.children;
-        })
-      );
+
+      // 그냥 혹시 몰라 복사함.
+      const copiedPath = [...path];
+      Transforms.removeNodes(editor, { at: copiedPath });
+      Transforms.insertNodes(editor, converted, { at: copiedPath });
     } catch (e) {
       // eslint-disable-next-line no-console
       console.error(e);
     }
     close();
     setContent("");
-  }, [close, content, editingPost, editor, path, setEditingPost]);
+  }, [close, content, editor, path]);
 
   // when opened
   useEffect(() => {

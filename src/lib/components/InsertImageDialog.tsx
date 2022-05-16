@@ -151,6 +151,7 @@ const InsertImageDialog: React.FC<{
   useHotkeys({
     callback: onKeyDownKeyL,
     keys: "l",
+    enabled: isOpen,
   });
 
   useHotkeys({
