@@ -2,7 +2,10 @@ import { faPenToSquare } from "@fortawesome/pro-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import useSafeSlateSelector from "@lib/hooks/use-safe-slate-selector";
 import { useMyStoreMemo } from "@lib/store";
-import type { ICodeBlock, PublicElementComponent } from "@lib/types";
+import type {
+  ICodeBlock,
+  PublicElementComponent as CommonElementComponent,
+} from "@lib/types";
 import { convertCodeBlockToString } from "@lib/types";
 import { useCallback } from "react";
 import type { RenderElementProps } from "slate-react";
@@ -14,7 +17,26 @@ export interface ICodeBlockProps extends RenderElementProps {
   element: ICodeBlock;
 }
 
-export const PublicCodeBlock: PublicElementComponent<ICodeBlockProps> = ({
+export const PublicCodeBlock: CommonElementComponent<ICodeBlockProps> = ({
+  children,
+  element,
+}) => {
+  const getString = useCallback(
+    () => convertCodeBlockToString(element),
+    [element]
+  );
+
+  return (
+    <pre className="p-3 bg-slate-700 text-white mb-2 relative rounded-lg shadow-lg">
+      <code className="relative">{children}</code>
+      <div className="flex gap-3 items-center absolute top-3 right-3">
+        {element.showCopy && <CopyButton getString={getString} />}
+      </div>
+    </pre>
+  );
+};
+
+export const CodeBlock: CommonElementComponent<ICodeBlockProps> = ({
   children,
   attributes,
   element,
@@ -60,4 +82,4 @@ export const PublicCodeBlock: PublicElementComponent<ICodeBlockProps> = ({
   );
 };
 
-export default PublicCodeBlock;
+export default CodeBlock;
