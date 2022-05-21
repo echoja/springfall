@@ -1,8 +1,7 @@
 import { createElementComponent } from "@lib/editor";
-import type { ICodeBlockElement } from "@lib/types";
-import type { RenderElementProps } from "slate-react";
+import type { CommonRenderElementProps, ICodeBlockElement } from "@lib/types";
 
-export interface ICodeBlockElementProps extends RenderElementProps {
+export interface ICodeBlockElementProps extends CommonRenderElementProps {
   element: ICodeBlockElement;
 }
 

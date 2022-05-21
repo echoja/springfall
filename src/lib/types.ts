@@ -2,6 +2,7 @@ import type { Post } from "@prisma/client";
 import type { NextPage } from "next";
 import type { DefaultSession } from "next-auth";
 import type { ReactElement, ReactNode } from "react";
+import type React from "react";
 import type { BaseEditor, Descendant, Element } from "slate";
 import type {
   ReactEditor,
@@ -43,9 +44,20 @@ export type RenderPublicElementProps = SetOptional<
   "attributes"
 >;
 
-export type PublicElementComponent<T extends RenderElementProps> = React.FC<
-  SetOptional<T, "attributes">
+export type CommonRenderElementProps = SetOptional<
+  RenderElementProps,
+  "attributes"
 >;
+
+export interface ICodeBlockProps extends RenderElementProps {
+  element: ICodeBlock;
+}
+
+export interface ICommonCodeBlockProps extends CommonRenderElementProps {
+  element: ICodeBlock;
+}
+
+export type CodeBlockComponent = React.FC<ICommonCodeBlockProps>;
 
 export type SerializedPost = Omit<
   Post,

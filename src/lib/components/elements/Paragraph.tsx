@@ -1,7 +1,7 @@
 import { createElementComponent } from "@lib/editor";
-import type { RenderElementProps } from "slate-react";
+import type { CommonRenderElementProps } from "@lib/types";
 
-export type IParagraphProps = RenderElementProps;
+export type IParagraphProps = CommonRenderElementProps;
 
 const { EditorComponent: Paragraph, PublicComponent } =
   createElementComponent<IParagraphProps>(({ children, attributes }) => {

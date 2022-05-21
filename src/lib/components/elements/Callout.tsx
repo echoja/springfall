@@ -1,8 +1,7 @@
 import { createElementComponent } from "@lib/editor";
-import type { ICallout } from "@lib/types";
-import type { RenderElementProps } from "slate-react";
+import type { CommonRenderElementProps, ICallout } from "@lib/types";
 
-export interface IRenderCalloutProps extends RenderElementProps {
+export interface IRenderCalloutProps extends CommonRenderElementProps {
   element: ICallout;
 }
 
