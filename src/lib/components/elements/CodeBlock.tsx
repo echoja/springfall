@@ -81,5 +81,3 @@ export const CodeBlock: CommonElementComponent<ICodeBlockProps> = ({
     </pre>
   );
 };
-
-export default CodeBlock;

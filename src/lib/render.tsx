@@ -5,7 +5,7 @@ import type { RenderElementProps, RenderLeafProps } from "slate-react";
 import type { SetOptional } from "type-fest";
 
 import Callout, { PublicCallout } from "./components/elements/Callout";
-import CodeBlock, { PublicCodeBlock } from "./components/elements/CodeBlock";
+import { CodeBlock, PublicCodeBlock } from "./components/elements/CodeBlock";
 import CodeBlockElement, {
   PublicCodeBlockElement,
 } from "./components/elements/CodeBlockElement";
