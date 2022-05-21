@@ -1,7 +1,7 @@
 /* This example requires Tailwind CSS v2.0+ */
 import { Dialog } from "@headlessui/react";
 import { useHotkeys } from "@lib/hooks/use-hotkeys";
-import { useMyStoreWithMemoizedSelector } from "@lib/store";
+import { useMyStoreMemo } from "@lib/store";
 import type { IUploadRequestInfo } from "@lib/types";
 import axiosGlobal from "axios";
 import type { ChangeEvent } from "react";
@@ -19,7 +19,7 @@ const InsertImageDialog: React.FC<{
   const [stage, setStage] = useState<"INITIAL" | "LINK" | "UPLOAD">("INITIAL");
   const editor = useSlate();
 
-  const { isOpen, close } = useMyStoreWithMemoizedSelector((store) => {
+  const { isOpen, close } = useMyStoreMemo((store) => {
     return {
       isOpen: store.isOpenImageInsertDialog,
       close: store.closeImageInsertDialog,
@@ -49,13 +49,6 @@ const InsertImageDialog: React.FC<{
                   text: "",
                 },
               ],
-              // type: "PARAGRAPH",
-              // children: [
-              //   {
-              //     type: "TEXT",
-              //     text: "hoho",
-              //   },
-              // ],
             },
           ],
 
@@ -157,6 +150,7 @@ const InsertImageDialog: React.FC<{
   useHotkeys({
     callback: onKeyDownKeyU,
     keys: "u",
+    enabled: isOpen,
   });
 
   const onClose = useCallback(() => {

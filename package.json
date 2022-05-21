@@ -52,6 +52,7 @@
     "slate": "^0.78.0",
     "slate-history": "^0.66.0",
     "slate-react": "^0.79.0",
+    "string-strip-html": "^9.1.12",
     "tailwind-merge": "^1.2.1",
     "usehooks-ts": "^2.5.2",
     "zustand": "^4.0.0-rc.1"

@@ -71,11 +71,7 @@ export function PublicLeaf(
       );
 
     case "CODE_BLOCK_TEXT":
-      return (
-        <span {...attributes} contentEditable={false}>
-          {children}
-        </span>
-      );
+      return <span {...attributes}>{children}</span>;
 
     default:
       return <span {...attributes}>{children}</span>;

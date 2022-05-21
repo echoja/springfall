@@ -3,7 +3,7 @@ import PostEditorWrapper from "@lib/components/PostEditorWrapper";
 import { useAdminPageGuard } from "@lib/hooks";
 import useToast from "@lib/hooks/use-toast";
 import { convertPostSerializedToCreate } from "@lib/serialize";
-import { useMyStoreWithMemoizedSelector } from "@lib/store";
+import { useMyStoreMemo } from "@lib/store";
 import type { MonnomlogPage } from "@lib/types";
 import type { Post } from "@prisma/client";
 import axiosGlobal from "axios";
@@ -16,10 +16,8 @@ const PostEdit: MonnomlogPage = () => {
   useAdminPageGuard();
   const router = useRouter();
   const toast = useToast();
-  const { post } = useMyStoreWithMemoizedSelector((store) => {
-    return {
-      post: store.editingPost,
-    };
+  const post = useMyStoreMemo((store) => {
+    return store.editingPost;
   }, []);
 
   const onSaveButtonClick = useCallback(async () => {

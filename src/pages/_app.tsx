@@ -1,7 +1,7 @@
 import { config as fontAwesomeConfig } from "@fortawesome/fontawesome-svg-core";
 import Default from "@lib/components/layout/Default";
 import useConst from "@lib/hooks/use-const";
-import { useMyStoreWithMemoizedSelector } from "@lib/store";
+import { useMyStoreMemo } from "@lib/store";
 import type { MonnomlogPage } from "@lib/types";
 import { SessionProvider } from "next-auth/react";
 import { DefaultSeo } from "next-seo";
@@ -26,15 +26,13 @@ interface IMyAppProps extends AppProps {
 const MyApp = ({ Component, pageProps }: IMyAppProps) => {
   const wrap = Component.layoutWrapper ?? defaultGetLayout;
 
-  const { colorMode, toggleColorMode } = useMyStoreWithMemoizedSelector(
-    (store) => {
-      return {
-        colorMode: store.colorMode,
-        toggleColorMode: store.toggleColorMode,
-      };
-    },
-    []
-  );
+  const colorMode = useMyStoreMemo((store) => {
+    return store.colorMode;
+  }, []);
+  const toggleColorMode = useMyStoreMemo((store) => {
+    return store.toggleColorMode;
+  }, []);
+
   const firstColorMode = useConst(colorMode);
 
   useEffect(() => {

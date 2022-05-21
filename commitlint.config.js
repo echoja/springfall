@@ -11,6 +11,7 @@ const CommitLintConfiguration = {
   },
   rules: {
     "body-max-line-length": [2, "always", Infinity],
+    "footer-max-line-length": [2, "always", Infinity],
   },
 };
 

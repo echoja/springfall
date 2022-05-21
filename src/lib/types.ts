@@ -59,7 +59,7 @@ export type CreatePostInput = Omit<
   content: ContentType;
 };
 
-export type ElementNode = StandaloneElementNode | IImageCaption;
+export type ElementNode = StandaloneElementNode | IImageCaption | IListItem;
 
 export type StandaloneElementNode =
   | IParagraph
@@ -139,7 +139,7 @@ export type IQuote = {
 
 export type ICodeBlock = {
   type: "CODE_BLOCK";
-  lang: string;
+  lang: "tsx" | "js";
   showLines: boolean;
   showCopy: boolean;
   label?: string;
@@ -159,6 +159,7 @@ export type ICodeBlockElement = {
 export type ICodeBlockText = {
   type: "CODE_BLOCK_TEXT";
   text: string;
+  isNewline?: boolean;
 };
 
 export type ICodeExplainer = {

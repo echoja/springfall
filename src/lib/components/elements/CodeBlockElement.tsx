@@ -14,7 +14,6 @@ const { EditorComponent: CodeBlockElement, PublicComponent } =
       return (
         <Tag
           {...attributes}
-          contentEditable={false}
           className={(element.properties?.className ?? []).join(" ")}
         >
           {children}

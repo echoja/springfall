@@ -4,16 +4,18 @@ import { Text } from "slate";
 import type { RenderElementProps, RenderLeafProps } from "slate-react";
 import type { SetOptional } from "type-fest";
 
-import { PublicCallout } from "./components/elements/Callout";
-import { PublicCodeBlock } from "./components/elements/CodeBlock";
-import { PublicCodeBlockElement } from "./components/elements/CodeBlockElement";
-import { PublicHeading } from "./components/elements/Heading";
-import { PublicHr } from "./components/elements/Hr";
-import { PublicImage } from "./components/elements/Image";
-import { PublicList } from "./components/elements/List";
-import { PublicParagraph } from "./components/elements/Paragraph";
-import { PublicTable } from "./components/elements/Table";
-import { PublicYoutube } from "./components/elements/Youtube";
+import Callout, { PublicCallout } from "./components/elements/Callout";
+import CodeBlock, { PublicCodeBlock } from "./components/elements/CodeBlock";
+import CodeBlockElement, {
+  PublicCodeBlockElement,
+} from "./components/elements/CodeBlockElement";
+import Heading, { PublicHeading } from "./components/elements/Heading";
+import Hr, { PublicHr } from "./components/elements/Hr";
+import Image, { PublicImage } from "./components/elements/Image";
+import List, { PublicList } from "./components/elements/List";
+import Paragraph, { PublicParagraph } from "./components/elements/Paragraph";
+import Table, { PublicTable } from "./components/elements/Table";
+import Youtube, { PublicYoutube } from "./components/elements/Youtube";
 import Leaf, { PublicLeaf } from "./components/Leaf";
 import type { RenderPublicElementProps } from "./types";
 
@@ -47,7 +49,32 @@ export function renderPublicElement(props: RenderPublicElementProps) {
 }
 
 export function renderElement(props: RenderElementProps) {
-  return renderPublicElement(props);
+  const { element } = props;
+  switch (element.type) {
+    case "CODE_BLOCK":
+      return <CodeBlock {...props} element={element} />;
+    case "CODE_BLOCK_ELEMENT":
+      return <CodeBlockElement {...props} element={element} />;
+    case "IMAGE_CAPTION":
+    case "PARAGRAPH":
+      return <Paragraph {...props} element={element} />;
+    case "HEADING":
+      return <Heading {...props} element={element} />;
+    case "LIST":
+      return <List {...props} element={element} />;
+    case "CALLOUT":
+      return <Callout {...props} element={element} />;
+    case "TABLE":
+      return <Table {...props} element={element} />;
+    case "HR":
+      return <Hr {...props} element={element} />;
+    case "YOUTUBE":
+      return <Youtube {...props} element={element} />;
+    case "IMAGE":
+      return <Image {...props} element={element} />;
+    default:
+      return <Paragraph {...props} element={element} />;
+  }
 }
 
 export function renderPublicLeaf(
