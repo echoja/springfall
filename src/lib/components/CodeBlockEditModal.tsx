@@ -1,13 +1,9 @@
 /* This example requires Tailwind CSS v2.0+ */
 import { Dialog } from "@headlessui/react";
 import { useHotkeys } from "@lib/hooks/use-hotkeys";
-import { useMyStoreWithMemoizedSelector } from "@lib/store";
-import type {
-  ICodeBlock,
-  ICodeBlockElement,
-  ICodeBlockText,
-  IText,
-} from "@lib/types";
+import { useMyStoreMemo } from "@lib/store";
+import type { ICodeBlock, ICodeBlockElement, ICodeBlockText } from "@lib/types";
+import { convertCodeBlockToString } from "@lib/types";
 import type { ChangeEvent } from "react";
 import { useEffect, memo, useCallback, useRef, useState } from "react";
 import type { RefractorElement, RefractorRoot, Text } from "refractor";
@@ -19,41 +15,63 @@ import { useSlateStatic } from "slate-react";
 
 refractor.register(tsxLang);
 
-function codeNodeToString(
-  node: ICodeBlock | ICodeBlockElement | ICodeBlockText | IText,
-  acc: string[]
-) {
-  if (node.type === "CODE_BLOCK_TEXT" || node.type === "TEXT") {
-    acc.push(node.text);
-  } else if (node.type === "CODE_BLOCK_ELEMENT" || node.type === "CODE_BLOCK") {
-    node.children.forEach((child) => codeNodeToString(child, acc));
-  }
-}
-
 function convertRefractorNodes(
-  node: RefractorElement | Text
+  node: RefractorElement | Text,
+  shouldWrapText: boolean
 ): ICodeBlockElement | ICodeBlockText {
+  /**
+   * 첫 번째 child 가 element 라면 형제 text 노드들은 무조건 element로 감싸져야 함.
+   * @see https://docs.slatejs.org/concepts/11-normalizing#built-in-constraints
+   */
+  let firstChildType: "element" | "text" | undefined;
+
   if (node.type === "element") {
     return {
       type: "CODE_BLOCK_ELEMENT",
-      children: node.children.map((child) => convertRefractorNodes(child)),
+      children: node.children.map((child, index) => {
+        if (index === 0) {
+          firstChildType = child.type;
+        }
+        return convertRefractorNodes(child, firstChildType === "element");
+      }),
       tagName: node.tagName as "span",
       properties: {
         className: node.properties?.className as string[] | undefined,
       },
     };
   }
+
+  if (node.type === "text" && shouldWrapText) {
+    return {
+      type: "CODE_BLOCK_ELEMENT",
+      children: [
+        {
+          type: "CODE_BLOCK_TEXT",
+          text: node.value,
+        },
+      ],
+      tagName: "span",
+      properties: {
+        className: ["token text-wrapper"],
+      },
+    };
+  }
+
   if (node.type === "text") {
     return {
       type: "CODE_BLOCK_TEXT",
       text: node.value,
     };
   }
+
   throw new Error("Unknown node type");
 }
 
 function refractorRootToCodeBlock(root: RefractorRoot): ICodeBlock {
-  const children = root.children.map((node) => convertRefractorNodes(node));
+  const children = root.children.map((node) =>
+    convertRefractorNodes(node, root.children[0]?.type === "element")
+  );
+
   return {
     type: "CODE_BLOCK",
     children,
@@ -63,10 +81,54 @@ function refractorRootToCodeBlock(root: RefractorRoot): ICodeBlock {
   };
 }
 
-function convertCodeBlockToString(node: ICodeBlock) {
-  const result: string[] = [];
-  codeNodeToString(node, result);
-  return result.join("");
+function convertNewLineImpl(
+  node: ICodeBlockElement | ICodeBlockText
+): ICodeBlockText[] | ICodeBlockElement[] {
+  if (node.type === "CODE_BLOCK_TEXT") {
+    if (node.text.includes("\n")) {
+      return node.text.split("\n").map((line) => {
+        const result: ICodeBlockElement = {
+          type: "CODE_BLOCK_ELEMENT",
+          tagName: "span",
+          properties: {
+            className: ["token text-wrapper"],
+          },
+          children: [
+            {
+              type: "CODE_BLOCK_TEXT",
+              text: line,
+              isNewline: line === "",
+            },
+          ],
+        };
+        return result;
+      });
+    }
+    return [node];
+  }
+
+  if (node.type === "CODE_BLOCK_ELEMENT") {
+    const children = node.children.map((child) => convertNewLineImpl(child));
+
+    const flattenChildren = children.flat();
+    return [
+      {
+        ...node,
+        children: flattenChildren,
+      },
+    ];
+  }
+
+  throw new Error("");
+}
+
+function convertNewline(codeBlock: ICodeBlock): ICodeBlock {
+  return {
+    ...codeBlock,
+    children: codeBlock.children
+      .map((child) => convertNewLineImpl(child))
+      .flat(),
+  };
 }
 
 const CodeBlockEditModal: React.FC = () => {
@@ -74,7 +136,7 @@ const CodeBlockEditModal: React.FC = () => {
   const editor = useSlateStatic();
   const [content, setContent] = useState("");
 
-  const { isOpen, close, path } = useMyStoreWithMemoizedSelector((store) => {
+  const { isOpen, close, path } = useMyStoreMemo((store) => {
     return {
       path: store.codeBlockEditPath,
       isOpen: store.codeBlockEditPath.length !== 0,
@@ -100,10 +162,12 @@ const CodeBlockEditModal: React.FC = () => {
     try {
       const converted = refractorRootToCodeBlock(formatted);
 
-      // 그냥 혹시 몰라 복사함.
+      const newlineConverted = convertNewline(converted);
+
+      // 혹시 모를 상황을 위해 얕은 복사 수행
       const copiedPath = [...path];
       Transforms.removeNodes(editor, { at: copiedPath });
-      Transforms.insertNodes(editor, converted, { at: copiedPath });
+      Transforms.insertNodes(editor, newlineConverted, { at: copiedPath });
     } catch (e) {
       // eslint-disable-next-line no-console
       console.error(e);

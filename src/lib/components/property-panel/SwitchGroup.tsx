@@ -8,6 +8,7 @@ interface ISwitchGroupProps {
   onChange: (checked: boolean) => void;
   title?: ReactNode;
   description?: ReactNode;
+  className?: string;
 }
 
 const SwitchGroup: React.FC<ISwitchGroupProps> = ({
@@ -15,18 +16,22 @@ const SwitchGroup: React.FC<ISwitchGroupProps> = ({
   onChange,
   description = "",
   title = "",
+  className,
 }) => {
   return (
     <Switch.Group
       as="div"
-      className="flex items-center justify-between font-sans"
+      className={twMerge(
+        "flex items-center justify-between font-sans",
+        className
+      )}
     >
       {(title || description) && (
         <span className="flex-grow flex flex-col">
           {title && (
             <Switch.Label
               as="span"
-              className="text-sm font-medium text-gray-900"
+              className="text-sm font-medium text-gray-700"
               passive
             >
               {title}

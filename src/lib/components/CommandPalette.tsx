@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Combobox, Dialog } from "@headlessui/react";
 import useConst from "@lib/hooks/use-const";
 import { getDefaultNodeProps } from "@lib/node";
-import { useMyStoreWithMemoizedSelector } from "@lib/store";
+import { useMyStoreMemo } from "@lib/store";
 import type { Command, ElementNode } from "@lib/types";
 import { useCallback, useState, memo } from "react";
 import type { Element } from "slate";
@@ -116,7 +116,7 @@ interface ICommandPaletteProps {
 const CommandPalette: React.FC<ICommandPaletteProps> = ({ onCommand }) => {
   const [query, setQuery] = useState("");
   const editor = useSlate();
-  const { isOpen, close } = useMyStoreWithMemoizedSelector((store) => {
+  const { isOpen, close } = useMyStoreMemo((store) => {
     return {
       isOpen: store.isOpenCommandPalette,
       close: store.closeCommandPalette,

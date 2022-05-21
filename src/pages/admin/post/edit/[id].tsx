@@ -4,7 +4,7 @@ import { useAdminPageGuard } from "@lib/hooks";
 import useToast from "@lib/hooks/use-toast";
 import prisma from "@lib/prisma";
 import { serializePost } from "@lib/serialize";
-import { useMyStoreWithMemoizedSelector } from "@lib/store";
+import { useMyStoreMemo } from "@lib/store";
 import type { MonnomlogPage, SerializedPost } from "@lib/types";
 import type { Post } from "@prisma/client";
 import axiosGlobal from "axios";
@@ -52,12 +52,8 @@ const PostEdit: MonnomlogPage<IPostEditProps> = (props) => {
   const router = useRouter();
   const toast = useToast();
 
-  const { post, setPost } = useMyStoreWithMemoizedSelector((store) => {
-    return {
-      post: store.editingPost,
-      setPost: store.setEditingPost,
-    };
-  }, []);
+  const post = useMyStoreMemo((store) => store.editingPost, []);
+  const setPost = useMyStoreMemo((store) => store.setEditingPost, []);
 
   // 최초 설정
   useEffect(() => {

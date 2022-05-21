@@ -1,8 +1,7 @@
 import { createElementComponent } from "@lib/editor";
-import type { ITable } from "@lib/types";
-import type { RenderElementProps } from "slate-react";
+import type { CommonRenderElementProps, ITable } from "@lib/types";
 
-export interface ITableProps extends RenderElementProps {
+export interface ITableProps extends CommonRenderElementProps {
   element: ITable;
 }
 const { EditorComponent: Table, PublicComponent } =

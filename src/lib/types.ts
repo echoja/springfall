@@ -2,8 +2,13 @@ import type { Post } from "@prisma/client";
 import type { NextPage } from "next";
 import type { DefaultSession } from "next-auth";
 import type { ReactElement, ReactNode } from "react";
+import type React from "react";
 import type { BaseEditor, Descendant, Element } from "slate";
-import type { ReactEditor, RenderElementProps } from "slate-react";
+import type {
+  ReactEditor,
+  RenderElementProps,
+  RenderLeafProps,
+} from "slate-react";
 import type { SetOptional } from "type-fest";
 import type { SetState, GetState } from "zustand";
 
@@ -39,9 +44,20 @@ export type RenderPublicElementProps = SetOptional<
   "attributes"
 >;
 
-export type PublicElementComponent<T extends RenderElementProps> = React.FC<
-  SetOptional<T, "attributes">
+export type CommonRenderElementProps = SetOptional<
+  RenderElementProps,
+  "attributes"
 >;
+
+export interface ICodeBlockProps extends RenderElementProps {
+  element: ICodeBlock;
+}
+
+export interface ICommonCodeBlockProps extends CommonRenderElementProps {
+  element: ICodeBlock;
+}
+
+export type CodeBlockComponent = React.FC<ICommonCodeBlockProps>;
 
 export type SerializedPost = Omit<
   Post,
@@ -59,7 +75,7 @@ export type CreatePostInput = Omit<
   content: ContentType;
 };
 
-export type ElementNode = StandaloneElementNode | IImageCaption;
+export type ElementNode = StandaloneElementNode | IImageCaption | IListItem;
 
 export type StandaloneElementNode =
   | IParagraph
@@ -139,7 +155,7 @@ export type IQuote = {
 
 export type ICodeBlock = {
   type: "CODE_BLOCK";
-  lang: string;
+  lang: "tsx" | "js";
   showLines: boolean;
   showCopy: boolean;
   label?: string;
@@ -159,6 +175,7 @@ export type ICodeBlockElement = {
 export type ICodeBlockText = {
   type: "CODE_BLOCK_TEXT";
   text: string;
+  isNewline?: boolean;
 };
 
 export type ICodeExplainer = {
@@ -343,3 +360,9 @@ export type Stores = {
 
 export type Set = SetState<Stores>;
 export type Get = GetState<Stores>;
+
+export type CommonRenderLeafProps = SetOptional<RenderLeafProps, "attributes">;
+
+export interface IRenderTextProps extends CommonRenderLeafProps {
+  leaf: IText;
+}

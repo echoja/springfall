@@ -1,8 +1,7 @@
 import { createElementComponent } from "@lib/editor";
-import type { IHr } from "@lib/types";
-import type { RenderElementProps } from "slate-react";
+import type { CommonRenderElementProps, IHr } from "@lib/types";
 
-export interface IHrProps extends RenderElementProps {
+export interface IHrProps extends CommonRenderElementProps {
   element: IHr;
 }
 

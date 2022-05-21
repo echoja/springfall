@@ -1,11 +1,10 @@
 import { createElementComponent } from "@lib/editor";
-import type { IImage } from "@lib/types";
+import type { CommonRenderElementProps, IImage } from "@lib/types";
 import { useMemo } from "react";
-import type { RenderElementProps } from "slate-react";
 import { useFocused, useSelected } from "slate-react";
 import { twMerge } from "tailwind-merge";
 
-export interface IImageProps extends RenderElementProps {
+export interface IImageProps extends CommonRenderElementProps {
   element: IImage;
 }
 

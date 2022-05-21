@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { isDevelopment } from "@lib/config";
 import { getEditor } from "@lib/editor";
 import { useHotkeys } from "@lib/hooks/use-hotkeys";
-import { useMyStoreWithMemoizedSelector } from "@lib/store";
+import { useMyStoreMemo } from "@lib/store";
 import type { Command } from "@lib/types";
 import Link from "next/link";
 import type React from "react";
@@ -13,12 +13,13 @@ import type { Descendant, Selection } from "slate";
 import { Slate } from "slate-react";
 import { twMerge } from "tailwind-merge";
 
+import PropertyPanel from "./BlockPropertyPanel";
 import CodeBlockEditModal from "./CodeBlockEditModal";
 import CommandPalette from "./CommandPalette";
 import ContentEditorEditable from "./ContentEditorEditable";
 import DebugPopover from "./DebugPopover";
 import InsertImageDialog from "./InsertImageDialog";
-import SwitchGroup from "./SwitchGroup";
+import SwitchGroup from "./property-panel/SwitchGroup";
 
 interface IPostEditorWrapperProps {
   onSaveButtonClick: () => void;
@@ -35,7 +36,7 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
     postContentData,
     initialized,
     setInitialized,
-  } = useMyStoreWithMemoizedSelector((store) => {
+  } = useMyStoreMemo((store) => {
     return {
       openCmdPallete: store.openCommandPalette,
       openImageDialog: store.openImageInsertDialog,
@@ -224,6 +225,7 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
                       title="공개"
                     />
                   )}
+                  {currentTabId === "block" && <PropertyPanel />}
                 </div>
               </div>
             </div>

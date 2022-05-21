@@ -1,9 +1,8 @@
 import { createElementComponent } from "@lib/editor";
-import type { IHeading } from "@lib/types";
-import type { RenderElementProps } from "slate-react";
+import type { CommonRenderElementProps, IHeading } from "@lib/types";
 import { twMerge } from "tailwind-merge";
 
-export interface IHeadingProps extends RenderElementProps {
+export interface IHeadingProps extends CommonRenderElementProps {
   element: IHeading;
 }
 

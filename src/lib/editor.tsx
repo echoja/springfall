@@ -1,10 +1,9 @@
 import { memo } from "react";
 import { createEditor, Editor, Element } from "slate";
 import { withHistory } from "slate-history";
-import type { RenderElementProps } from "slate-react";
 import { withReact } from "slate-react";
 
-import type { PublicElementComponent } from "./types";
+import type { CommonRenderElementProps } from "./types";
 
 export const selectionFilteredByType = (
   editor: Editor,
@@ -22,15 +21,15 @@ export const selectionFilteredByType = (
   );
 };
 
-export function createElementComponent<T extends RenderElementProps>(
-  Component: PublicElementComponent<T>
+export function createElementComponent<T extends CommonRenderElementProps>(
+  Component: React.FC<T>
 ): {
   EditorComponent: React.FC<T>;
-  PublicComponent: PublicElementComponent<T>;
+  PublicComponent: React.FC<T>;
 } {
   return {
     PublicComponent: memo(Component),
-    EditorComponent: memo((props) => <Component {...props} />),
+    EditorComponent: memo(Component),
   };
 }
 

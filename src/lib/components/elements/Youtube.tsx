@@ -1,8 +1,7 @@
 import { createElementComponent } from "@lib/editor";
-import type { IYoutube } from "@lib/types";
-import type { RenderElementProps } from "slate-react";
+import type { CommonRenderElementProps, IYoutube } from "@lib/types";
 
-export interface IYoutubeProps extends RenderElementProps {
+export interface IYoutubeProps extends CommonRenderElementProps {
   element: IYoutube;
 }
 

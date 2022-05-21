@@ -1,8 +1,7 @@
 import { createElementComponent } from "@lib/editor";
-import type { IList } from "@lib/types";
-import type { RenderElementProps } from "slate-react";
+import type { CommonRenderElementProps, IList } from "@lib/types";
 
-export interface IListProps extends RenderElementProps {
+export interface IListProps extends CommonRenderElementProps {
   element: IList;
 }
 

@@ -77,7 +77,7 @@ export const useMyStore = create<Stores>()(
   }))
 );
 
-export const useMyStoreWithMemoizedSelector = <T>(
+export const useMyStoreMemo = <T>(
   selector: (stores: Stores) => T,
   dependencies: ReadonlyArray<unknown>
 ) => {

@@ -11,7 +11,7 @@ export function getDefaultNodeProps(
       const result: ICodeBlock = {
         type: "CODE_BLOCK",
         children: [],
-        lang: "none",
+        lang: "tsx",
         showCopy: true,
         showLines: true,
       };
