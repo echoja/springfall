@@ -16,7 +16,7 @@ import List, { PublicList } from "./components/elements/List";
 import Paragraph, { PublicParagraph } from "./components/elements/Paragraph";
 import Table, { PublicTable } from "./components/elements/Table";
 import Youtube, { PublicYoutube } from "./components/elements/Youtube";
-import Leaf, { PublicLeaf } from "./components/Leaf";
+import { Leaf, PublicLeaf } from "./components/Leaf";
 import type { RenderPublicElementProps } from "./types";
 
 export function renderPublicElement(props: RenderPublicElementProps) {
@@ -78,7 +78,7 @@ export function renderElement(props: RenderElementProps) {
 }
 
 export function renderPublicLeaf(
-  props: SetOptional<RenderLeafProps, "attributes" | "text">
+  props: SetOptional<RenderLeafProps, "attributes">
 ) {
   return <PublicLeaf {...props} />;
 }
@@ -89,8 +89,10 @@ export function renderLeaf(props: RenderLeafProps) {
 
 export const PublicElement = renderPublicElement;
 
+// any를 한 데 모으기 위함
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Any = any;
+
 export function renderPublic(
   data: Descendant[]
 ): ReactElement<Any, Any> | null {
@@ -101,7 +103,7 @@ export function renderPublic(
         if (Text.isText(descendant)) {
           return (
             // eslint-disable-next-line react/no-array-index-key
-            <PublicLeaf key={index} leaf={descendant}>
+            <PublicLeaf key={index} leaf={descendant} text={descendant}>
               {(descendant as Any).text}
             </PublicLeaf>
           );

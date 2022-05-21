@@ -3,7 +3,11 @@ import type { NextPage } from "next";
 import type { DefaultSession } from "next-auth";
 import type { ReactElement, ReactNode } from "react";
 import type { BaseEditor, Descendant, Element } from "slate";
-import type { ReactEditor, RenderElementProps } from "slate-react";
+import type {
+  ReactEditor,
+  RenderElementProps,
+  RenderLeafProps,
+} from "slate-react";
 import type { SetOptional } from "type-fest";
 import type { SetState, GetState } from "zustand";
 
@@ -344,3 +348,9 @@ export type Stores = {
 
 export type Set = SetState<Stores>;
 export type Get = GetState<Stores>;
+
+export type CommonRenderLeafProps = SetOptional<RenderLeafProps, "attributes">;
+
+export interface IRenderTextProps extends CommonRenderLeafProps {
+  leaf: IText;
+}
