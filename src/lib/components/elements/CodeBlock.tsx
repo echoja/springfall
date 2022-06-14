@@ -60,7 +60,7 @@ const CodeBlockLayout: React.FC<{
     <div className="flex flex-col">
       {element.label && (
         <div
-          className="inline-flex bg-slate-200 shadow-xl text-xs font-mono  ml-3 rounded-tl rounded-tr px-2 py-1 mr-auto"
+          className="inline-flex px-2 py-1 ml-3 mr-auto font-mono text-xs transition-colors rounded-tl rounded-tr shadow-xl bg-slate-200 dark:text-gray-100 dark:bg-slate-600"
           contentEditable={false}
         >
           <span className="inline-flex mr-2">
@@ -97,7 +97,7 @@ const Buttons: React.FC<{ children: ReactNode }> = ({ children }) => {
   return (!Array.isArray(children) && children) ||
     (Array.isArray(children) &&
       children.filter((v) => Boolean(v)).length !== 0) ? (
-    <div className="inline-flex absolute items-center gap-3 top-3 right-3 text-white">
+    <div className="absolute inline-flex items-center gap-3 text-white top-3 right-3">
       {children}
     </div>
   ) : null;
