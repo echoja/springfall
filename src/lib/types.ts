@@ -207,9 +207,12 @@ export type IText = {
   bold?: boolean;
   underline?: boolean;
   strikethrough?: boolean;
+  italic?: boolean;
   code?: boolean;
   kbd?: boolean;
 };
+
+export type Mark = keyof Omit<IText, "type" | "text">;
 
 export type IPlainText = {
   type: "PLAIN_TEXT";

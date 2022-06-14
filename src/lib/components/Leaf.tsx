@@ -1,46 +1,31 @@
 import type { CommonRenderLeafProps, IRenderTextProps } from "@lib/types";
 
 export function Text(props: IRenderTextProps) {
-  const { children, leaf, attributes } = props;
+  const { leaf, attributes } = props;
+  let { children } = props;
 
   if (leaf.bold) {
-    return (
-      <span {...attributes}>
-        <strong>{children}</strong>
-      </span>
-    );
+    children = <strong>{children}</strong>;
+  }
+
+  if (leaf.italic) {
+    children = <em>{children}</em>;
   }
 
   if (leaf.code) {
-    return (
-      <span {...attributes}>
-        <code>{children}</code>
-      </span>
-    );
+    children = <code>{children}</code>;
   }
 
   if (leaf.kbd) {
-    return (
-      <span {...attributes}>
-        <kbd>{children}</kbd>
-      </span>
-    );
+    children = <kbd>{children}</kbd>;
   }
 
   if (leaf.strikethrough) {
-    return (
-      <span {...attributes}>
-        <s>{children}</s>
-      </span>
-    );
+    children = <s>{children}</s>;
   }
 
   if (leaf.underline) {
-    return (
-      <span {...attributes}>
-        <u>{children}</u>
-      </span>
-    );
+    children = <u>{children}</u>;
   }
 
   return <span {...attributes}>{children}</span>;

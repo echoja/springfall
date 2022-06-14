@@ -27,6 +27,28 @@
   a {
     @apply text-gray-600 hover:text-gray-800 hover:underline;
   }
+
+  .dark a {
+    @apply text-gray-100 hover:text-gray-200 hover:underline;
+  }
+
+  kbd {
+    @apply transition-all;
+  }
+
+  article kbd {
+    @apply border text-gray-500 text-xs font-bold border-gray-300 bg-gray-100 rounded py-0.5 px-1 leading-tight whitespace-nowrap;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, .1), 0 2px 1px 0 rgba(255, 255, 255, .5) inset;
+  }
+
+  .dark article kbd {
+    @apply text-gray-200 bg-gray-600 border-gray-500;
+    box-shadow: 0px 1px 2px rgba(255, 255, 255, .5), 0 1px 1px 0 rgba(255, 255, 255, .3) inset;
+  }
+
+  article code {
+    @apply text-sm;
+  }
 }
 
 @layer components {
@@ -50,6 +72,10 @@
 
   .ring-b {
     @apply ring-b-2;
+  }
+
+  .text-0 {
+    font-size: 0;
   }
 }
 

@@ -159,11 +159,11 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
         <div className="flex items-center justify-between">
           <div className="flex items-center">
             <Link href="/admin/post/list">
-              <a className="btn mr-2">
+              <a className="mr-2 btn">
                 <FontAwesomeIcon icon={faAngleLeft} />
               </a>
             </Link>
-            <span className="font-semibold font-sans inline-flex pr-2">
+            <span className="inline-flex pr-2 font-sans font-semibold">
               글 편집
             </span>
             <span className="text-xs text-gray-500">
@@ -190,28 +190,28 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
 
           <CodeBlockEditModal />
 
-          <div className="flex gap-2 items-stretch">
+          <div className="flex items-stretch gap-2">
             {/* Editor Main */}
-            <div className="w-full max-w-screen-lg p-2 mt-6">
+            <article className="w-full max-w-screen-lg p-2 mt-6">
               <input
                 type="text"
                 placeholder="제목"
                 value={post.title}
                 onChange={onTitlechange}
-                className="border-0 text-xl font-semibold mb-3 w-full focus:ring-0"
+                className="w-full mb-3 text-xl font-semibold border-0 focus:ring-0"
               />
 
               <div className="relative">
                 <ContentEditorEditable />
               </div>
-            </div>
+            </article>
 
             {/* Editor Sidebar */}
-            <div className="border-l flex-auto w-80">
+            <div className="flex-auto border-l w-80">
               <div className="sticky top-0 max-h-screen overflow-auto">
                 {/* Editor Sidebar Tabs */}
                 <div className="border-b border-gray-200">
-                  <nav className="-mb-px flex" aria-label="Tabs">
+                  <nav className="flex -mb-px" aria-label="Tabs">
                     {tabLinks}
                   </nav>
                 </div>

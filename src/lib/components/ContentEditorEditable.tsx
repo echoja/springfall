@@ -1,50 +1,98 @@
 import { renderElement, renderLeaf } from "@lib/render";
+import type { Mark } from "@lib/types";
 import type { KeyboardEvent } from "react";
 import { useMemo, useCallback, useState, memo } from "react";
-import { Editor, Transforms, Text } from "slate";
-import { Editable, useSlate } from "slate-react";
+import { Editor, Transforms } from "slate";
+import { Editable, useSlateStatic } from "slate-react";
 import { twMerge } from "tailwind-merge";
 
 // Define our own custom set of helpers.
-const CustomEditor = {
-  isBoldMarkActive(editor: Editor) {
-    const [match] = Editor.nodes(editor, {
-      match: (n) => n.type === "TEXT" && n.bold === true,
-      universal: true,
-    });
+function isMarkActive(editor: Editor, mark: Mark) {
+  const [match] = Editor.nodes(editor, {
+    match: (n) => n.type === "TEXT" && n[mark] === true,
+    universal: true,
+  });
 
-    return Boolean(match);
-  },
+  return Boolean(match);
+}
 
-  isCodeBlockActive(editor: Editor) {
-    const [match] = Editor.nodes(editor, {
-      match: (n) => n.type === "CODE_BLOCK",
-    });
+const toggleMark = (editor: Editor, mark: Mark) => {
+  const isActive = isMarkActive(editor, mark);
 
-    return Boolean(match);
-  },
-
-  toggleBoldMark(editor: Editor) {
-    const isActive = CustomEditor.isBoldMarkActive(editor);
-    Transforms.setNodes(
-      editor,
-      { bold: isActive ? undefined : true },
-      { match: (n) => Text.isText(n), split: true }
-    );
-  },
-
-  toggleCodeBlock(editor: Editor) {
-    const isActive = CustomEditor.isCodeBlockActive(editor);
-    Transforms.setNodes(
-      editor,
-      { type: isActive ? undefined : "CODE_BLOCK" },
-      { match: (n) => Editor.isBlock(editor, n) }
-    );
-  },
+  if (isActive) {
+    Editor.removeMark(editor, mark);
+  } else {
+    Editor.addMark(editor, mark, true);
+  }
 };
 
+function isCodeBlockActive(editor: Editor) {
+  const [match] = Editor.nodes(editor, {
+    match: (n) => n.type === "CODE_BLOCK",
+  });
+
+  return Boolean(match);
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function toggleCodeBlock(editor: Editor) {
+  const isActive = isCodeBlockActive(editor);
+  Transforms.setNodes(
+    editor,
+    { type: isActive ? undefined : "CODE_BLOCK" },
+    { match: (n) => Editor.isBlock(editor, n) }
+  );
+}
+
+function onKeyDown(event: KeyboardEvent<HTMLDivElement>, editor: Editor) {
+  if ((event.ctrlKey || event.metaKey) && event.shiftKey) {
+    switch (event.key) {
+      case "s":
+        event.preventDefault();
+        toggleMark(editor, "strikethrough");
+        break;
+
+      case "k":
+        event.preventDefault();
+        toggleMark(editor, "kbd");
+        break;
+
+      default:
+        break;
+    }
+    return;
+  }
+
+  if (event.ctrlKey || event.metaKey) {
+    switch (event.key) {
+      case "b":
+        event.preventDefault();
+        toggleMark(editor, "bold");
+        break;
+
+      case "u":
+        event.preventDefault();
+        toggleMark(editor, "underline");
+        break;
+
+      case "e":
+        event.preventDefault();
+        toggleMark(editor, "code");
+        break;
+
+      case "i":
+        event.preventDefault();
+        toggleMark(editor, "italic");
+        break;
+
+      default:
+        break;
+    }
+  }
+}
+
 const ContentEditorEditable: React.FC = () => {
-  const editor = useSlate();
+  const editor = useSlateStatic();
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [focused, setFocused] = useState(false);
@@ -57,26 +105,9 @@ const ContentEditorEditable: React.FC = () => {
     setFocused(true);
   }, []);
 
-  const onKeyDown = useCallback(
+  const onHandleKeyDown = useCallback(
     (event: KeyboardEvent<HTMLDivElement>) => {
-      if (!event.ctrlKey) {
-        return;
-      }
-
-      switch (event.key) {
-        case "`":
-          event.preventDefault();
-          CustomEditor.toggleCodeBlock(editor);
-          break;
-
-        case "b":
-          event.preventDefault();
-          CustomEditor.toggleBoldMark(editor);
-          break;
-
-        default:
-          break;
-      }
+      onKeyDown(event, editor);
     },
     [editor]
   );
@@ -91,7 +122,7 @@ const ContentEditorEditable: React.FC = () => {
       renderLeaf={renderLeaf}
       onBlur={editableOnBlur}
       onFocus={editableOnFocus}
-      onKeyDown={onKeyDown}
+      onKeyDown={onHandleKeyDown}
     />
   );
 };
