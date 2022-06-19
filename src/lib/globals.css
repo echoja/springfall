@@ -37,11 +37,11 @@
   }
 
   article {
-    @apply leading-relaxed;
+    @apply leading-[1.7];
   }
 
   article p {
-    @apply mb-3;
+    @apply my-[0.8em];
   }
 
   article kbd {

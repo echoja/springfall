@@ -7,7 +7,7 @@ export interface IHrProps extends CommonRenderElementProps {
 
 const { EditorComponent: Hr, PublicComponent } =
   createElementComponent<IHrProps>(({ attributes }) => {
-    return <hr {...attributes} />;
+    return <hr className="my-4" {...attributes} />;
   });
 
 export const PublicHr = PublicComponent;

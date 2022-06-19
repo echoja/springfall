@@ -6,7 +6,7 @@ export interface IHeadingProps extends CommonRenderElementProps {
   element: IHeading;
 }
 
-const defaultHeadingClassName = "font-semibold mb-[2em]";
+const defaultHeadingClassName = "font-semibold mt-[1.5em] mb-[0.5em]";
 
 const { EditorComponent: Heading, PublicComponent } =
   createElementComponent<IHeadingProps>(({ children, element, attributes }) => {
