@@ -9,7 +9,7 @@ type LayoutProps = {
 
 const Default = ({ children }: LayoutProps) => {
   return (
-    <div className="mx-auto max-w-screen-lg">
+    <div className="max-w-screen-md mx-auto">
       <div className="p-8">
         <Header />
         <main className="mt-12 mb-24">{children}</main>
