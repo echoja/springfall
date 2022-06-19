@@ -5,11 +5,7 @@ export type IParagraphProps = CommonRenderElementProps;
 
 const { EditorComponent: Paragraph, PublicComponent } =
   createElementComponent<IParagraphProps>(({ children, attributes }) => {
-    return (
-      <p className="mb-2" {...attributes}>
-        {children}
-      </p>
-    );
+    return <p {...attributes}>{children}</p>;
   });
 
 export const PublicParagraph = PublicComponent;

@@ -72,13 +72,13 @@ const PostView: MonnomlogPage<IPostViewProps> = ({ post }) => {
       <header className="mb-5">
         <h1 className="text-3xl font-semibold">{post.title}</h1>
       </header>
-      <div className="mb-7 text-gray-500">
-        <span className="flex-inline mr-2">
+      <div className="text-gray-500 mb-7">
+        <span className="mr-2 flex-inline">
           <FontAwesomeIcon icon={faAxe} />
         </span>
         <span>{format(new Date(post.updatedAt), "yyyy.MM.dd.")}</span>
       </div>
-      <div className="article">{rendered}</div>
+      <div className="article-body">{rendered}</div>
     </article>
   );
 };
