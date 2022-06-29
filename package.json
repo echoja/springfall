@@ -37,6 +37,7 @@
     "framer-motion": "^6.5.0",
     "hotkeys-js": "^3.9.4",
     "immer": "^9.0.15",
+    "is-url": "^1.2.4",
     "joi": "^17.6.0",
     "markdown-it": "^13.0.1",
     "nanoid": "^4.0.0",
@@ -60,6 +61,7 @@
   "devDependencies": {
     "@commitlint/config-conventional": "^17.0.3",
     "@swc-node/jest": "^1.5.2",
+    "@types/is-url": "^1.2.30",
     "@types/jest": "^28.1.5",
     "@types/markdown-it": "^12.2.3",
     "@types/react": "^18.0.15",

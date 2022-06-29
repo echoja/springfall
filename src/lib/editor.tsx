@@ -1,3 +1,4 @@
+import isUrl from "is-url";
 import { memo } from "react";
 import { createEditor, Editor, Element } from "slate";
 import { withHistory } from "slate-history";
@@ -35,6 +36,33 @@ export function createElementComponent<T extends CommonRenderElementProps>(
 
 export function withCodeBlock(editor: Editor): Editor {
   return editor;
+}
+
+export function withLinkBlock(editor: Editor): Editor {
+  const result = { ...editor };
+
+  result.isInline = (element) =>
+    ["link", "button"].includes(element.type) || editor.isInline(element);
+
+  result.insertText = (text) => {
+    if (text && isUrl(text)) {
+      wrapLink(result, text);
+    } else {
+      editor.insertText(text);
+    }
+  };
+
+  result.insertData = (data) => {
+    const text = data.getData("text/plain");
+
+    if (text && isUrl(text)) {
+      wrapLink(result, text);
+    } else {
+      editor.insertData(data);
+    }
+  };
+
+  return result;
 }
 
 export function getEditor(): Editor {
