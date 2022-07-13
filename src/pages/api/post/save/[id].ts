@@ -13,7 +13,7 @@ export default authGuard(async (req: NextApiRequest, res: NextApiResponse) => {
     },
     data: editPostInput,
   });
-  await res.unstable_revalidate(`/post/${id}`);
+  await res.revalidate(`/post/${id}`);
   res.statusCode = 200;
   res.json(result);
 });
