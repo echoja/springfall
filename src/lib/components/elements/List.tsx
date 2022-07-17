@@ -1,5 +1,5 @@
-import { createElementComponent } from "@lib/editor";
-import type { CommonRenderElementProps, IList } from "@lib/types";
+import type { CommonRenderElementProps, IList } from "@modules/content/types";
+import { createElementComponent } from "@modules/editor/custom-slate-editor";
 
 export interface IListProps extends CommonRenderElementProps {
   element: IList;

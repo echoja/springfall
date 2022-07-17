@@ -1,8 +1,8 @@
+import { POSTS_PER_PAGE } from "@common/config";
 import PostList from "@lib/components/PostList";
-import { POSTS_PER_PAGE } from "@lib/config";
 import prisma from "@lib/prisma";
 import { serializePost } from "@lib/serialize";
-import type { MonnomlogPage, SerializedPost } from "@lib/types";
+import type { MonnomlogPage, SerializedPost } from "@modules/content/types";
 import Joi from "joi";
 import type { GetServerSideProps } from "next";
 import { NextSeo } from "next-seo";

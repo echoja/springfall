@@ -4,7 +4,7 @@ import { adminLayoutWrapper } from "@lib/components/layout/AdminLayout";
 import { useAdminPageGuard } from "@lib/hooks";
 import prisma from "@lib/prisma";
 import { serializePost } from "@lib/serialize";
-import type { MonnomlogPage, SerializedPost } from "@lib/types";
+import type { MonnomlogPage, SerializedPost } from "@modules/content/types";
 import type { GetServerSideProps } from "next";
 import Link from "next/link";
 

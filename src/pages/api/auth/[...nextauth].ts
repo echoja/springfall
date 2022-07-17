@@ -1,6 +1,6 @@
 // pages/api/auth/[...nextauth].ts
 
-import { getGithubCredentials, getNextauthSecret } from "@lib/config";
+import { getGithubCredentials, getNextauthSecret } from "@common/config";
 import prisma from "@lib/prisma";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import NextAuth from "next-auth";

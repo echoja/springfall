@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import prisma from "@lib/prisma";
 import { renderPublic } from "@lib/render";
 import { serializePost } from "@lib/serialize";
-import type { MonnomlogPage, SerializedPost } from "@lib/types";
+import type { MonnomlogPage, SerializedPost } from "@modules/content/types";
 import { format } from "date-fns";
 import Joi from "joi";
 import type { GetStaticPaths, GetStaticProps } from "next";

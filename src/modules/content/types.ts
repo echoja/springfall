@@ -12,8 +12,6 @@ import type {
 import type { SetOptional } from "type-fest";
 import type { SetState, GetState } from "zustand";
 
-export * from "./util";
-
 declare module "slate" {
   // eslint-disable-next-line @typescript-eslint/naming-convention
   interface CustomTypes {
@@ -89,7 +87,8 @@ export type StandaloneElementNode =
   | IImage
   | IList
   | IHr
-  | IYoutube;
+  | IYoutube
+  | ILink;
 
 export type ICallout = {
   type: "CALLOUT";
@@ -199,7 +198,14 @@ export type IGithubBlock = {
   url: string;
 };
 
-type InlineNode = IText | ILink | IIcon | ICodeBlockText;
+export type ILink = {
+  type: "LINK";
+  url: string;
+  internal?: boolean;
+  children: InlineNode[];
+};
+
+type InlineNode = IText | IIcon | ICodeBlockText;
 
 export type IText = {
   type: "TEXT";
@@ -222,13 +228,6 @@ export type IPlainText = {
 export type EmptyText = {
   type: "NOOP";
   text: "";
-};
-
-export type ILink = {
-  type: "LINK";
-  text: string;
-  url: string;
-  internal?: boolean;
 };
 
 export type IIcon = {

@@ -4,7 +4,7 @@ import { useAdminPageGuard } from "@lib/hooks";
 import useToast from "@lib/hooks/use-toast";
 import { convertPostSerializedToCreate } from "@lib/serialize";
 import { useMyStoreMemo } from "@lib/store";
-import type { MonnomlogPage } from "@lib/types";
+import type { MonnomlogPage } from "@modules/content/types";
 import type { Post } from "@prisma/client";
 import axiosGlobal from "axios";
 import { useRouter } from "next/router";

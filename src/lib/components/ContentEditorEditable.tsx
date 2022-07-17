@@ -1,5 +1,5 @@
 import { renderElement, renderLeaf } from "@lib/render";
-import type { Mark } from "@lib/types";
+import type { Mark } from "@modules/content/types";
 import type { KeyboardEvent } from "react";
 import { useMemo, useCallback, useState, memo } from "react";
 import { Editor, Transforms } from "slate";

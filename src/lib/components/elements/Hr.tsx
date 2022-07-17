@@ -1,5 +1,5 @@
-import { createElementComponent } from "@lib/editor";
-import type { CommonRenderElementProps, IHr } from "@lib/types";
+import type { CommonRenderElementProps, IHr } from "@modules/content/types";
+import { createElementComponent } from "@modules/editor/custom-slate-editor";
 
 export interface IHrProps extends CommonRenderElementProps {
   element: IHr;

@@ -1,12 +1,12 @@
+import { convertCodeBlockToString } from "@common/util";
 import { faPenToSquare } from "@fortawesome/pro-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useMyStoreMemo } from "@lib/store";
 import type {
-  CodeBlockComponent,
   ICodeBlock,
   ICommonCodeBlockProps,
-} from "@lib/types";
-import { convertCodeBlockToString } from "@lib/types";
+  CodeBlockComponent,
+} from "@modules/content/types";
 import type { CSSProperties, ReactNode } from "react";
 import type React from "react";
 import { useCallback } from "react";

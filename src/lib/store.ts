@@ -1,7 +1,3 @@
-import { useCallback } from "react";
-import create from "zustand";
-import { devtools } from "zustand/middleware";
-
 import type {
   ColorModeStore,
   AdminStore,
@@ -9,7 +5,10 @@ import type {
   Set,
   Get,
   SerializedPost,
-} from "./types";
+} from "@modules/content/types";
+import { useCallback } from "react";
+import create from "zustand";
+import { devtools } from "zustand/middleware";
 
 function createColorModeStore(set: Set, _get: Get): ColorModeStore {
   return {

@@ -1,6 +1,5 @@
+import type { ICodeBlock } from "@modules/content/types";
 import type { Element } from "slate";
-
-import type { ICodeBlock } from "./types";
 
 export function getDefaultNodeProps(
   type: Element["type"]

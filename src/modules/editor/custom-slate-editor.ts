@@ -1,10 +1,10 @@
-import isUrl from "is-url";
 import { memo } from "react";
 import { createEditor, Editor, Element } from "slate";
 import { withHistory } from "slate-history";
 import { withReact } from "slate-react";
 
-import type { CommonRenderElementProps } from "./types";
+import { withLinkBlock } from "../content/link/api";
+import type { CommonRenderElementProps } from "../content/types";
 
 export const selectionFilteredByType = (
   editor: Editor,
@@ -38,35 +38,8 @@ export function withCodeBlock(editor: Editor): Editor {
   return editor;
 }
 
-export function withLinkBlock(editor: Editor): Editor {
-  const result = { ...editor };
-
-  result.isInline = (element) =>
-    ["link", "button"].includes(element.type) || editor.isInline(element);
-
-  result.insertText = (text) => {
-    if (text && isUrl(text)) {
-      wrapLink(result, text);
-    } else {
-      editor.insertText(text);
-    }
-  };
-
-  result.insertData = (data) => {
-    const text = data.getData("text/plain");
-
-    if (text && isUrl(text)) {
-      wrapLink(result, text);
-    } else {
-      editor.insertData(data);
-    }
-  };
-
-  return result;
-}
-
 export function getEditor(): Editor {
-  return [withHistory, withReact, withCodeBlock].reduce(
+  return [withHistory, withReact, withCodeBlock, withLinkBlock].reduce(
     (acc, plugin) => plugin(acc),
     createEditor()
   );

@@ -5,7 +5,7 @@ import useToast from "@lib/hooks/use-toast";
 import prisma from "@lib/prisma";
 import { serializePost } from "@lib/serialize";
 import { useMyStoreMemo } from "@lib/store";
-import type { MonnomlogPage, SerializedPost } from "@lib/types";
+import type { MonnomlogPage, SerializedPost } from "@modules/content/types";
 import type { Post } from "@prisma/client";
 import axiosGlobal from "axios";
 import type { GetServerSideProps } from "next";

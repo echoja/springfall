@@ -1,6 +1,6 @@
 import { authGuard } from "@lib/api-guard";
 import prisma from "@lib/prisma";
-import type { CreatePostInput } from "@lib/types";
+import type { CreatePostInput } from "@modules/content/types";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/react";
 

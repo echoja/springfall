@@ -1,8 +1,11 @@
+import Link, { PublicLink } from "@modules/content/link/component";
 import type { ReactElement } from "react";
 import type { Descendant } from "slate";
 import { Text } from "slate";
 import type { RenderElementProps, RenderLeafProps } from "slate-react";
 import type { SetOptional } from "type-fest";
+
+import type { RenderPublicElementProps } from "../modules/content/types";
 
 import Callout, { PublicCallout } from "./components/elements/Callout";
 import { CodeBlock, PublicCodeBlock } from "./components/elements/CodeBlock";
@@ -17,7 +20,6 @@ import Paragraph, { PublicParagraph } from "./components/elements/Paragraph";
 import Table, { PublicTable } from "./components/elements/Table";
 import Youtube, { PublicYoutube } from "./components/elements/Youtube";
 import { Leaf, PublicLeaf } from "./components/Leaf";
-import type { RenderPublicElementProps } from "./types";
 
 export function renderPublicElement(props: RenderPublicElementProps) {
   const { element } = props;
@@ -43,6 +45,8 @@ export function renderPublicElement(props: RenderPublicElementProps) {
       return <PublicYoutube {...props} element={element} />;
     case "IMAGE":
       return <PublicImage {...props} element={element} />;
+    case "LINK":
+      return <PublicLink {...props} element={element} />;
     default:
       return <PublicParagraph {...props} element={element} />;
   }
@@ -72,6 +76,8 @@ export function renderElement(props: RenderElementProps) {
       return <Youtube {...props} element={element} />;
     case "IMAGE":
       return <Image {...props} element={element} />;
+    case "LINK":
+      return <Link {...props} element={element} />;
     default:
       return <Paragraph {...props} element={element} />;
   }

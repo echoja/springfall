@@ -1,6 +1,9 @@
+import type {
+  SerializedPost,
+  ContentType,
+  CreatePostInput,
+} from "@modules/content/types";
 import type { Post } from "@prisma/client";
-
-import type { ContentType, CreatePostInput, SerializedPost } from "./types";
 
 export function serializePost(post: Post): SerializedPost {
   return {

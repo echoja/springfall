@@ -1,7 +1,7 @@
+import { parseQueryToNumber } from "@common/util";
 import { authGuard } from "@lib/api-guard";
 import prisma from "@lib/prisma";
-import type { SerializedPost } from "@lib/types";
-import { parseQueryToNumber } from "@lib/util";
+import type { SerializedPost } from "@modules/content/types";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default authGuard(async (req: NextApiRequest, res: NextApiResponse) => {

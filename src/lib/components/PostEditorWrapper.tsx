@@ -1,11 +1,11 @@
+import { isDevelopment } from "@common/config";
 import { faAngleLeft } from "@fortawesome/pro-regular-svg-icons";
 import { faFloppyDisk } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { isDevelopment } from "@lib/config";
-import { getEditor } from "@lib/editor";
 import { useHotkeys } from "@lib/hooks/use-hotkeys";
 import { useMyStoreMemo } from "@lib/store";
-import type { Command } from "@lib/types";
+import type { Command } from "@modules/content/types";
+import { getEditor } from "@modules/editor/custom-slate-editor";
 import Link from "next/link";
 import type React from "react";
 import { useCallback, useState, useMemo, memo, useEffect } from "react";

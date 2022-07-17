@@ -1,7 +1,6 @@
 // lib/prisma.ts
+import { isDevelopment } from "@common/config";
 import { PrismaClient } from "@prisma/client";
-
-import { isDevelopment } from "./config";
 
 declare global {
   // allow global `var` declarations

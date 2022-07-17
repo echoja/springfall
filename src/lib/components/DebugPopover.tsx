@@ -1,6 +1,6 @@
 import { Transition } from "@headlessui/react";
 import { useMyStore } from "@lib/store";
-import type { SerializedPost } from "@lib/types";
+import type { SerializedPost } from "@modules/content/types";
 import {
   Fragment,
   memo,

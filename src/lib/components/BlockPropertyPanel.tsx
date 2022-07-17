@@ -1,5 +1,5 @@
 import { useMyStoreMemo } from "@lib/store";
-import type { ICodeBlock } from "@lib/types";
+import type { ICodeBlock } from "@modules/content/types";
 import { memo, useMemo } from "react";
 import type { Node, Path } from "slate";
 import { Transforms, Editor } from "slate";

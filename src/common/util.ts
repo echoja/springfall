@@ -5,7 +5,7 @@ import type {
   ICodeBlockElement,
   ICodeBlockText,
   IText,
-} from "./types";
+} from "../modules/content/types";
 
 /**
  * query(`string | string[] | undefined`)를 number로 변환합니다.
