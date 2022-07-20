@@ -147,7 +147,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-s3@npm:^3.128.0":
+"@aws-sdk/client-s3@npm:^3.131.0":
   version: 3.131.0
   resolution: "@aws-sdk/client-s3@npm:3.131.0"
   dependencies:
@@ -782,7 +782,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/s3-presigned-post@npm:^3.128.0":
+"@aws-sdk/s3-presigned-post@npm:^3.131.0":
   version: 3.131.0
   resolution: "@aws-sdk/s3-presigned-post@npm:3.131.0"
   dependencies:
@@ -2999,7 +2999,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jest@npm:^28.1.5":
+"@types/jest@npm:^28.1.6":
   version: 28.1.6
   resolution: "@types/jest@npm:28.1.6"
   dependencies:
@@ -5535,7 +5535,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"framer-motion@npm:^6.5.0":
+"framer-motion@npm:^6.5.1":
   version: 6.5.1
   resolution: "framer-motion@npm:6.5.1"
   dependencies:
@@ -7672,8 +7672,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "monnomlog@workspace:."
   dependencies:
-    "@aws-sdk/client-s3": ^3.128.0
-    "@aws-sdk/s3-presigned-post": ^3.128.0
+    "@aws-sdk/client-s3": ^3.131.0
+    "@aws-sdk/s3-presigned-post": ^3.131.0
     "@commitlint/config-conventional": ^17.0.3
     "@floating-ui/react-dom": ^0.7.2
     "@floating-ui/react-dom-interactions": ^0.6.6
@@ -7688,7 +7688,7 @@ __metadata:
     "@swc-node/jest": ^1.5.2
     "@tailwindcss/forms": ^0.5.2
     "@types/is-url": ^1.2.30
-    "@types/jest": ^28.1.5
+    "@types/jest": ^28.1.6
     "@types/markdown-it": ^12.2.3
     "@types/react": ^18.0.15
     autoprefixer: ^10.4.7
@@ -7700,7 +7700,7 @@ __metadata:
     eslint-config-next: ^12.2.2
     eslint-config-prettier: ^8.5.0
     eslint-config-sznm: ^1.0.0
-    framer-motion: ^6.5.0
+    framer-motion: ^6.5.1
     hotkeys-js: ^3.9.4
     husky: ^8.0.1
     immer: ^9.0.15
@@ -7713,7 +7713,7 @@ __metadata:
     next: ^12.2.2
     next-auth: ^4.10.0
     next-seo: ^5.4.0
-    next-sitemap: ^3.1.10
+    next-sitemap: ^3.1.11
     postcss: ^8.4.14
     prettier: ^2.7.1
     prisma: ^4.0.0
@@ -7727,7 +7727,7 @@ __metadata:
     slate-history: ^0.66.0
     slate-react: ^0.81.0
     standard-version: ^9.5.0
-    string-strip-html: ^10.0.0
+    string-strip-html: ^10.1.0
     tailwind-merge: ^1.4.0
     tailwindcss: ^3.1.6
     type-fest: ^2.16.0
@@ -7832,7 +7832,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next-sitemap@npm:^3.1.10":
+"next-sitemap@npm:^3.1.11":
   version: 3.1.11
   resolution: "next-sitemap@npm:3.1.11"
   dependencies:
@@ -9499,7 +9499,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"string-strip-html@npm:^10.0.0":
+"string-strip-html@npm:^10.1.0":
   version: 10.1.0
   resolution: "string-strip-html@npm:10.1.0"
   dependencies:
