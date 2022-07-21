@@ -4,6 +4,11 @@ import { faFloppyDisk } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useHotkeys } from "@lib/hooks/use-hotkeys";
 import { useMyStoreMemo } from "@lib/store";
+import {
+  insertLink,
+  isLinkActive,
+  unwrapLink,
+} from "@modules/content/link/api";
 import type { Command } from "@modules/content/types";
 import { getEditor } from "@modules/editor/custom-slate-editor";
 import Link from "next/link";
@@ -100,6 +105,24 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
   useHotkeys({
     keys: "ctrl+s, cmd+s",
     callback: onSaveButtonClick,
+  });
+
+  const toggleLink = useCallback(() => {
+    if (isLinkActive(editor)) {
+      unwrapLink(editor);
+      return;
+    }
+
+    const url = window.prompt("Enter the URL of the link:");
+    if (!url) {
+      return;
+    }
+    insertLink(editor, url);
+  }, [editor]);
+
+  useHotkeys({
+    keys: "ctrl+k, cmd+k",
+    callback: toggleLink,
   });
 
   const onSlateChange = useCallback(

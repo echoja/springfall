@@ -4,8 +4,8 @@
  */
 export default function InlineChromiumBugfix() {
   return (
-    <span contentEditable={false} className="font-[0px]">
-      ${String.fromCodePoint(160) /* Non-breaking space */}
+    <span contentEditable={false} className="text-[0px]">
+      {String.fromCodePoint(160) /* Non-breaking space */}
     </span>
   );
 }

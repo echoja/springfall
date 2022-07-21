@@ -46,28 +46,30 @@ export const insertLink = (editor: Editor, url: string) => {
 };
 
 export function withLinkBlock(editor: Editor): Editor {
-  const result = { ...editor };
+  const { isInline, insertText, insertData } = editor;
 
-  result.isInline = (element) =>
-    ["link", "button"].includes(element.type) || editor.isInline(element);
+  // eslint-disable-next-line no-param-reassign
+  editor.isInline = (element) => element.type === "LINK" || isInline(element);
 
-  result.insertText = (text) => {
+  // eslint-disable-next-line no-param-reassign
+  editor.insertText = (text) => {
     if (text && isUrl(text)) {
-      wrapLink(result, text);
+      wrapLink(editor, text);
     } else {
-      editor.insertText(text);
+      insertText(text);
     }
   };
 
-  result.insertData = (data) => {
+  // eslint-disable-next-line no-param-reassign
+  editor.insertData = (data) => {
     const text = data.getData("text/plain");
 
     if (text && isUrl(text)) {
-      wrapLink(result, text);
+      wrapLink(editor, text);
     } else {
-      editor.insertData(data);
+      insertData(data);
     }
   };
 
-  return result;
+  return editor;
 }

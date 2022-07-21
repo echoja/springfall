@@ -78,7 +78,7 @@ const PostEdit: MonnomlogPage<IPostEditProps> = (props) => {
       );
       toast({
         status: "success",
-        title: "포스팅이 성공적으로 저장었습니다.",
+        title: "포스팅이 성공적으로 저장되었습니다.",
       });
 
       // eslint-disable-next-line no-console

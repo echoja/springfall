@@ -2,7 +2,7 @@ import { renderElement, renderLeaf } from "@lib/render";
 import type { Mark } from "@modules/content/types";
 import type { KeyboardEvent } from "react";
 import { useMemo, useCallback, useState, memo } from "react";
-import { Editor, Transforms } from "slate";
+import { Editor, Transforms, Range } from "slate";
 import { Editable, useSlateStatic } from "slate-react";
 import { twMerge } from "tailwind-merge";
 
@@ -46,13 +46,13 @@ function toggleCodeBlock(editor: Editor) {
 
 function onKeyDown(event: KeyboardEvent<HTMLDivElement>, editor: Editor) {
   if ((event.ctrlKey || event.metaKey) && event.shiftKey) {
-    switch (event.key) {
-      case "s":
+    switch (event.code) {
+      case "KeyS":
         event.preventDefault();
         toggleMark(editor, "strikethrough");
         break;
 
-      case "k":
+      case "KeyK":
         event.preventDefault();
         toggleMark(editor, "kbd");
         break;
@@ -64,29 +64,49 @@ function onKeyDown(event: KeyboardEvent<HTMLDivElement>, editor: Editor) {
   }
 
   if (event.ctrlKey || event.metaKey) {
-    switch (event.key) {
-      case "b":
+    switch (event.code) {
+      case "KeyB":
         event.preventDefault();
         toggleMark(editor, "bold");
         break;
 
-      case "u":
+      case "KeyU":
         event.preventDefault();
         toggleMark(editor, "underline");
         break;
 
-      case "e":
+      case "KeyE":
         event.preventDefault();
         toggleMark(editor, "code");
         break;
 
-      case "i":
+      case "KeyI":
         event.preventDefault();
         toggleMark(editor, "italic");
         break;
 
       default:
         break;
+    }
+  }
+
+  const { selection } = editor;
+
+  // Default left/right behavior is unit:'character'.
+  // This fails to distinguish between two cursor positions, such as
+  // <inline>foo<cursor/></inline> vs <inline>foo</inline><cursor/>.
+  // Here we modify the behavior to unit:'offset'.
+  // This lets the user step into and out of the inline without stepping over characters.
+  // You may wish to customize this further to only use unit:'offset' in specific cases.
+  if (selection && Range.isCollapsed(selection)) {
+    if (event.code === "ArrowLeft") {
+      event.preventDefault();
+      Transforms.move(editor, { unit: "offset", reverse: true });
+      return;
+    }
+    if (event.code === "ArrowRight") {
+      event.preventDefault();
+      Transforms.move(editor, { unit: "offset" });
     }
   }
 }
