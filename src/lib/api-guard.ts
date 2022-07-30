@@ -1,14 +1,13 @@
+import supabase from "@lib/supabase";
 import type { NextApiHandler } from "next";
-import { getSession } from "next-auth/react";
 
 export const authGuard = (
   handler: NextApiHandler,
   message = "unauthorized"
 ): NextApiHandler => {
   return async (req, res) => {
-    const session = await getSession({ req });
-
-    if (session) {
+    const { user } = await supabase.auth.api.getUserByCookie(req);
+    if (user) {
       return handler(req, res);
     }
 

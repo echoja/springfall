@@ -1,22 +1,16 @@
 import { authGuard } from "@lib/api-guard";
-import prisma from "@lib/prisma";
+import supabase from "@lib/supabase";
 import type { CreatePostInput } from "@lib/types";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getSession } from "next-auth/react";
 
 export default authGuard(async (req: NextApiRequest, res: NextApiResponse) => {
   const createPostInput = req.body as CreatePostInput;
-  const session = await getSession({ req });
-
-  if (!session) {
-    res.status(401).send("");
-    return;
-  }
+  const s = supabase.auth.session();
 
   const post = await prisma.post.create({
     data: {
       ...createPostInput,
-      authorId: session.user.id,
+      authorId: s?.user?.id,
     },
   });
 
