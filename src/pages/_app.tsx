@@ -2,7 +2,7 @@ import { config as fontAwesomeConfig } from "@fortawesome/fontawesome-svg-core";
 import Default from "@lib/components/layout/Default";
 import useConst from "@lib/hooks/use-const";
 import { useMyStoreMemo } from "@lib/store";
-import supabase from "@lib/supabase";
+import { anonClient } from "@lib/supabase";
 import type { MonnomlogPage } from "@lib/types";
 import { DefaultSeo } from "next-seo";
 import type { AppProps } from "next/app";
@@ -25,7 +25,7 @@ interface IMyAppProps extends AppProps {
 
 const MyApp = ({ Component, pageProps }: IMyAppProps) => {
   useEffect(() => {
-    const { data, error } = supabase.auth.onAuthStateChange(
+    const { data, error } = anonClient.auth.onAuthStateChange(
       (event, session) => {
         fetch("/api/auth", {
           method: "POST",

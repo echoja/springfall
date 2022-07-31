@@ -23,10 +23,11 @@ export interface paths {
           updated_at?: parameters["rowFilter.posts.updated_at"];
           removed_at?: parameters["rowFilter.posts.removed_at"];
           published?: parameters["rowFilter.posts.published"];
-          content?: parameters["rowFilter.posts.content"];
           summary?: parameters["rowFilter.posts.summary"];
           title?: parameters["rowFilter.posts.title"];
           id?: parameters["rowFilter.posts.id"];
+          user_id?: parameters["rowFilter.posts.user_id"];
+          content?: parameters["rowFilter.posts.content"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -81,10 +82,11 @@ export interface paths {
           updated_at?: parameters["rowFilter.posts.updated_at"];
           removed_at?: parameters["rowFilter.posts.removed_at"];
           published?: parameters["rowFilter.posts.published"];
-          content?: parameters["rowFilter.posts.content"];
           summary?: parameters["rowFilter.posts.summary"];
           title?: parameters["rowFilter.posts.title"];
           id?: parameters["rowFilter.posts.id"];
+          user_id?: parameters["rowFilter.posts.user_id"];
+          content?: parameters["rowFilter.posts.content"];
         };
         header: {
           /** Preference */
@@ -103,10 +105,11 @@ export interface paths {
           updated_at?: parameters["rowFilter.posts.updated_at"];
           removed_at?: parameters["rowFilter.posts.removed_at"];
           published?: parameters["rowFilter.posts.published"];
-          content?: parameters["rowFilter.posts.content"];
           summary?: parameters["rowFilter.posts.summary"];
           title?: parameters["rowFilter.posts.title"];
           id?: parameters["rowFilter.posts.id"];
+          user_id?: parameters["rowFilter.posts.user_id"];
+          content?: parameters["rowFilter.posts.content"];
         };
         body: {
           /** posts */
@@ -151,11 +154,6 @@ export interface definitions {
      * Format: text
      * @default
      */
-    content: string;
-    /**
-     * Format: text
-     * @default
-     */
     summary: string;
     /**
      * Format: text
@@ -168,6 +166,10 @@ export interface definitions {
      * This is a Primary Key.<pk/>
      */
     id: number;
+    /** Format: uuid */
+    user_id: string;
+    /** Format: jsonb */
+    content: unknown;
   };
 }
 
@@ -215,13 +217,15 @@ export interface parameters {
   /** Format: boolean */
   "rowFilter.posts.published": string;
   /** Format: text */
-  "rowFilter.posts.content": string;
-  /** Format: text */
   "rowFilter.posts.summary": string;
   /** Format: text */
   "rowFilter.posts.title": string;
   /** Format: bigint */
   "rowFilter.posts.id": string;
+  /** Format: uuid */
+  "rowFilter.posts.user_id": string;
+  /** Format: jsonb */
+  "rowFilter.posts.content": string;
 }
 
 export interface operations {}

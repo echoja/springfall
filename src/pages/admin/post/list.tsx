@@ -2,7 +2,7 @@ import { faPen } from "@fortawesome/pro-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { adminLayoutWrapper } from "@lib/components/layout/AdminLayout";
 import { useAdminPageGuard } from "@lib/hooks";
-import supabase from "@lib/supabase";
+import { anonClient } from "@lib/supabase";
 import type { definitions } from "@lib/supabase-types";
 import type { MonnomlogPage } from "@lib/types";
 import type { GetServerSideProps } from "next";
@@ -16,7 +16,7 @@ interface IPostListProps {
 export const getServerSideProps: GetServerSideProps<
   IPostListProps
 > = async () => {
-  const response = await supabase
+  const response = await anonClient
     .from<Post>("posts") // Message maps to the type of the row in your database.
     .select("*");
 

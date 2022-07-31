@@ -1,4 +1,4 @@
-import supabase from "@lib/supabase";
+import { anonClient } from "@lib/supabase";
 import type { NextApiHandler } from "next";
 
 export const authGuard = (
@@ -6,7 +6,7 @@ export const authGuard = (
   message = "unauthorized"
 ): NextApiHandler => {
   return async (req, res) => {
-    const { user } = await supabase.auth.api.getUserByCookie(req);
+    const { user } = await anonClient.auth.api.getUserByCookie(req);
     if (user) {
       return handler(req, res);
     }

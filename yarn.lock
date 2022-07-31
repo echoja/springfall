@@ -7170,6 +7170,43 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jotai@npm:^1.7.6":
+  version: 1.7.6
+  resolution: "jotai@npm:1.7.6"
+  peerDependencies:
+    "@babel/core": "*"
+    "@babel/template": "*"
+    "@urql/core": "*"
+    immer: "*"
+    optics-ts: "*"
+    react: ">=16.8"
+    react-query: "*"
+    valtio: "*"
+    wonka: "*"
+    xstate: "*"
+  peerDependenciesMeta:
+    "@babel/core":
+      optional: true
+    "@babel/template":
+      optional: true
+    "@urql/core":
+      optional: true
+    immer:
+      optional: true
+    optics-ts:
+      optional: true
+    react-query:
+      optional: true
+    valtio:
+      optional: true
+    wonka:
+      optional: true
+    xstate:
+      optional: true
+  checksum: cc9ccf530545d7de5f66cbdbf17bbfd6a2fc13d44b3f3d5eb9efe7ca12a41224931e33871dfe15b83f63ce31e5fe22c23a8a60742c0191512a4a3d87efeb7236
+  languageName: node
+  linkType: hard
+
 "js-tokens@npm:^3.0.0 || ^4.0.0, js-tokens@npm:^4.0.0":
   version: 4.0.0
   resolution: "js-tokens@npm:4.0.0"
@@ -7894,6 +7931,7 @@ __metadata:
     immer: ^9.0.15
     jest: ^28.1.3
     joi: ^17.6.0
+    jotai: ^1.7.6
     lint-staged: ^13.0.3
     markdown-it: ^13.0.1
     nanoid: ^4.0.0

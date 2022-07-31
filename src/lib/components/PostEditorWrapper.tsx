@@ -4,8 +4,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { isDevelopment } from "@lib/config";
 import { getEditor } from "@lib/editor";
 import { useHotkeys } from "@lib/hooks/use-hotkeys";
-import { useMyStoreMemo } from "@lib/store";
+import {
+  editingPostAtom,
+  editingPostContentDataAtom,
+  useMyStoreMemo,
+} from "@lib/store";
 import type { Command } from "@lib/types";
+import { useAtom } from "jotai";
 import Link from "next/link";
 import type React from "react";
 import { useCallback, useState, useMemo, memo, useEffect } from "react";
@@ -28,31 +33,26 @@ interface IPostEditorWrapperProps {
 const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
   onSaveButtonClick,
 }) => {
-  const {
-    openCmdPallete,
-    openImageDialog,
-    onChangePost,
-    post,
-    postContentData,
-    initialized,
-    setInitialized,
-  } = useMyStoreMemo((store) => {
-    return {
-      openCmdPallete: store.openCommandPalette,
-      openImageDialog: store.openImageInsertDialog,
-      post: store.editingPost,
-      onChangePost: store.setEditingPost,
-      postContentData: store.editingPost.content.data,
-      initialized: store.editingPostInitialized,
-      setInitialized: store.setEditingPostInitialized,
-    };
-  }, []);
+  const { openCmdPallete, openImageDialog, initialized, setInitialized } =
+    useMyStoreMemo((store) => {
+      return {
+        openCmdPallete: store.openCommandPalette,
+        openImageDialog: store.openImageInsertDialog,
+        initialized: store.editingPostInitialized,
+        setInitialized: store.setEditingPostInitialized,
+      };
+    }, []);
+
+  const [editingPost, setEditingPost] = useAtom(editingPostAtom);
+  const [postContentData] = useAtom(editingPostContentDataAtom);
 
   const setTitle = useCallback(
     (title: string) => {
-      onChangePost({ ...post, title });
+      if (editingPost) {
+        setEditingPost({ ...editingPost, title });
+      }
     },
-    [onChangePost, post]
+    [setEditingPost, editingPost]
   );
 
   const onTitlechange = useCallback(
@@ -71,9 +71,9 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
 
   const onPublishedChange = useCallback(
     (published: boolean) => {
-      onChangePost({ ...post, published });
+      setEditingPost({ ...editingPost, published });
     },
-    [onChangePost, post]
+    [setEditingPost, editingPost]
   );
 
   const [editor] = useState(getEditor);
@@ -104,9 +104,9 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
 
   const onSlateChange = useCallback(
     (data: Descendant[]) => {
-      onChangePost({ ...post, content: { data } });
+      setEditingPost({ ...editingPost, content: { data } });
     },
-    [onChangePost, post]
+    [setEditingPost, editingPost]
   );
 
   const tabLinks = useMemo(() => {
@@ -173,7 +173,7 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
           </div>
 
           <div className="inline-flex items-center">
-            {isDevelopment() && <DebugPopover post={post} />}
+            {isDevelopment() && <DebugPopover post={editingPost} />}
             <button type="button" className="btn" onClick={onSaveButtonClick}>
               <FontAwesomeIcon icon={faFloppyDisk} />
             </button>
@@ -196,7 +196,7 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
               <input
                 type="text"
                 placeholder="제목"
-                value={post.title}
+                value={editingPost.title}
                 onChange={onTitlechange}
                 className="w-full mb-3 text-xl font-semibold border-0 focus:ring-0"
               />
@@ -220,7 +220,7 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
                 <div className="p-3">
                   {currentTabId === "post" && (
                     <SwitchGroup
-                      checked={post.published}
+                      checked={editingPost.published}
                       onChange={onPublishedChange}
                       title="공개"
                     />

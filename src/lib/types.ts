@@ -1,6 +1,4 @@
-import type { Post } from "@prisma/client";
 import type { NextPage } from "next";
-import type { DefaultSession } from "next-auth";
 import type { ReactElement, ReactNode } from "react";
 import type React from "react";
 import type { BaseEditor, Descendant, Element } from "slate";
@@ -12,6 +10,8 @@ import type {
 import type { SetOptional } from "type-fest";
 import type { SetState, GetState } from "zustand";
 
+import type { Post } from "./supabase";
+
 export * from "./util";
 
 declare module "slate" {
@@ -20,15 +20,6 @@ declare module "slate" {
     Editor: BaseEditor & ReactEditor & { type: "EDITOR" };
     Element: ElementNode;
     Text: InlineNode | EmptyText;
-  }
-}
-
-declare module "next-auth" {
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  interface Session {
-    user: {
-      id: number;
-    } & DefaultSession["user"];
   }
 }
 
@@ -59,21 +50,10 @@ export interface ICommonCodeBlockProps extends CommonRenderElementProps {
 
 export type CodeBlockComponent = React.FC<ICommonCodeBlockProps>;
 
-export type SerializedPost = Omit<
+export type CreatePostInput = Pick<
   Post,
-  "updatedAt" | "createdAt" | "content"
-> & {
-  updatedAt: string;
-  createdAt: string;
-  content: ContentType;
-};
-
-export type CreatePostInput = Omit<
-  Post,
-  "content" | "createdAt" | "updatedAt" | "id"
-> & {
-  content: ContentType;
-};
+  "title" | "content" | "published" | "summary"
+>;
 
 export type ElementNode = StandaloneElementNode | IImageCaption | IListItem;
 
@@ -347,9 +327,6 @@ export type AdminStore = {
   isOpenImageInsertDialog: boolean;
   openImageInsertDialog: () => void;
   closeImageInsertDialog: () => void;
-
-  editingPost: SerializedPost;
-  setEditingPost: (post: SerializedPost) => void;
 
   editingPostInitialized: boolean;
   setEditingPostInitialized: (initialized: boolean) => void;
