@@ -1,7 +1,7 @@
+import { parseQueryToNumber } from "@common/util";
 import { authGuard } from "@lib/api-guard";
-import type { Post } from "@lib/supabase";
-import { servicePosts } from "@lib/supabase-service";
-import { parseQueryToNumber } from "@lib/util";
+import type { Post } from "@modules/supabase/supabase";
+import { servicePosts } from "@modules/supabase/supabase-service";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default authGuard(async (req: NextApiRequest, res: NextApiResponse) => {

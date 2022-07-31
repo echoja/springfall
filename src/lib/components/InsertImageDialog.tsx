@@ -2,7 +2,7 @@
 import { Dialog } from "@headlessui/react";
 import { useHotkeys } from "@lib/hooks/use-hotkeys";
 import { useMyStoreMemo } from "@lib/store";
-import type { IUploadRequestInfo } from "@lib/types";
+import type { IUploadRequestInfo } from "@modules/content/types";
 import axiosGlobal from "axios";
 import type { ChangeEvent } from "react";
 import { memo, useCallback, useMemo, useRef, useState } from "react";

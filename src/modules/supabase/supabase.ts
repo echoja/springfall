@@ -1,9 +1,9 @@
 // TODO: move to module dir
 
+import type { ContentType } from "@modules/content/types";
 import { createClient } from "@supabase/supabase-js";
 
 import type { definitions } from "./supabase-types";
-import type { ContentType } from "./types";
 
 // TODO: move to config file
 export function getSupabaseAnonKey() {

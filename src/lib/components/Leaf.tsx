@@ -1,4 +1,7 @@
-import type { CommonRenderLeafProps, IRenderTextProps } from "@lib/types";
+import type {
+  CommonRenderLeafProps,
+  IRenderTextProps,
+} from "@modules/content/types";
 
 export function Text(props: IRenderTextProps) {
   const { leaf, attributes } = props;
@@ -42,17 +45,6 @@ export function PublicLeaf({ children, leaf, text }: CommonRenderLeafProps) {
         </span>
       );
 
-    case "LINK":
-      return (
-        <a
-          href={leaf.url}
-          target={leaf.internal ? undefined : "_blank"}
-          rel="noreferrer"
-        >
-          {children}
-        </a>
-      );
-
     case "CODE_BLOCK_TEXT":
       return leaf.isNewline ? <br /> : <span>{children}</span>;
 
@@ -75,18 +67,6 @@ export function Leaf({
         <span {...attributes}>
           <span>아이콘: {leaf.icon}</span>
         </span>
-      );
-
-    case "LINK":
-      return (
-        <a
-          {...attributes}
-          href={leaf.url}
-          target={leaf.internal ? undefined : "_blank"}
-          rel="noreferrer"
-        >
-          {children}
-        </a>
       );
 
     case "CODE_BLOCK_TEXT":

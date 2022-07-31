@@ -1,10 +1,15 @@
+import type {
+  ColorModeStore,
+  AdminStore,
+  Stores,
+  Set,
+  Get,
+} from "@modules/content/types";
+import type { Post } from "@modules/supabase/supabase";
 import { atom } from "jotai";
 import { useCallback } from "react";
 import create from "zustand";
 import { devtools } from "zustand/middleware";
-
-import type { Post } from "./supabase";
-import type { ColorModeStore, AdminStore, Stores, Set, Get } from "./types";
 
 function createColorModeStore(set: Set, _get: Get): ColorModeStore {
   return {

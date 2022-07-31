@@ -1,9 +1,9 @@
 import { faAxe } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { renderPublic } from "@lib/render";
-import type { Post } from "@lib/supabase";
-import { servicePosts } from "@lib/supabase-service";
-import type { MonnomlogPage } from "@lib/types";
+import type { MonnomlogPage } from "@modules/content/types";
+import type { Post } from "@modules/supabase/supabase";
+import { servicePosts } from "@modules/supabase/supabase-service";
 import { format } from "date-fns";
 import Joi from "joi";
 import type { GetStaticPaths, GetStaticProps } from "next";

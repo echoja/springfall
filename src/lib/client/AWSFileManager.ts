@@ -1,8 +1,8 @@
 import { S3Client } from "@aws-sdk/client-s3";
 import { createPresignedPost } from "@aws-sdk/s3-presigned-post";
-import { getS3BucketName, getS3Credentials, getS3Region } from "@lib/config";
-import type { IFileManager } from "@lib/types";
-import { noopFunction } from "@lib/util";
+import { getS3BucketName, getS3Credentials, getS3Region } from "@common/config";
+import { noopFunction } from "@common/util";
+import type { IFileManager } from "@modules/content/types";
 import { nanoid } from "nanoid";
 
 const Bucket = getS3BucketName();

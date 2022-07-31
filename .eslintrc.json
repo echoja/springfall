@@ -40,8 +40,11 @@
 
     "@next/next/no-img-element": "off",
 
-    "react-hooks/exhaustive-deps": ["warn", {
-      "additionalHooks": "(useMyStoreWithMemoizedSelector|useMyOtherCustomHook)"
-    }]
+    "react-hooks/exhaustive-deps": [
+      "warn",
+      {
+        "additionalHooks": "(useMyStoreMemo|useMyOtherCustomHook)"
+      }
+    ]
   }
 }

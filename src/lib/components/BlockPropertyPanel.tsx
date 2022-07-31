@@ -1,5 +1,5 @@
 import { editingPostContentDataAtom } from "@lib/store";
-import type { ICodeBlock } from "@lib/types";
+import type { ICodeBlock } from "@modules/content/types";
 import { useAtom } from "jotai";
 import { memo, useMemo } from "react";
 import type { Node, Path } from "slate";

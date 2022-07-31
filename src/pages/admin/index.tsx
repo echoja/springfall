@@ -1,6 +1,6 @@
 import { adminLayoutWrapper } from "@lib/components/layout/AdminLayout";
 import { useAdminPageGuard } from "@lib/hooks";
-import type { MonnomlogPage } from "@lib/types";
+import type { MonnomlogPage } from "@modules/content/types";
 
 export const Admin: MonnomlogPage = () => {
   useAdminPageGuard();

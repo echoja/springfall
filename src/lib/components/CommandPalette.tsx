@@ -4,7 +4,7 @@ import { Combobox, Dialog } from "@headlessui/react";
 import useConst from "@lib/hooks/use-const";
 import { getDefaultNodeProps } from "@lib/node";
 import { useMyStoreMemo } from "@lib/store";
-import type { Command, ElementNode } from "@lib/types";
+import type { Command, ElementNode } from "@modules/content/types";
 import { useCallback, useState, memo } from "react";
 import type { Element } from "slate";
 import { Editor, Transforms } from "slate";

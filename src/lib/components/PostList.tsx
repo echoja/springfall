@@ -1,10 +1,10 @@
+import { POSTS_PER_PAGE } from "@common/config";
 import {
   faCabinetFiling,
   faSeedling,
 } from "@fortawesome/pro-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { POSTS_PER_PAGE } from "@lib/config";
-import type { Post } from "@lib/supabase";
+import type { Post } from "@modules/supabase/supabase";
 import Link from "next/link";
 import { useMemo } from "react";
 

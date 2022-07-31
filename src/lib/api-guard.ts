@@ -1,4 +1,4 @@
-import { anonClient } from "@lib/supabase";
+import { anonClient } from "@modules/supabase/supabase";
 import type { NextApiHandler } from "next";
 
 export const authGuard = (

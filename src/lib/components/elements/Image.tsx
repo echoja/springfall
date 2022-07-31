@@ -1,5 +1,5 @@
-import { createElementComponent } from "@lib/editor";
-import type { CommonRenderElementProps, IImage } from "@lib/types";
+import type { CommonRenderElementProps, IImage } from "@modules/content/types";
+import { createElementComponent } from "@modules/editor/custom-slate-editor";
 import { useMemo } from "react";
 import { useFocused, useSelected } from "slate-react";
 import { twMerge } from "tailwind-merge";

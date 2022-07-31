@@ -4,8 +4,8 @@ import { useAdminPageGuard } from "@lib/hooks";
 import useToast from "@lib/hooks/use-toast";
 import { getCreatePostInput } from "@lib/serialize";
 import { editingPostAtom } from "@lib/store";
-import type { Post } from "@lib/supabase";
-import type { MonnomlogPage } from "@lib/types";
+import type { MonnomlogPage } from "@modules/content/types";
+import type { Post } from "@modules/supabase/supabase";
 import axiosGlobal from "axios";
 import { useAtom } from "jotai";
 import { useRouter } from "next/router";
@@ -28,7 +28,7 @@ const PostEdit: MonnomlogPage = () => {
 
       toast({
         status: "success",
-        title: "포스팅이 성공적으로 저장었습니다.",
+        title: "포스팅이 성공적으로 저장되었습니다.",
       });
 
       // eslint-disable-next-line no-console

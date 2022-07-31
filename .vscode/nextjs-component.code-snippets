@@ -18,7 +18,7 @@
   "Next.js Monnomlog Page Component": {
     "prefix": "monnomlog-page",
     "body": [
-      "import type { MonnomlogPage } from \"@lib/types\"",
+      "import type { MonnomlogPage } from \"@modules/content/types\"",
       "",
       "interface I${TM_FILENAME_BASE/(^[a-z])|\\-([0-9a-z])/${1:/capitalize}${2:/capitalize}/g}Props {}",
       "",

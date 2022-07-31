@@ -1,5 +1,5 @@
-import { createElementComponent } from "@lib/editor";
-import type { CommonRenderElementProps, ITable } from "@lib/types";
+import type { CommonRenderElementProps, ITable } from "@modules/content/types";
+import { createElementComponent } from "@modules/editor/custom-slate-editor";
 
 export interface ITableProps extends CommonRenderElementProps {
   element: ITable;

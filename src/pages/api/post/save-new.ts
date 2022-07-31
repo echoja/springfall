@@ -1,5 +1,8 @@
-import type { Post } from "@lib/supabase";
-import { serviceClient, servicePosts } from "@lib/supabase-service";
+import type { Post } from "@modules/supabase/supabase";
+import {
+  serviceClient,
+  servicePosts,
+} from "@modules/supabase/supabase-service";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {

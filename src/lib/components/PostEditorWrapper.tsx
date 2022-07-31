@@ -1,15 +1,20 @@
+import { isDevelopment } from "@common/config";
 import { faAngleLeft } from "@fortawesome/pro-regular-svg-icons";
 import { faFloppyDisk } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { isDevelopment } from "@lib/config";
-import { getEditor } from "@lib/editor";
 import { useHotkeys } from "@lib/hooks/use-hotkeys";
 import {
   editingPostAtom,
   editingPostContentDataAtom,
   useMyStoreMemo,
 } from "@lib/store";
-import type { Command } from "@lib/types";
+import {
+  insertLink,
+  isLinkActive,
+  unwrapLink,
+} from "@modules/content/link/api";
+import type { Command } from "@modules/content/types";
+import { getEditor } from "@modules/editor/custom-slate-editor";
 import { useAtom } from "jotai";
 import Link from "next/link";
 import type React from "react";
@@ -100,6 +105,25 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
   useHotkeys({
     keys: "ctrl+s, cmd+s",
     callback: onSaveButtonClick,
+  });
+
+  const toggleLink = useCallback(() => {
+    if (isLinkActive(editor)) {
+      unwrapLink(editor);
+      return;
+    }
+
+    // eslint-disable-next-line no-alert
+    const url = window.prompt("Enter the URL of the link:");
+    if (!url) {
+      return;
+    }
+    insertLink(editor, url);
+  }, [editor]);
+
+  useHotkeys({
+    keys: "ctrl+k, cmd+k",
+    callback: toggleLink,
   });
 
   const onSlateChange = useCallback(

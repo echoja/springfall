@@ -1,9 +1,13 @@
 /* This example requires Tailwind CSS v2.0+ */
+import { convertCodeBlockToString } from "@common/util";
 import { Dialog } from "@headlessui/react";
 import { useHotkeys } from "@lib/hooks/use-hotkeys";
 import { useMyStoreMemo } from "@lib/store";
-import type { ICodeBlock, ICodeBlockElement, ICodeBlockText } from "@lib/types";
-import { convertCodeBlockToString } from "@lib/types";
+import type {
+  ICodeBlock,
+  ICodeBlockElement,
+  ICodeBlockText,
+} from "@modules/content/types";
 import type { ChangeEvent } from "react";
 import { useEffect, memo, useCallback, useRef, useState } from "react";
 import type { RefractorElement, RefractorRoot, Text } from "refractor";
@@ -204,10 +208,10 @@ const CodeBlockEditModal: React.FC = () => {
       onClose={onClose}
       open={isOpen}
     >
-      <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+      <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" />
 
-      <div className="fixed z-10 inset-0 overflow-y-auto">
-        <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+      <div className="fixed inset-0 z-10 overflow-y-auto">
+        <div className="flex items-end justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
           {/* This element is to trick the browser into centering the modal contents. */}
           <span
             className="hidden sm:inline-block sm:align-middle sm:h-screen"
@@ -215,18 +219,18 @@ const CodeBlockEditModal: React.FC = () => {
           >
             &#8203;
           </span>
-          <Dialog.Panel className="relative inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
+          <Dialog.Panel className="relative inline-block px-4 pt-5 pb-4 overflow-hidden text-left align-bottom transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
             <div>
               <Dialog.Title
                 as="h3"
-                className="text-lg leading-6 font-medium text-gray-900 mb-3"
+                className="mb-3 text-lg font-medium leading-6 text-gray-900"
               >
                 코드 수정
               </Dialog.Title>
 
               <textarea
                 rows={40}
-                className="block w-full border-0 py-2 resize-none placeholder-gray-500 focus:ring-2 rounded-lg focus:ring-indigo-500 sm:text-sm"
+                className="block w-full py-2 placeholder-gray-500 border-0 rounded-lg resize-none focus:ring-2 focus:ring-indigo-500 sm:text-sm"
                 placeholder="코드를 작성하세요"
                 onChange={onTextareaChange}
                 value={content}

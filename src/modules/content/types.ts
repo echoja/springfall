@@ -1,3 +1,4 @@
+import type { Post } from "@modules/supabase/supabase";
 import type { NextPage } from "next";
 import type { ReactElement, ReactNode } from "react";
 import type React from "react";
@@ -9,10 +10,6 @@ import type {
 } from "slate-react";
 import type { SetOptional } from "type-fest";
 import type { SetState, GetState } from "zustand";
-
-import type { Post } from "./supabase";
-
-export * from "./util";
 
 declare module "slate" {
   // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -69,7 +66,8 @@ export type StandaloneElementNode =
   | IImage
   | IList
   | IHr
-  | IYoutube;
+  | IYoutube
+  | ILink;
 
 export type ICallout = {
   type: "CALLOUT";
@@ -179,7 +177,14 @@ export type IGithubBlock = {
   url: string;
 };
 
-type InlineNode = IText | ILink | IIcon | ICodeBlockText;
+export type ILink = {
+  type: "LINK";
+  url: string;
+  internal?: boolean;
+  children: InlineNode[];
+};
+
+type InlineNode = IText | IIcon | ICodeBlockText;
 
 export type IText = {
   type: "TEXT";
@@ -202,13 +207,6 @@ export type IPlainText = {
 export type EmptyText = {
   type: "NOOP";
   text: "";
-};
-
-export type ILink = {
-  type: "LINK";
-  text: string;
-  url: string;
-  internal?: boolean;
 };
 
 export type IIcon = {

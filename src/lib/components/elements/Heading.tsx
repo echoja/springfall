@@ -1,5 +1,8 @@
-import { createElementComponent } from "@lib/editor";
-import type { CommonRenderElementProps, IHeading } from "@lib/types";
+import type {
+  CommonRenderElementProps,
+  IHeading,
+} from "@modules/content/types";
+import { createElementComponent } from "@modules/editor/custom-slate-editor";
 import { twMerge } from "tailwind-merge";
 
 export interface IHeadingProps extends CommonRenderElementProps {

@@ -2,9 +2,9 @@ import { faPen } from "@fortawesome/pro-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { adminLayoutWrapper } from "@lib/components/layout/AdminLayout";
 import { useAdminPageGuard } from "@lib/hooks";
-import { anonClient } from "@lib/supabase";
-import type { definitions } from "@lib/supabase-types";
-import type { MonnomlogPage } from "@lib/types";
+import type { MonnomlogPage } from "@modules/content/types";
+import { anonClient } from "@modules/supabase/supabase";
+import type { definitions } from "@modules/supabase/supabase-types";
 import type { GetServerSideProps } from "next";
 import Link from "next/link";
 
