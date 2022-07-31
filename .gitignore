@@ -4,8 +4,6 @@
 
 # dependencies
 /node_modules
-/.pnp
-.pnp.js
 
 # testing
 /coverage
@@ -48,12 +46,3 @@ sitemap*.xml
 
 # generated files
 generated
-
-# yarn 2 no zero-installs
-.yarn/*
-!.yarn/patches
-!.yarn/releases
-!.yarn/plugins
-!.yarn/sdks
-!.yarn/versions
-.pnp.*
