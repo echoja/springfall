@@ -1,9 +1,9 @@
 import { faAxe } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import prisma from "@lib/prisma";
 import { renderPublic } from "@lib/render";
-import { serializePost } from "@lib/serialize";
-import type { MonnomlogPage, SerializedPost } from "@modules/content/types";
+import type { Post } from "@lib/supabase";
+import { servicePosts } from "@lib/supabase-service";
+import type { MonnomlogPage } from "@lib/types";
 import { format } from "date-fns";
 import Joi from "joi";
 import type { GetStaticPaths, GetStaticProps } from "next";
@@ -12,19 +12,32 @@ import { useMemo } from "react";
 import type { Descendant } from "slate";
 
 interface IPostViewProps {
-  post: SerializedPost;
+  post: Post;
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const posts = await prisma.post.findMany({
-    where: { published: true },
-    select: {
-      id: true,
-    },
-  });
-  const paths = posts.map((post) => ({
+  const { data, error } = await servicePosts().select("id");
+
+  if (error) {
+    // eslint-disable-next-line no-console
+    console.error(error);
+    return {
+      paths: [],
+      fallback: false,
+    };
+  }
+
+  if (!data) {
+    return {
+      paths: [],
+      fallback: false,
+    };
+  }
+
+  const paths = data.map((post) => ({
     params: { id: post.id.toString() },
   }));
+
   return { paths, fallback: false };
 };
 
@@ -42,11 +55,7 @@ export const getStaticProps: GetStaticProps<IPostViewProps> = async ({
     throw new Error("page number is not valid");
   }
 
-  const post = await prisma.post.findUnique({
-    where: {
-      id,
-    },
-  });
+  const { data: post } = await servicePosts().select("*").eq("id", id).single();
 
   if (!post) {
     return {
@@ -54,7 +63,7 @@ export const getStaticProps: GetStaticProps<IPostViewProps> = async ({
     };
   }
 
-  return { props: { post: serializePost(post) } };
+  return { props: { post } };
 };
 
 const PostView: MonnomlogPage<IPostViewProps> = ({ post }) => {
@@ -76,7 +85,7 @@ const PostView: MonnomlogPage<IPostViewProps> = ({ post }) => {
         <span className="mr-2 flex-inline">
           <FontAwesomeIcon icon={faAxe} />
         </span>
-        <span>{format(new Date(post.updatedAt), "yyyy.MM.dd.")}</span>
+        <span>{format(new Date(post.updated_at), "yyyy.MM.dd.")}</span>
       </div>
       <div className="article-body">{rendered}</div>
     </article>

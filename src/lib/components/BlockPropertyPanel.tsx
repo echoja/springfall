@@ -1,9 +1,10 @@
-import { useMyStoreMemo } from "@lib/store";
-import type { ICodeBlock } from "@modules/content/types";
+import { editingPostContentDataAtom } from "@lib/store";
+import type { ICodeBlock } from "@lib/types";
+import { useAtom } from "jotai";
 import { memo, useMemo } from "react";
 import type { Node, Path } from "slate";
 import { Transforms, Editor } from "slate";
-import { useSlate, useSlateSelector, useSlateStatic } from "slate-react";
+import { useSlateSelector, useSlateStatic } from "slate-react";
 
 import SelectGroup from "./property-panel/SelectGroup";
 import SwitchGroup from "./property-panel/SwitchGroup";
@@ -88,7 +89,7 @@ function getPropertyPanel(node: Node, path: Path): React.ReactNode {
 
 const PropertyPanel: React.FC = () => {
   const selection = useSlateSelector((editor) => editor.selection);
-  const editor = useSlate();
+  const editor = useSlateStatic();
 
   const selectedNodePath = useMemo<Path | null>(() => {
     if (!selection) {
@@ -125,31 +126,30 @@ const PropertyPanel: React.FC = () => {
     return { firstIndex: first, restPath: rest };
   }, [selectedElementPath]);
 
-  const node = useMyStoreMemo(
-    (store) => {
-      if (firstIndex === -1 || firstIndex === undefined) {
+  const [editingPostContentData] = useAtom(editingPostContentDataAtom);
+
+  const node = useMemo(() => {
+    if (firstIndex === -1 || firstIndex === undefined) {
+      return null;
+    }
+    const firstNode = editingPostContentData[firstIndex] ?? null;
+    return restPath.reduce((reducingNode, index) => {
+      if (!reducingNode) {
         return null;
       }
-      const firstNode = store.editingPost.content.data[firstIndex] ?? null;
-      return restPath.reduce((reducingNode, index) => {
-        if (!reducingNode) {
-          return null;
-        }
 
-        if (!Editor.isBlock(editor, reducingNode)) {
-          return null;
-        }
+      if (!Editor.isBlock(editor, reducingNode)) {
+        return null;
+      }
 
-        const child = reducingNode.children[index];
-        if (!child) {
-          return null;
-        }
+      const child = reducingNode.children[index];
+      if (!child) {
+        return null;
+      }
 
-        return child;
-      }, firstNode);
-    },
-    [firstIndex, restPath]
-  );
+      return child;
+    }, firstNode);
+  }, [editingPostContentData, editor, firstIndex, restPath]);
 
   const propertyPanel = useMemo(
     () =>

@@ -1,6 +1,6 @@
 import { Transition } from "@headlessui/react";
 import { useMyStore } from "@lib/store";
-import type { SerializedPost } from "@modules/content/types";
+import type { Post } from "@lib/supabase";
 import {
   Fragment,
   memo,
@@ -23,7 +23,7 @@ function reduceByKeys<T>(object: T, keys: ReadonlyArray<number | string>) {
   }, object);
 }
 
-const DebugPopover: React.FC<{ post: SerializedPost }> = ({ post }) => {
+const DebugPopover: React.FC<{ post: Post }> = ({ post }) => {
   const [open, setOpen] = useState(false);
   const [keys, setPostKeys] =
     useState<ReadonlyArray<number | string>>(emptyArray);
@@ -77,7 +77,7 @@ const DebugPopover: React.FC<{ post: SerializedPost }> = ({ post }) => {
     return Object.keys(currentItem).map((key, index) => (
       <button
         type="button"
-        className="bg-slate-700 text-white hover:bg-slate-600 transition-all px-2 py-1 text-xs rounded"
+        className="px-2 py-1 text-xs text-white transition-all rounded bg-slate-700 hover:bg-slate-600"
         // eslint-disable-next-line react/no-array-index-key
         key={`post-${key}-${index}`}
         onClick={() => {
@@ -125,11 +125,11 @@ const DebugPopover: React.FC<{ post: SerializedPost }> = ({ post }) => {
         leaveFrom="opacity-100 translate-y-0"
         leaveTo="opacity-0 translate-y-1"
       >
-        <div className="absolute -translate-x-full translate-y-1/2 w-80 transform p-3 z-10 bg-white border shadow-md">
+        <div className="absolute z-10 p-3 transform -translate-x-full translate-y-1/2 bg-white border shadow-md w-80">
           <div className="flex flex-wrap gap-1 mb-4">
             <button
               type="button"
-              className="bg-slate-700 text-white hover:bg-slate-600 transition-all px-2 py-1 text-xs rounded"
+              className="px-2 py-1 text-xs text-white transition-all rounded bg-slate-700 hover:bg-slate-600"
               onClick={() => {
                 setPostKeys(emptyArray);
               }}
@@ -138,7 +138,7 @@ const DebugPopover: React.FC<{ post: SerializedPost }> = ({ post }) => {
             </button>
             <button
               type="button"
-              className="bg-slate-700 text-white hover:bg-slate-600 transition-all px-2 py-1 text-xs rounded"
+              className="px-2 py-1 text-xs text-white transition-all rounded bg-slate-700 hover:bg-slate-600"
               onClick={() => {
                 setPostKeys(["content", "data"]);
               }}
@@ -163,7 +163,7 @@ const DebugPopover: React.FC<{ post: SerializedPost }> = ({ post }) => {
             <span>store</span>{" "}
             <button
               type="button"
-              className="bg-slate-700 text-white hover:bg-slate-600 transition-all px-2 py-1 text-xs rounded"
+              className="px-2 py-1 text-xs text-white transition-all rounded bg-slate-700 hover:bg-slate-600"
               onClick={() => {
                 setStoreKeys(emptyArray);
               }}

@@ -4,12 +4,13 @@ import {
   faSeedling,
 } from "@fortawesome/pro-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import type { SerializedPost } from "@modules/content/types";
+import { POSTS_PER_PAGE } from "@lib/config";
+import type { Post } from "@lib/supabase";
 import Link from "next/link";
 import { useMemo } from "react";
 
 interface IPostListProps {
-  posts: SerializedPost[];
+  posts: Post[];
   count: number;
   currentPage: number;
 }

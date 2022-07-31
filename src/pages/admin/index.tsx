@@ -1,19 +1,10 @@
 import { adminLayoutWrapper } from "@lib/components/layout/AdminLayout";
 import { useAdminPageGuard } from "@lib/hooks";
-import type { MonnomlogPage } from "@modules/content/types";
-import type { Post } from "@prisma/client";
+import type { MonnomlogPage } from "@lib/types";
 
-interface IPagesProps {
-  feed: (Post & {
-    author: {
-      name: string | null;
-    } | null;
-  })[];
-}
-
-export const Admin: MonnomlogPage<IPagesProps> = ({ feed: _feed }) => {
+export const Admin: MonnomlogPage = () => {
   useAdminPageGuard();
-  return <div>hello admin!</div>;
+  return <div>어드민 화면입니다.</div>;
 };
 
 Admin.layoutWrapper = adminLayoutWrapper;

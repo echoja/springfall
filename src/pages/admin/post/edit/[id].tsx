@@ -2,26 +2,29 @@ import { NoLayoutWrapper } from "@lib/components/layout/NoLayout";
 import PostEditorWrapper from "@lib/components/PostEditorWrapper";
 import { useAdminPageGuard } from "@lib/hooks";
 import useToast from "@lib/hooks/use-toast";
-import prisma from "@lib/prisma";
-import { serializePost } from "@lib/serialize";
-import { useMyStoreMemo } from "@lib/store";
-import type { MonnomlogPage, SerializedPost } from "@modules/content/types";
-import type { Post } from "@prisma/client";
+import { editingPostAtom } from "@lib/store";
+import type { Post } from "@lib/supabase";
+import { anonPosts } from "@lib/supabase";
+import type { MonnomlogPage } from "@lib/types";
 import axiosGlobal from "axios";
+import { useAtom } from "jotai";
+import { useHydrateAtoms } from "jotai/utils";
 import type { GetServerSideProps } from "next";
-import { useRouter } from "next/router";
-import { useCallback, useEffect } from "react";
+import { useCallback } from "react";
 
 const axios = axiosGlobal.create();
 
 interface IPostEditProps {
-  post: SerializedPost;
+  post: Post;
 }
 
 export const getServerSideProps: GetServerSideProps<IPostEditProps> = async (
   context
 ) => {
-  const id = context?.params?.id;
+  let id = context.params?.id;
+  if (Array.isArray(id)) {
+    [id] = id;
+  }
 
   if (!id) {
     return {
@@ -29,52 +32,36 @@ export const getServerSideProps: GetServerSideProps<IPostEditProps> = async (
     };
   }
 
-  const post = await prisma.post.findUnique({
-    where: {
-      id: Number(id),
-    },
-  });
+  const postResponse = await anonPosts().select("*").eq("id", id).single();
 
-  if (!post) {
+  if (!postResponse.data) {
     return {
       notFound: true,
     };
   }
 
   return {
-    props: { post: serializePost(post) }, // will be passed to the page component as props
+    props: { post: postResponse.data },
   };
 };
 
 const PostEdit: MonnomlogPage<IPostEditProps> = (props) => {
   useAdminPageGuard();
   const { post: postProp } = props;
-  const router = useRouter();
+  // const router = useRouter();
   const toast = useToast();
 
-  const post = useMyStoreMemo((store) => store.editingPost, []);
-  const setPost = useMyStoreMemo((store) => store.setEditingPost, []);
+  // const post = useMyStoreMemo((store) => store.editingPost, []);
+  // const setPost = useMyStoreMemo((store) => store.setEditingPost, []);
 
-  // 최초 설정
-  useEffect(() => {
-    setPost(postProp);
-  }, [postProp, setPost]);
-
-  useEffect(() => {
-    if (!postProp) {
-      router.push("/admin/post/list");
-      toast({
-        description: "존재하지 않는 포스트입니다",
-        status: "error",
-      });
-    }
-  }, [postProp, toast, router]);
+  useHydrateAtoms([[editingPostAtom, postProp]]);
+  const [editingPost] = useAtom(editingPostAtom);
 
   const onSaveButtonClick = useCallback(async () => {
     try {
       const { data: result } = await axios.post<Post>(
         `/api/post/save/${postProp?.id}`,
-        post
+        editingPost
       );
       toast({
         status: "success",
@@ -92,7 +79,7 @@ const PostEdit: MonnomlogPage<IPostEditProps> = (props) => {
       // eslint-disable-next-line no-console
       console.log("error", e);
     }
-  }, [post, postProp, toast]);
+  }, [editingPost, postProp, toast]);
 
   if (!postProp) {
     // eslint-disable-next-line react/jsx-no-useless-fragment
