@@ -34,6 +34,7 @@
     "framer-motion": "^6.5.1",
     "hotkeys-js": "^3.9.4",
     "immer": "^9.0.15",
+    "is-hotkey": "^0.2.0",
     "is-url": "^1.2.4",
     "joi": "^17.6.0",
     "jotai": "^1.7.6",

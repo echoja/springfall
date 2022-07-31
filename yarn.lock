@@ -6428,6 +6428,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"is-hotkey@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "is-hotkey@npm:0.2.0"
+  checksum: 97d295cfd8c3eb2c9b218daee5bff0ddaf47210930e3eb1eff36d2e6ad74854028203c640f35ea2d183d0cba94ac4c4bcd291925bc3a343d8a4c7d2c5ab3e2a6
+  languageName: node
+  linkType: hard
+
 "is-lambda@npm:^1.0.1":
   version: 1.0.1
   resolution: "is-lambda@npm:1.0.1"
@@ -7847,6 +7854,7 @@ __metadata:
     hotkeys-js: ^3.9.4
     husky: ^8.0.1
     immer: ^9.0.15
+    is-hotkey: ^0.2.0
     is-url: ^1.2.4
     jest: ^28.1.3
     joi: ^17.6.0

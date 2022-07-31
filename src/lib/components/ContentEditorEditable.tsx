@@ -1,5 +1,6 @@
 import { renderElement, renderLeaf } from "@lib/render";
 import type { Mark } from "@modules/content/types";
+import { isKeyHotkey } from "is-hotkey";
 import type { KeyboardEvent } from "react";
 import { useMemo, useCallback, useState, memo } from "react";
 import { Editor, Transforms, Range } from "slate";
@@ -99,12 +100,12 @@ function onKeyDown(event: KeyboardEvent<HTMLDivElement>, editor: Editor) {
   // This lets the user step into and out of the inline without stepping over characters.
   // You may wish to customize this further to only use unit:'offset' in specific cases.
   if (selection && Range.isCollapsed(selection)) {
-    if (event.code === "ArrowLeft") {
+    if (isKeyHotkey("left", event)) {
       event.preventDefault();
       Transforms.move(editor, { unit: "offset", reverse: true });
       return;
     }
-    if (event.code === "ArrowRight") {
+    if (isKeyHotkey("right", event)) {
       event.preventDefault();
       Transforms.move(editor, { unit: "offset" });
     }
