@@ -26,9 +26,8 @@ yarn dev
 ## 개발 유의사항
 
 - [Next.js](https://nextjs.org)
-- [Chakra UI](https://chakra-ui.com): 스타일 관리
-- PostreSQL: 데이터베이스 (Amazon Lightsail)
-- [Prisma](https://www.prisma.io/): ORM
+- [Supabase](https://supabase.com)
+- [tailwindcss](https://tailwindcss.com/)
 - REST API (GraphQL 사용하지 않음)
 - [slate.js](https://www.slatejs.org/): 내부 에디터
 

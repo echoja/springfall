@@ -4,12 +4,12 @@ import {
 } from "@fortawesome/pro-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { POSTS_PER_PAGE } from "@lib/config";
-import type { SerializedPost } from "@lib/types";
+import type { Post } from "@lib/supabase";
 import Link from "next/link";
 import { useMemo } from "react";
 
 interface IPostListProps {
-  posts: SerializedPost[];
+  posts: Post[];
   count: number;
   currentPage: number;
 }
@@ -39,12 +39,12 @@ const PostList: React.FC<IPostListProps> = ({ count, posts, currentPage }) => {
 
   return (
     <div>
-      <h1 className="text-3xl font-semibold mb-5">글 목록</h1>
+      <h1 className="mb-5 text-3xl font-semibold">글 목록</h1>
       <div className="mb-5">
         {posts.map((post) => (
           <article>
             <Link href={`/post/${post.id}`} passHref>
-              <a className="group font-bold">
+              <a className="font-bold group">
                 <span className="inline-block mr-2 transition-colors duration-1000 group-hover:text-teal-600">
                   <FontAwesomeIcon icon={faSeedling} size="sm" />
                 </span>

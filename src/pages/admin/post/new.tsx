@@ -2,11 +2,12 @@ import { NoLayoutWrapper } from "@lib/components/layout/NoLayout";
 import PostEditorWrapper from "@lib/components/PostEditorWrapper";
 import { useAdminPageGuard } from "@lib/hooks";
 import useToast from "@lib/hooks/use-toast";
-import { convertPostSerializedToCreate } from "@lib/serialize";
-import { useMyStoreMemo } from "@lib/store";
+import { getCreatePostInput } from "@lib/serialize";
+import { editingPostAtom } from "@lib/store";
+import type { Post } from "@lib/supabase";
 import type { MonnomlogPage } from "@lib/types";
-import type { Post } from "@prisma/client";
 import axiosGlobal from "axios";
+import { useAtom } from "jotai";
 import { useRouter } from "next/router";
 import { useCallback } from "react";
 
@@ -16,15 +17,13 @@ const PostEdit: MonnomlogPage = () => {
   useAdminPageGuard();
   const router = useRouter();
   const toast = useToast();
-  const post = useMyStoreMemo((store) => {
-    return store.editingPost;
-  }, []);
+  const [editingPost] = useAtom(editingPostAtom);
 
   const onSaveButtonClick = useCallback(async () => {
     try {
       const { data: result } = await axios.post<Post>(
         `/api/post/save-new`,
-        convertPostSerializedToCreate(post)
+        getCreatePostInput(editingPost)
       );
 
       toast({
@@ -44,7 +43,7 @@ const PostEdit: MonnomlogPage = () => {
       // eslint-disable-next-line no-console
       console.log("error", e);
     }
-  }, [post, router, toast]);
+  }, [editingPost, router, toast]);
 
   return <PostEditorWrapper onSaveButtonClick={onSaveButtonClick} />;
 };

@@ -1,34 +1,43 @@
 import PostList from "@lib/components/PostList";
 import { POSTS_PER_PAGE } from "@lib/config";
-import prisma from "@lib/prisma";
-import { serializePost } from "@lib/serialize";
-import type { MonnomlogPage, SerializedPost } from "@lib/types";
+import type { Post } from "@lib/supabase";
+import { anonPosts } from "@lib/supabase";
+import type { MonnomlogPage } from "@lib/types";
 import type { GetServerSideProps } from "next";
 import { NextSeo } from "next-seo";
 
 interface IListIndexProps {
-  posts: SerializedPost[];
+  posts: Post[];
   count: number;
 }
 
 export const getServerSideProps: GetServerSideProps<
   IListIndexProps
 > = async () => {
-  const [posts, count] = await Promise.all([
-    prisma.post.findMany({
-      where: {
-        published: true,
-      },
-      take: POSTS_PER_PAGE,
+  const [{ count }, { data: posts, error }] = await Promise.all([
+    anonPosts().select("*", {
+      head: true,
+      count: "exact",
     }),
-    prisma.post.count(),
+    anonPosts().select("*").limit(POSTS_PER_PAGE),
   ]);
 
+  if (error) {
+    // eslint-disable-next-line no-console
+    console.error(error);
+    return {
+      notFound: true,
+    };
+  }
+
+  if (!posts || posts.length === 0 || !count) {
+    return {
+      notFound: true,
+    };
+  }
+
   return {
-    props: {
-      posts: posts.map(serializePost),
-      count,
-    },
+    props: { posts, count },
   };
 };
 

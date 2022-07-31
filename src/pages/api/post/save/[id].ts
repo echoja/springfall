@@ -1,19 +1,19 @@
 import { authGuard } from "@lib/api-guard";
-import prisma from "@lib/prisma";
-import type { SerializedPost } from "@lib/types";
+import type { Post } from "@lib/supabase";
+import { servicePosts } from "@lib/supabase-service";
 import { parseQueryToNumber } from "@lib/util";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default authGuard(async (req: NextApiRequest, res: NextApiResponse) => {
-  const editPostInput = req.body as SerializedPost;
+  const editPostInput = req.body as Post;
   const id = parseQueryToNumber(req.query.id);
-  const result = await prisma.post.update({
-    where: {
-      id,
-    },
-    data: editPostInput,
-  });
+
+  const { data: post } = await servicePosts()
+    .update(editPostInput)
+    .eq("id", id)
+    .single();
+
   await res.revalidate(`/post/${id}`);
   res.statusCode = 200;
-  res.json(result);
+  res.json(post);
 });

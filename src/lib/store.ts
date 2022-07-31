@@ -1,15 +1,10 @@
+import { atom } from "jotai";
 import { useCallback } from "react";
 import create from "zustand";
 import { devtools } from "zustand/middleware";
 
-import type {
-  ColorModeStore,
-  AdminStore,
-  Stores,
-  Set,
-  Get,
-  SerializedPost,
-} from "./types";
+import type { Post } from "./supabase";
+import type { ColorModeStore, AdminStore, Stores, Set, Get } from "./types";
 
 function createColorModeStore(set: Set, _get: Get): ColorModeStore {
   return {
@@ -21,7 +16,7 @@ function createColorModeStore(set: Set, _get: Get): ColorModeStore {
   };
 }
 
-const defaultPost: SerializedPost = {
+const defaultPost: Post = {
   title: "",
   content: {
     data: [
@@ -36,12 +31,13 @@ const defaultPost: SerializedPost = {
       },
     ],
   },
-  authorId: -1,
   published: false,
-  createdAt: "",
+  created_at: "",
   id: -1,
   summary: "",
-  updatedAt: "",
+  updated_at: "",
+  removed_at: "",
+  user_id: "-1",
 };
 
 function createAdminStore(set: Set, _get: Get): AdminStore {
@@ -59,10 +55,6 @@ function createAdminStore(set: Set, _get: Get): AdminStore {
     openImageInsertDialog: () => set(() => ({ isOpenImageInsertDialog: true })),
     closeImageInsertDialog: () =>
       set(() => ({ isOpenImageInsertDialog: false })),
-
-    editingPost: defaultPost,
-    setEditingPost: (post: SerializedPost) =>
-      set(() => ({ editingPost: post })),
 
     editingPostInitialized: false,
     setEditingPostInitialized: (initialized: boolean) =>
@@ -84,3 +76,8 @@ export const useMyStoreMemo = <T>(
   // eslint-disable-next-line react-hooks/exhaustive-deps
   return useMyStore(useCallback(selector, dependencies));
 };
+
+export const editingPostAtom = atom<Post>(defaultPost);
+export const editingPostContentDataAtom = atom(
+  (get) => get(editingPostAtom).content.data
+);

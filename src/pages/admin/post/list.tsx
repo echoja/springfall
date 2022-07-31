@@ -2,22 +2,34 @@ import { faPen } from "@fortawesome/pro-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { adminLayoutWrapper } from "@lib/components/layout/AdminLayout";
 import { useAdminPageGuard } from "@lib/hooks";
-import prisma from "@lib/prisma";
-import { serializePost } from "@lib/serialize";
-import type { MonnomlogPage, SerializedPost } from "@lib/types";
+import { anonClient } from "@lib/supabase";
+import type { definitions } from "@lib/supabase-types";
+import type { MonnomlogPage } from "@lib/types";
 import type { GetServerSideProps } from "next";
 import Link from "next/link";
 
+type Post = definitions["posts"];
 interface IPostListProps {
-  posts: SerializedPost[];
+  posts: Post[];
 }
 
 export const getServerSideProps: GetServerSideProps<
   IPostListProps
 > = async () => {
-  const posts = await prisma.post.findMany();
+  const response = await anonClient
+    .from<Post>("posts") // Message maps to the type of the row in your database.
+    .select("*");
+
+  if (response.error) {
+    // eslint-disable-next-line no-console
+    console.error(response.error);
+    return {
+      notFound: true,
+    };
+  }
+
   return {
-    props: { posts: posts.map((post) => serializePost(post)) }, // will be passed to the page component as props
+    props: { posts: response.data ?? [] }, // will be passed to the page component as props
   };
 };
 
