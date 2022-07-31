@@ -1,4 +1,4 @@
-import { anonClient } from "@lib/supabase";
+import { anonClient } from "@modules/supabase/supabase";
 import { useRouter } from "next/router";
 import { useCallback, useEffect } from "react";
 import type { AsyncReturnType } from "type-fest";

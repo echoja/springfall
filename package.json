@@ -9,7 +9,7 @@
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --noEmit",
-    "codegen": "cat src/lib/supabase-types-beginning.txt > src/lib/supabase-types.ts && openapi-typescript \"${NEXT_PUBLIC_SUPABASE_URL}/rest/v1/?apikey=${NEXT_PUBLIC_SUPABASE_ANON_KEY}\" >> src/lib/supabase-types.ts",
+    "codegen": "cat src/modules/supabase/supabase-types-beginning.txt > src/modules/supabase/supabase-types.ts && openapi-typescript \"${NEXT_PUBLIC_SUPABASE_URL}/rest/v1/?apikey=${NEXT_PUBLIC_SUPABASE_ANON_KEY}\" >> src/modules/supabase/supabase-types.ts",
     "upgrade": "yarn upgrade-interactive",
     "release": "standard-version",
     "push-release": "git push --follow-tags origin main",

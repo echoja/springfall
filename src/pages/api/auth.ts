@@ -1,4 +1,4 @@
-import { anonClient } from "@lib/supabase";
+import { anonClient } from "@modules/supabase/supabase";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {

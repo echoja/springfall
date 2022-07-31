@@ -1,6 +1,6 @@
 import { Transition } from "@headlessui/react";
 import { useMyStore } from "@lib/store";
-import type { Post } from "@lib/supabase";
+import type { Post } from "@modules/supabase/supabase";
 import {
   Fragment,
   memo,

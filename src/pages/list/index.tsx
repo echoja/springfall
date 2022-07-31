@@ -1,9 +1,8 @@
 import { POSTS_PER_PAGE } from "@common/config";
 import PostList from "@lib/components/PostList";
-import { POSTS_PER_PAGE } from "@lib/config";
-import type { Post } from "@lib/supabase";
-import { anonPosts } from "@lib/supabase";
-import type { MonnomlogPage } from "@lib/types";
+import type { MonnomlogPage } from "@modules/content/types";
+import type { Post } from "@modules/supabase/supabase";
+import { anonPosts } from "@modules/supabase/supabase";
 import type { GetServerSideProps } from "next";
 import { NextSeo } from "next-seo";
 

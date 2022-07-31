@@ -1,5 +1,5 @@
-import type { Post } from "./supabase";
-import type { CreatePostInput } from "./types";
+import type { CreatePostInput } from "@modules/content/types";
+import type { Post } from "@modules/supabase/supabase";
 
 export function getCreatePostInput(post: Post): CreatePostInput {
   return {
