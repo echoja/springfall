@@ -2,15 +2,51 @@
 import { Dialog } from "@headlessui/react";
 import { useHotkeys } from "@lib/hooks/use-hotkeys";
 import { useMyStoreMemo } from "@lib/store";
-import type { IUploadRequestInfo } from "@modules/content/types";
-import axiosGlobal from "axios";
+import { anonClient } from "@modules/supabase/supabase";
+import { nanoid } from "nanoid";
 import type { ChangeEvent } from "react";
 import { memo, useCallback, useMemo, useRef, useState } from "react";
 import type { Selection } from "slate";
 import { Editor, Transforms } from "slate";
 import { useSlate } from "slate-react";
 
-const axios = axiosGlobal.create();
+const uploadFile = async (file: File) => {
+  // insert id to filename
+  const lastDot = file.name.lastIndexOf(".");
+  const newFilename = `${file.name.substring(
+    0,
+    lastDot
+  )}-${nanoid()}${file.name.substring(lastDot)}`;
+
+  const { data, error } = await anonClient.storage
+    .from("uploads")
+    .upload(newFilename, file, {
+      cacheControl: "3600",
+      upsert: false,
+      contentType: file.type,
+    });
+
+  if (error) {
+    throw error;
+  }
+  if (!data) {
+    throw new Error("no response data");
+  }
+
+  const { error: publicUrlError, publicURL } = anonClient.storage
+    .from("uploads")
+    .getPublicUrl(data.Key.substring(data.Key.indexOf("/") + 1));
+
+  if (publicUrlError) {
+    throw publicUrlError;
+  }
+
+  if (!publicURL) {
+    throw new Error("no publicURL");
+  }
+
+  return publicURL;
+};
 
 const InsertImageDialog: React.FC<{
   selection: Selection | null;
@@ -70,30 +106,7 @@ const InsertImageDialog: React.FC<{
             files.push(file);
           }
         }
-        const promises = files.map(async (file) => {
-          const { data: requestInfo } = await axios.request<IUploadRequestInfo>(
-            {
-              method: "POST",
-              url: `/api/file/presigned-url/${file.name}`,
-              params: {
-                filetype: file.type,
-              },
-            }
-          );
-
-          const formData = new FormData();
-          formData.append("Content-Type", file.type);
-          Object.entries(requestInfo.headers).forEach(([k, v]) => {
-            formData.append(k, v);
-          });
-          formData.append("file", file);
-
-          await axios.post(requestInfo.url, formData, {
-            headers: { "Content-Type": "multipart/form-data" },
-          });
-
-          return `${requestInfo.url}/${requestInfo.headers.key ?? ""}`;
-        });
+        const promises = files.map((file) => uploadFile(file));
 
         Promise.all(promises).then((urls) => {
           imageUploaded(urls);
@@ -109,7 +122,7 @@ const InsertImageDialog: React.FC<{
         <div className="mb-3 w-96">
           <label
             htmlFor="formFile"
-            className="form-label inline-block mb-2 text-gray-700"
+            className="inline-block mb-2 text-gray-700 form-label"
           >
             이미지 업로드
           </label>
@@ -166,10 +179,10 @@ const InsertImageDialog: React.FC<{
       onClose={onClose}
       open={isOpen}
     >
-      <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+      <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" />
 
-      <div className="fixed z-10 inset-0 overflow-y-auto">
-        <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+      <div className="fixed inset-0 z-10 overflow-y-auto">
+        <div className="flex items-end justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
           {/* This element is to trick the browser into centering the modal contents. */}
           <span
             className="hidden sm:inline-block sm:align-middle sm:h-screen"
@@ -177,7 +190,7 @@ const InsertImageDialog: React.FC<{
           >
             &#8203;
           </span>
-          <Dialog.Panel className="relative inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
+          <Dialog.Panel className="relative inline-block px-4 pt-5 pb-4 overflow-hidden text-left align-bottom transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
             <>
               {/* eslint-disable-next-line no-nested-ternary */}
               {stage === "INITIAL" && (
@@ -186,7 +199,7 @@ const InsertImageDialog: React.FC<{
                     <div className="mt-3 text-center sm:mt-5">
                       <Dialog.Title
                         as="h3"
-                        className="text-lg leading-6 font-medium text-gray-900"
+                        className="text-lg font-medium leading-6 text-gray-900"
                       >
                         이미지 삽입 유형을 고르세요.
                       </Dialog.Title>
@@ -196,7 +209,7 @@ const InsertImageDialog: React.FC<{
                   <div className="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
                     <button
                       type="button"
-                      className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-1 sm:text-sm"
+                      className="inline-flex justify-center w-full px-4 py-2 text-base font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-1 sm:text-sm"
                       onClick={setStageUpload}
                       ref={uploadButtonRef}
                     >
@@ -204,7 +217,7 @@ const InsertImageDialog: React.FC<{
                     </button>
                     <button
                       type="button"
-                      className="mt-3 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:col-start-2 sm:text-sm"
+                      className="inline-flex justify-center w-full px-4 py-2 mt-3 text-base font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:col-start-2 sm:text-sm"
                       onClick={setStageLink}
                     >
                       링크 (l)
