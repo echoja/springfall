@@ -49,11 +49,11 @@ specifiers:
   react-merge-refs: ^2.0.1
   refractor: ^4.7.0
   rfdc: ^1.3.0
-  slate: ^0.81.1
+  slate: ^0.82.0
   slate-history: ^0.66.0
-  slate-react: ^0.81.0
+  slate-react: ^0.82.0
   standard-version: ^9.5.0
-  string-strip-html: ^10.1.0
+  string-strip-html: ^11.0.1
   tailwind-merge: ^1.4.0
   tailwindcss: ^3.1.6
   type-fest: ^2.16.0
@@ -90,10 +90,10 @@ dependencies:
   react-merge-refs: 2.0.1
   refractor: 4.7.0
   rfdc: 1.3.0
-  slate: 0.81.3
-  slate-history: 0.66.0_slate@0.81.3
-  slate-react: 0.81.0_njwfekudbehx2lwpmvgkrdxmhi
-  string-strip-html: 10.1.0
+  slate: 0.82.0
+  slate-history: 0.66.0_slate@0.82.0
+  slate-react: 0.82.0_bg222ifi7it6hblyfyz26virpa
+  string-strip-html: 11.0.1
   tailwind-merge: 1.5.1
   usehooks-ts: 2.6.0_react@18.2.0
   zustand: 4.0.0_immer@9.0.15+react@18.2.0
@@ -6162,17 +6162,17 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /slate-history/0.66.0_slate@0.81.3:
+  /slate-history/0.66.0_slate@0.82.0:
     resolution: {integrity: sha512-6MWpxGQZiMvSINlCbMW43E2YBSVMCMCIwQfBzGssjWw4kb0qfvj0pIdblWNRQZD0hR6WHP+dHHgGSeVdMWzfng==}
     peerDependencies:
       slate: '>=0.65.3'
     dependencies:
       is-plain-object: 5.0.0
-      slate: 0.81.3
+      slate: 0.82.0
     dev: false
 
-  /slate-react/0.81.0_njwfekudbehx2lwpmvgkrdxmhi:
-    resolution: {integrity: sha512-bwryad4EvOmc7EFKb8aGg9DWNDh3KvToaggGieIgGTTbHJYHc9ADFC3A87Ittlpd5XUVopR0MpChQ3g3ODyvqw==}
+  /slate-react/0.82.0_bg222ifi7it6hblyfyz26virpa:
+    resolution: {integrity: sha512-kaLpphZ2apX1C7N+8LQElKZ3XKHdmuAZYfTtUOetxCQ6MctDMHg1GHE/tX5hNvF/2bvG5PSnEOrfUOqaSOpzMA==}
     peerDependencies:
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
@@ -6187,12 +6187,12 @@ packages:
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       scroll-into-view-if-needed: 2.2.29
-      slate: 0.81.3
+      slate: 0.82.0
       tiny-invariant: 1.0.6
     dev: false
 
-  /slate/0.81.3:
-    resolution: {integrity: sha512-9rME3rSOsR76BsTGezNp6kiwjJL4yVJLwVQawj9xUf8wEZqoPU8d38hyQ3Jeg1SG6me2aS43m6H+n163/BhGWw==}
+  /slate/0.82.0:
+    resolution: {integrity: sha512-2O2NQunBoIWp3M6HP9w1RnNYR6eC52jW4cAXiUDthTxeiwTjL+wrSncls+9jmfqVrUnUb13qbgOEmw6/EdE1yA==}
     dependencies:
       immer: 9.0.15
       is-plain-object: 5.0.0
@@ -6348,8 +6348,8 @@ packages:
       strip-ansi: 6.0.1
     dev: true
 
-  /string-strip-html/10.1.0:
-    resolution: {integrity: sha512-hW/etdKDQWBmjOUDywkxgaJzH+X00cIzY4ho/XQPKu71vI5KnjrFVzfS3GtgmeT7bFeKFVoYSAi8FXXU/t+2Ug==}
+  /string-strip-html/11.0.1:
+    resolution: {integrity: sha512-7Us+3NiJurKQex+gqTum3bTZ1urY7qM7fYYvT6zFqc0obX4TPVjKwQwsFkwnKuylG0yE+j878IuQOQuXEgAoqQ==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
     dependencies:
       html-entities: 2.3.3
