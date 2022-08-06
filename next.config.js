@@ -5,8 +5,12 @@ const config = {
     dirs: ["src"],
   },
   images: {
-    domains: ['s3.ap-northeast-2.amazonaws.com'],
+    domains: ["s3.ap-northeast-2.amazonaws.com"],
   },
 };
 
-module.exports = config;
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true",
+});
+
+module.exports = withBundleAnalyzer(config);
