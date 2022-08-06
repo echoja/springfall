@@ -1,4 +1,3 @@
-import { useAdminPageGuard } from "@common/hooks";
 import useToast from "@common/hooks/use-toast";
 import { editingPostAtom } from "@common/store";
 import { getCreatePostInput } from "@common/util";
@@ -14,7 +13,6 @@ import { useCallback } from "react";
 const axios = axiosGlobal.create();
 
 const PostEdit: MonnomlogPage = () => {
-  useAdminPageGuard();
   const router = useRouter();
   const toast = useToast();
   const [editingPost] = useAtom(editingPostAtom);
@@ -49,5 +47,3 @@ const PostEdit: MonnomlogPage = () => {
 };
 
 PostEdit.layoutWrapper = NoLayoutWrapper;
-
-export default PostEdit;

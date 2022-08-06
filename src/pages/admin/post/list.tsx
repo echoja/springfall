@@ -1,4 +1,3 @@
-import { useAdminPageGuard } from "@common/hooks";
 import { faPen } from "@fortawesome/pro-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { MonnomlogPage } from "@modules/content/types";
@@ -34,7 +33,6 @@ export const getServerSideProps: GetServerSideProps<
 };
 
 const PostList: MonnomlogPage<IPostListProps> = ({ posts }) => {
-  useAdminPageGuard();
   return (
     <div>
       <table>
