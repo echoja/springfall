@@ -1,5 +1,4 @@
-import { parseQueryToNumber } from "@common/util";
-import { authGuard } from "@lib/api-guard";
+import { authGuard, parseQueryToNumber } from "@common/util";
 import type { Post } from "@modules/supabase/supabase";
 import { servicePosts } from "@modules/supabase/supabase-service";
 import type { NextApiRequest, NextApiResponse } from "next";

@@ -45,6 +45,8 @@
       {
         "additionalHooks": "(useMyStoreMemo|useMyOtherCustomHook)"
       }
-    ]
+    ],
+
+    "react/jsx-key": ["error", { "checkFragmentShorthand": true }]
   }
 }

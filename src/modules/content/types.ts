@@ -1,6 +1,6 @@
 import type { Post } from "@modules/supabase/supabase";
 import type { NextPage } from "next";
-import type { ReactElement, ReactNode } from "react";
+import type { ReactNode } from "react";
 import type React from "react";
 import type { BaseEditor, Descendant, Element } from "slate";
 import type {
@@ -20,9 +20,11 @@ declare module "slate" {
   }
 }
 
+export type LayoutWrapper = React.FC<{ page: ReactNode }>;
+
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type MonnomlogPage<P = {}> = NextPage<P> & {
-  layoutWrapper?: (page: ReactElement) => ReactNode;
+  layoutWrapper?: LayoutWrapper;
 };
 
 export type ContentType = { data: Descendant[] };
@@ -45,6 +47,11 @@ export interface ICommonCodeBlockProps extends CommonRenderElementProps {
   element: ICodeBlock;
 }
 
+export interface IContentElementProps<T extends Element>
+  extends CommonRenderElementProps {
+  element: T;
+}
+
 export type CodeBlockComponent = React.FC<ICommonCodeBlockProps>;
 
 export type CreatePostInput = Pick<
@@ -59,14 +66,11 @@ export type StandaloneElementNode =
   | IHeading
   | ICodeBlock
   | ICodeBlockElement
-  | ITable
   | ICallout
-  | IGithubBlock
   | IQuote
   | IImage
   | IList
   | IHr
-  | IYoutube
   | ILink;
 
 export type ICallout = {
@@ -79,18 +83,6 @@ export type ICallout = {
 export type IHr = {
   type: "HR";
   children: [EmptyText];
-};
-
-export type IYoutube = {
-  type: "YOUTUBE";
-  iframeUrl: string;
-  children: [EmptyText];
-};
-
-export type ITable = {
-  type: "TABLE";
-  children: [EmptyText];
-  // TODO: 구현 필요
 };
 
 export type IHeading = {
@@ -169,12 +161,6 @@ export type IParagraph = {
 export type IImageCaption = {
   type: "IMAGE_CAPTION";
   children: InlineNode[];
-};
-
-export type IGithubBlock = {
-  type: "GITHUB_BLOCK";
-  children: [EmptyText];
-  url: string;
 };
 
 export type ILink = {

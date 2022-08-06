@@ -1,6 +1,6 @@
 import { POSTS_PER_PAGE } from "@common/config";
-import PostList from "@lib/components/PostList";
 import type { MonnomlogPage } from "@modules/content/types";
+import PostList from "@modules/layout/PostList";
 import type { Post } from "@modules/supabase/supabase";
 import { anonPosts } from "@modules/supabase/supabase";
 import type { GetServerSideProps } from "next";

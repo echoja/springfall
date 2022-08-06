@@ -17,7 +17,6 @@
     "baseUrl": "src",
     "incremental": true,
     "paths": {
-      "@lib/*": ["lib/*"],
       "@common/*": ["common/*"],
       "@modules/*": ["modules/*"]
     }
