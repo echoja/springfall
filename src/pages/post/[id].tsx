@@ -1,6 +1,6 @@
 import { faAxe } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { renderPublic } from "@modules/content/render";
+import { renderPublic } from "@modules/content/renderPublic";
 import type { MonnomlogPage } from "@modules/content/types";
 import type { Post } from "@modules/supabase/supabase";
 import { servicePosts } from "@modules/supabase/supabase-service";

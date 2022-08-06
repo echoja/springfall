@@ -2,7 +2,7 @@ import { useAdminPageGuard } from "@common/hooks";
 import { faPen } from "@fortawesome/pro-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { MonnomlogPage } from "@modules/content/types";
-import adminLayoutWrapper from "@modules/layout/AdminLayout";
+import AdminLayoutWrapper from "@modules/layout/AdminLayout";
 import { anonClient } from "@modules/supabase/supabase";
 import type { definitions } from "@modules/supabase/supabase-types";
 import type { GetServerSideProps } from "next";
@@ -79,6 +79,6 @@ const PostList: MonnomlogPage<IPostListProps> = ({ posts }) => {
   );
 };
 
-PostList.layoutWrapper = adminLayoutWrapper;
+PostList.layoutWrapper = AdminLayoutWrapper;
 
 export default PostList;

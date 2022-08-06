@@ -1,15 +1,7 @@
-import type { CommonRenderElementProps, IHr } from "@modules/content/types";
-import { createElementComponent } from "@modules/editor/custom-slate-editor";
+import type { IContentElementProps, IHr } from "@modules/content/types";
 
-export interface IHrProps extends CommonRenderElementProps {
-  element: IHr;
-}
-
-const { EditorComponent: Hr, PublicComponent } =
-  createElementComponent<IHrProps>(({ attributes }) => {
-    return <hr className="my-4" {...attributes} />;
-  });
-
-export const PublicHr = PublicComponent;
+const Hr: React.FC<IContentElementProps<IHr>> = ({ attributes }) => {
+  return <hr className="my-4" {...attributes} />;
+};
 
 export default Hr;

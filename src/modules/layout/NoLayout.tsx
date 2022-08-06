@@ -1,5 +1,7 @@
-import type { ReactNode } from "react";
+import type { LayoutWrapper } from "@modules/content/types";
 
-export default function NoLayoutWrapper(page: ReactNode) {
+const NoLayoutWrapper: LayoutWrapper = ({ page }) => {
   return <div>{page}</div>;
-}
+};
+
+export default NoLayoutWrapper;

@@ -2,12 +2,7 @@ import { useMyStoreMemo } from "@common/store";
 import { convertCodeBlockToString } from "@common/util";
 import { faPenToSquare } from "@fortawesome/pro-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import type {
-  ICodeBlock,
-  ICommonCodeBlockProps,
-  CodeBlockComponent,
-} from "@modules/content/types";
-import type { CSSProperties, ReactNode } from "react";
+import type { ICodeBlock, CodeBlockComponent } from "@modules/content/types";
 import type React from "react";
 import { useCallback } from "react";
 import {
@@ -16,9 +11,11 @@ import {
   useSelected,
   useSlateStatic,
 } from "slate-react";
-import { twMerge } from "tailwind-merge";
 
 import CopyButton from "../../admin-ui/CopyButton";
+
+import Buttons from "./Buttons";
+import CodeBlockLayout from "./CodeBlockLayout";
 
 const EditButton: React.FC<{
   element: ICodeBlock;
@@ -48,83 +45,7 @@ const EditButton: React.FC<{
   );
 };
 
-const CodeBlockLayout: React.FC<{
-  element: ICodeBlock;
-  renderedButtons: ReactNode;
-  children: ReactNode;
-  style?: CSSProperties;
-  attributes?: ICommonCodeBlockProps["attributes"];
-  className?: string;
-}> = ({ renderedButtons, attributes, children, element, style, className }) => {
-  return (
-    <div className="flex flex-col">
-      {element.label && (
-        <div
-          className="inline-flex px-2 py-1 ml-3 mr-auto font-mono text-xs transition-colors rounded-tl rounded-tr shadow-xl bg-slate-200 dark:text-gray-100 dark:bg-slate-600"
-          contentEditable={false}
-        >
-          <span className="inline-flex mr-2">
-            {element.url ? (
-              <a href={element.url} target="_blank" rel="noreferrer">
-                {element.label}
-              </a>
-            ) : (
-              <span>{element.label}</span>
-            )}
-          </span>
-
-          <CopyButton getString={() => element.label ?? ""} />
-        </div>
-      )}
-      <div className="relative">
-        <pre
-          {...attributes}
-          className={twMerge(
-            "p-3 bg-slate-700 text-white mb-3 relative rounded-lg shadow-lg overflow-x-auto",
-            className
-          )}
-          style={style}
-        >
-          <code className="relative">{children}</code>
-        </pre>
-        {renderedButtons}
-      </div>
-    </div>
-  );
-};
-
-const Buttons: React.FC<{ children: ReactNode }> = ({ children }) => {
-  return (!Array.isArray(children) && children) ||
-    (Array.isArray(children) &&
-      children.filter((v) => Boolean(v)).length !== 0) ? (
-    <div className="absolute inline-flex items-center gap-3 text-white top-3 right-3">
-      {children}
-    </div>
-  ) : null;
-};
-
-export const PublicCodeBlock: CodeBlockComponent = ({ children, element }) => {
-  return (
-    <CodeBlockLayout
-      element={element}
-      renderedButtons={
-        <Buttons>
-          {element.showCopy && (
-            <CopyButton getString={() => convertCodeBlockToString(element)} />
-          )}
-        </Buttons>
-      }
-    >
-      {children}
-    </CodeBlockLayout>
-  );
-};
-
-export const CodeBlock: CodeBlockComponent = ({
-  children,
-  attributes,
-  element,
-}) => {
+const CodeBlock: CodeBlockComponent = ({ children, attributes, element }) => {
   const selected = useSelected();
   const focused = useFocused();
 
@@ -146,3 +67,5 @@ export const CodeBlock: CodeBlockComponent = ({
     </CodeBlockLayout>
   );
 };
+
+export default CodeBlock;

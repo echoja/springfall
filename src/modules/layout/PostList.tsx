@@ -42,7 +42,7 @@ const PostList: React.FC<IPostListProps> = ({ count, posts, currentPage }) => {
       <h1 className="mb-5 text-3xl font-semibold">글 목록</h1>
       <div className="mb-5">
         {posts.map((post) => (
-          <article>
+          <article key={post.id}>
             <Link href={`/post/${post.id}`} passHref>
               <a className="font-bold group">
                 <span className="inline-block mr-2 transition-colors duration-1000 group-hover:text-teal-600">
@@ -62,7 +62,7 @@ const PostList: React.FC<IPostListProps> = ({ count, posts, currentPage }) => {
         {!startReached && <span>...</span>}
         {pageArray.map((page) => {
           return (
-            <Link href={`/list/${page}`}>
+            <Link href={`/list/${page}`} key={page}>
               <a
                 className={`${
                   currentPage === page ? "font-bold" : ""

@@ -25,12 +25,6 @@ const commands: Command[] = [
     hiddenLabel: "convert to codeblock",
   },
   {
-    type: "CONVERT",
-    to: "GITHUB_BLOCK",
-    label: "깃허브 블록으로 변환 (개발중)",
-    hiddenLabel: "convert to githubblock",
-  },
-  {
     type: "CONVERT_HEADING",
     level: 1,
     label: "h1 제목으로 변환",
@@ -89,18 +83,6 @@ const commands: Command[] = [
     to: "QUOTE",
     label: "인용구로 변환 (개발중)",
     hiddenLabel: "convert to quote",
-  },
-  {
-    type: "CONVERT",
-    to: "TABLE",
-    label: "표로 변환 (개발중)",
-    hiddenLabel: "convert to table",
-  },
-  {
-    type: "CONVERT",
-    to: "YOUTUBE",
-    label: "유튜브 블록으로 변환 (개발중)",
-    hiddenLabel: "convert to youtube",
   },
   {
     type: "INSERT_IMAGE",

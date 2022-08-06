@@ -5,16 +5,12 @@ import type {
 
 const CodeBlockElement: React.FC<IContentElementProps<ICodeBlockElement>> = ({
   children,
-  attributes,
   element,
 }) => {
   const Tag: keyof JSX.IntrinsicElements = element.tagName;
 
   return (
-    <Tag
-      {...attributes}
-      className={(element.properties?.className ?? []).join(" ")}
-    >
+    <Tag className={(element.properties?.className ?? []).join(" ")}>
       {children}
     </Tag>
   );
