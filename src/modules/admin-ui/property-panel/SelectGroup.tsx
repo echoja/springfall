@@ -1,4 +1,4 @@
-import useConst from "@lib/hooks/use-const";
+import useConst from "@common/hooks/use-const";
 import { nanoid } from "nanoid";
 import type { ChangeEvent } from "react";
 import { memo, useCallback, useMemo } from "react";

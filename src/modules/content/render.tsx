@@ -1,25 +1,29 @@
+import Callout, { PublicCallout } from "@modules/content/callout/Callout";
+import {
+  CodeBlock,
+  PublicCodeBlock,
+} from "@modules/content/code-block/CodeBlock";
+import CodeBlockElement, {
+  PublicCodeBlockElement,
+} from "@modules/content/code-block/CodeBlockElement";
+import Heading, { PublicHeading } from "@modules/content/heading/Heading";
+import Hr, { PublicHr } from "@modules/content/hr/Hr";
+import Image, { PublicImage } from "@modules/content/image/Image";
 import Link, { PublicLink } from "@modules/content/link/component";
+import List, { PublicList } from "@modules/content/list/List";
+import Paragraph, {
+  PublicParagraph,
+} from "@modules/content/paragraph/Paragraph";
+import Table, { PublicTable } from "@modules/content/table/Table";
+import type { RenderPublicElementProps } from "@modules/content/types";
+import Youtube, { PublicYoutube } from "@modules/content/youtube/Youtube";
 import type { ReactElement } from "react";
-import type { Descendant } from "slate";
 import { Text } from "slate";
+import type { Descendant } from "slate";
 import type { RenderElementProps, RenderLeafProps } from "slate-react";
 import type { SetOptional } from "type-fest";
 
-import type { RenderPublicElementProps } from "../modules/content/types";
-
-import Callout, { PublicCallout } from "./components/elements/Callout";
-import { CodeBlock, PublicCodeBlock } from "./components/elements/CodeBlock";
-import CodeBlockElement, {
-  PublicCodeBlockElement,
-} from "./components/elements/CodeBlockElement";
-import Heading, { PublicHeading } from "./components/elements/Heading";
-import Hr, { PublicHr } from "./components/elements/Hr";
-import Image, { PublicImage } from "./components/elements/Image";
-import List, { PublicList } from "./components/elements/List";
-import Paragraph, { PublicParagraph } from "./components/elements/Paragraph";
-import Table, { PublicTable } from "./components/elements/Table";
-import Youtube, { PublicYoutube } from "./components/elements/Youtube";
-import { Leaf, PublicLeaf } from "./components/Leaf";
+import { Leaf, PublicLeaf } from "./Leaf";
 
 export function renderPublicElement(props: RenderPublicElementProps) {
   const { element } = props;

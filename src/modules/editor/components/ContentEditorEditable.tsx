@@ -1,4 +1,4 @@
-import { renderElement, renderLeaf } from "@lib/render";
+import { renderElement, renderLeaf } from "@modules/content/render";
 import type { Mark } from "@modules/content/types";
 import { isKeyHotkey } from "is-hotkey";
 import type { KeyboardEvent } from "react";

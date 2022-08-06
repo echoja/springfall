@@ -1,8 +1,8 @@
+import { useAdminPageGuard } from "@common/hooks";
 import { faPen } from "@fortawesome/pro-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { adminLayoutWrapper } from "@lib/components/layout/AdminLayout";
-import { useAdminPageGuard } from "@lib/hooks";
 import type { MonnomlogPage } from "@modules/content/types";
+import adminLayoutWrapper from "@modules/layout/AdminLayout";
 import { anonClient } from "@modules/supabase/supabase";
 import type { definitions } from "@modules/supabase/supabase-types";
 import type { GetServerSideProps } from "next";

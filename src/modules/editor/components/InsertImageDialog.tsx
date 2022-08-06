@@ -1,7 +1,7 @@
 /* This example requires Tailwind CSS v2.0+ */
+import { useHotkeys } from "@common/hooks/use-hotkeys";
+import { useMyStoreMemo } from "@common/store";
 import { Dialog } from "@headlessui/react";
-import { useHotkeys } from "@lib/hooks/use-hotkeys";
-import { useMyStoreMemo } from "@lib/store";
 import { anonClient } from "@modules/supabase/supabase";
 import { nanoid } from "nanoid";
 import type { ChangeEvent } from "react";

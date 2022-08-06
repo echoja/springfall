@@ -1,6 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 
-import { authGuard } from "@lib/api-guard";
+import { authGuard } from "@common/util";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 const hello = authGuard((req: NextApiRequest, res: NextApiResponse) => {

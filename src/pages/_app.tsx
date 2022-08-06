@@ -1,8 +1,8 @@
+import useConst from "@common/hooks/use-const";
+import { useMyStoreMemo } from "@common/store";
 import { config as fontAwesomeConfig } from "@fortawesome/fontawesome-svg-core";
-import Default from "@lib/components/layout/Default";
-import useConst from "@lib/hooks/use-const";
-import { useMyStoreMemo } from "@lib/store";
 import type { MonnomlogPage } from "@modules/content/types";
+import Default from "@modules/layout/Default";
 import { anonClient } from "@modules/supabase/supabase";
 import { DefaultSeo } from "next-seo";
 import type { AppProps } from "next/app";
@@ -13,7 +13,7 @@ import { useEffect } from "react";
 import defaultSEOConfig from "../../next-seo.config";
 
 import "@fortawesome/fontawesome-svg-core/styles.css";
-import "@lib/globals.css";
+import "@common/globals.css";
 
 fontAwesomeConfig.autoAddCss = false;
 

@@ -1,9 +1,9 @@
-import { NoLayoutWrapper } from "@lib/components/layout/NoLayout";
-import PostEditorWrapper from "@lib/components/PostEditorWrapper";
-import { useAdminPageGuard } from "@lib/hooks";
-import useToast from "@lib/hooks/use-toast";
-import { editingPostAtom } from "@lib/store";
+import { useAdminPageGuard } from "@common/hooks";
+import useToast from "@common/hooks/use-toast";
+import { editingPostAtom } from "@common/store";
 import type { MonnomlogPage } from "@modules/content/types";
+import PostEditorWrapper from "@modules/editor/components/PostEditorWrapper";
+import NoLayoutWrapper from "@modules/layout/NoLayout";
 import type { Post } from "@modules/supabase/supabase";
 import { anonPosts } from "@modules/supabase/supabase";
 import axiosGlobal from "axios";

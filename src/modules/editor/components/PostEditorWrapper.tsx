@@ -1,19 +1,21 @@
 import { isDevelopment } from "@common/config";
-import { faAngleLeft } from "@fortawesome/pro-regular-svg-icons";
-import { faFloppyDisk } from "@fortawesome/pro-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useHotkeys } from "@lib/hooks/use-hotkeys";
+import { useHotkeys } from "@common/hooks/use-hotkeys";
 import {
   editingPostAtom,
   editingPostContentDataAtom,
   useMyStoreMemo,
-} from "@lib/store";
+} from "@common/store";
+import { faAngleLeft } from "@fortawesome/pro-regular-svg-icons";
+import { faFloppyDisk } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   insertLink,
   isLinkActive,
   unwrapLink,
 } from "@modules/content/link/api";
 import type { Command } from "@modules/content/types";
+import CommandPalette from "@modules/editor/components/CommandPalette";
+import InsertImageDialog from "@modules/editor/components/InsertImageDialog";
 import { getEditor } from "@modules/editor/custom-slate-editor";
 import { useAtom } from "jotai";
 import Link from "next/link";
@@ -23,13 +25,12 @@ import type { Descendant, Selection } from "slate";
 import { Slate } from "slate-react";
 import { twMerge } from "tailwind-merge";
 
-import PropertyPanel from "./BlockPropertyPanel";
+import PropertyPanel from "../../admin-ui/property-panel/BlockPropertyPanel";
+import SwitchGroup from "../../admin-ui/property-panel/SwitchGroup";
+
 import CodeBlockEditModal from "./CodeBlockEditModal";
-import CommandPalette from "./CommandPalette";
 import ContentEditorEditable from "./ContentEditorEditable";
 import DebugPopover from "./DebugPopover";
-import InsertImageDialog from "./InsertImageDialog";
-import SwitchGroup from "./property-panel/SwitchGroup";
 
 interface IPostEditorWrapperProps {
   onSaveButtonClick: () => void;

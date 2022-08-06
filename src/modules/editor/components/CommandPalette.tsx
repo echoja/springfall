@@ -1,9 +1,9 @@
+import useConst from "@common/hooks/use-const";
+import { useMyStoreMemo } from "@common/store";
+import { getDefaultNodeProps } from "@common/util";
 import { faMagnifyingGlass } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Combobox, Dialog } from "@headlessui/react";
-import useConst from "@lib/hooks/use-const";
-import { getDefaultNodeProps } from "@lib/node";
-import { useMyStoreMemo } from "@lib/store";
 import type { Command, ElementNode } from "@modules/content/types";
 import { useCallback, useState, memo } from "react";
 import type { Element } from "slate";

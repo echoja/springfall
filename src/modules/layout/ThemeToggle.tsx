@@ -1,4 +1,4 @@
-import { useMyStore } from "@lib/store";
+import { useMyStore } from "@common/store";
 import { RiMoonFill, RiSunLine } from "react-icons/ri";
 
 const ThemeToggle = () => {

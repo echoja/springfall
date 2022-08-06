@@ -1,7 +1,7 @@
+import { useMyStoreMemo } from "@common/store";
 import { convertCodeBlockToString } from "@common/util";
 import { faPenToSquare } from "@fortawesome/pro-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useMyStoreMemo } from "@lib/store";
 import type {
   ICodeBlock,
   ICommonCodeBlockProps,
@@ -18,7 +18,7 @@ import {
 } from "slate-react";
 import { twMerge } from "tailwind-merge";
 
-import CopyButton from "../CopyButton";
+import CopyButton from "../../admin-ui/CopyButton";
 
 const EditButton: React.FC<{
   element: ICodeBlock;

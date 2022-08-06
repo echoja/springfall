@@ -1,5 +1,5 @@
+import { useMyStore } from "@common/store";
 import { Transition } from "@headlessui/react";
-import { useMyStore } from "@lib/store";
 import type { Post } from "@modules/supabase/supabase";
 import {
   Fragment,

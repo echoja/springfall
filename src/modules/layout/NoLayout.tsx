@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
 
-export const NoLayoutWrapper = (page: ReactNode) => {
+export default function NoLayoutWrapper(page: ReactNode) {
   return <div>{page}</div>;
-};
+}

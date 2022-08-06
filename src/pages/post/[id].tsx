@@ -1,6 +1,6 @@
 import { faAxe } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { renderPublic } from "@lib/render";
+import { renderPublic } from "@modules/content/render";
 import type { MonnomlogPage } from "@modules/content/types";
 import type { Post } from "@modules/supabase/supabase";
 import { servicePosts } from "@modules/supabase/supabase-service";
@@ -9,7 +9,6 @@ import Joi from "joi";
 import type { GetStaticPaths, GetStaticProps } from "next";
 import { NextSeo } from "next-seo";
 import { useMemo } from "react";
-import type { Descendant } from "slate";
 
 interface IPostViewProps {
   post: Post;
@@ -68,7 +67,7 @@ export const getStaticProps: GetStaticProps<IPostViewProps> = async ({
 
 const PostView: MonnomlogPage<IPostViewProps> = ({ post }) => {
   const data = useMemo(() => {
-    return (post.content ? post.content.data : []) as Descendant[];
+    return post.content ? post.content.data : [];
   }, [post.content]);
 
   const rendered = useMemo(() => {

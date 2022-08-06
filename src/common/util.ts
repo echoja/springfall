@@ -1,11 +1,15 @@
-import rfdc from "rfdc";
-
 import type {
   ICodeBlock,
   ICodeBlockElement,
   ICodeBlockText,
   IText,
-} from "../modules/content/types";
+  CreatePostInput,
+} from "@modules/content/types";
+import { anonClient } from "@modules/supabase/supabase";
+import type { Post } from "@modules/supabase/supabase";
+import type { NextApiHandler } from "next";
+import rfdc from "rfdc";
+import type { Element } from "slate";
 
 /**
  * query(`string | string[] | undefined`)를 number로 변환합니다.
@@ -51,4 +55,49 @@ export function convertCodeBlockToString(node: ICodeBlock) {
   const result: string[] = [];
   codeNodeToString(node, result);
   return result.join("");
+}
+
+export const authGuard = (
+  handler: NextApiHandler,
+  message = "unauthorized"
+): NextApiHandler => {
+  return async (req, res) => {
+    const { user } = await anonClient.auth.api.getUserByCookie(req);
+    if (user) {
+      return handler(req, res);
+    }
+
+    res.status(401);
+    res.send(message);
+    return undefined;
+  };
+};
+
+export function getDefaultNodeProps(
+  type: Element["type"]
+): Omit<Partial<Element>, "type" | "children"> {
+  // eslint-disable-next-line sonarjs/no-small-switch
+  switch (type) {
+    case "CODE_BLOCK": {
+      const result: ICodeBlock = {
+        type: "CODE_BLOCK",
+        children: [],
+        lang: "tsx",
+        showCopy: true,
+        showLines: true,
+      };
+      return result;
+    }
+    default:
+      return {};
+  }
+}
+
+export function getCreatePostInput(post: Post): CreatePostInput {
+  return {
+    title: post.title,
+    content: post.content,
+    published: post.published,
+    summary: post.summary,
+  };
 }

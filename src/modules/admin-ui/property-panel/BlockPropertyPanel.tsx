@@ -1,4 +1,4 @@
-import { editingPostContentDataAtom } from "@lib/store";
+import { editingPostContentDataAtom } from "@common/store";
 import type { ICodeBlock } from "@modules/content/types";
 import { useAtom } from "jotai";
 import { memo, useMemo } from "react";
@@ -6,9 +6,9 @@ import type { Node, Path } from "slate";
 import { Transforms, Editor } from "slate";
 import { useSlateSelector, useSlateStatic } from "slate-react";
 
-import SelectGroup from "./property-panel/SelectGroup";
-import SwitchGroup from "./property-panel/SwitchGroup";
-import TextInputGroup from "./property-panel/TextInputGroup";
+import SelectGroup from "./SelectGroup";
+import SwitchGroup from "./SwitchGroup";
+import TextInputGroup from "./TextInputGroup";
 
 const CodeBlockPropertyPanel: React.FC<{ node: ICodeBlock; path: Path }> = memo(
   ({ node, path }) => {
