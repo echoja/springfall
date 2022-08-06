@@ -13,6 +13,7 @@ specifiers:
   '@supabase/supabase-js': ^1.35.4
   '@swc-node/jest': ^1.5.2
   '@tailwindcss/forms': ^0.5.2
+  '@types/is-hotkey': ^0.1.7
   '@types/is-url': ^1.2.30
   '@types/jest': ^28.1.6
   '@types/markdown-it': ^12.2.3
@@ -103,6 +104,7 @@ dependencies:
 devDependencies:
   '@commitlint/config-conventional': 17.0.3
   '@swc-node/jest': 1.5.2_typescript@4.7.4
+  '@types/is-hotkey': 0.1.7
   '@types/is-url': 1.2.30
   '@types/jest': 28.1.6
   '@types/markdown-it': 12.2.3
@@ -1698,7 +1700,6 @@ packages:
 
   /@types/is-hotkey/0.1.7:
     resolution: {integrity: sha512-yB5C7zcOM7idwYZZ1wKQ3pTfjA9BbvFqRWvKB46GFddxnJtHwi/b9y84ykQtxQPg5qhdpg4Q/kWU3EGoCTmLzQ==}
-    dev: false
 
   /@types/is-url/1.2.30:
     resolution: {integrity: sha512-AnlNFwjzC8XLda5VjRl4ItSd8qp8pSNowvsut0WwQyBWHpOxjxRJm8iO6uETWqEyLdYdb9/1j+Qd9gQ4l5I4fw==}
