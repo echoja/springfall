@@ -4,7 +4,7 @@
 
 [기획 문서 (내부 링크)](https://www.notion.so/ezkorry/MONNOMLOG-177f0ecce08043669bfc24797272cd1b)
 
-![Vercel](https://vercelbadge.vercel.app/api/monnomlog-donkasu/monnomlog-alpha) [![Depfu](https://badges.depfu.com/badges/37441f284b6c8a355e802d0667137107/count.svg)](https://depfu.com/github/monnomlog-donkasu/monnomlog-alpha?project_id=34653)
+![Vercel](https://vercelbadge.vercel.app/api/monnomlog-donkasu/monnomlog-alpha) [![Depfu](https://badges.depfu.com/badges/40013c6c77b7fe975691b4df2f88cb2c/count.svg)](https://depfu.com/github/monnomlog-donkasu/monnomlog-alpha?project_id=36213)
 
 [![forthebadge](https://forthebadge.com/images/badges/made-with-typescript.svg)](https://forthebadge.com)
 
