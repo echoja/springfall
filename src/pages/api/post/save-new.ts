@@ -15,10 +15,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   const createPostInput = req.body as Post;
 
-  const result = await servicePosts().insert({
-    ...createPostInput,
-    user_id: user.id,
-  });
+  const result = await servicePosts()
+    .insert({
+      ...createPostInput,
+      user_id: user.id,
+    })
+    .single();
 
   if (result.error) {
     res.status(400);
@@ -26,9 +28,15 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     return;
   }
 
-  const id = result.body?.[0]?.id;
+  const id = result.body?.id;
   if (id) {
-    await res.revalidate(`/post/${id}`);
+    try {
+      await res.revalidate(`/post/${id}`);
+    } catch (e) {
+      // TODO: 운영 환경에서 존재하지 않는 주소에 대해 발생하는 오류 처리해야함
+      // eslint-disable-next-line no-console
+      console.error(e);
+    }
   }
 
   res.statusCode = 200;
