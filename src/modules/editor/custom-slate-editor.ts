@@ -6,6 +6,8 @@ import { withReact } from "slate-react";
 import { withLinkBlock } from "../content/link/api";
 import type { CommonRenderElementProps } from "../content/types";
 
+import withHtml from "./plugins/withHtml";
+
 export const selectionFilteredByType = (
   editor: Editor,
   type: Element["type"]
@@ -39,8 +41,11 @@ export function withCodeBlock(editor: Editor): Editor {
 }
 
 export function getEditor(): Editor {
-  return [withHistory, withReact, withCodeBlock, withLinkBlock].reduce(
-    (acc, plugin) => plugin(acc),
-    createEditor()
-  );
+  return [
+    withHistory,
+    withReact,
+    withCodeBlock,
+    withLinkBlock,
+    withHtml,
+  ].reduce((acc, plugin) => plugin(acc), createEditor());
 }

@@ -3,7 +3,7 @@ import { editingPostAtom } from "@common/store";
 import { getCreatePostInput } from "@common/util";
 import type { MonnomlogPage } from "@modules/content/types";
 import PostEditorWrapper from "@modules/editor/components/PostEditorWrapper";
-import NoLayoutWrapper from "@modules/layout/NoLayout";
+import AdminNoLayoutWrapper from "@modules/layout/AdminNoLayout";
 import type { Post } from "@modules/supabase/supabase";
 import axiosGlobal from "axios";
 import { useAtom } from "jotai";
@@ -46,6 +46,6 @@ const PostEdit: MonnomlogPage = () => {
   return <PostEditorWrapper onSaveButtonClick={onSaveButtonClick} />;
 };
 
-PostEdit.layoutWrapper = NoLayoutWrapper;
+PostEdit.layoutWrapper = AdminNoLayoutWrapper;
 
 export default PostEdit;
