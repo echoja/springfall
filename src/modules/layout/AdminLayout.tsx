@@ -15,18 +15,15 @@ const AdminLayoutWrapper: LayoutWrapper = ({ page }) => {
         { redirectTo: window.location.href }
       );
     }
+    // 관리자 하드 코딩. TODO: 클라이언트에서 검사하는 거라 한계가 있으므로 수정 필요
+    else if (user && user.email !== "eszqsc112@gmail.com") {
+      router.replace("/404");
+    }
   }, [router]);
 
   useEffect(() => {
     const { data, error } = anonClient.auth.onAuthStateChange(
       (event, session) => {
-        // 관리자 하드 코딩. TODO: 클라이언트에서 검사하는 거라 한계가 있으므로 수정 필요
-        if (session?.user && session.user.email !== "eszqsc112@gmail.com") {
-          anonClient.auth.signOut();
-          router.replace("/404");
-          return;
-        }
-
         fetch("/api/auth", {
           method: "POST",
           headers: new Headers({ "Content-Type": "application/json" }),
