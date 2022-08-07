@@ -43,7 +43,7 @@ const AdminLayoutWrapper: LayoutWrapper = ({ page }) => {
     return () => {
       data?.unsubscribe();
     };
-  }, []);
+  }, [router]);
 
   return (
     <div className="flex mx-auto">

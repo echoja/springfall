@@ -47,3 +47,5 @@ const PostEdit: MonnomlogPage = () => {
 };
 
 PostEdit.layoutWrapper = NoLayoutWrapper;
+
+export default PostEdit;
