@@ -1,4 +1,3 @@
-import { useAdminPageGuard } from "@common/hooks";
 import useToast from "@common/hooks/use-toast";
 import { editingPostAtom } from "@common/store";
 import type { MonnomlogPage } from "@modules/content/types";
@@ -46,13 +45,8 @@ export const getServerSideProps: GetServerSideProps<IPostEditProps> = async (
 };
 
 const PostEdit: MonnomlogPage<IPostEditProps> = (props) => {
-  useAdminPageGuard();
   const { post: postProp } = props;
-  // const router = useRouter();
   const toast = useToast();
-
-  // const post = useMyStoreMemo((store) => store.editingPost, []);
-  // const setPost = useMyStoreMemo((store) => store.setEditingPost, []);
 
   useHydrateAtoms([[editingPostAtom, postProp]]);
   const [editingPost] = useAtom(editingPostAtom);
@@ -82,8 +76,7 @@ const PostEdit: MonnomlogPage<IPostEditProps> = (props) => {
   }, [editingPost, postProp, toast]);
 
   if (!postProp) {
-    // eslint-disable-next-line react/jsx-no-useless-fragment
-    return <></>;
+    return null;
   }
 
   return <PostEditorWrapper onSaveButtonClick={onSaveButtonClick} />;
