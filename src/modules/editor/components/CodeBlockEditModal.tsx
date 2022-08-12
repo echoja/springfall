@@ -1,7 +1,7 @@
 /* This example requires Tailwind CSS v2.0+ */
 import { useHotkeys } from "@common/hooks/use-hotkeys";
 import { useMyStoreMemo } from "@common/store";
-import { convertCodeBlockToString } from "@common/util";
+import { codeNodeToString, deepclone } from "@common/util";
 import { Dialog } from "@headlessui/react";
 import { convertToCodeBlock } from "@modules/content/code-block/convert";
 import type { ICodeBlock } from "@modules/content/types";
@@ -43,13 +43,11 @@ const CodeBlockEditModal: React.FC = () => {
   const onClose = useCallback(() => {
     // TODO: 언어 정할 수 있도록 하기
     const formatted = refractor.highlight(content, "tsx");
-    console.log("formatted", formatted);
     try {
       const converted = convertToCodeBlock(formatted);
-      console.log("converted", converted);
 
       // 혹시 모를 상황을 위해 얕은 복사 수행
-      const copiedPath = [...path];
+      const copiedPath = deepclone(path);
       Transforms.removeNodes(editor, { at: copiedPath });
       Transforms.insertNodes(editor, converted, { at: copiedPath });
     } catch (e) {
@@ -65,7 +63,7 @@ const CodeBlockEditModal: React.FC = () => {
     if (isOpen === true && path.length > 0) {
       try {
         const findResult = Editor.node(editor, path) as NodeEntry<ICodeBlock>;
-        setContent(convertCodeBlockToString(findResult[0]));
+        setContent(codeNodeToString(findResult[0]));
       } catch (e) {
         // eslint-disable-next-line no-console
         console.log("node not found", e);
