@@ -1,6 +1,6 @@
 import type {
   ICodeBlock,
-  ICodeBlockElement,
+  ICodeElement,
   ICodeBlockText,
   IText,
   CreatePostInput,
@@ -32,12 +32,12 @@ export function noopFunction(..._args: any): any {
 export const deepclone = rfdc();
 
 export function codeNodeToString(
-  node: ICodeBlock | ICodeBlockElement | ICodeBlockText | IText,
+  node: ICodeBlock | ICodeElement | ICodeBlockText | IText,
   acc: string[]
 ) {
   if (node.type === "CODE_BLOCK_TEXT" || node.type === "TEXT") {
     acc.push(node.text);
-  } else if (node.type === "CODE_BLOCK_ELEMENT" || node.type === "CODE_BLOCK") {
+  } else if (node.type === "CODE_ELEMENT" || node.type === "CODE_BLOCK") {
     // newline 일 경우
     if (
       node.children.length === 1 &&

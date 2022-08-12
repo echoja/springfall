@@ -3,7 +3,8 @@ import type { Descendant, Element } from "slate";
 
 import PublicCallout from "./callout/PublicCallout";
 import PublicCodeBlock from "./code-block/PublicCodeBlock";
-import PublicCodeBlockElement from "./code-block/PublicCodeBlockElement";
+import PublicCodeBlockElement from "./code-block/PublicCodeElement";
+import PublicCodeLine from "./code-block/PublicCodeLine";
 import PublicHeading from "./heading/PublicHeading";
 import PublicHr from "./hr/PublicHr";
 import PublicImage from "./image/PublicImage";
@@ -18,8 +19,10 @@ export function renderPublicElement(props: RenderPublicElementProps) {
   switch (element.type) {
     case "CODE_BLOCK":
       return <PublicCodeBlock {...props} element={element} />;
-    case "CODE_BLOCK_ELEMENT":
+    case "CODE_ELEMENT":
       return <PublicCodeBlockElement {...props} element={element} />;
+    case "CODE_LINE":
+      return <PublicCodeLine {...props} element={element} />;
     case "PARAGRAPH":
       return <Paragraph {...props} element={element} />;
     case "HEADING":
@@ -49,26 +52,30 @@ export function renderPublic(
 ): ReactElement<Any, Any> | null {
   return (
     <>
-      {data.map((child, index) => {
-        if ((child as { children?: Any }).children) {
-          // render element
-          let children;
-          if ((child as { children?: Any }).children) {
-            children = renderPublic((child as { children?: Any }).children);
-          }
+      {data.map((descendant, index) => {
+        if (
+          descendant.type === "ICON" ||
+          descendant.type === "TEXT" ||
+          descendant.type === "NOOP"
+        ) {
           return (
             // eslint-disable-next-line react/no-array-index-key
-            <PublicElement key={index} element={child as Element}>
-              {children}
-            </PublicElement>
+            <PublicLeaf key={index} leaf={descendant} text={descendant}>
+              {(descendant as Any).text}
+            </PublicLeaf>
           );
         }
 
+        // render element
+        let children;
+        if ((descendant as { children?: Any }).children) {
+          children = renderPublic((descendant as { children?: Any }).children);
+        }
         return (
           // eslint-disable-next-line react/no-array-index-key
-          <PublicLeaf key={index} leaf={child as IText} text={child as IText}>
-            {(child as Any).text}
-          </PublicLeaf>
+          <PublicElement key={index} element={descendant}>
+            {children}
+          </PublicElement>
         );
       })}
     </>

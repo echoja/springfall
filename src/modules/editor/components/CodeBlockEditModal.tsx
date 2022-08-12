@@ -3,14 +3,10 @@ import { useHotkeys } from "@common/hooks/use-hotkeys";
 import { useMyStoreMemo } from "@common/store";
 import { convertCodeBlockToString } from "@common/util";
 import { Dialog } from "@headlessui/react";
-import type {
-  ICodeBlock,
-  ICodeBlockElement,
-  ICodeBlockText,
-} from "@modules/content/types";
+import { convertToCodeBlock } from "@modules/content/code-block/convert";
+import type { ICodeBlock } from "@modules/content/types";
 import type { ChangeEvent } from "react";
 import { useEffect, memo, useCallback, useRef, useState } from "react";
-import type { RefractorElement, RefractorRoot, Text } from "refractor";
 import { refractor } from "refractor";
 import tsxLang from "refractor/lang/tsx";
 import type { NodeEntry } from "slate";
@@ -18,122 +14,6 @@ import { Transforms, Editor } from "slate";
 import { useSlateStatic } from "slate-react";
 
 refractor.register(tsxLang);
-
-function convertRefractorNodes(
-  node: RefractorElement | Text,
-  shouldWrapText: boolean
-): ICodeBlockElement | ICodeBlockText {
-  /**
-   * 첫 번째 child 가 element 라면 형제 text 노드들은 무조건 element로 감싸져야 함.
-   * @see https://docs.slatejs.org/concepts/11-normalizing#built-in-constraints
-   */
-  let firstChildType: "element" | "text" | undefined;
-
-  if (node.type === "element") {
-    return {
-      type: "CODE_BLOCK_ELEMENT",
-      children: node.children.map((child, index) => {
-        if (index === 0) {
-          firstChildType = child.type;
-        }
-        return convertRefractorNodes(child, firstChildType === "element");
-      }),
-      tagName: node.tagName as "span",
-      properties: {
-        className: node.properties?.className as string[] | undefined,
-      },
-    };
-  }
-
-  if (node.type === "text" && shouldWrapText) {
-    return {
-      type: "CODE_BLOCK_ELEMENT",
-      children: [
-        {
-          type: "CODE_BLOCK_TEXT",
-          text: node.value,
-        },
-      ],
-      tagName: "span",
-      properties: {
-        className: ["token text-wrapper"],
-      },
-    };
-  }
-
-  if (node.type === "text") {
-    return {
-      type: "CODE_BLOCK_TEXT",
-      text: node.value,
-    };
-  }
-
-  throw new Error("Unknown node type");
-}
-
-function refractorRootToCodeBlock(root: RefractorRoot): ICodeBlock {
-  const children = root.children.map((node) =>
-    convertRefractorNodes(node, root.children[0]?.type === "element")
-  );
-
-  return {
-    type: "CODE_BLOCK",
-    children,
-    lang: "tsx",
-    showCopy: true,
-    showLines: true,
-  };
-}
-
-function convertNewLineImpl(
-  node: ICodeBlockElement | ICodeBlockText
-): ICodeBlockText[] | ICodeBlockElement[] {
-  if (node.type === "CODE_BLOCK_TEXT") {
-    if (node.text.includes("\n")) {
-      return node.text.split("\n").map((line) => {
-        const result: ICodeBlockElement = {
-          type: "CODE_BLOCK_ELEMENT",
-          tagName: "span",
-          properties: {
-            className: ["token text-wrapper"],
-          },
-          children: [
-            {
-              type: "CODE_BLOCK_TEXT",
-              text: line,
-              isNewline: line === "",
-            },
-          ],
-        };
-        return result;
-      });
-    }
-    return [node];
-  }
-
-  if (node.type === "CODE_BLOCK_ELEMENT") {
-    const children = node.children.map((child) => convertNewLineImpl(child));
-
-    const flattenChildren = children.flat();
-    return [
-      {
-        ...node,
-        children: flattenChildren,
-      },
-    ];
-  }
-
-  throw new Error("");
-}
-
-function convertNewline(codeBlock: ICodeBlock): ICodeBlock {
-  return {
-    ...codeBlock,
-    children: codeBlock.children
-      .map((child) => convertNewLineImpl(child))
-      .flat(),
-  };
-}
 
 const CodeBlockEditModal: React.FC = () => {
   const uploadButtonRef = useRef(null);
@@ -163,15 +43,15 @@ const CodeBlockEditModal: React.FC = () => {
   const onClose = useCallback(() => {
     // TODO: 언어 정할 수 있도록 하기
     const formatted = refractor.highlight(content, "tsx");
+    console.log("formatted", formatted);
     try {
-      const converted = refractorRootToCodeBlock(formatted);
-
-      const newlineConverted = convertNewline(converted);
+      const converted = convertToCodeBlock(formatted);
+      console.log("converted", converted);
 
       // 혹시 모를 상황을 위해 얕은 복사 수행
       const copiedPath = [...path];
       Transforms.removeNodes(editor, { at: copiedPath });
-      Transforms.insertNodes(editor, newlineConverted, { at: copiedPath });
+      Transforms.insertNodes(editor, converted, { at: copiedPath });
     } catch (e) {
       // eslint-disable-next-line no-console
       console.error(e);

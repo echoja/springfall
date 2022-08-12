@@ -65,7 +65,8 @@ export type StandaloneElementNode =
   | IParagraph
   | IHeading
   | ICodeBlock
-  | ICodeBlockElement
+  | ICodeElement
+  | ICodeLine
   | ICallout
   | IQuote
   | IImage
@@ -130,22 +131,22 @@ export type ICodeBlock = {
   showCopy: boolean;
   label?: string;
   url?: string;
-  children: (ICodeBlockElement | ICodeBlockText)[];
+  children: ICodeLine[];
 };
 
-export type ICodeBlockElement = {
-  type: "CODE_BLOCK_ELEMENT";
+export type ICodeLine = {
+  type: "CODE_LINE";
+  format?: "info" | "added" | "deleted";
+  children: (ICodeElement | IText)[];
+};
+
+export type ICodeElement = {
+  type: "CODE_ELEMENT";
   tagName: "span";
   properties?: {
     className?: string[];
   };
-  children: (ICodeBlockElement | ICodeBlockText)[];
-};
-
-export type ICodeBlockText = {
-  type: "CODE_BLOCK_TEXT";
-  text: string;
-  isNewline?: boolean;
+  children: (ICodeElement | IText)[];
 };
 
 export type ICodeExplainer = {
@@ -170,7 +171,7 @@ export type ILink = {
   children: InlineNode[];
 };
 
-type InlineNode = IText | IIcon | ICodeBlockText;
+type InlineNode = IText | IIcon;
 
 export type IText = {
   type: "TEXT";

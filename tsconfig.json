@@ -16,6 +16,7 @@
     "jsx": "preserve",
     "baseUrl": "src",
     "incremental": true,
+    "types": ["vitest/globals"],
     "paths": {
       "@common/*": ["common/*"],
       "@modules/*": ["modules/*"]
