@@ -4,7 +4,7 @@ import type { ChangeEvent } from "react";
 import { memo, useCallback, useMemo } from "react";
 import { twMerge } from "tailwind-merge";
 
-function SelectGroup<T extends string>({
+function SelectGroup<T extends string | undefined>({
   onChange,
   options,
   value,
@@ -24,7 +24,7 @@ function SelectGroup<T extends string>({
   const optionsDom = useMemo(
     () =>
       options.map(({ label: optionLabel, value: optionValue }) => (
-        <option key={optionValue} value={optionValue}>
+        <option key={`${optionValue}`} value={`${optionValue}`}>
           {optionLabel}
         </option>
       )),
@@ -42,15 +42,15 @@ function SelectGroup<T extends string>({
     <div className={twMerge("flex items-center gab-3", className)}>
       <label
         htmlFor={fixedId}
-        className="block text-sm font-medium font-sans text-gray-700 w-20"
+        className="block w-20 font-sans text-sm font-medium text-gray-700"
       >
         {title}
       </label>
       <select
         id={fixedId}
         name={fixedId}
-        value={value}
-        className="block w-full pl-3 pr-10 py-1 font-sans text-sm border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+        value={`${value}`}
+        className="block w-full py-1 pl-3 pr-10 font-sans text-sm border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
         onChange={onSelectChange}
       >
         {optionsDom}
