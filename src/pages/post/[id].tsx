@@ -8,14 +8,17 @@ import { format } from "date-fns";
 import Joi from "joi";
 import type { GetStaticPaths, GetStaticProps } from "next";
 import { NextSeo } from "next-seo";
+import { useRouter } from "next/router";
 import { useMemo } from "react";
 
 interface IPostViewProps {
-  post: Post;
+  post?: Post;
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const { data, error } = await servicePosts().select("id");
+  const { data, error } = await servicePosts()
+    .select("id")
+    .eq("published", true);
 
   if (error) {
     // eslint-disable-next-line no-console
@@ -37,7 +40,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
     params: { id: post.id.toString() },
   }));
 
-  return { paths, fallback: false };
+  return { paths, fallback: true };
 };
 
 export const getStaticProps: GetStaticProps<IPostViewProps> = async ({
@@ -66,13 +69,19 @@ export const getStaticProps: GetStaticProps<IPostViewProps> = async ({
 };
 
 const PostView: MonnomlogPage<IPostViewProps> = ({ post }) => {
+  const router = useRouter();
+
   const data = useMemo(() => {
-    return post.content ? post.content.data : [];
-  }, [post.content]);
+    return post?.content ? post?.content.data : [];
+  }, [post?.content]);
 
   const rendered = useMemo(() => {
     return renderPublic(data);
   }, [data]);
+
+  if (router.isFallback || !post) {
+    return <div>로딩중...</div>;
+  }
 
   return (
     <article>
