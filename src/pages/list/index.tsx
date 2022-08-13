@@ -15,11 +15,13 @@ export const getServerSideProps: GetServerSideProps<
   IListIndexProps
 > = async () => {
   const [{ count }, { data: posts, error }] = await Promise.all([
-    anonPosts().select("*", {
-      head: true,
-      count: "exact",
-    }),
-    anonPosts().select("*").limit(POSTS_PER_PAGE),
+    anonPosts()
+      .select("*", {
+        head: true,
+        count: "exact",
+      })
+      .eq("published", true),
+    anonPosts().select("*").eq("published", true).limit(POSTS_PER_PAGE),
   ]);
 
   if (error) {

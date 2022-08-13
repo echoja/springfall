@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import type { Descendant } from "slate";
+import type { Descendant, Element } from "slate";
 
 import PublicCallout from "./callout/PublicCallout";
 import PublicCodeBlock from "./code-block/PublicCodeBlock";
@@ -11,7 +11,7 @@ import { PublicLeaf } from "./Leaf";
 import PublicLink from "./link/PublicLink";
 import PublicList from "./list/PublicList";
 import Paragraph from "./paragraph/Paragraph";
-import type { RenderPublicElementProps } from "./types";
+import type { IText, RenderPublicElementProps } from "./types";
 
 export function renderPublicElement(props: RenderPublicElementProps) {
   const { element } = props;
@@ -49,31 +49,26 @@ export function renderPublic(
 ): ReactElement<Any, Any> | null {
   return (
     <>
-      {data.map((descendant, index) => {
-        if (
-          descendant.type === "ICON" ||
-          descendant.type === "TEXT" ||
-          descendant.type === "CODE_BLOCK_TEXT" ||
-          descendant.type === "NOOP"
-        ) {
+      {data.map((child, index) => {
+        if ((child as { children?: Any }).children) {
+          // render element
+          let children;
+          if ((child as { children?: Any }).children) {
+            children = renderPublic((child as { children?: Any }).children);
+          }
           return (
             // eslint-disable-next-line react/no-array-index-key
-            <PublicLeaf key={index} leaf={descendant} text={descendant}>
-              {(descendant as Any).text}
-            </PublicLeaf>
+            <PublicElement key={index} element={child as Element}>
+              {children}
+            </PublicElement>
           );
         }
 
-        // render element
-        let children;
-        if ((descendant as { children?: Any }).children) {
-          children = renderPublic((descendant as { children?: Any }).children);
-        }
         return (
           // eslint-disable-next-line react/no-array-index-key
-          <PublicElement key={index} element={descendant}>
-            {children}
-          </PublicElement>
+          <PublicLeaf key={index} leaf={child as IText} text={child as IText}>
+            {(child as Any).text}
+          </PublicLeaf>
         );
       })}
     </>
