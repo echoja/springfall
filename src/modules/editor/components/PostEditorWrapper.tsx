@@ -25,8 +25,8 @@ import type { Descendant, Selection } from "slate";
 import { Slate } from "slate-react";
 import { twMerge } from "tailwind-merge";
 
-import PropertyPanel from "../../admin-ui/property-panel/BlockPropertyPanel";
-import SwitchGroup from "../../admin-ui/property-panel/SwitchGroup";
+import SwitchGroup from "../../admin-ui/components/SwitchGroup";
+import PropertyPanel from "../../admin-ui/property-panel/PropertyPanelWrapper";
 
 import CodeBlockEditModal from "./CodeBlockEditModal";
 import ContentEditorEditable from "./ContentEditorEditable";

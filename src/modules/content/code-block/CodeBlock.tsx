@@ -1,5 +1,5 @@
 import { useMyStoreMemo } from "@common/store";
-import { convertCodeBlockToString } from "@common/util";
+import { codeNodeToString } from "@common/util";
 import { faPenToSquare } from "@fortawesome/pro-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { ICodeBlock, CodeBlockComponent } from "@modules/content/types";
@@ -57,7 +57,7 @@ const CodeBlock: CodeBlockComponent = ({ children, attributes, element }) => {
       renderedButtons={
         <Buttons>
           {element.showCopy && (
-            <CopyButton getString={() => convertCodeBlockToString(element)} />
+            <CopyButton getString={() => codeNodeToString(element)} />
           )}
           <EditButton element={element} />
         </Buttons>

@@ -1,9 +1,9 @@
 import type {
   ICodeBlock,
-  ICodeBlockElement,
-  ICodeBlockText,
+  ICodeElement,
   IText,
   CreatePostInput,
+  ICodeLine,
 } from "@modules/content/types";
 import { anonClient } from "@modules/supabase/supabase";
 import type { Post } from "@modules/supabase/supabase";
@@ -32,29 +32,20 @@ export function noopFunction(..._args: any): any {
 export const deepclone = rfdc();
 
 export function codeNodeToString(
-  node: ICodeBlock | ICodeBlockElement | ICodeBlockText | IText,
-  acc: string[]
-) {
-  if (node.type === "CODE_BLOCK_TEXT" || node.type === "TEXT") {
-    acc.push(node.text);
-  } else if (node.type === "CODE_BLOCK_ELEMENT" || node.type === "CODE_BLOCK") {
-    // newline 일 경우
-    if (
-      node.children.length === 1 &&
-      node.children[0]?.type === "CODE_BLOCK_TEXT" &&
-      node.children[0]?.isNewline
-    ) {
-      acc.push("\n");
-    } else {
-      node.children.forEach((child) => codeNodeToString(child, acc));
-    }
+  node: ICodeBlock | ICodeLine | ICodeElement | IText
+): string {
+  if (node.type === "CODE_BLOCK") {
+    return node.children.map(codeNodeToString).join("\n");
   }
-}
 
-export function convertCodeBlockToString(node: ICodeBlock) {
-  const result: string[] = [];
-  codeNodeToString(node, result);
-  return result.join("");
+  if (node.type === "CODE_LINE" || node.type === "CODE_ELEMENT") {
+    return node.children.map(codeNodeToString).join("");
+  }
+
+  if (node.type === "TEXT") {
+    return node.text;
+  }
+  return "";
 }
 
 export const authGuard = (

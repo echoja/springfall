@@ -1,4 +1,4 @@
-import { convertCodeBlockToString } from "@common/util";
+import { codeNodeToString } from "@common/util";
 import CopyButton from "@modules/admin-ui/CopyButton";
 
 import type { CodeBlockComponent } from "../types";
@@ -13,7 +13,7 @@ const PublicCodeBlock: CodeBlockComponent = ({ children, element }) => {
       renderedButtons={
         <Buttons>
           {element.showCopy && (
-            <CopyButton getString={() => convertCodeBlockToString(element)} />
+            <CopyButton getString={() => codeNodeToString(element)} />
           )}
         </Buttons>
       }

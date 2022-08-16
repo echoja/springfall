@@ -36,7 +36,7 @@ const CodeBlockLayout: React.FC<{
         <pre
           {...attributes}
           className={twMerge(
-            "p-3 bg-slate-700 text-white mb-3 relative rounded-lg shadow-lg overflow-x-auto",
+            "py-3 bg-slate-700 text-white mb-3 relative rounded-lg shadow-lg overflow-x-auto",
             className
           )}
           style={style}

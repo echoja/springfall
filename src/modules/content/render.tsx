@@ -1,6 +1,7 @@
 import Callout from "@modules/content/callout/Callout";
 import CodeBlock from "@modules/content/code-block/CodeBlock";
-import CodeBlockElement from "@modules/content/code-block/CodeBlockElement";
+import CodeElement from "@modules/content/code-block/CodeElement";
+import CodeLine from "@modules/content/code-block/CodeLine";
 import Heading from "@modules/content/heading/Heading";
 import Hr from "@modules/content/hr/Hr";
 import Image from "@modules/content/image/Image";
@@ -17,8 +18,10 @@ export function renderElement(props: RenderElementProps) {
   switch (element.type) {
     case "CODE_BLOCK":
       return <CodeBlock {...props} element={element} />;
-    case "CODE_BLOCK_ELEMENT":
-      return <CodeBlockElement {...props} element={element} />;
+    case "CODE_ELEMENT":
+      return <CodeElement {...props} element={element} />;
+    case "CODE_LINE":
+      return <CodeLine {...props} element={element} />;
     case "PARAGRAPH":
       return <Paragraph {...props} element={element} />;
     case "HEADING":

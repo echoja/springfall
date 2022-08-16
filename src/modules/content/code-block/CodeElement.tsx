@@ -1,9 +1,9 @@
 import type {
-  ICodeBlockElement,
+  ICodeElement,
   IContentElementProps,
 } from "@modules/content/types";
 
-const CodeBlockElement: React.FC<IContentElementProps<ICodeBlockElement>> = ({
+const CodeElement: React.FC<IContentElementProps<ICodeElement>> = ({
   children,
   attributes,
   element,
@@ -20,4 +20,4 @@ const CodeBlockElement: React.FC<IContentElementProps<ICodeBlockElement>> = ({
   );
 };
 
-export default CodeBlockElement;
+export default CodeElement;
