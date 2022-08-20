@@ -1,0 +1,7 @@
+.link {
+  @apply underline underline-offset-2 decoration-brand-400 hover:decoration-2 decoration-1 text-black font-semibold transition;
+}
+
+:global(.dark) .link {
+  @apply text-white;
+}
