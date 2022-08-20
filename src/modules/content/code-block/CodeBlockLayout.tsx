@@ -41,7 +41,7 @@ const CodeBlockLayout: React.FC<{
           )}
           style={style}
         >
-          <code className="relative flex flex-col max-content">{children}</code>
+          <code className="relative flex flex-col min-w-max">{children}</code>
         </pre>
         {renderedButtons}
       </div>

@@ -1,5 +1,5 @@
 import { atom, useAtom } from "jotai";
-import { useCallback, useLayoutEffect } from "react";
+import { useCallback, useEffect } from "react";
 
 export type ColorMode = "dark" | "light";
 
@@ -36,7 +36,7 @@ const colorModeAtomWithStorage = atom(
 export const useColorModeEffect = () => {
   const [colorMode] = useAtom(colorModeAtomWithStorage);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (colorMode === "light") {
       document.documentElement.classList.add("light");
       document.documentElement.classList.remove("dark");

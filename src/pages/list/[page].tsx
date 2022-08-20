@@ -2,7 +2,7 @@ import { POSTS_PER_PAGE } from "@common/config";
 import type { MonnomlogPage } from "@modules/content/types";
 import PostList from "@modules/layout/PostList";
 import type { Post } from "@modules/supabase/supabase";
-import { anonPosts } from "@modules/supabase/supabase";
+import { servicePosts } from "@modules/supabase/supabase-service";
 import Joi from "joi";
 import type { GetServerSideProps } from "next";
 import { NextSeo } from "next-seo";
@@ -28,16 +28,20 @@ export const getServerSideProps: GetServerSideProps<IListPageProps> = async ({
       notFound: true,
     };
   }
-  const [{ count }, { data: posts, error }] = await Promise.all([
-    anonPosts().select("*", {
-      head: true,
-      count: "exact",
-    }),
-    anonPosts()
-      .select("*")
-      .range(pageNum * POSTS_PER_PAGE, pageNum * (POSTS_PER_PAGE + 1) - 1),
-  ]);
 
+  const [{ count }, { data: posts, error }] = await Promise.all([
+    servicePosts()
+      .select("*", {
+        head: true,
+        count: "exact",
+      })
+      .eq("published", true),
+    servicePosts()
+      .select("*")
+      .order("created_at", { ascending: false })
+      .eq("published", true)
+      .range((pageNum - 1) * POSTS_PER_PAGE, pageNum * POSTS_PER_PAGE - 1),
+  ]);
   if (error) {
     // eslint-disable-next-line no-console
     console.error(error);
