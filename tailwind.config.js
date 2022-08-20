@@ -11,7 +11,7 @@ module.exports = {
         "-apple-system",
         "BlinkMacSystemFont",
         '"Segoe UI"',
-        "Roboto", 
+        "Roboto",
         '"Helvetica Neue"',
         "Arial",
         '"Noto Sans"',
@@ -22,7 +22,7 @@ module.exports = {
         '"Noto Color Emoji"',
       ],
       serif: [
-        '"Iropke Batang"',
+        '"MaruBuri"',
         "ui-serif",
         "Georgia",
         "Cambria",
@@ -44,7 +44,7 @@ module.exports = {
     extend: {
       colors: {
         brand: colors.emerald,
-      }
+      },
     },
   },
   plugins: [require("@tailwindcss/forms")],

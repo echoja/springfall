@@ -1,13 +1,13 @@
-import useConst from "@common/hooks/use-const";
-import { useMyStoreMemo } from "@common/store";
 import { config as fontAwesomeConfig } from "@fortawesome/fontawesome-svg-core";
+import {
+  useColorMode,
+  useColorModeEffect,
+} from "@modules/color-mode/color-mode";
 import type { MonnomlogPage } from "@modules/content/types";
 import Default from "@modules/layout/Default";
 import { DefaultSeo } from "next-seo";
 import type { AppProps } from "next/app";
 import Head from "next/head";
-import type { ReactNode } from "react";
-import { useEffect } from "react";
 
 import defaultSEOConfig from "../../next-seo.config";
 
@@ -16,44 +16,14 @@ import "@common/globals.css";
 
 fontAwesomeConfig.autoAddCss = false;
 
-const defaultGetLayout = (props: { page: ReactNode }) => (
-  <Default>{props.page}</Default>
-);
-
 interface IMyAppProps extends AppProps {
   Component: MonnomlogPage;
 }
 
 const MyApp = ({ Component, pageProps }: IMyAppProps) => {
-  const LayoutWrapper = Component.layoutWrapper ?? defaultGetLayout;
-
-  const colorMode = useMyStoreMemo((store) => {
-    return store.colorMode;
-  }, []);
-  const toggleColorMode = useMyStoreMemo((store) => {
-    return store.toggleColorMode;
-  }, []);
-
-  const firstColorMode = useConst(colorMode);
-
-  useEffect(() => {
-    if (
-      window.matchMedia("(prefers-color-scheme: dark)").matches &&
-      firstColorMode === "light"
-    ) {
-      toggleColorMode();
-    }
-  }, [toggleColorMode, firstColorMode]);
-
-  useEffect(() => {
-    if (colorMode === "light") {
-      document.documentElement.classList.add("light");
-      document.documentElement.classList.remove("dark");
-    } else {
-      document.documentElement.classList.add("dark");
-      document.documentElement.classList.remove("light");
-    }
-  }, [colorMode]);
+  const LayoutWrapper = Component.layoutWrapper ?? Default;
+  useColorModeEffect();
+  const { colorMode } = useColorMode();
 
   return (
     <>
@@ -62,12 +32,9 @@ const MyApp = ({ Component, pageProps }: IMyAppProps) => {
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, viewport-fit=cover"
         />
-        <link
-          rel="preload"
-          href="/IropkeBatangM.woff"
-          as="font"
-          type="font/woff"
-          crossOrigin="anonymous"
+        <meta
+          name="theme-color"
+          content={colorMode === "light" ? "#ffffff" : "#1e293b"}
         />
       </Head>
       <DefaultSeo {...defaultSEOConfig} />

@@ -295,11 +295,6 @@ export type ValueOf<T, K extends string | number | symbol> = T extends Record<
   ? V
   : never;
 
-export type ColorModeStore = {
-  colorMode: "dark" | "light";
-  toggleColorMode: () => void;
-};
-
 export type AdminStore = {
   codeBlockEditPath: number[];
   openCodeBlockEditModal: (path: number[]) => void;
@@ -317,7 +312,7 @@ export type AdminStore = {
   setEditingPostInitialized: (initialized: boolean) => void;
 };
 
-export type SplittedStores = ColorModeStore | AdminStore;
+export type SplittedStores = AdminStore;
 
 export type Stores = {
   [Key in Keys<SplittedStores>]: ValueOf<SplittedStores, Key>;

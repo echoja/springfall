@@ -1,25 +1,9 @@
-import type {
-  ColorModeStore,
-  AdminStore,
-  Stores,
-  Set,
-  Get,
-} from "@modules/content/types";
+import type { AdminStore, Stores, Set, Get } from "@modules/content/types";
 import type { Post } from "@modules/supabase/supabase";
 import { atom } from "jotai";
 import { useCallback } from "react";
 import create from "zustand";
 import { devtools } from "zustand/middleware";
-
-function createColorModeStore(set: Set, _get: Get): ColorModeStore {
-  return {
-    colorMode: "light",
-    toggleColorMode: () =>
-      set((state) => ({
-        colorMode: state.colorMode === "dark" ? "light" : "dark",
-      })),
-  };
-}
 
 const defaultPost: Post = {
   title: "",
@@ -69,7 +53,6 @@ function createAdminStore(set: Set, _get: Get): AdminStore {
 
 export const useMyStore = create<Stores>()(
   devtools((set, get) => ({
-    ...createColorModeStore(set, get),
     ...createAdminStore(set, get),
   }))
 );
