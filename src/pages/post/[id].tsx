@@ -57,7 +57,11 @@ export const getStaticProps: GetStaticProps<IPostViewProps> = async ({
     throw new Error("page number is not valid");
   }
 
-  const { data: post } = await servicePosts().select("*").eq("id", id).single();
+  const { data: post } = await servicePosts()
+    .select("*")
+    .eq("published", true)
+    .eq("id", id)
+    .single();
 
   if (!post) {
     return {

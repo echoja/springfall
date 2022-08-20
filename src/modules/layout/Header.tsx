@@ -14,7 +14,7 @@ const Header = () => {
       </h1>
 
       <div className="ml-auto mr-3">
-        <Link href="/list">
+        <Link href="/post/list">
           <a className="hover:underline">글 목록</a>
         </Link>
       </div>

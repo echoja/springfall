@@ -42,6 +42,7 @@ export const getServerSideProps: GetServerSideProps<IListPageProps> = async ({
       .eq("published", true)
       .range((pageNum - 1) * POSTS_PER_PAGE, pageNum * POSTS_PER_PAGE - 1),
   ]);
+
   if (error) {
     // eslint-disable-next-line no-console
     console.error(error);

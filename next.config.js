@@ -7,6 +7,20 @@ const config = {
   images: {
     domains: ["s3.ap-northeast-2.amazonaws.com"],
   },
+  async redirects() {
+    return [
+      {
+        source: "/admin/post/edit/list",
+        destination: "/admin/post/edit/list/1",
+        permanent: true,
+      },
+      {
+        source: "/post/list",
+        destination: "/post/list/1",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
