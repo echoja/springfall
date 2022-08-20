@@ -46,12 +46,14 @@
 
   article kbd {
     @apply border text-gray-500 text-xs font-bold border-gray-300 bg-gray-100 rounded py-0.5 px-1 leading-tight whitespace-nowrap;
-    box-shadow: 0px 1px 2px rgba(0, 0, 0, .1), 0 2px 1px 0 rgba(255, 255, 255, .5) inset;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1),
+      0 2px 1px 0 rgba(255, 255, 255, 0.5) inset;
   }
 
   .dark article kbd {
     @apply text-gray-200 bg-gray-600 border-gray-500;
-    box-shadow: 0px 1px 2px rgba(255, 255, 255, .5), 0 1px 1px 0 rgba(255, 255, 255, .3) inset;
+    box-shadow: 0px 1px 2px rgba(255, 255, 255, 0.5),
+      0 1px 1px 0 rgba(255, 255, 255, 0.3) inset;
   }
 
   article code {
@@ -88,8 +90,58 @@
 }
 
 @font-face {
-  font-family: "Iropke Batang";
-  src: url("/IropkeBatangM.woff") format("woff");
+  font-family: "MaruBuri";
+  font-weight: 200;
+  font-style: normal;
+  src: url("/fonts/MaruBuri-ExtraLight.eot");
+  src: url("/fonts/MaruBuri-ExtraLight.eot?#iefix") format("embedded-opentype"),
+    url("/fonts/MaruBuri-ExtraLight.woff2") format("woff2"),
+    url("/fonts/MaruBuri-ExtraLight.woff") format("woff"),
+    url("/fonts/MaruBuri-ExtraLight.ttf") format("truetype");
+  font-display: swap;
+}
+@font-face {
+  font-family: "MaruBuri";
+  font-weight: 300;
+  font-style: normal;
+  src: url("/fonts/MaruBuri-Light.eot");
+  src: url("/fonts/MaruBuri-Light.eot?#iefix") format("embedded-opentype"),
+    url("/fonts/MaruBuri-Light.woff2") format("woff2"),
+    url("/fonts/MaruBuri-Light.woff") format("woff"),
+    url("/fonts/MaruBuri-Light.ttf") format("truetype");
+  font-display: swap;
+}
+@font-face {
+  font-family: "MaruBuri";
+  font-weight: 400;
+  font-style: normal;
+  src: url("/fonts/MaruBuri-Regular.eot");
+  src: url("/fonts/MaruBuri-Regular.eot?#iefix") format("embedded-opentype"),
+    url("/fonts/MaruBuri-Regular.woff2") format("woff2"),
+    url("/fonts/MaruBuri-Regular.woff") format("woff"),
+    url("/fonts/MaruBuri-Regular.ttf") format("truetype");
+  font-display: swap;
+}
+@font-face {
+  font-family: "MaruBuri";
+  font-weight: 600;
+  font-style: normal;
+  src: url("/fonts/MaruBuri-SemiBold.eot");
+  src: url("/fonts/MaruBuri-SemiBold.eot?#iefix") format("embedded-opentype"),
+    url("/fonts/MaruBuri-SemiBold.woff2") format("woff2"),
+    url("/fonts/MaruBuri-SemiBold.woff") format("woff"),
+    url("/fonts/MaruBuri-SemiBold.ttf") format("truetype");
+  font-display: swap;
+}
+@font-face {
+  font-family: "MaruBuri";
+  font-weight: 700;
+  font-style: normal;
+  src: url("/fonts/MaruBuri-Bold.eot");
+  src: url("/fonts/MaruBuri-Bold.eot?#iefix") format("embedded-opentype"),
+    url("/fonts/MaruBuri-Bold.woff2") format("woff2"),
+    url("/fonts/MaruBuri-Bold.woff") format("woff"),
+    url("/fonts/MaruBuri-Bold.ttf") format("truetype");
   font-display: swap;
 }
 

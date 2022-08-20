@@ -32,16 +32,16 @@ const CodeBlockLayout: React.FC<{
           <CopyButton getString={() => element.label ?? ""} />
         </div>
       )}
-      <div className="relative">
+      <div className="relative -mx-4 sm:-mx-6 md:mx-0">
         <pre
           {...attributes}
           className={twMerge(
-            "py-3 bg-slate-700 text-white mb-3 relative rounded-lg shadow-lg overflow-x-auto",
+            "py-3 bg-slate-700 text-white mb-3 relative md:rounded-lg  shadow-lg overflow-x-auto",
             className
           )}
           style={style}
         >
-          <code className="relative">{children}</code>
+          <code className="relative flex flex-col min-w-max">{children}</code>
         </pre>
         {renderedButtons}
       </div>

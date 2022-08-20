@@ -4,6 +4,8 @@ import { twMerge } from "tailwind-merge";
 
 import type { IContentElementProps, ILink } from "../types";
 
+import style from "./style.module.css";
+
 const Link: React.FC<IContentElementProps<ILink>> = ({
   children,
   element,
@@ -14,7 +16,7 @@ const Link: React.FC<IContentElementProps<ILink>> = ({
     <a
       {...attributes}
       href={element.url}
-      className={twMerge(selected && "shadow-md")}
+      className={twMerge(selected && "shadow-md", style.link)}
     >
       <InlineChromiumBugfix />
       {children}

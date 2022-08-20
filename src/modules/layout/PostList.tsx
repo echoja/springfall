@@ -62,7 +62,7 @@ const PostList: React.FC<IPostListProps> = ({ count, posts, currentPage }) => {
         {!startReached && <span>...</span>}
         {pageArray.map((page) => {
           return (
-            <Link href={`/list/${page}`} key={page}>
+            <Link href={`/post/list/${page}`} key={page}>
               <a
                 className={`${
                   currentPage === page ? "font-bold" : ""
