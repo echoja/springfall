@@ -5,6 +5,8 @@ import CodeLine from "@modules/content/code-block/CodeLine";
 import Heading from "@modules/content/heading/Heading";
 import Hr from "@modules/content/hr/Hr";
 import Image from "@modules/content/image/Image";
+import ImageCaption from "@modules/content/image/ImageCaption";
+import ImageContainer from "@modules/content/image/ImageContainer";
 import Link from "@modules/content/link/Link";
 import List from "@modules/content/list/List";
 import Paragraph from "@modules/content/paragraph/Paragraph";
@@ -34,6 +36,10 @@ export function renderElement(props: RenderElementProps) {
       return <Hr {...props} element={element} />;
     case "IMAGE":
       return <Image {...props} element={element} />;
+    case "IMAGE_CONTAINER":
+      return <ImageContainer {...props} element={element} />;
+    case "IMAGE_CAPTION":
+      return <ImageCaption {...props} element={element} />;
     case "LINK":
       return <Link {...props} element={element} />;
     default:

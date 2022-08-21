@@ -1,3 +1,4 @@
+import { withImage } from "@modules/content/image/slate-api";
 import { memo } from "react";
 import { createEditor, Editor, Element } from "slate";
 import { withHistory } from "slate-history";
@@ -47,5 +48,6 @@ export function getEditor(): Editor {
     withCodeBlock,
     withLinkBlock,
     withHtml,
+    withImage,
   ].reduce((acc, plugin) => plugin(acc), createEditor());
 }

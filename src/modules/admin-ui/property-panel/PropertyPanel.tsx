@@ -1,6 +1,7 @@
 import useContentNode from "@common/hooks/use-content-node";
 import CodeBlockPropertyPanel from "@modules/content/code-block/property-panel/CodeBlockPropertyPanel";
 import CodeLinePropertyPanel from "@modules/content/code-block/property-panel/CodeLinePropertyPanel";
+import ImagePropertyPanel from "@modules/content/image/property-panel/ImagePropertyPanel";
 import type { Path } from "slate";
 
 const PropertyPanel: React.FC<{ nodePath: Path }> = ({ nodePath: path }) => {
@@ -13,6 +14,8 @@ const PropertyPanel: React.FC<{ nodePath: Path }> = ({ nodePath: path }) => {
       return <CodeBlockPropertyPanel node={node} path={path} />;
     case "CODE_LINE":
       return <CodeLinePropertyPanel node={node} path={path} />;
+    case "IMAGE":
+      return <ImagePropertyPanel node={node} path={path} />;
     default:
       return null;
   }

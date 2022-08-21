@@ -4,7 +4,7 @@ import type { MonnomlogPage } from "@modules/content/types";
 import PostEditorWrapper from "@modules/editor/components/PostEditorWrapper";
 import AdminNoLayoutWrapper from "@modules/layout/AdminNoLayout";
 import type { Post } from "@modules/supabase/supabase";
-import { anonPosts } from "@modules/supabase/supabase";
+import { servicePosts } from "@modules/supabase/supabase-service";
 import axiosGlobal from "axios";
 import { useAtom } from "jotai";
 import { useHydrateAtoms } from "jotai/utils";
@@ -31,7 +31,7 @@ export const getServerSideProps: GetServerSideProps<IPostEditProps> = async (
     };
   }
 
-  const postResponse = await anonPosts().select("*").eq("id", id).single();
+  const postResponse = await servicePosts().select("*").eq("id", id).single();
 
   if (!postResponse.data) {
     return {

@@ -7,6 +7,8 @@ import { Editor, Transforms, Range } from "slate";
 import { Editable, useSlateStatic } from "slate-react";
 import { twMerge } from "tailwind-merge";
 
+import renderPlaceholder from "../render-placeholder";
+
 // Define our own custom set of helpers.
 function isMarkActive(editor: Editor, mark: Mark) {
   const [match] = Editor.nodes(editor, {
@@ -141,6 +143,7 @@ const ContentEditorEditable: React.FC = () => {
       placeholder="내용을 입력하세요"
       renderElement={renderElement}
       renderLeaf={renderLeaf}
+      renderPlaceholder={renderPlaceholder}
       onBlur={editableOnBlur}
       onFocus={editableOnFocus}
       onKeyDown={onHandleKeyDown}
