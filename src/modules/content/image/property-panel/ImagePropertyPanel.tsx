@@ -13,7 +13,7 @@ const ImagePropertyPanel: React.FC<{ node: IImage; path: Path }> = ({
 
   return (
     <TextareaGroup
-      value={node.alt}
+      value={node.alt ?? ""}
       onChange={(value) =>
         Transforms.setNodes(editor, { alt: value }, { at: path })
       }

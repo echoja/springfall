@@ -10,8 +10,8 @@ const config = {
   async redirects() {
     return [
       {
-        source: "/admin/post/edit/list",
-        destination: "/admin/post/edit/list/1",
+        source: "/admin/post/list",
+        destination: "/admin/post/list/1",
         permanent: true,
       },
       {

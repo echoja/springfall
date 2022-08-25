@@ -1,3 +1,4 @@
+import useEditPropertyInternalValue from "@common/hooks/use-edit-property-internal-value";
 import type { ChangeEvent } from "react";
 import { useCallback } from "react";
 import { twMerge } from "tailwind-merge";
@@ -10,28 +11,38 @@ export default function TextareaGroup({
   className,
   rows = 4,
 }: {
-  value?: string;
+  value: string;
   title: string;
   onChange: (value: string) => void;
   id?: string;
   className?: string;
   rows?: number;
 }) {
+  const { internalValue, onInternalValueChange } = useEditPropertyInternalValue(
+    {
+      externalValue: value,
+      onChange,
+    }
+  );
+
   const onTextareaChange = useCallback(
     (e: ChangeEvent<HTMLTextAreaElement>) => {
-      return onChange(e.target.value);
+      return onInternalValueChange(e.target.value);
     },
-    [onChange]
+    [onInternalValueChange]
   );
   return (
     <div>
-      <label htmlFor={id} className="block text-sm font-medium text-gray-700">
+      <label
+        htmlFor={id}
+        className="block font-sans text-sm font-medium text-gray-700"
+      >
         {title}
       </label>
       <div className="mt-1">
         <textarea
           rows={rows}
-          value={value}
+          value={internalValue}
           onChange={onTextareaChange}
           id={id}
           className={twMerge(
