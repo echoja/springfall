@@ -1,0 +1,8 @@
+.code {
+  @apply text-sm px-[0.25em] py-[0.1em] rounded bg-slate-100;
+}
+
+/* TODO: dark:bg-slate-600 이 먹히지 않아서 나온 대안. 추후 수정 요망 */
+:global(.dark) .code {
+  @apply bg-slate-600;
+}
