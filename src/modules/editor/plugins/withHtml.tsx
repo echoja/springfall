@@ -30,20 +30,22 @@ const ELEMENT_TAGS: {
 };
 
 const TEXT_TAGS: { [tag: string]: (el: HTMLElement) => Partial<Text> } = {
-  CODE: () => ({ code: true }),
-  DEL: () => ({ strikethrough: true }),
-  EM: () => ({ italic: true }),
-  I: () => ({ italic: true }),
-  S: () => ({ strikethrough: true }),
-  STRONG: () => ({ bold: true }),
-  U: () => ({ underline: true }),
+  CODE: () => ({ type: "TEXT", code: true }),
+  DEL: () => ({ type: "TEXT", strikethrough: true }),
+  EM: () => ({ type: "TEXT", italic: true }),
+  I: () => ({ type: "TEXT", italic: true }),
+  S: () => ({ type: "TEXT", strikethrough: true }),
+  STRONG: () => ({ type: "TEXT", bold: true }),
+  U: () => ({ type: "TEXT", underline: true }),
 };
 
 export const deserialize = (
   el: HTMLElement
 ): (Node | string | null)[] | Node | string | null => {
   if (el.nodeType === 3) {
-    return el.textContent === "\n" ? null : el.textContent;
+    return el.textContent === "\n"
+      ? null
+      : { type: "TEXT", text: el.textContent ?? "" };
   }
   if (el.nodeType !== 1) {
     return null;
