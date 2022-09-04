@@ -59,7 +59,7 @@ export type CreatePostInput = Pick<
   "title" | "content" | "published" | "summary"
 >;
 
-export type ElementNode = StandaloneElementNode | IImageCaption | IListItem;
+export type ElementNode = StandaloneElementNode | IListItem;
 
 export type StandaloneElementNode =
   | IParagraph
@@ -70,6 +70,8 @@ export type StandaloneElementNode =
   | ICallout
   | IQuote
   | IImage
+  | IImageCaption
+  | IImageContainer
   | IList
   | IHr
   | ILink;
@@ -106,17 +108,20 @@ export type IListItem = {
 export type IImage = {
   type: "IMAGE";
   url: string;
-  size:
-    | {
-        type: "FIT";
-      }
-    | {
-        type: "EXACT";
-        width: number;
-        height: number;
-      };
+  width: number;
+  height: number;
   alt?: string;
-  children: [IImageCaption] | [EmptyText];
+  children: [EmptyText];
+};
+
+export type IImageCaption = {
+  type: "IMAGE_CAPTION";
+  children: InlineNode[];
+};
+
+export type IImageContainer = {
+  type: "IMAGE_CONTAINER";
+  children: [IImage, IImageCaption];
 };
 
 export type IQuote = {
@@ -156,11 +161,6 @@ export type ICodeExplainer = {
 
 export type IParagraph = {
   type: "PARAGRAPH";
-  children: InlineNode[];
-};
-
-export type IImageCaption = {
-  type: "IMAGE_CAPTION";
   children: InlineNode[];
 };
 

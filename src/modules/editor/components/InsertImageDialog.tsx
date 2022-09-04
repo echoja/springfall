@@ -2,6 +2,7 @@
 import { useHotkeys } from "@common/hooks/use-hotkeys";
 import { useMyStoreMemo } from "@common/store";
 import { Dialog } from "@headlessui/react";
+import getImageFileSize from "@modules/file/get-image-size";
 import { anonClient } from "@modules/supabase/supabase";
 import { nanoid } from "nanoid";
 import type { ChangeEvent } from "react";
@@ -63,55 +64,88 @@ const InsertImageDialog: React.FC<{
   }, []);
 
   const imageUploaded = useCallback(
-    (urls: string[]) => {
+    ({
+      height,
+      url,
+      width,
+    }: {
+      url: string;
+      width: number;
+      height: number;
+    }) => {
       close();
-      urls.forEach((url) => {
-        if (!selection) {
-          return;
-        }
-        const point = Editor.after(editor, selection, {
-          unit: "block",
-        });
-        Transforms.insertNodes(
-          editor,
-          [
-            {
-              type: "IMAGE",
-              url,
-              size: { type: "FIT" },
-              children: [
-                {
-                  type: "NOOP",
-                  text: "",
-                },
-              ],
-            },
-          ],
-
-          { at: point || undefined, select: true }
-        );
+      if (!selection) {
+        return;
+      }
+      const point = Editor.after(editor, selection, {
+        unit: "block",
       });
+      Transforms.insertNodes(
+        editor,
+        [
+          {
+            type: "IMAGE_CONTAINER",
+            children: [
+              {
+                type: "IMAGE",
+                url,
+                height,
+                width,
+                children: [
+                  {
+                    type: "NOOP",
+                    text: "",
+                  },
+                ],
+              },
+              {
+                type: "IMAGE_CAPTION",
+                children: [
+                  {
+                    type: "TEXT",
+                    text: "",
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+
+        { at: point || undefined, select: true }
+      );
     },
     [editor, selection, close]
   );
 
   const handleFiles = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
+    async (e: ChangeEvent<HTMLInputElement>) => {
       const fileList = e.target.files;
-      if (fileList) {
-        const files: File[] = [];
-        for (let i = 0; i < fileList.length; i += 1) {
-          const file = fileList.item(i);
-          if (file) {
-            files.push(file);
-          }
-        }
-        const promises = files.map((file) => uploadFile(file));
-
-        Promise.all(promises).then((urls) => {
-          imageUploaded(urls);
-        });
+      if (!fileList) {
+        return;
       }
+      const files: File[] = [];
+      for (let i = 0; i < fileList.length; i += 1) {
+        const file = fileList.item(i);
+        if (file) {
+          files.push(file);
+        }
+      }
+
+      const promises = files.map(async (file) => {
+        if (file.type.includes("image")) {
+          const [actualSize, url] = await Promise.all([
+            getImageFileSize(file),
+            uploadFile(file),
+          ] as const);
+
+          imageUploaded({
+            height: actualSize.height,
+            width: actualSize.width,
+            url,
+          });
+        }
+      });
+      await Promise.all(promises);
     },
     [imageUploaded]
   );

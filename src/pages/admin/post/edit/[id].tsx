@@ -4,12 +4,12 @@ import type { MonnomlogPage } from "@modules/content/types";
 import PostEditorWrapper from "@modules/editor/components/PostEditorWrapper";
 import AdminNoLayoutWrapper from "@modules/layout/AdminNoLayout";
 import type { Post } from "@modules/supabase/supabase";
-import { anonPosts } from "@modules/supabase/supabase";
+import { servicePosts } from "@modules/supabase/supabase-service";
 import axiosGlobal from "axios";
 import { useAtom } from "jotai";
 import { useHydrateAtoms } from "jotai/utils";
 import type { GetServerSideProps } from "next";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 
 const axios = axiosGlobal.create();
 
@@ -31,7 +31,7 @@ export const getServerSideProps: GetServerSideProps<IPostEditProps> = async (
     };
   }
 
-  const postResponse = await anonPosts().select("*").eq("id", id).single();
+  const postResponse = await servicePosts().select("*").eq("id", id).single();
 
   if (!postResponse.data) {
     return {
@@ -49,7 +49,12 @@ const PostEdit: MonnomlogPage<IPostEditProps> = (props) => {
   const toast = useToast();
 
   useHydrateAtoms([[editingPostAtom, postProp]]);
-  const [editingPost] = useAtom(editingPostAtom);
+  const [editingPost, setEditingPost] = useAtom(editingPostAtom);
+
+  // 페이지가 바뀔 때마다 갱신해준다.
+  useEffect(() => {
+    setEditingPost(postProp);
+  }, [postProp, setEditingPost]);
 
   const onSaveButtonClick = useCallback(async () => {
     try {

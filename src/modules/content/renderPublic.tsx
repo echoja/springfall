@@ -8,6 +8,8 @@ import PublicCodeLine from "./code-block/PublicCodeLine";
 import PublicHeading from "./heading/PublicHeading";
 import PublicHr from "./hr/PublicHr";
 import PublicImage from "./image/PublicImage";
+import PublicImageCaption from "./image/PublicImageCaption";
+import PublicImageContainer from "./image/PublicImageContainer";
 import { PublicLeaf } from "./Leaf";
 import PublicLink from "./link/PublicLink";
 import PublicList from "./list/PublicList";
@@ -35,6 +37,10 @@ export function renderPublicElement(props: RenderPublicElementProps) {
       return <PublicHr {...props} element={element} />;
     case "IMAGE":
       return <PublicImage {...props} element={element} />;
+    case "IMAGE_CAPTION":
+      return <PublicImageCaption {...props} element={element} />;
+    case "IMAGE_CONTAINER":
+      return <PublicImageContainer {...props} element={element} />;
     case "LINK":
       return <PublicLink {...props} element={element} />;
     default:

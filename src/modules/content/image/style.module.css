@@ -1,0 +1,15 @@
+.container {
+  @apply mb-6;
+}
+
+.image-wrapper {
+  @apply relative shadow-md md:shadow-lg rounded overflow-hidden;
+}
+
+.image {
+  @apply block max-w-full;
+}
+
+.caption {
+  @apply p-2 text-sm font-sans text-gray-500;
+}

@@ -1,7 +1,9 @@
 import type { IContentElementProps, IImage } from "@modules/content/types";
 import { useMemo } from "react";
-import { useFocused, useSelected } from "slate-react";
+import { useSelected } from "slate-react";
 import { twMerge } from "tailwind-merge";
+
+import style from "./style.module.css";
 
 const Image: React.FC<IContentElementProps<IImage>> = ({
   children,
@@ -9,33 +11,18 @@ const Image: React.FC<IContentElementProps<IImage>> = ({
   element,
 }) => {
   const selected = useSelected();
-  const focused = useFocused();
   const classes = useMemo(() => {
-    return selected && focused ? "ring-indigo-500" : "";
-  }, [focused, selected]);
-
-  const style = useMemo(
-    () =>
-      element.size.type === "FIT"
-        ? {}
-        : {
-            width: element.size.width,
-            height: element.size.height,
-          },
-    [element.size]
-  );
+    return selected ? "ring ring-indigo-500" : "";
+  }, [selected]);
 
   return (
-    <div {...attributes}>
-      <div contentEditable={false} className="relative">
-        <img
-          src={element.url}
-          alt={element.alt}
-          className={twMerge("block max-w-full", classes)}
-          style={{ ...style }}
-        />
-      </div>
+    <div {...attributes} className={style["image-wrapper"]}>
       {children}
+      <img
+        src={element.url}
+        alt={element.alt}
+        className={twMerge(style.image, classes)}
+      />
     </div>
   );
 };

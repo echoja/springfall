@@ -54,9 +54,7 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
 
   const setTitle = useCallback(
     (title: string) => {
-      if (editingPost) {
-        setEditingPost({ ...editingPost, title });
-      }
+      setEditingPost({ ...editingPost, title });
     },
     [setEditingPost, editingPost]
   );
@@ -129,9 +127,9 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
 
   const onSlateChange = useCallback(
     (data: Descendant[]) => {
-      setEditingPost({ ...editingPost, content: { data } });
+      setEditingPost((prev) => ({ ...prev, content: { data } }));
     },
-    [setEditingPost, editingPost]
+    [setEditingPost]
   );
 
   const tabLinks = useMemo(() => {
@@ -183,7 +181,7 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
       <div className="p-2 shadow-md">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-            <Link href="/admin/post/list">
+            <Link href="/admin/post/list/1">
               <a className="mr-2 btn">
                 <FontAwesomeIcon icon={faAngleLeft} />
               </a>
