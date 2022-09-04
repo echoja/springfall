@@ -19,11 +19,18 @@ export const parseNode = (node: Element | Text): Element | Text => {
     return node;
   }
 
+  if (node.children) {
+    return {
+      ...node,
+      // TODO: any 제거, optional 제거
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      children: node.children.map((child) => parseNode(child)) as any,
+    };
+  }
+
   return {
-    ...node,
-    // TODO: any 제거
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    children: node.children.map((child) => parseNode(child)) as any,
+    type: "TEXT",
+    text: "",
   };
 };
 
