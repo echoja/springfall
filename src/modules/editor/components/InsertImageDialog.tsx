@@ -93,7 +93,7 @@ const InsertImageDialog: React.FC<{
                 width,
                 children: [
                   {
-                    type: "NOOP",
+                    type: "TEXT",
                     text: "",
                   },
                 ],

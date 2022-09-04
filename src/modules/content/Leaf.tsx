@@ -3,6 +3,8 @@ import type {
   IRenderTextProps,
 } from "@modules/content/types";
 
+import style from "./leaf.module.css";
+
 export function Text(props: IRenderTextProps) {
   const { leaf, attributes } = props;
   let { children } = props;
@@ -16,7 +18,7 @@ export function Text(props: IRenderTextProps) {
   }
 
   if (leaf.code) {
-    children = <code>{children}</code>;
+    children = <code className={style.code}>{children}</code>;
   }
 
   if (leaf.kbd) {

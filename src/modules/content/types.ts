@@ -154,11 +154,6 @@ export type ICodeElement = {
   children: (ICodeElement | IText)[];
 };
 
-export type ICodeExplainer = {
-  line: number;
-  children: StandaloneElementNode[];
-};
-
 export type IParagraph = {
   type: "PARAGRAPH";
   children: InlineNode[];
@@ -191,8 +186,7 @@ export type IPlainText = {
   text: string;
 };
 
-export type EmptyText = {
-  type: "NOOP";
+export type EmptyText = IText & {
   text: "";
 };
 
