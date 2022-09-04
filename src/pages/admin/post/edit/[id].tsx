@@ -9,7 +9,7 @@ import axiosGlobal from "axios";
 import { useAtom } from "jotai";
 import { useHydrateAtoms } from "jotai/utils";
 import type { GetServerSideProps } from "next";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 
 const axios = axiosGlobal.create();
 
@@ -49,7 +49,12 @@ const PostEdit: MonnomlogPage<IPostEditProps> = (props) => {
   const toast = useToast();
 
   useHydrateAtoms([[editingPostAtom, postProp]]);
-  const [editingPost] = useAtom(editingPostAtom);
+  const [editingPost, setEditingPost] = useAtom(editingPostAtom);
+
+  // 페이지가 바뀔 때마다 갱신해준다.
+  useEffect(() => {
+    setEditingPost(postProp);
+  }, [postProp, setEditingPost]);
 
   const onSaveButtonClick = useCallback(async () => {
     try {
