@@ -17,7 +17,11 @@ const ImageCaption: React.FC<IContentElementProps<IImageCaption>> = ({
   const isEmpty = isEmptyImageCaption(element);
 
   return (
-    <div {...attributes} className="relative">
+    <div
+      {...attributes}
+      className="relative"
+      style={{ maxWidth: `${element.width}px` }}
+    >
       <div
         className={twMerge(selected && "ring ring-indigo-500", style.caption)}
       >

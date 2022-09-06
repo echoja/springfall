@@ -116,6 +116,7 @@ export type IImage = {
 
 export type IImageCaption = {
   type: "IMAGE_CAPTION";
+  width: number;
   children: InlineNode[];
 };
 

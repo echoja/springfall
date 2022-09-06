@@ -100,6 +100,7 @@ const InsertImageDialog: React.FC<{
               },
               {
                 type: "IMAGE_CAPTION",
+                width,
                 children: [
                   {
                     type: "TEXT",

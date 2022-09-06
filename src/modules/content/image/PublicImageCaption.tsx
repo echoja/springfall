@@ -13,7 +13,7 @@ const PublicImageCaption: React.FC<IContentElementProps<IImageCaption>> = ({
   const isEmpty = isEmptyImageCaption(element);
 
   return isEmpty ? null : (
-    <div className="relative">
+    <div className="relative" style={{ maxWidth: `${element.width}px` }}>
       <div className={style.caption}>{children}</div>
     </div>
   );

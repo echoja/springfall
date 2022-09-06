@@ -19,10 +19,18 @@ export const parseNode = (node: Element | Text): Element | Text => {
     return node;
   }
 
+  if (type === "IMAGE_CAPTION") {
+    return {
+      ...node,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      children: node.children.map((child) => parseNode(child)) as any,
+      width: node.width || 3000,
+    };
+  }
+
   if (node.children) {
     return {
       ...node,
-      // TODO: any 제거, optional 제거
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       children: node.children.map((child) => parseNode(child)) as any,
     };
