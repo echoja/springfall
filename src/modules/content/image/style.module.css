@@ -1,9 +1,10 @@
 .container {
-  @apply mb-6;
+  @apply mb-6 max-w-fit mx-auto;
 }
 
 .image-wrapper {
   @apply relative shadow-md md:shadow-lg rounded overflow-hidden;
+  font-size: 0;
 }
 
 .image {

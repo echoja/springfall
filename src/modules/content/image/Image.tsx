@@ -1,4 +1,5 @@
 import type { IContentElementProps, IImage } from "@modules/content/types";
+import NextImage from "next/image";
 import { useMemo } from "react";
 import { useSelected } from "slate-react";
 import { twMerge } from "tailwind-merge";
@@ -11,18 +12,31 @@ const Image: React.FC<IContentElementProps<IImage>> = ({
   element,
 }) => {
   const selected = useSelected();
-  const classes = useMemo(() => {
+  const selectedClass = useMemo(() => {
     return selected ? "ring ring-indigo-500" : "";
   }, [selected]);
 
   return (
-    <div {...attributes} className={style["image-wrapper"]}>
+    <div
+      {...attributes}
+      className={twMerge(style["image-wrapper"], selectedClass)}
+    >
       {children}
-      <img
-        src={element.url}
-        alt={element.alt}
-        className={twMerge(style.image, classes)}
-      />
+      {element.height && element.width ? (
+        <NextImage
+          src={element.url}
+          width={element.width}
+          height={element.height}
+          alt={element.alt}
+          className={twMerge(style.image)}
+        />
+      ) : (
+        <img
+          src={element.url}
+          alt={element.alt}
+          className={twMerge(style.image)}
+        />
+      )}
     </div>
   );
 };
