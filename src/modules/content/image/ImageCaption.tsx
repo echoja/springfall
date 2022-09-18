@@ -22,9 +22,7 @@ const ImageCaption: React.FC<IContentElementProps<IImageCaption>> = ({
       className="relative"
       style={{ maxWidth: `${element.width}px` }}
     >
-      <div
-        className={twMerge(selected && "ring ring-indigo-500", style.caption)}
-      >
+      <div className={twMerge("rounded", selected && "ring ", style.caption)}>
         {children}
       </div>
       {isEmpty ? (

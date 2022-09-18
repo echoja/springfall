@@ -16,7 +16,7 @@ const Link: React.FC<IContentElementProps<ILink>> = ({
     <a
       {...attributes}
       href={element.url}
-      className={twMerge(selected && "shadow-md", style.link)}
+      className={twMerge(selected && "ring-2", style.link)}
     >
       <InlineChromiumBugfix />
       {children}
