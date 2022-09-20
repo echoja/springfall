@@ -20,6 +20,7 @@ const Image: React.FC<IContentElementProps<IImage>> = ({
       {children}
       {element.height && element.width ? (
         <NextImage
+          draggable={false}
           src={element.url}
           width={element.width}
           height={element.height}
@@ -28,6 +29,7 @@ const Image: React.FC<IContentElementProps<IImage>> = ({
         />
       ) : (
         <img
+          draggable={false}
           src={element.url}
           alt={element.alt}
           className={twMerge(style.image)}
