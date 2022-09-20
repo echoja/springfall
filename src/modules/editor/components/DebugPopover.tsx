@@ -9,6 +9,7 @@ import {
   useMemo,
   useState,
 } from "react";
+import { useSlateSelection } from "slate-react";
 import { twMerge } from "tailwind-merge";
 
 const emptyArray: ReadonlyArray<number | string> = [];
@@ -110,6 +111,21 @@ const DebugPopover: React.FC<{ post: Post }> = ({ post }) => {
       ));
   }, [store, storeKeys]);
 
+  const [logSelection, setLogSelection] = useState(false);
+  const selection = useSlateSelection();
+  useEffect(() => {
+    if (logSelection) {
+      // eslint-disable-next-line no-console
+      console.log(
+        "selection",
+        "anchor",
+        selection?.anchor,
+        "focus",
+        selection?.focus
+      );
+    }
+  }, [logSelection, selection]);
+
   return (
     <>
       <button type="button" onClick={toggleOpen}>
@@ -125,7 +141,7 @@ const DebugPopover: React.FC<{ post: Post }> = ({ post }) => {
         leaveFrom="opacity-100 translate-y-0"
         leaveTo="opacity-0 translate-y-1"
       >
-        <div className="absolute z-10 p-3 transform -translate-x-full translate-y-1/2 bg-white border shadow-md w-80">
+        <div className="absolute z-10 p-3 text-sm transform -translate-x-full translate-y-1/2 bg-white border shadow-md w-80">
           <div className="flex flex-wrap gap-1 mb-4">
             <button
               type="button"
@@ -158,9 +174,28 @@ const DebugPopover: React.FC<{ post: Post }> = ({ post }) => {
             ))}
           </div>
           <div className="flex flex-wrap gap-1">{postButtons}</div>
-          <hr className="my-10" />
+          <hr className="my-3 -mx-3" />
+          <div className="flex items-center h-5">
+            <input
+              id="log-selection"
+              type="checkbox"
+              className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+              checked={logSelection}
+              onChange={(e) => {
+                setLogSelection(e.target.checked);
+              }}
+            />
+            <label
+              htmlFor="log-selection"
+              className="block ml-2 text-xs text-gray-900"
+            >
+              Selection
+            </label>
+          </div>
+          <hr className="my-3 -mx-3" />
+
           <p className="inline-flex gap-3 mb-3">
-            <span>store</span>{" "}
+            <span>store</span>
             <button
               type="button"
               className="px-2 py-1 text-xs text-white transition-all rounded bg-slate-700 hover:bg-slate-600"

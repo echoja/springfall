@@ -178,35 +178,40 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
 
   return (
     <div>
-      <div className="p-2 shadow-md">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center">
-            <Link href="/admin/post/list/1">
-              <a className="mr-2 btn">
-                <FontAwesomeIcon icon={faAngleLeft} />
-              </a>
-            </Link>
-            <span className="inline-flex pr-2 font-sans font-semibold">
-              글 편집
-            </span>
-            <span className="text-xs text-gray-500">
-              <kbd>⌘</kbd> (또는 <kbd>Ctrl</kbd>) + <kbd>⇧</kbd> + <kbd>P</kbd>
-              로 Command Palette 를 여세요!
-            </span>
-          </div>
-
-          <div className="inline-flex items-center">
-            {isDevelopment() && <DebugPopover post={editingPost} />}
-            <button type="button" className="btn" onClick={onSaveButtonClick}>
-              <FontAwesomeIcon icon={faFloppyDisk} />
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Editor Body */}
       {initialized && (
         <Slate value={postContentData} onChange={onSlateChange} editor={editor}>
+          <div className="p-2 shadow-md">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <Link href="/admin/post/list/1">
+                  <a className="mr-2 btn">
+                    <FontAwesomeIcon icon={faAngleLeft} />
+                  </a>
+                </Link>
+                <span className="inline-flex pr-2 font-sans font-semibold">
+                  글 편집
+                </span>
+                <span className="text-xs text-gray-500">
+                  <kbd>⌘</kbd> (또는 <kbd>Ctrl</kbd>) + <kbd>⇧</kbd> +{" "}
+                  <kbd>P</kbd>로 Command Palette 를 여세요!
+                </span>
+              </div>
+
+              <div className="inline-flex items-center">
+                {isDevelopment() && <DebugPopover post={editingPost} />}
+                <button
+                  type="button"
+                  className="btn"
+                  onClick={onSaveButtonClick}
+                >
+                  <FontAwesomeIcon icon={faFloppyDisk} />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Editor Body */}
+
           <CommandPalette onCommand={onCommand} />
 
           <InsertImageDialog selection={savedSelection} />

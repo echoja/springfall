@@ -13,7 +13,7 @@ import PublicImageContainer from "./image/PublicImageContainer";
 import { PublicLeaf } from "./Leaf";
 import PublicLink from "./link/PublicLink";
 import PublicList from "./list/PublicList";
-import Paragraph from "./paragraph/Paragraph";
+import PublicParagraph from "./paragraph/PublicParagraph";
 import type { IText, RenderPublicElementProps } from "./types";
 
 export function renderPublicElement(props: RenderPublicElementProps) {
@@ -26,7 +26,7 @@ export function renderPublicElement(props: RenderPublicElementProps) {
     case "CODE_LINE":
       return <PublicCodeLine {...props} element={element} />;
     case "PARAGRAPH":
-      return <Paragraph {...props} element={element} />;
+      return <PublicParagraph {...props} element={element} />;
     case "HEADING":
       return <PublicHeading {...props} element={element} />;
     case "LIST":
