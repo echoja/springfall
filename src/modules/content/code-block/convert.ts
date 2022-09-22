@@ -1,7 +1,27 @@
 import { deepclone } from "@common/util";
 import type { RefractorElement, RefractorRoot, Text } from "refractor";
+import { refractor } from "refractor";
+import shLang from "refractor/lang/bash";
+import htmlLang from "refractor/lang/markup";
+import pythonLang from "refractor/lang/python";
+import rustLang from "refractor/lang/rust";
+import tsxLang from "refractor/lang/tsx";
 
-import type { ICodeBlock, ICodeElement, ICodeLine, IText } from "../types";
+import type {
+  ICodeBlock,
+  ICodeElement,
+  ICodeLine,
+  IText,
+  Language,
+} from "../types";
+
+import codeNodeToString from "./code-node-to-string";
+
+refractor.register(tsxLang);
+refractor.register(rustLang);
+refractor.register(pythonLang);
+refractor.register(htmlLang);
+refractor.register(shLang);
 
 export function getText(node: Text):
   | {
@@ -212,7 +232,10 @@ export function unifyCodeBlock(codeBlock: ICodeBlock): ICodeBlock {
   };
 }
 
-export function convertToCodeBlock(root: RefractorRoot): ICodeBlock {
+export function convertRefactorToCodeBlock(
+  root: RefractorRoot,
+  lang: Language
+): ICodeBlock {
   const lines = getLines(root);
   const codeLines: ICodeLine[] = lines.map((line) => {
     return {
@@ -224,10 +247,42 @@ export function convertToCodeBlock(root: RefractorRoot): ICodeBlock {
   const codeBlock: ICodeBlock = {
     type: "CODE_BLOCK",
     children: codeLines,
-    lang: "tsx",
+    lang,
     showCopy: true,
     showLines: false,
   };
 
   return unifyCodeBlock(codeBlock);
+}
+
+export function createCodeBlock(value: string, language: Language) {
+  let formatted: RefractorRoot;
+  if (language === "plaintext") {
+    formatted = {
+      type: "root",
+      children: [
+        {
+          type: "element",
+          tagName: "span",
+          properties: {
+            className: ["token", "text-wrapper"],
+          },
+          children: [
+            {
+              type: "text",
+              value,
+            },
+          ],
+        },
+      ],
+    };
+  } else {
+    formatted = refractor.highlight(value, language);
+  }
+  return convertRefactorToCodeBlock(formatted, language);
+}
+
+export function convert(source: ICodeBlock, language: Language) {
+  const content = codeNodeToString(source);
+  return createCodeBlock(content, language);
 }

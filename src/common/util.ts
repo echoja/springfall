@@ -1,10 +1,4 @@
-import type {
-  ICodeBlock,
-  ICodeElement,
-  IText,
-  CreatePostInput,
-  ICodeLine,
-} from "@modules/content/types";
+import type { ICodeBlock, CreatePostInput } from "@modules/content/types";
 import { anonClient } from "@modules/supabase/supabase";
 import type { Post } from "@modules/supabase/supabase";
 import type { NextApiHandler } from "next";
@@ -30,23 +24,6 @@ export function noopFunction(..._args: any): any {
 }
 
 export const deepclone = rfdc();
-
-export function codeNodeToString(
-  node: ICodeBlock | ICodeLine | ICodeElement | IText
-): string {
-  if (node.type === "CODE_BLOCK") {
-    return node.children.map(codeNodeToString).join("\n");
-  }
-
-  if (node.type === "CODE_LINE" || node.type === "CODE_ELEMENT") {
-    return node.children.map(codeNodeToString).join("");
-  }
-
-  if (node.type === "TEXT") {
-    return node.text;
-  }
-  return "";
-}
 
 export const authGuard = (
   handler: NextApiHandler,

@@ -130,9 +130,11 @@ export type IQuote = {
   children: StandaloneElementNode[];
 };
 
+export type Language = "tsx" | "rust" | "python" | "html" | "plaintext" | "sh";
+
 export type ICodeBlock = {
   type: "CODE_BLOCK";
-  lang: "tsx" | "js";
+  lang: Language;
   showLines: boolean;
   showCopy: boolean;
   label?: string;

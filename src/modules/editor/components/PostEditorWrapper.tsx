@@ -83,8 +83,8 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
   const [editor] = useState(getEditor);
   const [savedSelection, setSavedSelection] = useState<Selection | null>(null);
   const [tabs, setTabs] = useState([
-    { label: "글", id: "post", current: true },
-    { label: "블록", id: "block", current: false },
+    { label: "블록", id: "block", current: true },
+    { label: "글", id: "post", current: false },
   ]);
 
   const currentTabId = useMemo(() => {

@@ -1,5 +1,4 @@
 import { useMyStoreMemo } from "@common/store";
-import { codeNodeToString } from "@common/util";
 import { faPenToSquare } from "@fortawesome/pro-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { ICodeBlock, CodeBlockComponent } from "@modules/content/types";
@@ -15,6 +14,7 @@ import {
 import CopyButton from "../../admin-ui/CopyButton";
 
 import Buttons from "./Buttons";
+import codeNodeToString from "./code-node-to-string";
 import CodeBlockLayout from "./CodeBlockLayout";
 
 const EditButton: React.FC<{
