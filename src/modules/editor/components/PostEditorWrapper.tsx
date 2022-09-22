@@ -8,6 +8,9 @@ import {
 import { faAngleLeft } from "@fortawesome/pro-regular-svg-icons";
 import { faFloppyDisk } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import SwitchGroup from "@modules/admin-ui/components/SwitchGroup";
+import PropertyPanel from "@modules/admin-ui/property-panel/PropertyPanelWrapper";
+import CodeBlockEditModal from "@modules/content/code-block/CodeBlockEditModal";
 import {
   insertLink,
   isLinkActive,
@@ -25,10 +28,6 @@ import type { Descendant, Selection } from "slate";
 import { Slate } from "slate-react";
 import { twMerge } from "tailwind-merge";
 
-import SwitchGroup from "../../admin-ui/components/SwitchGroup";
-import PropertyPanel from "../../admin-ui/property-panel/PropertyPanelWrapper";
-
-import CodeBlockEditModal from "./CodeBlockEditModal";
 import ContentEditorEditable from "./ContentEditorEditable";
 import DebugPopover from "./DebugPopover";
 

@@ -2,6 +2,8 @@ import { deepclone } from "@common/util";
 import type { RefractorElement, RefractorRoot, Text } from "refractor";
 import { refractor } from "refractor";
 import shLang from "refractor/lang/bash";
+import cppLang from "refractor/lang/cpp";
+import cssLang from "refractor/lang/css";
 import htmlLang from "refractor/lang/markup";
 import pythonLang from "refractor/lang/python";
 import rustLang from "refractor/lang/rust";
@@ -22,6 +24,8 @@ refractor.register(rustLang);
 refractor.register(pythonLang);
 refractor.register(htmlLang);
 refractor.register(shLang);
+refractor.register(cppLang);
+refractor.register(cssLang);
 
 export function getText(node: Text):
   | {

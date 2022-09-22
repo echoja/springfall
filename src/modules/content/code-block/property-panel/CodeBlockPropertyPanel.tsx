@@ -36,16 +36,20 @@ const CodeBlockPropertyPanel: React.FC<{ node: ICodeBlock; path: Path }> = ({
               value: "plaintext",
             },
             {
+              label: "HTML",
+              value: "html",
+            },
+            {
               label: "TypeScript (tsx)",
               value: "tsx",
             },
             {
-              label: "쉘 (bash)",
-              value: "sh",
+              label: "CSS",
+              value: "css",
             },
             {
-              label: "HTML",
-              value: "html",
+              label: "쉘 (bash)",
+              value: "sh",
             },
             {
               label: "Rust",
@@ -54,6 +58,10 @@ const CodeBlockPropertyPanel: React.FC<{ node: ICodeBlock; path: Path }> = ({
             {
               label: "Python",
               value: "python",
+            },
+            {
+              label: "C++",
+              value: "cpp",
             },
           ] as const
         }
