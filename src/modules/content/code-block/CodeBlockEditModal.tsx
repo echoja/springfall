@@ -1,19 +1,16 @@
 /* This example requires Tailwind CSS v2.0+ */
 import { useHotkeys } from "@common/hooks/use-hotkeys";
 import { useMyStoreMemo } from "@common/store";
-import { codeNodeToString, deepclone } from "@common/util";
+import { deepclone } from "@common/util";
 import { Dialog } from "@headlessui/react";
-import { convertToCodeBlock } from "@modules/content/code-block/convert";
+import codeNodeToString from "@modules/content/code-block/code-node-to-string";
+import { createCodeBlock } from "@modules/content/code-block/convert";
 import type { ICodeBlock } from "@modules/content/types";
 import type { ChangeEvent } from "react";
 import { useEffect, memo, useCallback, useRef, useState } from "react";
-import { refractor } from "refractor";
-import tsxLang from "refractor/lang/tsx";
 import type { NodeEntry } from "slate";
 import { Transforms, Editor } from "slate";
 import { useSlateStatic } from "slate-react";
-
-refractor.register(tsxLang);
 
 const CodeBlockEditModal: React.FC = () => {
   const uploadButtonRef = useRef(null);
@@ -42,14 +39,11 @@ const CodeBlockEditModal: React.FC = () => {
 
   const onClose = useCallback(() => {
     // TODO: 언어 정할 수 있도록 하기
-    const formatted = refractor.highlight(content, "tsx");
     try {
-      const converted = convertToCodeBlock(formatted);
-
-      // 혹시 모를 상황을 위해 얕은 복사 수행
+      const codeBlock = createCodeBlock(content, "plaintext");
       const copiedPath = deepclone(path);
       Transforms.removeNodes(editor, { at: copiedPath });
-      Transforms.insertNodes(editor, converted, { at: copiedPath });
+      Transforms.insertNodes(editor, codeBlock, { at: copiedPath });
     } catch (e) {
       // eslint-disable-next-line no-console
       console.error(e);

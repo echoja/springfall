@@ -1,4 +1,5 @@
 /* eslint-disable no-param-reassign */
+import { convert } from "@modules/content/code-block/convert";
 import type { Editor, Element, Node, Text } from "slate";
 import { Transforms } from "slate";
 import { jsx } from "slate-hyperscript";
@@ -79,7 +80,12 @@ export const deserialize = (
 
   if (ELEMENT_TAGS[nodeName]) {
     const attrs = ELEMENT_TAGS[nodeName]?.(el);
-    return jsx("element", attrs, children);
+    const result = jsx("element", attrs, children);
+    // TODO: 코드 블록 관련된 곳으로 옮기기
+    if (result.type === "CODE_BLOCK") {
+      return convert(result, "plaintext");
+    }
+    return result;
   }
 
   if (TEXT_TAGS[nodeName]) {

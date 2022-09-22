@@ -2,12 +2,9 @@ import { editingPostContentDataAtom } from "@common/store";
 import { useAtom } from "jotai";
 import { selectAtom } from "jotai/utils";
 import { useMemo } from "react";
-import type { Node } from "slate";
-import { Editor } from "slate";
-import { useSlateStatic } from "slate-react";
+import type { Node, Editor, Descendant } from "slate";
 
 export default function useContentNode(path: number[]) {
-  const editor = useSlateStatic();
   const [atom] = useAtom(
     useMemo(
       () =>
@@ -17,18 +14,17 @@ export default function useContentNode(path: number[]) {
             children: v,
           } as Editor;
 
-          return path.reduce<Node>((acc, currentPath) => {
-            if (Editor.isBlock(editor, acc) || acc.type === "EDITOR") {
-              const next = acc.children[currentPath];
-              if (next) {
-                return next;
-              }
-              throw new Error("Invalid Path");
-            }
-            throw new Error("Invalid Path");
+          const result = path.reduce<Node | undefined>((acc, currentPath) => {
+            return (acc as { children: Descendant[] })?.children?.[currentPath];
           }, reduced);
+
+          if (!result) {
+            throw new Error(`Path invalid: ${JSON.stringify(path)}`);
+          }
+
+          return result;
         }),
-      [editor, path]
+      [path]
     )
   );
 

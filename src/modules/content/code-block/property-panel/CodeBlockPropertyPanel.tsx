@@ -1,11 +1,14 @@
+import { deepclone } from "@common/util";
 import SelectGroup from "@modules/admin-ui/components/SelectGroup";
 import SwitchGroup from "@modules/admin-ui/components/SwitchGroup";
 import TextInputGroup from "@modules/admin-ui/components/TextInputGroup";
-import type { ICodeBlock } from "@modules/content/types";
+import type { ICodeBlock, Language } from "@modules/content/types";
 import React from "react";
 import type { Path } from "slate";
 import { Transforms } from "slate";
 import { useSlateStatic } from "slate-react";
+
+import { convert } from "../convert";
 
 const CodeBlockPropertyPanel: React.FC<{ node: ICodeBlock; path: Path }> = ({
   node,
@@ -15,22 +18,50 @@ const CodeBlockPropertyPanel: React.FC<{ node: ICodeBlock; path: Path }> = ({
 
   return (
     <>
-      <SelectGroup
+      <SelectGroup<Language>
         className="mb-2"
         title="언어"
         value={node.lang}
-        onChange={(v) => {
-          Transforms.setNodes(editor, { lang: v }, { at: path });
+        onChange={(lang) => {
+          const converted = convert(node, lang);
+          const copiedPath = deepclone(path);
+          Transforms.removeNodes(editor, { at: copiedPath });
+          Transforms.insertNodes(editor, converted, { at: copiedPath });
+          Transforms.select(editor, copiedPath);
         }}
         options={
           [
             {
-              label: "TypeScript",
+              label: "일반 텍스트",
+              value: "plaintext",
+            },
+            {
+              label: "HTML",
+              value: "html",
+            },
+            {
+              label: "TypeScript (tsx)",
               value: "tsx",
             },
             {
-              label: "JavaScript",
-              value: "js",
+              label: "CSS",
+              value: "css",
+            },
+            {
+              label: "쉘 (bash)",
+              value: "sh",
+            },
+            {
+              label: "Rust",
+              value: "rust",
+            },
+            {
+              label: "Python",
+              value: "python",
+            },
+            {
+              label: "C++",
+              value: "cpp",
             },
           ] as const
         }
