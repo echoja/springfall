@@ -4,7 +4,7 @@
 
 @layer base {
   html {
-    @apply transition-all duration-300 text-gray-800;
+    @apply transition-all duration-300 text-gray-800 break-words;
   }
 
   html.dark {
