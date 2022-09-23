@@ -14,6 +14,7 @@ import type { RenderElementProps, RenderLeafProps } from "slate-react";
 import type { SetOptional } from "type-fest";
 
 import { Leaf, PublicLeaf } from "./Leaf";
+import ListItem from "./list/ListItem";
 
 export function renderElement(props: RenderElementProps) {
   const { element } = props;
@@ -30,6 +31,8 @@ export function renderElement(props: RenderElementProps) {
       return <Heading {...props} element={element} />;
     case "LIST":
       return <List {...props} element={element} />;
+    case "LIST_ITEM":
+      return <ListItem {...props} element={element} />;
     case "CALLOUT":
       return <Callout {...props} element={element} />;
     case "HR":

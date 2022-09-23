@@ -1,0 +1,15 @@
+.list {
+  @apply pl-[1.5em] my-[0.8em];
+}
+
+.ordered-list {
+  @apply list-decimal;
+}
+
+.unordered-list {
+  @apply list-disc;
+}
+
+.list-item {
+  @apply my-[0.4em];
+}

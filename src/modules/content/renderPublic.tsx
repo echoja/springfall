@@ -13,6 +13,7 @@ import PublicImageContainer from "./image/PublicImageContainer";
 import { PublicLeaf } from "./Leaf";
 import PublicLink from "./link/PublicLink";
 import PublicList from "./list/PublicList";
+import PublicListItem from "./list/PublicListItem";
 import PublicParagraph from "./paragraph/PublicParagraph";
 import type { IText, RenderPublicElementProps } from "./types";
 
@@ -31,6 +32,8 @@ export function renderPublicElement(props: RenderPublicElementProps) {
       return <PublicHeading {...props} element={element} />;
     case "LIST":
       return <PublicList {...props} element={element} />;
+    case "LIST_ITEM":
+      return <PublicListItem {...props} element={element} />;
     case "CALLOUT":
       return <PublicCallout {...props} element={element} />;
     case "HR":
