@@ -32,4 +32,12 @@ export function getS3Region() {
   return process.env.MONNOMLOG_S3_REGION ?? "ap-northeast-2";
 }
 
+export function getBaseUrl() {
+  return (
+    process.env.BASE_URL ||
+    process.env.NEXT_PUBLIC_VERCEL_URL ||
+    "https://springfall.cc"
+  );
+}
+
 export const POSTS_PER_PAGE = 10;

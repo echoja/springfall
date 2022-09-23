@@ -1,3 +1,4 @@
+import { getBaseUrl } from "@common/config";
 import { faAxe } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { renderPublic } from "@modules/content/renderPublic";
@@ -7,7 +8,7 @@ import { servicePosts } from "@modules/supabase/supabase-service";
 import { format } from "date-fns";
 import Joi from "joi";
 import type { GetStaticPaths, GetStaticProps } from "next";
-import { NextSeo } from "next-seo";
+import { ArticleJsonLd, NextSeo } from "next-seo";
 import { useRouter } from "next/router";
 import { useMemo } from "react";
 
@@ -87,9 +88,53 @@ const PostView: MonnomlogPage<IPostViewProps> = ({ post }) => {
     return <div>로딩중...</div>;
   }
 
+  const url = `${getBaseUrl()}${router.asPath}`;
+
   return (
     <article>
-      <NextSeo title={post.title} />
+      <NextSeo
+        title={post.title}
+        canonical={url}
+        openGraph={{
+          title: post.title,
+          description: post.summary,
+          url,
+          type: "article",
+          article: {
+            publishedTime: post.created_at,
+            // TODO: updated_at 으로 변경
+            modifiedTime: new Date(post.updated_at).toISOString(),
+            // expirationTime: new Date(post.updated_at).setFullYear(toISOString(),
+            // section: "Section II",
+            // TODO: 작가 링크 추가
+            // authors: [
+            //   "https://www.example.com/authors/@firstnameB-lastnameB",
+            // ],
+            // TODO: add tags
+            // tags: ["Tag A", "Tag B", "Tag C"],
+          },
+          // TODO: 대표 이미지 추가
+          // images: [
+          //   {
+          //     url: "https://www.test.ie/images/cover.jpg",
+          //     width: 850,
+          //     height: 650,
+          //     alt: "Photo of text",
+          //   },
+          // ],
+        }}
+      />
+      <ArticleJsonLd
+        type="Blog"
+        url={url}
+        title={post.title}
+        // TODO: 이미지 추가
+        images={[]}
+        datePublished={new Date(post.created_at).toISOString()}
+        dateModified={new Date(post.updated_at).toISOString()}
+        authorName="봄가을"
+        description={post.summary}
+      />
       <header className="mb-5">
         <h1 className="text-3xl font-semibold">{post.title}</h1>
       </header>
