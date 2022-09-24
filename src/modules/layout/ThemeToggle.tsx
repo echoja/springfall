@@ -12,7 +12,7 @@ const ThemeToggle = () => {
 
   return (
     <button type="button" aria-label="theme toggle" onClick={toggle}>
-      <Icon />
+      <Icon className="w-12 h-12 p-4" />
     </button>
   );
 };

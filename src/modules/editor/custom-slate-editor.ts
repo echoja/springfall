@@ -8,6 +8,7 @@ import { withLinkBlock } from "../content/link/api";
 import type { CommonRenderElementProps } from "../content/types";
 
 import withHtml from "./plugins/withHtml";
+import withShortcuts from "./plugins/withShortcuts";
 
 export const selectionFilteredByType = (
   editor: Editor,
@@ -49,5 +50,6 @@ export function getEditor(): Editor {
     withLinkBlock,
     withHtml,
     withImage,
+    withShortcuts,
   ].reduce((acc, plugin) => plugin(acc), createEditor());
 }

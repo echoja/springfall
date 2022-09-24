@@ -15,7 +15,7 @@ const Header = () => {
 
       <div className="ml-auto mr-3">
         <Link href="/post/list">
-          <a className="hover:underline">글 목록</a>
+          <a className="py-4">글 목록</a>
         </Link>
       </div>
       <ThemeToggle />
