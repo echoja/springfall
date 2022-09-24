@@ -8,7 +8,6 @@ import {
 import { faAngleLeft } from "@fortawesome/pro-regular-svg-icons";
 import { faFloppyDisk } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import SwitchGroup from "@modules/admin-ui/components/SwitchGroup";
 import PropertyPanel from "@modules/admin-ui/property-panel/PropertyPanelWrapper";
 import CodeBlockEditModal from "@modules/content/code-block/CodeBlockEditModal";
 import {
@@ -30,6 +29,7 @@ import { twMerge } from "tailwind-merge";
 
 import ContentEditorEditable from "./ContentEditorEditable";
 import DebugPopover from "./DebugPopover";
+import PostPropertyPanel from "./PostPropertyPanel";
 
 interface IPostEditorWrapperProps {
   onSaveButtonClick: () => void;
@@ -71,13 +71,6 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
       setInitialized(false);
     };
   }, [setInitialized]);
-
-  const onPublishedChange = useCallback(
-    (published: boolean) => {
-      setEditingPost({ ...editingPost, published });
-    },
-    [setEditingPost, editingPost]
-  );
 
   const [editor] = useState(getEditor);
   const [savedSelection, setSavedSelection] = useState<Selection | null>(null);
@@ -245,13 +238,7 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
 
                 {/* Editor Sidebar Tabs Body */}
                 <div className="p-3">
-                  {currentTabId === "post" && (
-                    <SwitchGroup
-                      checked={editingPost.published}
-                      onChange={onPublishedChange}
-                      title="공개"
-                    />
-                  )}
+                  {currentTabId === "post" && <PostPropertyPanel />}
                   {currentTabId === "block" && <PropertyPanel />}
                 </div>
               </div>
