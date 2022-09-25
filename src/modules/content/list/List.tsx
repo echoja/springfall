@@ -9,13 +9,13 @@ const List: React.FC<IContentElementProps<IList>> = ({
 }) => {
   if (element.ordered) {
     return (
-      <ol className={`${style.list} ${style["ordered-list"]}`} {...attributes}>
+      <ol className={style.ol} {...attributes}>
         {children}
       </ol>
     );
   }
   return (
-    <ul className={`${style.list} ${style["unordered-list"]}`} {...attributes}>
+    <ul className={style.ul} {...attributes}>
       {children}
     </ul>
   );

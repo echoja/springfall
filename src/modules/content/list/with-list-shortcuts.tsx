@@ -22,7 +22,7 @@ const withListShortcuts = (editor: Editor) => {
       const range = { anchor, focus: start };
       const beforeText = Editor.string(editor, range) + text.slice(0, -1);
 
-      if ("*-+".includes(beforeText)) {
+      if (beforeText.length === 1 && "*-+".includes(beforeText)) {
         Transforms.select(editor, range);
 
         if (!Range.isCollapsed(range)) {

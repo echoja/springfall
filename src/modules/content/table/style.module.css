@@ -1,0 +1,51 @@
+.wrapper-1 {
+  @apply mt-1 mb-6 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8;
+}
+
+.wrapper-2 {
+  @apply inline-block min-w-full py-2 align-middle md:px-6 lg:px-8;
+}
+
+.wrapper-3 {
+  @apply overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg;
+}
+
+.table {
+  @apply min-w-full divide-y divide-gray-300;
+}
+
+:global(.dark) .table {
+  @apply divide-gray-500;
+}
+
+.th {
+  @apply font-sans px-3 py-2.5 text-left text-sm font-semibold text-gray-900;
+}
+
+:global(.dark) .th {
+  @apply text-gray-100;
+}
+
+.td {
+  @apply whitespace-pre-wrap px-3 py-2.5 text-sm text-gray-500;
+}
+
+:global(.dark) .td {
+  @apply text-gray-300;
+}
+
+.thead {
+  @apply bg-gray-50;
+}
+
+:global(.dark) .thead {
+  @apply bg-white/10;
+}
+
+.tbody {
+  @apply divide-y divide-gray-200 bg-white;
+}
+
+:global(.dark) .tbody {
+  @apply divide-gray-600 bg-white/5;
+}
