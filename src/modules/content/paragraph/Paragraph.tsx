@@ -1,12 +1,6 @@
-import type {
-  CommonRenderElementProps,
-  IContentElementProps,
-  IParagraph,
-} from "@modules/content/types";
+import type { IContentElementProps, IParagraph } from "@modules/content/types";
 import { useSelected } from "slate-react";
 import { twMerge } from "tailwind-merge";
-
-export type IParagraphProps = CommonRenderElementProps;
 
 const Paragraph: React.FC<IContentElementProps<IParagraph>> = ({
   attributes,

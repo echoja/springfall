@@ -1,19 +1,20 @@
-import Callout from "@modules/content/callout/Callout";
-import CodeBlock from "@modules/content/code-block/CodeBlock";
-import CodeElement from "@modules/content/code-block/CodeElement";
-import CodeLine from "@modules/content/code-block/CodeLine";
-import Heading from "@modules/content/heading/Heading";
-import Hr from "@modules/content/hr/Hr";
-import Image from "@modules/content/image/Image";
-import ImageCaption from "@modules/content/image/ImageCaption";
-import ImageContainer from "@modules/content/image/ImageContainer";
-import Link from "@modules/content/link/Link";
-import List from "@modules/content/list/List";
-import Paragraph from "@modules/content/paragraph/Paragraph";
 import type { RenderElementProps, RenderLeafProps } from "slate-react";
 
+import Callout from "./callout/Callout";
+import CodeBlock from "./code-block/CodeBlock";
+import CodeElement from "./code-block/CodeElement";
+import CodeLine from "./code-block/CodeLine";
+import Heading from "./heading/Heading";
+import Hr from "./hr/Hr";
+import Image from "./image/Image";
+import ImageCaption from "./image/ImageCaption";
+import ImageContainer from "./image/ImageContainer";
 import ImageUploadPlaceholder from "./image/ImageUploadPlaceholder";
+import Link from "./link/Link";
+import List from "./list/List";
 import ListItem from "./list/ListItem";
+import Paragraph from "./paragraph/Paragraph";
+import RawHtml from "./raw-html/RawHtml";
 import Table from "./table/Table";
 import TableCell from "./table/TableCell";
 import TableGroup from "./table/TableGroup";
@@ -59,6 +60,8 @@ export function renderElement(props: RenderElementProps) {
       return <TableRow {...props} element={element} />;
     case "TABLE_CELL":
       return <TableCell {...props} element={element} />;
+    case "RAW_HTML":
+      return <RawHtml {...props} element={element} />;
     default:
       throw new Error(`no element found: ${element.type}`);
   }

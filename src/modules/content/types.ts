@@ -59,6 +59,7 @@ export type StandaloneElementNode =
   | IList
   | IHr
   | ILink
+  | IRawHtml
   | ITable;
 
 // types to be used with StandaloneElementNode
@@ -71,6 +72,12 @@ export type PartElementNode =
   | ICodeElement
   | IImage
   | IImageCaption;
+
+export type IRawHtml = {
+  type: "RAW_HTML";
+  html: string;
+  children: [EmptyText];
+};
 
 export type ITable = {
   type: "TABLE";
@@ -247,15 +254,15 @@ export interface IConvertHeadingCommand extends IBaseCommand {
   level: 1 | 2 | 3 | 4 | 5 | 6;
 }
 
-export interface IInsertImageCommand extends IBaseCommand {
-  type: "INSERT_IMAGE";
+export interface ISimpleCommand extends IBaseCommand {
+  type: "INSERT_IMAGE" | "INSERT_RAW_HTML";
 }
 
 export type Command =
   | IConvertCommand
   | INoopCommand
   | IConvertHeadingCommand
-  | IInsertImageCommand;
+  | ISimpleCommand;
 
 export interface IUploadRequestInfo {
   url: string;

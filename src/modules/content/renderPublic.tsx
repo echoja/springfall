@@ -14,6 +14,7 @@ import PublicLink from "./link/PublicLink";
 import PublicList from "./list/PublicList";
 import PublicListItem from "./list/PublicListItem";
 import PublicParagraph from "./paragraph/PublicParagraph";
+import PublicRawHtml from "./raw-html/PublicRawHtml";
 import PublicTable from "./table/PublicTable";
 import PublicTableCell from "./table/PublicTableCell";
 import PublicTableGroup from "./table/PublicTableGroup";
@@ -58,6 +59,8 @@ export function renderPublicElement(props: CommonRenderElementProps) {
       return <PublicTableRow {...props} element={element} />;
     case "TABLE_CELL":
       return <PublicTableCell {...props} element={element} />;
+    case "RAW_HTML":
+      return <PublicRawHtml {...props} element={element} />;
     default:
       return null;
   }

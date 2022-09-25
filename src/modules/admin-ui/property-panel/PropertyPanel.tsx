@@ -3,6 +3,7 @@ import CodeBlockPropertyPanel from "@modules/content/code-block/property-panel/C
 import CodeLinePropertyPanel from "@modules/content/code-block/property-panel/CodeLinePropertyPanel";
 import ImagePropertyPanel from "@modules/content/image/property-panel/ImagePropertyPanel";
 import ListPropertyPanel from "@modules/content/list/ListPropertyPanel";
+import RawHtmlPropertyPanel from "@modules/content/raw-html/RawHtmlPropertyPanel";
 import TablePropertyPanel from "@modules/content/table/TablePropertyPanel";
 import type { Path } from "slate";
 
@@ -22,6 +23,8 @@ const PropertyPanel: React.FC<{ nodePath: Path }> = ({ nodePath: path }) => {
       return <ListPropertyPanel node={node} path={path} />;
     case "TABLE":
       return <TablePropertyPanel node={node} path={path} />;
+    case "RAW_HTML":
+      return <RawHtmlPropertyPanel node={node} path={path} />;
     default:
       return null;
   }

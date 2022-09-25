@@ -4,6 +4,10 @@ import { getDefaultNodeProps } from "@common/util";
 import { faMagnifyingGlass } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Combobox, Dialog } from "@headlessui/react";
+import {
+  insertRawHtmlItem,
+  handler as insertRawHtmlHandler,
+} from "@modules/content/raw-html/command-item";
 import type { Command, ElementNode } from "@modules/content/types";
 import { useCallback, useState, memo } from "react";
 import type { Element } from "slate";
@@ -89,7 +93,15 @@ const commands: Command[] = [
     label: "이미지 삽입",
     hiddenLabel: "insert image",
   },
+  insertRawHtmlItem,
 ];
+
+const handlers = new Map<
+  Command["type"],
+  (editor: Editor, command: Command) => void
+>();
+
+handlers.set("INSERT_RAW_HTML", insertRawHtmlHandler);
 
 interface ICommandPaletteProps {
   onCommand?: (command: Command) => void;
@@ -165,7 +177,12 @@ const CommandPalette: React.FC<ICommandPaletteProps> = ({ onCommand }) => {
           break;
         }
         default: {
-          onCommand?.(command);
+          const handler = handlers.get(command.type);
+          if (handler) {
+            handler(editor, command);
+          } else {
+            onCommand?.(command);
+          }
         }
       }
       close();
