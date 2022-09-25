@@ -17,7 +17,10 @@ const ContentEditorEditable: React.FC = () => {
     [editor]
   );
 
-  const className = useMemo(() => twMerge("p-3 min-h-[80vh]"), []);
+  const className = useMemo(
+    () => twMerge("p-4 sm:p-6 md:p-8 min-h-[80vh]"),
+    []
+  );
 
   return (
     <Editable

@@ -8,7 +8,7 @@ import {
 import { faAngleLeft } from "@fortawesome/pro-regular-svg-icons";
 import { faFloppyDisk } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import PropertyPanel from "@modules/admin-ui/property-panel/PropertyPanelWrapper";
+import PropertyPanelWrapper from "@modules/admin-ui/property-panel/PropertyPanelWrapper";
 import CodeBlockEditModal from "@modules/content/code-block/CodeBlockEditModal";
 import {
   insertLink,
@@ -212,13 +212,13 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
 
           <div className="flex items-stretch gap-2">
             {/* Editor Main */}
-            <article className="w-full max-w-screen-lg p-2 mt-6">
+            <article className="w-full max-w-screen-md mt-6">
               <input
                 type="text"
                 placeholder="제목"
                 value={editingPost.title}
                 onChange={onTitlechange}
-                className="w-full mb-3 text-xl font-semibold border-0 focus:ring-0"
+                className="w-full p-4 mb-3 text-xl font-semibold border-0 sm:p-6 md:p-8 focus:ring-0"
               />
 
               <div className="relative">
@@ -227,7 +227,7 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
             </article>
 
             {/* Editor Sidebar */}
-            <div className="flex-auto border-l w-80">
+            <div className="flex-none min-w-[20rem] border-l">
               <div className="sticky top-0 max-h-screen overflow-auto">
                 {/* Editor Sidebar Tabs */}
                 <div className="border-b border-gray-200">
@@ -239,7 +239,7 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
                 {/* Editor Sidebar Tabs Body */}
                 <div className="p-3">
                   {currentTabId === "post" && <PostPropertyPanel />}
-                  {currentTabId === "block" && <PropertyPanel />}
+                  {currentTabId === "block" && <PropertyPanelWrapper />}
                 </div>
               </div>
             </div>
