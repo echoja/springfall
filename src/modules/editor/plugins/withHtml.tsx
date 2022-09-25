@@ -5,7 +5,7 @@ import { Transforms } from "slate";
 import { jsx } from "slate-hyperscript";
 
 const ELEMENT_TAGS: {
-  [tag: string]: (el: HTMLElement) => Partial<Element>;
+  [tag: HTMLElement["nodeName"]]: (el: HTMLElement) => Partial<Element>;
 } = {
   A: (el: HTMLElement) => ({
     type: "LINK",
@@ -28,9 +28,18 @@ const ELEMENT_TAGS: {
   P: () => ({ type: "PARAGRAPH" }),
   PRE: () => ({ type: "CODE_BLOCK" }),
   UL: () => ({ type: "LIST", ordered: false }),
+  TABLE: () => ({ type: "TABLE" }),
+  THEAD: () => ({ type: "TABLE_GROUP", role: "head" }),
+  TBODY: () => ({ type: "TABLE_GROUP", role: "body" }),
+  TFOOT: () => ({ type: "TABLE_GROUP", role: "foot" }),
+  TR: () => ({ type: "TABLE_ROW" }),
+  TD: () => ({ type: "TABLE_CELL" }),
+  TH: () => ({ type: "TABLE_CELL", header: true }),
 };
 
-const TEXT_TAGS: { [tag: string]: (el: HTMLElement) => Partial<Text> } = {
+const TEXT_TAGS: {
+  [tag: HTMLElement["nodeName"]]: (el: HTMLElement) => Partial<Text>;
+} = {
   CODE: () => ({ type: "TEXT", code: true }),
   DEL: () => ({ type: "TEXT", strikethrough: true }),
   EM: () => ({ type: "TEXT", italic: true }),
@@ -42,6 +51,8 @@ const TEXT_TAGS: { [tag: string]: (el: HTMLElement) => Partial<Text> } = {
 
 export const deserialize = (
   el: HTMLElement
+  // TODO: complexity 해결
+  // eslint-disable-next-line sonarjs/cognitive-complexity
 ): (Node | string | null)[] | Node | string | null => {
   if (el.nodeType === 3) {
     return el.textContent === "\n"
@@ -58,6 +69,7 @@ export const deserialize = (
   const { nodeName } = el;
   let parent = el;
 
+  // TODO: 코드 블록 관련된 곳으로 옮기기
   if (
     nodeName === "PRE" &&
     el.childNodes[0] &&
@@ -81,10 +93,12 @@ export const deserialize = (
   if (ELEMENT_TAGS[nodeName]) {
     const attrs = ELEMENT_TAGS[nodeName]?.(el);
     const result = jsx("element", attrs, children);
+
     // TODO: 코드 블록 관련된 곳으로 옮기기
     if (result.type === "CODE_BLOCK") {
       return convert(result, "plaintext");
     }
+
     return result;
   }
 

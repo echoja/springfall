@@ -59,22 +59,53 @@ export type CreatePostInput = Pick<
   "title" | "content" | "published" | "summary"
 >;
 
-export type ElementNode = StandaloneElementNode | IListItem;
+export type ElementNode = StandaloneElementNode | PartElementNode;
 
 export type StandaloneElementNode =
   | IParagraph
   | IHeading
   | ICodeBlock
-  | ICodeElement
-  | ICodeLine
   | ICallout
   | IQuote
-  | IImage
-  | IImageCaption
   | IImageContainer
   | IList
   | IHr
-  | ILink;
+  | ILink
+  | ITable;
+
+// types to be used with StandaloneElementNode
+export type PartElementNode =
+  | IListItem
+  | ITableGroup
+  | ITableRow
+  | ITableCell
+  | ICodeLine
+  | ICodeElement
+  | IImage
+  | IImageCaption;
+
+export type ITable = {
+  type: "TABLE";
+  children: ITableGroup[];
+  header?: boolean;
+};
+
+export type ITableGroup = {
+  type: "TABLE_GROUP";
+  role: "head" | "body" | "foot";
+  children: ITableRow[];
+};
+
+export type ITableRow = {
+  type: "TABLE_ROW";
+  children: ITableCell[];
+};
+
+export type ITableCell = {
+  type: "TABLE_CELL";
+  header?: boolean;
+  children: StandaloneElementNode[];
+};
 
 export type ICallout = {
   type: "CALLOUT";
@@ -102,7 +133,7 @@ export type IList = {
 
 export type IListItem = {
   type: "LIST_ITEM";
-  children: ElementNode[];
+  children: StandaloneElementNode[];
 };
 
 export type IImage = {

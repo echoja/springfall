@@ -15,6 +15,10 @@ import type { SetOptional } from "type-fest";
 
 import { Leaf, PublicLeaf } from "./Leaf";
 import ListItem from "./list/ListItem";
+import Table from "./table/Table";
+import TableCell from "./table/TableCell";
+import TableGroup from "./table/TableGroup";
+import TableRow from "./table/TableRow";
 
 export function renderElement(props: RenderElementProps) {
   const { element } = props;
@@ -45,8 +49,16 @@ export function renderElement(props: RenderElementProps) {
       return <ImageCaption {...props} element={element} />;
     case "LINK":
       return <Link {...props} element={element} />;
+    case "TABLE":
+      return <Table {...props} element={element} />;
+    case "TABLE_GROUP":
+      return <TableGroup {...props} element={element} />;
+    case "TABLE_ROW":
+      return <TableRow {...props} element={element} />;
+    case "TABLE_CELL":
+      return <TableCell {...props} element={element} />;
     default:
-      return <pre>{JSON.stringify(element)}</pre>;
+      throw new Error(`no element found: ${element.type}`);
   }
 }
 

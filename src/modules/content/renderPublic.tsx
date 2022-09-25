@@ -15,6 +15,10 @@ import PublicLink from "./link/PublicLink";
 import PublicList from "./list/PublicList";
 import PublicListItem from "./list/PublicListItem";
 import PublicParagraph from "./paragraph/PublicParagraph";
+import PublicTable from "./table/PublicTable";
+import PublicTableCell from "./table/PublicTableCell";
+import PublicTableGroup from "./table/PublicTableGroup";
+import PublicTableRow from "./table/PublicTableRow";
 import type { IText, RenderPublicElementProps } from "./types";
 
 export function renderPublicElement(props: RenderPublicElementProps) {
@@ -46,6 +50,14 @@ export function renderPublicElement(props: RenderPublicElementProps) {
       return <PublicImageContainer {...props} element={element} />;
     case "LINK":
       return <PublicLink {...props} element={element} />;
+    case "TABLE":
+      return <PublicTable {...props} element={element} />;
+    case "TABLE_GROUP":
+      return <PublicTableGroup {...props} element={element} />;
+    case "TABLE_ROW":
+      return <PublicTableRow {...props} element={element} />;
+    case "TABLE_CELL":
+      return <PublicTableCell {...props} element={element} />;
     default:
       return null;
   }
