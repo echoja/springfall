@@ -14,3 +14,7 @@
 .caption {
   @apply p-2 text-sm font-sans text-gray-500;
 }
+
+:global(.dark) .caption {
+  @apply text-gray-400;
+}

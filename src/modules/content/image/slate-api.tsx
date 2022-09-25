@@ -24,6 +24,18 @@ export const withImage = (editor: Editor) => {
       (path[path.length - 1] as number) + 1,
     ];
 
+    // p 태그 안에 이미지가 있을 때 수정
+    // TODO: 테스트 필요
+    if (
+      node.type === "PARAGRAPH" &&
+      node.children.length === 1 &&
+      (node.children[0]?.type as ElementNode["type"]) === "IMAGE_CONTAINER"
+    ) {
+      Transforms.unwrapNodes(editor, {
+        at: path,
+      });
+    }
+
     if (node.type === "IMAGE_CONTAINER") {
       const children = node.children as ElementNode[];
       if (children.length === 1) {
