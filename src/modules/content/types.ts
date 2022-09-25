@@ -55,6 +55,7 @@ export type StandaloneElementNode =
   | ICallout
   | IQuote
   | IImageContainer
+  | IImageUploadPlaceholder
   | IList
   | IHr
   | ILink
@@ -130,6 +131,13 @@ export type IImage = {
   height: number;
   alt?: string;
   children: [EmptyText];
+};
+
+export type IImageUploadPlaceholder = {
+  type: "IMAGE_UPLOAD_PLACEHOLDER";
+  children: [EmptyText];
+  id: string;
+  externalUrl?: string;
 };
 
 export type IImageCaption = {

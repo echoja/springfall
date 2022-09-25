@@ -1,8 +1,7 @@
 /* This example requires Tailwind CSS v2.0+ */
 import { useMyStoreMemo } from "@common/store";
 import { Dialog } from "@headlessui/react";
-import getImageFileSize from "@modules/file/get-image-size";
-import { anonClient } from "@modules/supabase/supabase";
+import replaceImageUploadPlaceholder from "@modules/content/image/replace-image-upload-holder";
 import { nanoid } from "nanoid";
 import type { ChangeEvent } from "react";
 import { memo, useCallback, useRef } from "react";
@@ -10,49 +9,11 @@ import type { Selection } from "slate";
 import { Editor, Transforms } from "slate";
 import { useSlate } from "slate-react";
 
-const uploadFile = async (file: File) => {
-  // insert id to filename
-  const lastDot = file.name.lastIndexOf(".");
-  const newFilename = `${file.name.substring(
-    0,
-    lastDot
-  )}-${nanoid()}${file.name.substring(lastDot)}`;
+import { uploadImage } from "../upload";
 
-  // TODO: 이미지 업로드 Progrss Bar 구현
-  // https://github.com/supabase/storage-api/issues/23#issuecomment-973277262
-  const { data, error } = await anonClient.storage
-    .from("uploads")
-    .upload(newFilename, file, {
-      cacheControl: "3600",
-      upsert: false,
-      contentType: file.type,
-    });
-
-  if (error) {
-    throw error;
-  }
-  if (!data) {
-    throw new Error("no response data");
-  }
-
-  const { error: publicUrlError, publicURL } = anonClient.storage
-    .from("uploads")
-    .getPublicUrl(data.Key.substring(data.Key.indexOf("/") + 1));
-
-  if (publicUrlError) {
-    throw publicUrlError;
-  }
-
-  if (!publicURL) {
-    throw new Error("no publicURL");
-  }
-
-  return publicURL;
-};
-
-const InsertImageDialog: React.FC<{
-  selection: Selection | null;
-}> = ({ selection }) => {
+const InsertImageDialog: React.FC<{ selection: Selection | null }> = ({
+  selection,
+}) => {
   const uploadInputRef = useRef(null);
   const editor = useSlate();
 
@@ -63,92 +24,59 @@ const InsertImageDialog: React.FC<{
     };
   }, []);
 
-  const imageUploaded = useCallback(
-    ({
-      height,
-      url,
-      width,
-    }: {
-      url: string;
-      width: number;
-      height: number;
-    }) => {
-      close();
-      if (!selection) {
-        return;
-      }
-      const point = Editor.after(editor, selection, {
-        unit: "block",
-      });
-      Transforms.insertNodes(
-        editor,
-        [
-          {
-            type: "IMAGE_CONTAINER",
-            children: [
-              {
-                type: "IMAGE",
-                url,
-                height,
-                width,
-                children: [
-                  {
-                    type: "TEXT",
-                    text: "",
-                  },
-                ],
-              },
-              {
-                type: "IMAGE_CAPTION",
-                width,
-                children: [
-                  {
-                    type: "TEXT",
-                    text: "",
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-
-        { at: point || undefined, select: true }
-      );
-    },
-    [editor, selection, close]
-  );
-
   const handleFiles = useCallback(
-    async (e: ChangeEvent<HTMLInputElement>) => {
+    (e: ChangeEvent<HTMLInputElement>) => {
       const fileList = e.target.files;
       if (!fileList) {
         return;
       }
-      const files: File[] = [];
+
+      const uploadImageList: { id: string; file: File }[] = [];
       for (let i = 0; i < fileList.length; i += 1) {
         const file = fileList.item(i);
         if (file) {
-          files.push(file);
+          uploadImageList.push({ id: nanoid(), file });
         }
       }
 
-      const promises = files.map(async (file) => {
-        if (file.type.includes("image")) {
-          const [actualSize, url] = await Promise.all([
-            getImageFileSize(file),
-            uploadFile(file),
-          ] as const);
+      if (!selection) {
+        return;
+      }
 
-          imageUploaded({
-            height: actualSize.height,
-            width: actualSize.width,
-            url,
-          });
-        }
+      const point = Editor.after(editor, selection, {
+        unit: "block",
       });
-      await Promise.all(promises);
+
+      if (!point) {
+        return;
+      }
+
+      uploadImage(uploadImageList).forEach(({ id, promise }) => {
+        Transforms.insertNodes(
+          editor,
+          {
+            type: "IMAGE_UPLOAD_PLACEHOLDER",
+            id,
+            children: [{ type: "TEXT", text: "" }],
+          },
+          { at: point || undefined, select: true }
+        );
+
+        promise.then((result) => {
+          if (result.type === "IMAGE_UPLOAD_SUCCESS") {
+            replaceImageUploadPlaceholder(editor, {
+              id,
+              height: result.height,
+              url: result.url,
+              width: result.width,
+            });
+          }
+        });
+      });
+
+      close();
     },
-    [imageUploaded]
+    [close, editor, selection]
   );
 
   const onClose = useCallback(() => {

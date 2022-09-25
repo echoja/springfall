@@ -12,6 +12,7 @@ import List from "@modules/content/list/List";
 import Paragraph from "@modules/content/paragraph/Paragraph";
 import type { RenderElementProps, RenderLeafProps } from "slate-react";
 
+import ImageUploadPlaceholder from "./image/ImageUploadPlaceholder";
 import ListItem from "./list/ListItem";
 import Table from "./table/Table";
 import TableCell from "./table/TableCell";
@@ -42,6 +43,8 @@ export function renderElement(props: RenderElementProps) {
       return <Hr {...props} element={element} />;
     case "IMAGE":
       return <Image {...props} element={element} />;
+    case "IMAGE_UPLOAD_PLACEHOLDER":
+      return <ImageUploadPlaceholder {...props} element={element} />;
     case "IMAGE_CONTAINER":
       return <ImageContainer {...props} element={element} />;
     case "IMAGE_CAPTION":
