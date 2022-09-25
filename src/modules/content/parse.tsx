@@ -9,13 +9,12 @@ export const parseNode = (node: Element | Text): Element | Text => {
   const { type } = node;
   if (!type) {
     return {
-      text: "",
       ...(node as Text),
       type: "TEXT",
     };
   }
 
-  if (type === "TEXT" || type === "ICON") {
+  if (type === "TEXT") {
     return node;
   }
 

@@ -2,14 +2,14 @@ import CopyButton from "@modules/admin-ui/CopyButton";
 import type { ReactNode, CSSProperties } from "react";
 import { twMerge } from "tailwind-merge";
 
-import type { ICodeBlock, ICommonCodeBlockProps } from "../types";
+import type { ICodeBlock, IContentElementProps } from "../types";
 
 const CodeBlockLayout: React.FC<{
   element: ICodeBlock;
   renderedButtons: ReactNode;
   children: ReactNode;
   style?: CSSProperties;
-  attributes?: ICommonCodeBlockProps["attributes"];
+  attributes?: IContentElementProps<ICodeBlock>["attributes"];
   className?: string;
 }> = ({ renderedButtons, attributes, children, element, style, className }) => {
   return (

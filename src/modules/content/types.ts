@@ -29,30 +29,17 @@ export type MonnomlogPage<P = {}> = NextPage<P> & {
 
 export type ContentType = { data: Descendant[] };
 
-export type RenderPublicElementProps = SetOptional<
-  RenderElementProps,
-  "attributes"
->;
-
 export type CommonRenderElementProps = SetOptional<
   RenderElementProps,
   "attributes"
->;
-
-export interface ICodeBlockProps extends RenderElementProps {
-  element: ICodeBlock;
-}
-
-export interface ICommonCodeBlockProps extends CommonRenderElementProps {
-  element: ICodeBlock;
-}
+> & {
+  empty?: boolean;
+};
 
 export interface IContentElementProps<T extends Element>
   extends CommonRenderElementProps {
   element: T;
 }
-
-export type CodeBlockComponent = React.FC<ICommonCodeBlockProps>;
 
 export type CreatePostInput = Pick<
   Post,
@@ -208,7 +195,7 @@ export type ILink = {
   children: InlineNode[];
 };
 
-type InlineNode = IText | IIcon;
+type InlineNode = IText;
 
 export type IText = {
   type: "TEXT";
@@ -230,11 +217,6 @@ export type IPlainText = {
 
 export type EmptyText = IText & {
   text: "";
-};
-
-export type IIcon = {
-  type: "ICON";
-  icon: string;
 };
 
 export interface IBaseCommand {
