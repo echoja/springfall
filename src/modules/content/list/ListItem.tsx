@@ -12,10 +12,7 @@ const ListItem: React.FC<IContentElementProps<IListItem>> = ({
 
   return (
     <li
-      className={twMerge(
-        style["list-item"],
-        selected && "ring-1 ring-offset-8"
-      )}
+      className={twMerge(style.li, selected && "ring-1 ring-offset-8")}
       {...attributes}
     >
       {children}
