@@ -11,14 +11,14 @@ import Link from "@modules/content/link/Link";
 import List from "@modules/content/list/List";
 import Paragraph from "@modules/content/paragraph/Paragraph";
 import type { RenderElementProps, RenderLeafProps } from "slate-react";
-import type { SetOptional } from "type-fest";
 
-import { Leaf, PublicLeaf } from "./Leaf";
+import ImageUploadPlaceholder from "./image/ImageUploadPlaceholder";
 import ListItem from "./list/ListItem";
 import Table from "./table/Table";
 import TableCell from "./table/TableCell";
 import TableGroup from "./table/TableGroup";
 import TableRow from "./table/TableRow";
+import Text from "./text/Text";
 
 export function renderElement(props: RenderElementProps) {
   const { element } = props;
@@ -43,6 +43,8 @@ export function renderElement(props: RenderElementProps) {
       return <Hr {...props} element={element} />;
     case "IMAGE":
       return <Image {...props} element={element} />;
+    case "IMAGE_UPLOAD_PLACEHOLDER":
+      return <ImageUploadPlaceholder {...props} element={element} />;
     case "IMAGE_CONTAINER":
       return <ImageContainer {...props} element={element} />;
     case "IMAGE_CAPTION":
@@ -62,12 +64,6 @@ export function renderElement(props: RenderElementProps) {
   }
 }
 
-export function renderPublicLeaf(
-  props: SetOptional<RenderLeafProps, "attributes">
-) {
-  return <PublicLeaf {...props} />;
-}
-
 export function renderLeaf(props: RenderLeafProps) {
-  return <Leaf {...props} />;
+  return <Text {...props} />;
 }

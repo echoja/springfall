@@ -10,7 +10,6 @@ import PublicHr from "./hr/PublicHr";
 import PublicImage from "./image/PublicImage";
 import PublicImageCaption from "./image/PublicImageCaption";
 import PublicImageContainer from "./image/PublicImageContainer";
-import { PublicLeaf } from "./Leaf";
 import PublicLink from "./link/PublicLink";
 import PublicList from "./list/PublicList";
 import PublicListItem from "./list/PublicListItem";
@@ -19,9 +18,10 @@ import PublicTable from "./table/PublicTable";
 import PublicTableCell from "./table/PublicTableCell";
 import PublicTableGroup from "./table/PublicTableGroup";
 import PublicTableRow from "./table/PublicTableRow";
-import type { IText, RenderPublicElementProps } from "./types";
+import PublicText from "./text/PublicText";
+import type { IText, CommonRenderElementProps } from "./types";
 
-export function renderPublicElement(props: RenderPublicElementProps) {
+export function renderPublicElement(props: CommonRenderElementProps) {
   const { element } = props;
   switch (element.type) {
     case "CODE_BLOCK":
@@ -74,15 +74,19 @@ export function renderPublic(
   return (
     <>
       {data.map((child, index) => {
-        if ((child as { children?: Any }).children) {
+        const typedChild = child as { children?: Any };
+
+        if (typedChild.children) {
           // render element
-          let children;
-          if ((child as { children?: Any }).children) {
-            children = renderPublic((child as { children?: Any }).children);
-          }
+          const children = renderPublic(typedChild.children);
+
+          const empty =
+            typedChild.children?.length === 1 &&
+            typedChild.children?.[0]?.text === "";
+
           return (
             // eslint-disable-next-line react/no-array-index-key
-            <PublicElement key={index} element={child as Element}>
+            <PublicElement key={index} element={child as Element} empty={empty}>
               {children}
             </PublicElement>
           );
@@ -90,9 +94,9 @@ export function renderPublic(
 
         return (
           // eslint-disable-next-line react/no-array-index-key
-          <PublicLeaf key={index} leaf={child as IText} text={child as IText}>
+          <PublicText key={index} leaf={child as IText} text={child as IText}>
             {(child as Any).text}
-          </PublicLeaf>
+          </PublicText>
         );
       })}
     </>

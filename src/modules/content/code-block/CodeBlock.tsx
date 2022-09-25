@@ -1,7 +1,7 @@
 import { useMyStoreMemo } from "@common/store";
 import { faPenToSquare } from "@fortawesome/pro-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import type { ICodeBlock, CodeBlockComponent } from "@modules/content/types";
+import type { ICodeBlock, IContentElementProps } from "@modules/content/types";
 import type React from "react";
 import { useCallback } from "react";
 import {
@@ -45,7 +45,11 @@ const EditButton: React.FC<{
   );
 };
 
-const CodeBlock: CodeBlockComponent = ({ children, attributes, element }) => {
+const CodeBlock: React.FC<IContentElementProps<ICodeBlock>> = ({
+  children,
+  attributes,
+  element,
+}) => {
   const selected = useSelected();
   const focused = useFocused();
 

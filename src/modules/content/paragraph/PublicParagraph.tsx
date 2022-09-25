@@ -7,10 +7,18 @@ import type {
 export type IParagraphProps = CommonRenderElementProps;
 
 const PublicParagraph: React.FC<IContentElementProps<IParagraph>> = ({
-  attributes,
   children,
+  empty,
 }) => {
-  return <p {...attributes}>{children}</p>;
+  if (empty) {
+    return (
+      <p>
+        <br />
+      </p>
+    );
+  }
+
+  return <p>{children}</p>;
 };
 
 export default PublicParagraph;

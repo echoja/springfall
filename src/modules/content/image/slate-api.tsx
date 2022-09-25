@@ -9,7 +9,11 @@ export const withImage = (editor: Editor) => {
 
   // eslint-disable-next-line no-param-reassign
   editor.isVoid = (element: ElementNode) => {
-    return element.type === "IMAGE" || isVoid(element);
+    return (
+      element.type === "IMAGE" ||
+      element.type === "IMAGE_UPLOAD_PLACEHOLDER" ||
+      isVoid(element)
+    );
   };
 
   // eslint-disable-next-line no-param-reassign

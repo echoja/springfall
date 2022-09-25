@@ -3,13 +3,9 @@ import NextImage from "next/image";
 
 import style from "./style.module.css";
 
-const PublicImage: React.FC<IContentElementProps<IImage>> = ({
-  children,
-  element,
-}) => {
+const PublicImage: React.FC<IContentElementProps<IImage>> = ({ element }) => {
   return (
     <div className={style["image-wrapper"]}>
-      {children}
       {element.height && element.width ? (
         <NextImage
           src={element.url}

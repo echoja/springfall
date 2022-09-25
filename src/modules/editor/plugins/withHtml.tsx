@@ -1,11 +1,19 @@
 /* eslint-disable no-param-reassign */
 import { convert } from "@modules/content/code-block/convert";
+import removeImageUploadPlaceholder from "@modules/content/image/remove-image-upload-placeholder";
+import replaceImageUploadPlaceholder from "@modules/content/image/replace-image-upload-holder";
+import { nanoid } from "nanoid";
 import type { Editor, Element, Node, Text } from "slate";
 import { Transforms } from "slate";
 import { jsx } from "slate-hyperscript";
 
+import { srcToFile, uploadImage } from "../upload";
+
 const ELEMENT_TAGS: {
-  [tag: HTMLElement["nodeName"]]: (el: HTMLElement) => Partial<Element>;
+  [tag: HTMLElement["nodeName"]]: (
+    el: HTMLElement,
+    editor: Editor
+  ) => Partial<Element>;
 } = {
   A: (el: HTMLElement) => ({
     type: "LINK",
@@ -19,10 +27,36 @@ const ELEMENT_TAGS: {
   H4: () => ({ type: "HEADING", level: 4 }),
   H5: () => ({ type: "HEADING", level: 5 }),
   H6: () => ({ type: "HEADING", level: 6 }),
-  IMG: (el: HTMLElement) => ({
-    type: "IMAGE",
-    url: el.getAttribute("src") || undefined,
-  }),
+  IMG: (el: HTMLElement, editor: Editor) => {
+    const externalUrl: string | null = el.getAttribute("src");
+    const id = nanoid();
+    if (externalUrl) {
+      srcToFile(externalUrl).then((file) => {
+        if (!file) {
+          removeImageUploadPlaceholder(editor, id);
+          return;
+        }
+        uploadImage([{ id, file }]).forEach(({ promise }) => {
+          promise.then((result) => {
+            if (result.type === "IMAGE_UPLOAD_SUCCESS") {
+              replaceImageUploadPlaceholder(editor, {
+                id,
+                height: result.height,
+                url: result.url,
+                width: result.width,
+              });
+            }
+          });
+        });
+      });
+    }
+
+    return {
+      type: "IMAGE_UPLOAD_PLACEHOLDER",
+      externalUrl: externalUrl || undefined,
+      id,
+    };
+  },
   LI: () => ({ type: "LIST_ITEM" }),
   OL: () => ({ type: "LIST", ordered: true }),
   P: () => ({ type: "PARAGRAPH" }),
@@ -49,11 +83,14 @@ const TEXT_TAGS: {
   U: () => ({ type: "TEXT", underline: true }),
 };
 
+type Fragment = Node | string | null | (Node | string | null)[];
+
 export const deserialize = (
-  el: HTMLElement
+  el: HTMLElement,
+  editor: Editor
   // TODO: complexity 해결
   // eslint-disable-next-line sonarjs/cognitive-complexity
-): (Node | string | null)[] | Node | string | null => {
+): Fragment => {
   if (el.nodeType === 3) {
     return el.textContent === "\n"
       ? null
@@ -79,7 +116,7 @@ export const deserialize = (
   }
 
   let children = Array.from(parent.childNodes)
-    .map((node) => deserialize(node as HTMLElement))
+    .map((node) => deserialize(node as HTMLElement, editor))
     .flat();
 
   if (children.length === 0) {
@@ -91,7 +128,7 @@ export const deserialize = (
   }
 
   if (ELEMENT_TAGS[nodeName]) {
-    const attrs = ELEMENT_TAGS[nodeName]?.(el);
+    const attrs = ELEMENT_TAGS[nodeName]?.(el, editor);
     const result = jsx("element", attrs, children);
 
     // TODO: 코드 블록 관련된 곳으로 옮기기
@@ -118,7 +155,7 @@ const withHtml = (editor: Editor) => {
 
     if (html) {
       const parsed = new DOMParser().parseFromString(html, "text/html");
-      const fragment = deserialize(parsed.body);
+      const fragment = deserialize(parsed.body, editor);
 
       if (fragment) {
         if (Array.isArray(fragment)) {

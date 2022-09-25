@@ -1,12 +1,15 @@
 import CopyButton from "@modules/admin-ui/CopyButton";
 
-import type { CodeBlockComponent } from "../types";
+import type { IContentElementProps, ICodeBlock } from "../types";
 
 import Buttons from "./Buttons";
 import codeNodeToString from "./code-node-to-string";
 import CodeBlockLayout from "./CodeBlockLayout";
 
-const PublicCodeBlock: CodeBlockComponent = ({ children, element }) => {
+const PublicCodeBlock: React.FC<IContentElementProps<ICodeBlock>> = ({
+  children,
+  element,
+}) => {
   return (
     <CodeBlockLayout
       element={element}

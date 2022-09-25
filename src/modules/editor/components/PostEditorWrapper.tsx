@@ -218,7 +218,7 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
                 placeholder="제목"
                 value={editingPost.title}
                 onChange={onTitlechange}
-                className="w-full p-4 mb-3 text-xl font-semibold border-0 sm:p-6 md:p-8 focus:ring-0"
+                className="w-full p-4 mb-3 font-sans text-3xl font-semibold border-0 sm:p-6 md:p-8 focus:ring-0"
               />
 
               <div className="relative">
