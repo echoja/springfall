@@ -55,7 +55,7 @@ export const getStaticProps: GetStaticProps<IPostViewProps> = async ({
   const schema = Joi.number().integer().min(1);
   const result = schema.validate(id);
   if (result.error) {
-    throw new Error("page number is not valid");
+    throw new Error(`post number is not valid: ${params.id}`);
   }
 
   const { data: post } = await servicePosts()
