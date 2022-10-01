@@ -10,20 +10,6 @@ const config = {
       process.env.NEXT_PUBLIC_SUPABASE_URL.split("://")[1],
     ],
   },
-  async redirects() {
-    return [
-      {
-        source: "/admin/post/list",
-        destination: "/admin/post/list/1",
-        permanent: true,
-      },
-      {
-        source: "/post/list",
-        destination: "/post/list/1",
-        permanent: true,
-      },
-    ];
-  },
 };
 
 const withBundleAnalyzer = require("@next/bundle-analyzer")({

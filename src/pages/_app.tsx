@@ -8,6 +8,7 @@ import Default from "@modules/layout/Default";
 import { DefaultSeo } from "next-seo";
 import type { AppProps } from "next/app";
 import Head from "next/head";
+import { GoogleAnalytics } from "nextjs-google-analytics";
 
 import defaultSEOConfig from "../../next-seo.config";
 
@@ -37,6 +38,7 @@ const MyApp = ({ Component, pageProps }: IMyAppProps) => {
           content={colorMode === "light" ? "#ffffff" : "#1e293b"}
         />
       </Head>
+      <GoogleAnalytics trackPageViews />
       <DefaultSeo {...defaultSEOConfig} />
       <LayoutWrapper page={<Component {...pageProps} />} />
     </>
