@@ -1,4 +1,4 @@
-import { anonClient } from "@modules/supabase/supabase";
+import { getAnonClient } from "@modules/supabase/supabase";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
@@ -6,9 +6,9 @@ const useAdminAuth = () => {
   const router = useRouter();
 
   useEffect(() => {
-    const user = anonClient.auth.user();
+    const user = getAnonClient().auth.user();
     if (!user) {
-      anonClient.auth.signIn(
+      getAnonClient().auth.signIn(
         { provider: "github" },
         { redirectTo: window.location.href }
       );
@@ -20,7 +20,7 @@ const useAdminAuth = () => {
   }, [router]);
 
   useEffect(() => {
-    const { data, error } = anonClient.auth.onAuthStateChange(
+    const { data, error } = getAnonClient().auth.onAuthStateChange(
       (event, session) => {
         fetch("/api/auth", {
           method: "POST",

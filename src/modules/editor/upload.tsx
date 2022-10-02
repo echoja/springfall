@@ -1,5 +1,5 @@
 import getImageFileSize from "@modules/file/get-image-size";
-import { anonClient } from "@modules/supabase/supabase";
+import { getAnonClient } from "@modules/supabase/supabase";
 import { nanoid } from "nanoid";
 
 export async function srcToFile(src: string) {
@@ -36,8 +36,8 @@ export const uploadFile = async (file: File) => {
 
   // TODO: 이미지 업로드 Progrss Bar 구현
   // https://github.com/supabase/storage-api/issues/23#issuecomment-973277262
-  const { data, error } = await anonClient.storage
-    .from("uploads")
+  const { data, error } = await getAnonClient()
+    .storage.from("uploads")
     .upload(newFilename, file, {
       cacheControl: "3600",
       upsert: false,
@@ -51,8 +51,8 @@ export const uploadFile = async (file: File) => {
     throw new Error("no response data");
   }
 
-  const { error: publicUrlError, publicURL } = anonClient.storage
-    .from("uploads")
+  const { error: publicUrlError, publicURL } = getAnonClient()
+    .storage.from("uploads")
     .getPublicUrl(data.Key.substring(data.Key.indexOf("/") + 1));
 
   if (publicUrlError) {

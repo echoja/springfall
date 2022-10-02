@@ -1,5 +1,5 @@
 import type { ICodeBlock, CreatePostInput } from "@modules/content/types";
-import { anonClient } from "@modules/supabase/supabase";
+import { getAnonClient } from "@modules/supabase/supabase";
 import type { Post } from "@modules/supabase/supabase";
 import type { NextApiHandler } from "next";
 import rfdc from "rfdc";
@@ -30,7 +30,7 @@ export const authGuard = (
   message = "unauthorized"
 ): NextApiHandler => {
   return async (req, res) => {
-    const { user } = await anonClient.auth.api.getUserByCookie(req);
+    const { user } = await getAnonClient().auth.api.getUserByCookie(req);
     if (user) {
       return handler(req, res);
     }
