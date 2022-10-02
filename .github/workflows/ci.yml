@@ -1,3 +1,39 @@
+# name: CI
+
+# on:
+#   pull_request:
+#   workflow_dispatch:
+
+# jobs:
+#   Testing DB Type:
+#     runs-on: ubuntu-22.04
+
+#     env:
+#       FONTAWESOME_NPM_AUTH_TOKEN: abcdefghijklmnopqrstuvwxyz
+
+#     steps:
+#       - uses: actions/checkout@v3
+
+#       - uses: supabase/setup-cli@v1
+#         with:
+#           version: 1.5.4
+
+#       - uses: pnpm/action-setup@v2.2.2
+#         with:
+#           version: 7.11.0
+
+#       - name: 로컬 개발 환경에서 Supabase 실행
+#         run: supabase start
+
+#       - name: 생성된 타입이 최신 버전인지 체크
+#         run: |
+#           pnpm gen
+#           if [ "$(git diff --ignore-space-at-eol src/modules/supabase/supabase-types.ts | wc -l)" -gt "0" ]; then
+#             echo "아래 변경사항이 적용되지 않았습니다."
+#             git diff
+#             exit 1
+#           fi
+
 name: CI
 
 on:
@@ -5,27 +41,25 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
+  Test:
     runs-on: ubuntu-22.04
+
+    env:
+      FONTAWESOME_NPM_AUTH_TOKEN: ${{ secrets.FONTAWESOME_NPM_AUTH_TOKEN }}
+
     steps:
       - uses: actions/checkout@v3
 
-      - uses: supabase/setup-cli@v1
+      - uses: actions/setup-node@v3
         with:
-          version: 1.5.4
+          node-version: 16
 
       - uses: pnpm/action-setup@v2.2.2
         with:
           version: 7.11.0
 
-      - name: 로컬 개발 환경에서 Supabase 실행
-        run: supabase start
+      - name: package install
+        run: pnpm install
 
-      - name: 생성된 타입이 최신 버전인지 체크
-        run: |
-          pnpm gen
-          if [ "$(git diff --ignore-space-at-eol src/modules/supabase/supabase-types.ts | wc -l)" -gt "0" ]; then
-            echo "아래 변경사항이 적용되지 않았습니다."
-            git diff
-            exit 1
-          fi
+      - name: test
+        run: pnpm test:ci

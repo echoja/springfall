@@ -5,6 +5,7 @@
   "scripts": {
     "t": "vitest",
     "test": "vitest",
+    "test:ci": "vitest run",
     "dev": "next dev",
     "build": "next build && next-sitemap --config next-sitemap.config.js",
     "start": "next start",
