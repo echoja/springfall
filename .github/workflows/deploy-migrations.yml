@@ -1,4 +1,4 @@
-name: Deploy Migrations
+name: Deploy DB Migrations
 
 on:
   push:
@@ -23,5 +23,5 @@ jobs:
           version: 1.5.4
 
       - run: |
-          supabase link --project-ref $PRODUCTION_PROJECT_ID
+          supabase link --project-ref $SUPABASE_PROJECT_ID
           supabase db push
