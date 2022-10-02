@@ -43,8 +43,11 @@ supabase start
 
 이 migration은 추후 Github Actions에서 push됩니다.
 
-Github Actions 에서 push 되기 위해서는 다음 세 가지 secrets 설정이 필요합니다.
+Github Actions 에서 push 되기 위해서는 다음 secrets 설정이 필요합니다.
 
+저장소 → Settings → Secrets → Actions → 우측 상단 New repository secret 으로 추가.
+
+- `FONTAWESOME_NPM_AUTH_TOKEN`
 - `SUPABASE_ACCESS_TOKEN`
 - `SUPABASE_DB_PASSWORD`
 - `SUPABASE_PROJECT_ID`
