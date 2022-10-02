@@ -23,5 +23,5 @@ jobs:
           version: 1.5.4
 
       - run: |
-          supabase link --project-ref $SUPABASE_PROJECT_ID
+          supabase link --project-ref $SUPABASE_PROJECT_ID --password $SUPABASE_DB_PASSWORD
           supabase db push
