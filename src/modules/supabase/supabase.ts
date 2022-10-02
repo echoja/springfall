@@ -3,7 +3,7 @@
 import type { ContentType } from "@modules/content/types";
 import { createClient } from "@supabase/supabase-js";
 
-import type { definitions } from "./supabase-types";
+import type { Database } from "./supabase-types";
 
 // TODO: move to config file
 export function getSupabaseAnonKey() {
@@ -22,7 +22,7 @@ export function getSupabaseServiceRoleKey() {
 
 export const anonClient = createClient(getSupabaseUrl(), getSupabaseAnonKey());
 
-export type Post = definitions["posts"] & {
+export type Post = Database["public"]["Tables"]["posts"]["Row"] & {
   content: ContentType;
 };
 
