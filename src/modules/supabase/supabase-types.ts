@@ -12,37 +12,37 @@ export interface Database {
     Tables: {
       posts: {
         Row: {
-          user_id: string;
+          id: number;
           created_at: string;
           updated_at: string;
-          removed_at: string;
+          removed_at: string | null;
           published: boolean;
           summary: string;
           title: string;
+          user_id: string;
           content: Json;
-          id: number;
         };
         Insert: {
-          user_id: string;
+          id?: number;
           created_at?: string;
           updated_at?: string;
-          removed_at?: string;
+          removed_at?: string | null;
           published?: boolean;
           summary?: string;
           title?: string;
+          user_id: string;
           content?: Json;
-          id?: number;
         };
         Update: {
-          user_id?: string;
+          id?: number;
           created_at?: string;
           updated_at?: string;
-          removed_at?: string;
+          removed_at?: string | null;
           published?: boolean;
           summary?: string;
           title?: string;
+          user_id?: string;
           content?: Json;
-          id?: number;
         };
       };
     };
