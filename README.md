@@ -23,6 +23,32 @@
 pnpm dev
 ```
 
+## DB 관련 세팅
+
+- [supabase cli](https://supabase.com/docs/guides/cli)를 활용합니다.
+- [Docker](https://www.docker.com/)가 설치되어 있어야 합니다.
+- Git이 설치되어 있어야 합니다.
+
+```bash
+supabase init # 현재 저장소에서 한 번도 supabase 관련 작업을 한 적이 없을 때. supabse 폴더 생성됨.
+supabase login
+supabase link --project-ref $SUPABASE_PROJECT_ID --password $SUPABASE_DB_PASSWORD
+```
+
+현재 migrations 를 기반으로 DB 및 스튜디오를 시작합니다. 스튜디오에서 일어나는 모든 변화는 migrations로 기록됩니다.
+
+```bash
+supabase start
+```
+
+이 migration은 추후 Github Actions에서 push됩니다.
+
+Github Actions 에서 push 되기 위해서는 다음 세 가지 secrets 설정이 필요합니다.
+
+- `SUPABASE_ACCESS_TOKEN`
+- `SUPABASE_DB_PASSWORD`
+- `SUPABASE_PROJECT_ID`
+
 ## 개발 유의사항
 
 - [Next.js](https://nextjs.org)

@@ -4,8 +4,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AdminSwitch from "@modules/admin-ui/components/AdminSwitch";
 import type { MonnomlogPage } from "@modules/content/types";
 import AdminLayoutWrapper from "@modules/layout/AdminLayout";
+import type { Post } from "@modules/supabase/supabase";
 import { servicePosts } from "@modules/supabase/supabase-service";
-import type { definitions } from "@modules/supabase/supabase-types";
 import axiosGlobal from "axios";
 import { format } from "date-fns";
 import Joi from "joi";
@@ -15,8 +15,6 @@ import { useRouter } from "next/router";
 import { useCallback } from "react";
 
 const axios = axiosGlobal.create();
-
-type Post = definitions["posts"];
 
 interface IPostListProps {
   posts: Post[];
