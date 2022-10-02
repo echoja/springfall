@@ -56,7 +56,7 @@ export const getServerSideProps: GetServerSideProps<IPostListProps> = async ({
     };
   }
 
-  if (!posts || posts.length === 0 || !count) {
+  if (!posts || (pageNum !== 1 && posts.length === 0) || count === null) {
     return {
       notFound: true,
     };
@@ -80,7 +80,7 @@ const PostList: MonnomlogPage<IPostListProps> = ({ posts, count }) => {
 
   return (
     <div>
-      <div className="flex flex-col mt-8">
+      <div className="flex flex-col mt-8 mb-5">
         <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
             <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
@@ -160,7 +160,7 @@ const PostList: MonnomlogPage<IPostListProps> = ({ posts, count }) => {
                 <tfoot>
                   <tr>
                     <td colSpan={2}>
-                      <p>
+                      <p className="px-3 py-2">
                         총 <strong>{count}</strong> 개
                       </p>
                     </td>
@@ -171,15 +171,22 @@ const PostList: MonnomlogPage<IPostListProps> = ({ posts, count }) => {
           </div>
         </div>
       </div>
-      <hr />
-      <Link href="/admin/post/new">
-        <a>
-          <div className="mr-2">
-            <FontAwesomeIcon icon={faPen} />
-          </div>
-          <span>새 글 쓰기</span>
-        </a>
-      </Link>
+
+      <div className="flex justify-end">
+        <Link href="/admin/post/new">
+          <button
+            type="button"
+            className="inline-flex items-center px-4 py-2 font-sans text-sm font-medium text-white border border-transparent rounded-md shadow-sm bg-brand-600 hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2"
+          >
+            <FontAwesomeIcon
+              icon={faPen}
+              className="w-4 h-4 mr-2 -ml-1"
+              aria-hidden="true"
+            />
+            새 글 쓰기
+          </button>
+        </Link>
+      </div>
     </div>
   );
 };

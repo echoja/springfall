@@ -51,7 +51,7 @@ export const getServerSideProps: GetServerSideProps<IListPageProps> = async ({
     };
   }
 
-  if (!posts || posts.length === 0 || !count) {
+  if (!posts || (pageNum !== 1 && posts.length === 0) || count === null) {
     return {
       notFound: true,
     };
