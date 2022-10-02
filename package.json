@@ -11,7 +11,7 @@
     "analyze": "ANALYZE=true yarn build",
     "lint": "next lint",
     "type-check": "tsc --noEmit",
-    "codegen": "cat src/modules/supabase/supabase-types-beginning.txt > src/modules/supabase/supabase-types.ts && openapi-typescript \"${NEXT_PUBLIC_SUPABASE_URL}/rest/v1/?apikey=${NEXT_PUBLIC_SUPABASE_ANON_KEY}\" >> src/modules/supabase/supabase-types.ts",
+    "gen": "cat src/modules/supabase/supabase-types-beginning.txt > src/modules/supabase/supabase-types.ts && supabase gen types typescript --local >> src/modules/supabase/supabase-types.ts && prettier --write src/modules/supabase/supabase-types.ts",
     "release": "standard-version",
     "push-release": "git push --follow-tags origin main",
     "prepare": "husky install",
