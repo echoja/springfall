@@ -41,7 +41,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  Test:
+  test:
     runs-on: ubuntu-22.04
 
     env:
