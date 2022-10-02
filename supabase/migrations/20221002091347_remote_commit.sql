@@ -79,7 +79,7 @@ CREATE TABLE "public"."posts" (
 );
 
 
-ALTER TABLE "public"."posts" OWNER TO "supabase_admin";
+ALTER TABLE "public"."posts" OWNER TO "postgres";
 
 --
 -- Name: posts_id_seq; Type: SEQUENCE; Schema: public; Owner: supabase_admin
