@@ -41,6 +41,7 @@ const PostList: React.FC<IPostListProps> = ({ count, posts, currentPage }) => {
     <div>
       <h1 className="mb-5 text-3xl font-semibold">글 목록</h1>
       <div className="mb-5">
+        {posts.length === 0 ? <div>글이 없습니다.</div> : null}
         {posts.map((post) => (
           <article key={post.id}>
             <Link href={`/post/${post.id}`} passHref>

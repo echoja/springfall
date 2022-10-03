@@ -11,8 +11,10 @@ export default function useToast() {
       description?: string;
       status?: "error" | "success" | "info";
     }) => {
-      // eslint-disable-next-line no-alert
-      alert(`${status}: ${title} - ${description}`);
+      if (typeof window !== "undefined") {
+        // eslint-disable-next-line no-alert
+        window.alert(`${status}: ${title} - ${description}`);
+      }
     },
     []
   );

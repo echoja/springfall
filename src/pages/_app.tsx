@@ -1,4 +1,5 @@
 import { config as fontAwesomeConfig } from "@fortawesome/fontawesome-svg-core";
+import { useUpdateSession } from "@modules/auth/use-session";
 import {
   useColorMode,
   useColorModeEffect,
@@ -25,6 +26,7 @@ const MyApp = ({ Component, pageProps }: IMyAppProps) => {
   const LayoutWrapper = Component.layoutWrapper ?? Default;
   useColorModeEffect();
   const { colorMode } = useColorMode();
+  useUpdateSession();
 
   return (
     <>

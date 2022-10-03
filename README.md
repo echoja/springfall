@@ -41,13 +41,23 @@ supabase link --project-ref $SUPABASE_PROJECT_ID --password $SUPABASE_DB_PASSWOR
 supabase start
 ```
 
+1. 스튜디오에서 DB 스키마 등을 수정.
+2. `pnpm sb-diff <filename>` 명령으로 migrations 파일 생성
+3. 해당 마이그레이션 파일에 변경사항이 잘 적용되었는지 체크
+4. `pnpm sb-push` 명령으로 변경사항을 스테이징에 적용
+
 이 migration은 추후 Github Actions에서 push됩니다.
 
-Github Actions 에서 push 되기 위해서는 다음 세 가지 secrets 설정이 필요합니다.
+Github Actions 에서 push 되기 위해서는 다음 secrets 설정이 필요합니다.
 
+저장소 → Settings → Secrets → Actions → 우측 상단 New repository secret 으로 추가.
+
+- `FONTAWESOME_NPM_AUTH_TOKEN`
 - `SUPABASE_ACCESS_TOKEN`
 - `SUPABASE_DB_PASSWORD`
 - `SUPABASE_PROJECT_ID`
+
+⚠️ supabase 버전 업데이트 할 때마다 `.github/workflows` 의 버전도 수정해주기~
 
 ## 개발 유의사항
 

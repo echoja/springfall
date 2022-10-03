@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { renderPublic } from "@modules/content/renderPublic";
 import type { MonnomlogPage } from "@modules/content/types";
 import type { Post } from "@modules/supabase/supabase";
-import { servicePosts } from "@modules/supabase/supabase-service";
+import { getServiceClient } from "@modules/supabase/supabase-service";
 import { format } from "date-fns";
 import Joi from "joi";
 import type { GetStaticPaths, GetStaticProps } from "next";
@@ -17,7 +17,8 @@ interface IPostViewProps {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const { data, error } = await servicePosts()
+  const { data, error } = await getServiceClient()
+    .from("posts")
     .select("id")
     .eq("published", true);
 
@@ -58,7 +59,8 @@ export const getStaticProps: GetStaticProps<IPostViewProps> = async ({
     throw new Error(`post number is not valid: ${params.id}`);
   }
 
-  const { data: post } = await servicePosts()
+  const { data: post } = await getServiceClient()
+    .from("posts")
     .select("*")
     .eq("published", true)
     .eq("id", id)
@@ -70,7 +72,7 @@ export const getStaticProps: GetStaticProps<IPostViewProps> = async ({
     };
   }
 
-  return { props: { post } };
+  return { props: { post: post as Post } };
 };
 
 const PostView: MonnomlogPage<IPostViewProps> = ({ post }) => {

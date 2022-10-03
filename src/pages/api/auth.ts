@@ -1,6 +1,6 @@
-import { getAnonClient } from "@modules/supabase/supabase";
+// import { getAnonClient } from "@modules/supabase/supabase";
 import type { NextApiRequest, NextApiResponse } from "next";
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
-  getAnonClient().auth.api.setAuthCookie(req, res);
+export default async (_req: NextApiRequest, _res: NextApiResponse) => {
+  // getAnonClient().auth.api.setAuthCookie(req, res);
 };

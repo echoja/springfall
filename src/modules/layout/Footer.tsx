@@ -1,23 +1,36 @@
-import { faTwitter } from "@fortawesome/free-brands-svg-icons";
+import { faGithub, faTwitter } from "@fortawesome/free-brands-svg-icons";
 import { faSmile } from "@fortawesome/pro-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { memo } from "react";
 
+const socialLinks = [
+  {
+    link: "https://twitter.com/springfall_cc",
+    icon: faTwitter,
+  },
+  {
+    link: "https://github.com/monnomlog-donkasu/monnomlog-alpha",
+    icon: faGithub,
+  },
+];
+
 const Footer = () => {
   return (
     <footer className="text-center">
-      <div className="mb-4">
-        <a
-          href="https://twitter.com/springfall_cc"
-          target="_blank"
-          rel="noreferrer"
-        >
-          {/* <Tooltip hasArrow aria-label="트위터" label="트위터" placement="top"> */}
-          <FontAwesomeIcon icon={faTwitter} size="lg" />
-          {/* </Tooltip> */}
-        </a>
+      <div className="flex items-center justify-center mb-4">
+        {socialLinks.map(({ link, icon }) => (
+          <a
+            key={link}
+            href={link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center w-12 h-12"
+          >
+            <FontAwesomeIcon icon={icon} />
+          </a>
+        ))}
       </div>
-      <p className="text-sm mb-4">
+      <p className="mb-4 text-sm">
         오늘도 행복한 하루 되세요 # <FontAwesomeIcon icon={faSmile} />
         {" # "}
         {new Date().getFullYear()}

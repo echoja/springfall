@@ -25,7 +25,6 @@ const ContentEditorEditable: React.FC = () => {
   return (
     <Editable
       className={className}
-      placeholder="내용을 입력하세요"
       renderElement={renderElement}
       renderLeaf={renderLeaf}
       renderPlaceholder={renderPlaceholder}

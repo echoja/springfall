@@ -1,11 +1,17 @@
 import { createClient } from "@supabase/supabase-js";
 
-import type { Post } from "./supabase";
 import { getSupabaseServiceRoleKey, getSupabaseUrl } from "./supabase";
+import type { Database } from "./supabase-types";
 
-export const serviceClient = createClient(
-  getSupabaseUrl(),
-  getSupabaseServiceRoleKey()
-);
+let serviceClient: ReturnType<typeof createClient<Database>> | null = null;
 
-export const servicePosts = () => serviceClient.from<Post>("posts");
+export function getServiceClient() {
+  if (!serviceClient) {
+    serviceClient = createClient<Database>(
+      getSupabaseUrl(),
+      getSupabaseServiceRoleKey()
+    );
+  }
+
+  return serviceClient;
+}

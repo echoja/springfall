@@ -5,14 +5,21 @@ import type { MonnomlogPage } from "@modules/content/types";
 import PostEditorWrapper from "@modules/editor/components/PostEditorWrapper";
 import AdminNoLayoutWrapper from "@modules/layout/AdminNoLayout";
 import type { Post } from "@modules/supabase/supabase";
-import { servicePosts } from "@modules/supabase/supabase-service";
-import axiosGlobal from "axios";
+import { getAnonClient } from "@modules/supabase/supabase";
+import { getServiceClient } from "@modules/supabase/supabase-service";
 import { useAtom } from "jotai";
 import { useHydrateAtoms } from "jotai/utils";
 import type { GetServerSideProps } from "next";
 import { useCallback, useEffect } from "react";
 
-const axios = axiosGlobal.create();
+function handleSave(id: number, post: Post) {
+  return getAnonClient()
+    .from("posts")
+    .update(post)
+    .eq("id", id)
+    .select()
+    .single();
+}
 
 interface IPostEditProps {
   post: Post;
@@ -32,7 +39,11 @@ export const getServerSideProps: GetServerSideProps<IPostEditProps> = async (
     };
   }
 
-  const postResponse = await servicePosts().select("*").eq("id", id).single();
+  const postResponse = await getServiceClient()
+    .from("posts")
+    .select("*")
+    .eq("id", id)
+    .single();
 
   if (!postResponse.data) {
     return {
@@ -41,7 +52,7 @@ export const getServerSideProps: GetServerSideProps<IPostEditProps> = async (
   }
 
   return {
-    props: { post: postResponse.data },
+    props: { post: postResponse.data as Post },
   };
 };
 
@@ -68,10 +79,7 @@ const PostEdit: MonnomlogPage<IPostEditProps> = (props) => {
 
   const onSaveButtonClick = useCallback(async () => {
     try {
-      const { data: result } = await axios.post<Post>(
-        `/api/post/save/${postProp?.id}`,
-        editingPost
-      );
+      const result = await handleSave(postProp.id, editingPost);
       toast({
         status: "success",
         title: "포스팅이 성공적으로 저장되었습니다.",

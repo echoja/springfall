@@ -43,12 +43,11 @@ const InsertImageDialog: React.FC<{ selection: Selection | null }> = ({
         return;
       }
 
-      const point = Editor.after(editor, selection, {
+      let point = Editor.after(editor, selection, {
         unit: "block",
       });
-
       if (!point) {
-        return;
+        point = selection.focus;
       }
 
       uploadImage(uploadImageList).forEach(({ id, promise }) => {

@@ -4,13 +4,10 @@ import { getCreatePostInput } from "@common/util";
 import type { MonnomlogPage } from "@modules/content/types";
 import PostEditorWrapper from "@modules/editor/components/PostEditorWrapper";
 import AdminNoLayoutWrapper from "@modules/layout/AdminNoLayout";
-import type { Post } from "@modules/supabase/supabase";
-import axiosGlobal from "axios";
+import { getAnonClient } from "@modules/supabase/supabase";
 import { useAtom } from "jotai";
 import { useRouter } from "next/router";
 import { useCallback } from "react";
-
-const axios = axiosGlobal.create();
 
 const PostEdit: MonnomlogPage = () => {
   const router = useRouter();
@@ -19,19 +16,35 @@ const PostEdit: MonnomlogPage = () => {
 
   const onSaveButtonClick = useCallback(async () => {
     try {
-      const { data: result } = await axios.post<Post>(
-        `/api/post/save-new`,
-        getCreatePostInput(editingPost)
-      );
+      const {
+        data: { user },
+      } = await getAnonClient().auth.getUser();
+
+      if (!user) {
+        toast({ title: "no user!" });
+        return;
+      }
+
+      const result = await getAnonClient()
+        .from("posts")
+        .insert({ ...getCreatePostInput(editingPost), user_id: user.id })
+        .select()
+        .single();
+
+      if (result.error) {
+        toast({ title: `에러가 발생했습니다: ${result.error.message}` });
+        return;
+      }
+
+      // eslint-disable-next-line no-console
+      console.log("# result", result);
 
       toast({
         status: "success",
         title: "포스팅이 성공적으로 저장되었습니다.",
       });
 
-      // eslint-disable-next-line no-console
-      console.log("# result", result);
-      router.push(`/admin/post/edit/${result.id}`);
+      router.push(`/admin/post/edit/${result.data.id}`);
     } catch (e: unknown) {
       toast({
         status: "error",

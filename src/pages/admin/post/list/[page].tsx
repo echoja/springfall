@@ -4,83 +4,79 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AdminSwitch from "@modules/admin-ui/components/AdminSwitch";
 import type { MonnomlogPage } from "@modules/content/types";
 import AdminLayoutWrapper from "@modules/layout/AdminLayout";
+import { checkPageNumber } from "@modules/route";
 import type { Post } from "@modules/supabase/supabase";
-import { servicePosts } from "@modules/supabase/supabase-service";
-import axiosGlobal from "axios";
+import { getAnonClient } from "@modules/supabase/supabase";
 import { format } from "date-fns";
-import Joi from "joi";
-import type { GetServerSideProps } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useCallback } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-const axios = axiosGlobal.create();
-
-interface IPostListProps {
-  posts: Post[];
-  pageNum: number;
-  count: number;
+function handleChangePublished(id: number, published: boolean) {
+  return getAnonClient()
+    .from("posts")
+    .update({
+      published,
+    })
+    .eq("id", id)
+    .select()
+    .single();
 }
 
-export const getServerSideProps: GetServerSideProps<IPostListProps> = async ({
-  query,
-}) => {
-  if (typeof query.page !== "string") {
-    throw new Error("page is not string");
+function replacePost(posts: Post[], post: Post) {
+  const index = posts.findIndex((p) => p.id === post.id);
+  if (index >= 0) {
+    const result = [...posts];
+    result[index] = post;
+    return result;
   }
-  const pageNum = parseInt(query.page, 10);
+  return posts;
+}
 
-  const schema = Joi.number().integer().min(1);
-  const result = schema.validate(pageNum);
-  if (result.error) {
-    return {
-      notFound: true,
-    };
-  }
-  const [{ count }, { data: posts, error }] = await Promise.all([
-    servicePosts().select("*", {
-      head: true,
-      count: "exact",
-    }),
-    servicePosts()
+const PostList: MonnomlogPage = () => {
+  const router = useRouter();
+  const [count, setCount] = useState(0);
+  const [posts, setPosts] = useState<Post[]>([]);
+
+  const page = useMemo(() => {
+    const result = checkPageNumber(router.query.page);
+    if (result.type === "ERROR") {
+      return null;
+    }
+    return result.value;
+  }, [router.query.page]);
+
+  useEffect(() => {
+    if (!page) {
+      return;
+    }
+    getAnonClient()
+      .from("posts")
+      .select("*", {
+        head: true,
+        count: "exact",
+      })
+      .then((result) => {
+        if (result.count) {
+          setCount(result.count);
+        }
+      });
+
+    getAnonClient()
+      .from("posts")
       .select("*")
       .order("created_at", { ascending: false })
-      .range((pageNum - 1) * POSTS_PER_PAGE, pageNum * POSTS_PER_PAGE - 1),
-  ]);
-
-  if (error) {
-    // eslint-disable-next-line no-console
-    console.error(error);
-    return {
-      notFound: true,
-    };
-  }
-
-  if (!posts || posts.length === 0 || !count) {
-    return {
-      notFound: true,
-    };
-  }
-
-  return { props: { posts, pageNum, count } };
-};
-
-const PostList: MonnomlogPage<IPostListProps> = ({ posts, count }) => {
-  const router = useRouter();
-
-  const handleChangePublished = useCallback(
-    async (id: number, published: boolean) => {
-      await axios.post<Post>(`/api/post/save/${id}`, {
-        published,
+      .range((page - 1) * POSTS_PER_PAGE, page * POSTS_PER_PAGE - 1)
+      .then((result) => {
+        if (result.data) {
+          setPosts(result.data as Post[]);
+        }
       });
-      await router.replace(router.asPath);
-    },
-    [router]
-  );
+  }, [page]);
 
   return (
     <div>
-      <div className="flex flex-col mt-8">
+      <div className="flex flex-col mt-8 mb-5">
         <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
             <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
@@ -149,9 +145,15 @@ const PostList: MonnomlogPage<IPostListProps> = ({ posts, count }) => {
                       <td className="relative py-4 pl-3 pr-4 text-sm font-medium whitespace-nowrap sm:pr-6">
                         <AdminSwitch
                           checked={post.published}
-                          onChange={async (checked) =>
-                            handleChangePublished(post.id, checked)
-                          }
+                          onChange={async (checked) => {
+                            const result = await handleChangePublished(
+                              post.id,
+                              checked
+                            );
+                            if (result.data) {
+                              setPosts(replacePost(posts, result.data as Post));
+                            }
+                          }}
                         />
                       </td>
                     </tr>
@@ -160,7 +162,7 @@ const PostList: MonnomlogPage<IPostListProps> = ({ posts, count }) => {
                 <tfoot>
                   <tr>
                     <td colSpan={2}>
-                      <p>
+                      <p className="px-3 py-2">
                         총 <strong>{count}</strong> 개
                       </p>
                     </td>
@@ -171,15 +173,22 @@ const PostList: MonnomlogPage<IPostListProps> = ({ posts, count }) => {
           </div>
         </div>
       </div>
-      <hr />
-      <Link href="/admin/post/new">
-        <a>
-          <div className="mr-2">
-            <FontAwesomeIcon icon={faPen} />
-          </div>
-          <span>새 글 쓰기</span>
-        </a>
-      </Link>
+
+      <div className="flex justify-end">
+        <Link href="/admin/post/new">
+          <button
+            type="button"
+            className="inline-flex items-center px-4 py-2 font-sans text-sm font-medium text-white border border-transparent rounded-md shadow-sm bg-brand-600 hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2"
+          >
+            <FontAwesomeIcon
+              icon={faPen}
+              className="w-4 h-4 mr-2 -ml-1"
+              aria-hidden="true"
+            />
+            새 글 쓰기
+          </button>
+        </Link>
+      </div>
     </div>
   );
 };
