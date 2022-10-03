@@ -20,11 +20,11 @@ export function getSupabaseServiceRoleKey() {
   return process.env.SUPABASE_SERVICE_ROLE_KEY ?? "";
 }
 
-let anonClient: ReturnType<typeof createClient> | null = null;
+let anonClient: ReturnType<typeof createClient<Database>> | null = null;
 
 export const getAnonClient = () => {
   if (!anonClient) {
-    anonClient = createClient(getSupabaseUrl(), getSupabaseAnonKey());
+    anonClient = createClient<Database>(getSupabaseUrl(), getSupabaseAnonKey());
   }
 
   return anonClient;
@@ -33,5 +33,3 @@ export const getAnonClient = () => {
 export type Post = Database["public"]["Tables"]["posts"]["Row"] & {
   content: ContentType;
 };
-
-export const anonPosts = () => getAnonClient().from<Post>("posts");

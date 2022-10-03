@@ -1,7 +1,5 @@
 import type { ICodeBlock, CreatePostInput } from "@modules/content/types";
-import { getAnonClient } from "@modules/supabase/supabase";
 import type { Post } from "@modules/supabase/supabase";
-import type { NextApiHandler } from "next";
 import rfdc from "rfdc";
 import type { Element } from "slate";
 
@@ -24,22 +22,6 @@ export function noopFunction(..._args: any): any {
 }
 
 export const deepclone = rfdc();
-
-export const authGuard = (
-  handler: NextApiHandler,
-  message = "unauthorized"
-): NextApiHandler => {
-  return async (req, res) => {
-    const { user } = await getAnonClient().auth.api.getUserByCookie(req);
-    if (user) {
-      return handler(req, res);
-    }
-
-    res.status(401);
-    res.send(message);
-    return undefined;
-  };
-};
 
 export function getDefaultNodeProps(
   type: Element["type"]

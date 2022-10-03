@@ -4,79 +4,75 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AdminSwitch from "@modules/admin-ui/components/AdminSwitch";
 import type { MonnomlogPage } from "@modules/content/types";
 import AdminLayoutWrapper from "@modules/layout/AdminLayout";
+import { checkPageNumber } from "@modules/route";
 import type { Post } from "@modules/supabase/supabase";
-import { servicePosts } from "@modules/supabase/supabase-service";
-import axiosGlobal from "axios";
+import { getAnonClient } from "@modules/supabase/supabase";
 import { format } from "date-fns";
-import Joi from "joi";
-import type { GetServerSideProps } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useCallback } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-const axios = axiosGlobal.create();
-
-interface IPostListProps {
-  posts: Post[];
-  pageNum: number;
-  count: number;
+function handleChangePublished(id: number, published: boolean) {
+  return getAnonClient()
+    .from("posts")
+    .update({
+      published,
+    })
+    .eq("id", id)
+    .select()
+    .single();
 }
 
-export const getServerSideProps: GetServerSideProps<IPostListProps> = async ({
-  query,
-}) => {
-  if (typeof query.page !== "string") {
-    throw new Error("page is not string");
+function replacePost(posts: Post[], post: Post) {
+  const index = posts.findIndex((p) => p.id === post.id);
+  if (index >= 0) {
+    const result = [...posts];
+    result[index] = post;
+    return result;
   }
-  const pageNum = parseInt(query.page, 10);
+  return posts;
+}
 
-  const schema = Joi.number().integer().min(1);
-  const result = schema.validate(pageNum);
-  if (result.error) {
-    return {
-      notFound: true,
-    };
-  }
-  const [{ count }, { data: posts, error }] = await Promise.all([
-    servicePosts().select("*", {
-      head: true,
-      count: "exact",
-    }),
-    servicePosts()
+const PostList: MonnomlogPage = () => {
+  const router = useRouter();
+  const [count, setCount] = useState(0);
+  const [posts, setPosts] = useState<Post[]>([]);
+
+  const page = useMemo(() => {
+    const result = checkPageNumber(router.query.page);
+    if (result.type === "ERROR") {
+      return null;
+    }
+    return result.value;
+  }, [router.query.page]);
+
+  useEffect(() => {
+    if (!page) {
+      return;
+    }
+    getAnonClient()
+      .from("posts")
+      .select("*", {
+        head: true,
+        count: "exact",
+      })
+      .then((result) => {
+        if (result.count) {
+          setCount(result.count);
+        }
+      });
+
+    getAnonClient()
+      .from("posts")
       .select("*")
       .order("created_at", { ascending: false })
-      .range((pageNum - 1) * POSTS_PER_PAGE, pageNum * POSTS_PER_PAGE - 1),
-  ]);
-
-  if (error) {
-    // eslint-disable-next-line no-console
-    console.error(error);
-    return {
-      notFound: true,
-    };
-  }
-
-  if (!posts || (pageNum !== 1 && posts.length === 0) || count === null) {
-    return {
-      notFound: true,
-    };
-  }
-
-  return { props: { posts, pageNum, count } };
-};
-
-const PostList: MonnomlogPage<IPostListProps> = ({ posts, count }) => {
-  const router = useRouter();
-
-  const handleChangePublished = useCallback(
-    async (id: number, published: boolean) => {
-      await axios.post<Post>(`/api/post/save/${id}`, {
-        published,
+      .range((page - 1) * POSTS_PER_PAGE, page * POSTS_PER_PAGE - 1)
+      .then((result) => {
+        if (result.data) {
+          setPosts(result.data as Post[]);
+        }
       });
-      await router.replace(router.asPath);
-    },
-    [router]
-  );
+  }, [page]);
 
   return (
     <div>
@@ -149,9 +145,15 @@ const PostList: MonnomlogPage<IPostListProps> = ({ posts, count }) => {
                       <td className="relative py-4 pl-3 pr-4 text-sm font-medium whitespace-nowrap sm:pr-6">
                         <AdminSwitch
                           checked={post.published}
-                          onChange={async (checked) =>
-                            handleChangePublished(post.id, checked)
-                          }
+                          onChange={async (checked) => {
+                            const result = await handleChangePublished(
+                              post.id,
+                              checked
+                            );
+                            if (result.data) {
+                              setPosts(replacePost(posts, result.data as Post));
+                            }
+                          }}
                         />
                       </td>
                     </tr>

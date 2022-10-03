@@ -51,19 +51,11 @@ export const uploadFile = async (file: File) => {
     throw new Error("no response data");
   }
 
-  const { error: publicUrlError, publicURL } = getAnonClient()
-    .storage.from("uploads")
-    .getPublicUrl(data.Key.substring(data.Key.indexOf("/") + 1));
+  const {
+    data: { publicUrl },
+  } = getAnonClient().storage.from("uploads").getPublicUrl(data.path);
 
-  if (publicUrlError) {
-    throw publicUrlError;
-  }
-
-  if (!publicURL) {
-    throw new Error("no publicURL");
-  }
-
-  return publicURL;
+  return publicUrl;
 };
 
 type UploadResult =

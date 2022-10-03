@@ -1,7 +1,7 @@
 import type { LayoutWrapper } from "@modules/content/types";
 import Link from "next/link";
 
-import useAdminAuth from "./useAdminAuth";
+import useAdminAuth from "../auth/use-admin-auth";
 
 const AdminLayoutWrapper: LayoutWrapper = ({ page }) => {
   useAdminAuth();
