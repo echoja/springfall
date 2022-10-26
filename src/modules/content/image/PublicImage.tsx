@@ -11,7 +11,8 @@ const PublicImage: React.FC<IContentElementProps<IImage>> = ({ element }) => {
           src={element.url}
           width={element.width}
           height={element.height}
-          alt={element.alt}
+          // TODO: alt 속성 필수로 변경
+          alt={element.alt ?? ""}
           className={style.image}
         />
       ) : (
