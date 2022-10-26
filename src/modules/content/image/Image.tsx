@@ -24,7 +24,8 @@ const Image: React.FC<IContentElementProps<IImage>> = ({
           src={element.url}
           width={element.width}
           height={element.height}
-          alt={element.alt}
+          // TODO: alt 속성 필수로 변경
+          alt={element.alt ?? ""}
           className={twMerge(style.image)}
         />
       ) : (
