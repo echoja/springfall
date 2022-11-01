@@ -7,7 +7,7 @@ import AdminLayoutWrapper from "@modules/layout/AdminLayout";
 import { checkPageNumber } from "@modules/route";
 import type { Post } from "@modules/supabase/supabase";
 import { getAnonClient } from "@modules/supabase/supabase";
-import { format } from "date-fns";
+import { formatInTimeZone } from "date-fns-tz";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
@@ -134,7 +134,11 @@ const PostList: MonnomlogPage = () => {
                         </Link>
                       </td>
                       <td className="px-3 py-4 text-sm text-gray-500 whitespace-nowrap">
-                        {format(new Date(post.updated_at), "yyyy.MM.dd.")}
+                        {formatInTimeZone(
+                          new Date(post.updated_at),
+                          "Asia/Seoul",
+                          "yyyy.MM.dd."
+                        )}
                       </td>
                       <td className="px-3 py-4 text-sm text-gray-500 whitespace-nowrap">
                         -

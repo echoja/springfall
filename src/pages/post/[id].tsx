@@ -5,7 +5,7 @@ import { renderPublic } from "@modules/content/renderPublic";
 import type { MonnomlogPage } from "@modules/content/types";
 import type { Post } from "@modules/supabase/supabase";
 import { getServiceClient } from "@modules/supabase/supabase-service";
-import { format } from "date-fns";
+import { formatInTimeZone } from "date-fns-tz";
 import Joi from "joi";
 import type { GetStaticPaths, GetStaticProps } from "next";
 import { ArticleJsonLd, NextSeo } from "next-seo";
@@ -144,7 +144,13 @@ const PostView: MonnomlogPage<IPostViewProps> = ({ post }) => {
         <span className="mr-2 flex-inline">
           <FontAwesomeIcon icon={faAxe} />
         </span>
-        <span>{format(new Date(post.updated_at), "yyyy.MM.dd.")}</span>
+        <span>
+          {formatInTimeZone(
+            new Date(post.updated_at),
+            "Asia/Seoul",
+            "yyyy.MM.dd."
+          )}
+        </span>
       </div>
       <div className="article-body">{rendered}</div>
     </article>
