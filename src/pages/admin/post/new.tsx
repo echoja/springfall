@@ -1,9 +1,9 @@
 import useToast from "@common/hooks/use-toast";
 import { editingPostAtom } from "@common/store";
-import { getCreatePostInput } from "@common/util";
 import type { MonnomlogPage } from "@modules/content/types";
 import PostEditorWrapper from "@modules/editor/components/PostEditorWrapper";
 import AdminNoLayoutWrapper from "@modules/layout/AdminNoLayout";
+import { revalidate, saveNewPost } from "@modules/post";
 import { getAnonClient } from "@modules/supabase/supabase";
 import { useAtom } from "jotai";
 import { useRouter } from "next/router";
@@ -25,19 +25,25 @@ const PostEdit: MonnomlogPage = () => {
         return;
       }
 
-      const result = await getAnonClient()
-        .from("posts")
-        .insert({ ...getCreatePostInput(editingPost), user_id: user.id })
-        .select()
-        .single();
+      const result = await saveNewPost(user.id, editingPost);
 
+      // eslint-disable-next-line no-console
+      console.log("result", result);
       if (result.error) {
         toast({ title: `에러가 발생했습니다: ${result.error.message}` });
         return;
       }
 
+      const revalidateResult = await revalidate(result.data.id);
+      const revalidateResultJson = await revalidateResult.json();
       // eslint-disable-next-line no-console
-      console.log("# result", result);
+      console.log("revalidateResultJson", revalidateResultJson);
+      if (revalidateResult.status !== 200) {
+        toast({
+          title: `revalidate 에러가 발생했습니다: ${revalidateResultJson}`,
+        });
+        return;
+      }
 
       toast({
         status: "success",

@@ -4,22 +4,13 @@ import { parsePost } from "@modules/content/parse";
 import type { MonnomlogPage } from "@modules/content/types";
 import PostEditorWrapper from "@modules/editor/components/PostEditorWrapper";
 import AdminNoLayoutWrapper from "@modules/layout/AdminNoLayout";
+import { revalidate, updatePost } from "@modules/post";
 import type { Post } from "@modules/supabase/supabase";
-import { getAnonClient } from "@modules/supabase/supabase";
 import { getServiceClient } from "@modules/supabase/supabase-service";
 import { useAtom } from "jotai";
 import { useHydrateAtoms } from "jotai/utils";
 import type { GetServerSideProps } from "next";
 import { useCallback, useEffect } from "react";
-
-function handleSave(id: number, post: Post) {
-  return getAnonClient()
-    .from("posts")
-    .update(post)
-    .eq("id", id)
-    .select()
-    .single();
-}
 
 interface IPostEditProps {
   post: Post;
@@ -79,7 +70,26 @@ const PostEdit: MonnomlogPage<IPostEditProps> = (props) => {
 
   const onSaveButtonClick = useCallback(async () => {
     try {
-      const result = await handleSave(postProp.id, editingPost);
+      const result = await updatePost(editingPost.id, editingPost);
+
+      // eslint-disable-next-line no-console
+      console.log("result", result);
+      if (result.error) {
+        toast({ title: `에러가 발생했습니다: ${result.error.message}` });
+        return;
+      }
+
+      const revalidateResult = await revalidate(result.data.id);
+      const revalidateResultJson = await revalidateResult.json();
+      // eslint-disable-next-line no-console
+      console.log("revalidateResultJson", revalidateResultJson);
+      if (revalidateResult.status !== 200) {
+        toast({
+          title: `revalidate 에러가 발생했습니다: ${revalidateResultJson}`,
+        });
+        return;
+      }
+
       toast({
         status: "success",
         title: "포스팅이 성공적으로 저장되었습니다.",
@@ -87,16 +97,16 @@ const PostEdit: MonnomlogPage<IPostEditProps> = (props) => {
 
       // eslint-disable-next-line no-console
       console.log("result", result);
-    } catch (e: unknown) {
+    } catch (e) {
       toast({
         status: "error",
-        title: "포스팅 저장이 실패했습니다.",
+        title: `포스팅 저장이 실패했습니다. 자세한 내용은 콘솔을 확인해주세요.`,
       });
 
       // eslint-disable-next-line no-console
       console.log("error", e);
     }
-  }, [editingPost, postProp, toast]);
+  }, [editingPost, toast]);
 
   if (!postProp) {
     return null;

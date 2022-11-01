@@ -175,10 +175,8 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
           <div className="p-2 shadow-md">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
-                <Link href="/admin/post/list/1">
-                  <a className="mr-2 btn">
-                    <FontAwesomeIcon icon={faAngleLeft} />
-                  </a>
+                <Link href="/admin/post/list/1" className="mr-2 btn">
+                  <FontAwesomeIcon icon={faAngleLeft} />
                 </Link>
                 <span className="inline-flex pr-2 font-sans font-semibold">
                   글 편집
