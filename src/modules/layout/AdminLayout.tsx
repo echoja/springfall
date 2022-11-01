@@ -11,9 +11,7 @@ const AdminLayoutWrapper: LayoutWrapper = ({ page }) => {
       <div className="w-64 p-8">
         <h2 className="text-lg font-bold">관리자</h2>
         <hr className="mt-3 mb-4" />
-        <Link href="/admin/post/list/1">
-          <a>게시글 목록</a>
-        </Link>
+        <Link href="/admin/post/list/1">게시글 목록</Link>
       </div>
       <main className="flex-1 m-8">{page}</main>
     </div>

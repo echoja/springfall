@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { NextSeo } from "next-seo";
 import Image from "next/image";
+import Link from "next/link";
 
 const Home = () => {
   return (
@@ -15,7 +16,7 @@ const Home = () => {
               duration: 2,
               repeatType: "reverse",
             }}
-            className="my-8 mx-auto sm:max-w-xs md:max-w-sm"
+            className="mx-auto my-8 sm:max-w-xs md:max-w-sm"
           >
             <Image
               src="/Launching-amico.svg"
@@ -25,14 +26,14 @@ const Home = () => {
             />
           </motion.div>
           <p className="text-center font-xs">
-            <a
+            <Link
               className="text-xs text-slate-400"
               href="https://storyset.com/illustration/launching/amico"
               target="_blank"
               rel="noopener noreferrer"
             >
               Illustration by Storyset
-            </a>
+            </Link>
           </p>
         </div>
       </div>

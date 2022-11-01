@@ -130,7 +130,7 @@ const PostList: MonnomlogPage = () => {
                       </td>
                       <td className="px-3 py-4 text-sm text-gray-500 whitespace-nowrap">
                         <Link href={`/admin/post/edit/${post.id}`}>
-                          <a>{post.title}</a>
+                          {post.title}
                         </Link>
                       </td>
                       <td className="px-3 py-4 text-sm text-gray-500 whitespace-nowrap">

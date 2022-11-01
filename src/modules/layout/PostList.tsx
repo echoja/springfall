@@ -44,13 +44,11 @@ const PostList: React.FC<IPostListProps> = ({ count, posts, currentPage }) => {
         {posts.length === 0 ? <div>글이 없습니다.</div> : null}
         {posts.map((post) => (
           <article key={post.id}>
-            <Link href={`/post/${post.id}`} passHref>
-              <a className="font-bold group">
-                <span className="inline-block mr-2 transition-colors duration-1000 group-hover:text-teal-600">
-                  <FontAwesomeIcon icon={faSeedling} size="sm" />
-                </span>
-                {post.title}
-              </a>
+            <Link className="font-bold group" href={`/post/${post.id}`}>
+              <span className="inline-block mr-2 transition-colors duration-1000 group-hover:text-teal-600">
+                <FontAwesomeIcon icon={faSeedling} size="sm" />
+              </span>
+              {post.title}
             </Link>
             {post.summary ? <p>{post.summary}</p> : null}
           </article>
@@ -63,14 +61,14 @@ const PostList: React.FC<IPostListProps> = ({ count, posts, currentPage }) => {
         {!startReached && <span>...</span>}
         {pageArray.map((page) => {
           return (
-            <Link href={`/post/list/${page}`} key={page}>
-              <a
-                className={`${
-                  currentPage === page ? "font-bold" : ""
-                } inline-block px-1`}
-              >
-                {page}
-              </a>
+            <Link
+              className={`${
+                currentPage === page ? "font-bold" : ""
+              } inline-block px-1`}
+              href={`/post/list/${page}`}
+              key={page}
+            >
+              {page}
             </Link>
           );
         })}

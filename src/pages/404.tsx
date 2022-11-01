@@ -22,22 +22,20 @@ const Page404 = () => {
           transition={transition}
           className="w-full md:w-[70%] lg:w-[60%] mx-auto sm:max-w-xs md:max-w-sm mb-10"
         >
-          <h1 className="font-semibold text-xl text-center">
+          <h1 className="text-xl font-semibold text-center">
             페이지를 찾을 수 없어요.
           </h1>
         </motion.div>
 
         <div className="my-4">
           <div className="text-center">
-            <Link href="/">
-              <a className="text-gray-500">
-                <span className="">홈으로 이동</span>
-                <FontAwesomeIcon
-                  className="pl-1.5"
-                  size="sm"
-                  icon={faShoePrints}
-                />
-              </a>
+            <Link className="text-gray-500" href="/">
+              <span className="">홈으로 이동</span>
+              <FontAwesomeIcon
+                className="pl-1.5"
+                size="sm"
+                icon={faShoePrints}
+              />
             </Link>
           </div>
         </div>
