@@ -1,7 +1,7 @@
 .code-block-layout {
-  @apply text-[87.5%] leading-[1.3] py-3 bg-slate-700 text-white mb-3 relative md:rounded-lg  shadow-lg overflow-x-auto;
+  @apply text-[87.5%] leading-[1.6] py-3 bg-slate-700 text-white mb-3 relative md:rounded-lg  shadow-lg overflow-x-auto;
 }
 
 .line {
-  @apply py-0.5 px-3;
+  @apply px-3;
 }
