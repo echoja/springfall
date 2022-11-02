@@ -1,7 +1,7 @@
 import type { ICodeLine, IContentElementProps } from "@modules/content/types";
 import { twMerge } from "tailwind-merge";
 
-import style from "./code-line-style.module.css";
+import style from "./style.module.css";
 
 const CodeLine: React.FC<IContentElementProps<ICodeLine>> = ({
   children,

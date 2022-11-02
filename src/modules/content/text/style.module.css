@@ -1,5 +1,5 @@
 .code {
-  @apply text-sm px-[0.25em] py-[0.1em] rounded bg-slate-100;
+  @apply text-[87.5%] px-[0.25em] py-[0.1em] rounded bg-slate-100;
 }
 
 /* TODO: dark:bg-slate-600 이 먹히지 않아서 나온 대안. 추후 수정 요망 */

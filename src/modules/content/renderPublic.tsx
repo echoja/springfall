@@ -98,7 +98,7 @@ export function renderPublic(
         return (
           // eslint-disable-next-line react/no-array-index-key
           <PublicText key={index} leaf={child as IText} text={child as IText}>
-            {(child as Any).text}
+            {(child as Any).text || String.fromCharCode(0xfeff)}
           </PublicText>
         );
       })}

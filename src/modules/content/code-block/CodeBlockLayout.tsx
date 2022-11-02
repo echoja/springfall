@@ -4,6 +4,8 @@ import { twMerge } from "tailwind-merge";
 
 import type { ICodeBlock, IContentElementProps } from "../types";
 
+import layoutStyle from "./style.module.css";
+
 const CodeBlockLayout: React.FC<{
   element: ICodeBlock;
   renderedButtons: ReactNode;
@@ -35,10 +37,7 @@ const CodeBlockLayout: React.FC<{
       <div className="relative -mx-4 sm:-mx-6 md:mx-0">
         <pre
           {...attributes}
-          className={twMerge(
-            "py-3 bg-slate-700 text-white mb-3 relative md:rounded-lg  shadow-lg overflow-x-auto",
-            className
-          )}
+          className={twMerge(layoutStyle["code-block-layout"], className)}
           style={style}
         >
           <code className="relative flex flex-col min-w-max">{children}</code>
