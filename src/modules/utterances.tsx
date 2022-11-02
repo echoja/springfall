@@ -1,8 +1,12 @@
 import { DEFAULT_UTTERANCES_REPO, getUtterancesRepo } from "@common/config";
 import { useEffect, useState } from "react";
 
+import { useColorMode } from "./color-mode/color-mode";
+
 const Utterances = () => {
   const [ref, setRef] = useState<HTMLDivElement | null>(null);
+
+  const { colorMode } = useColorMode();
 
   useEffect(() => {
     const repo = getUtterancesRepo();
@@ -14,7 +18,10 @@ const Utterances = () => {
       script.crossOrigin = "anonymous";
       script.setAttribute("repo", repo);
       script.setAttribute("issue-term", "pathname");
-      script.setAttribute("theme", "preferred-color-scheme");
+      script.setAttribute(
+        "theme",
+        colorMode === "dark" ? "github-dark" : "github-light"
+      );
       ref.appendChild(script);
       return () => {
         script.remove();
@@ -25,7 +32,7 @@ const Utterances = () => {
     }
 
     return undefined;
-  }, [ref]);
+  }, [colorMode, ref]);
 
   return <div ref={setRef} />;
 };
