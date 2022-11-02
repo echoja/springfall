@@ -1,12 +1,14 @@
+import { getBaseUrl } from "./src/common/config";
+
 /** @type {import('next-seo').DefaultSeoProps} */
 const defaultSEOConfig = {
   title: "봄가을",
   titleTemplate: "%s | 봄가을",
   defaultTitle: "봄가을",
   description: "봄가을 개발 블로그",
-  canonical: "https://springfall.cc",
+  canonical: getBaseUrl(),
   openGraph: {
-    url: "https://springfall.cc",
+    url: getBaseUrl(),
     title: "봄가을",
     description: "봄가을 개발 블로그",
     // images: [

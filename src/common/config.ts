@@ -35,9 +35,16 @@ export function getS3Region() {
 export function getBaseUrl() {
   return (
     process.env.BASE_URL ||
+    process.env.NEXT_PUBLIC_BASE_URL ||
     process.env.NEXT_PUBLIC_VERCEL_URL ||
     "https://springfall.cc"
   );
+}
+
+export const DEFAULT_UTTERANCES_REPO = "owner/repo";
+
+export function getUtterancesRepo() {
+  return process.env.NEXT_PUBLIC_UTTERANCES_REPO || DEFAULT_UTTERANCES_REPO;
 }
 
 export const POSTS_PER_PAGE = 10;
