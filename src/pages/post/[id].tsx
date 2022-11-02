@@ -5,6 +5,7 @@ import { renderPublic } from "@modules/content/renderPublic";
 import type { MonnomlogPage } from "@modules/content/types";
 import type { Post } from "@modules/supabase/supabase";
 import { getServiceClient } from "@modules/supabase/supabase-service";
+import Utterances from "@modules/utterances";
 import { formatInTimeZone } from "date-fns-tz";
 import Joi from "joi";
 import type { GetStaticPaths, GetStaticProps } from "next";
@@ -104,7 +105,6 @@ const PostView: MonnomlogPage<IPostViewProps> = ({ post }) => {
           type: "article",
           article: {
             publishedTime: post.created_at,
-            // TODO: updated_at 으로 변경
             modifiedTime: new Date(post.updated_at).toISOString(),
             // expirationTime: new Date(post.updated_at).setFullYear(toISOString(),
             // section: "Section II",
@@ -153,6 +153,7 @@ const PostView: MonnomlogPage<IPostViewProps> = ({ post }) => {
         </span>
       </div>
       <div className="article-body">{rendered}</div>
+      <Utterances />
     </article>
   );
 };
