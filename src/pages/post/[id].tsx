@@ -152,7 +152,7 @@ const PostView: MonnomlogPage<IPostViewProps> = ({ post }) => {
           )}
         </span>
       </div>
-      <div className="article-body">{rendered}</div>
+      <div>{rendered}</div>
       <Utterances />
     </article>
   );
