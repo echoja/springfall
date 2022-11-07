@@ -1,10 +1,9 @@
-import dynamic from "next/dynamic";
+import Tooltip from "@common/Tooltip";
+import { faList } from "@fortawesome/pro-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 
-const ThemeToggle = dynamic(() => import("./ThemeToggle"), {
-  ssr: false,
-  loading: () => <div style={{ width: "16px" }} />,
-});
+import ThemeToggle from "./ThemeToggle";
 
 const Header = () => {
   return (
@@ -13,12 +12,14 @@ const Header = () => {
         <Link href="/">봄가을</Link>
       </h1>
 
-      <div className="ml-auto mr-3">
-        <Link className="py-4" href="/post/list/1">
-          글 목록
+      <div className="ml-auto">
+        <Link className="p-4" href="/post/list/1">
+          <FontAwesomeIcon className="w-4 h-4" icon={faList} />
         </Link>
       </div>
-      <ThemeToggle />
+      <Tooltip content="asdf">
+        <ThemeToggle />
+      </Tooltip>
     </header>
   );
 };

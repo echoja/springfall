@@ -31,8 +31,10 @@ const Footer = () => {
         ))}
       </div>
       <p className="mb-4 text-sm">
-        오늘도 행복한 하루 되세요 # <FontAwesomeIcon icon={faSmile} />
-        {" # "}
+        오늘도 행복한 하루 되세요.
+        <span className="mx-2">
+          <FontAwesomeIcon icon={faSmile} />
+        </span>
         {new Date().getFullYear()}
       </p>
     </footer>
