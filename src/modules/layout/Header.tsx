@@ -17,6 +17,7 @@ const Header = () => {
           href="/post/list/1"
         >
           <FontAwesomeIcon className="w-4 h-4" icon={faList} />
+          <span className="sr-only">글 목록</span>
         </Link>
       </div>
       <ThemeToggle />

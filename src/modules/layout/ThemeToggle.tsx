@@ -22,7 +22,7 @@ const ThemeToggle = forwardRef<HTMLButtonElement>(function ThemeToggle(
   props,
   propRef
 ) {
-  const { toggle } = useColorMode();
+  const { toggle, colorMode } = useColorMode();
 
   return (
     <button
@@ -34,6 +34,9 @@ const ThemeToggle = forwardRef<HTMLButtonElement>(function ThemeToggle(
       {...props}
     >
       <DynamicIcon />
+      <span className="sr-only">
+        {colorMode === "dark" ? "라이트 모드로 전환" : "다크 모드로 전환"}
+      </span>
     </button>
   );
 });
