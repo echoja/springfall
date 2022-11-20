@@ -27,7 +27,7 @@ const ThemeToggle = forwardRef<HTMLButtonElement>(function ThemeToggle(
   return (
     <button
       type="button"
-      className="p-4"
+      className="p-4 transition rounded-full hover:bg-gray-400/10 hover:opacity-90"
       aria-label="theme toggle"
       onClick={toggle}
       ref={propRef}

@@ -1,4 +1,3 @@
-import Tooltip from "@common/Tooltip";
 import { faList } from "@fortawesome/pro-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
@@ -12,14 +11,15 @@ const Header = () => {
         <Link href="/">봄가을</Link>
       </h1>
 
-      <div className="ml-auto">
-        <Link className="p-4" href="/post/list/1">
+      <div className="ml-auto mr-2">
+        <Link
+          className="p-4 transition rounded-full hover:bg-gray-400/10 hover:opacity-90"
+          href="/post/list/1"
+        >
           <FontAwesomeIcon className="w-4 h-4" icon={faList} />
         </Link>
       </div>
-      <Tooltip content="asdf">
-        <ThemeToggle />
-      </Tooltip>
+      <ThemeToggle />
     </header>
   );
 };

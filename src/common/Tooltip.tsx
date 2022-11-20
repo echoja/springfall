@@ -128,7 +128,7 @@ const Tooltip = forwardRef<HTMLElement, HTMLProps<HTMLElement> & ITooltipProps>(
           <AnimatePresence>
             {open && (
               <motion.div
-                className="px-2 py-1 text-xs text-white bg-gray-800 rounded"
+                className="px-2 py-1 font-sans text-xs text-white bg-gray-800 rounded"
                 initial={{ opacity: 0, scale: 0.85 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0 }}
