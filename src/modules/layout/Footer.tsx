@@ -1,9 +1,9 @@
 import { faGithub, faTwitter } from "@fortawesome/free-brands-svg-icons";
 import type { IconDefinition } from "@fortawesome/pro-regular-svg-icons";
 import {
-  faSmile,
+  faHandsHoldingDollar,
   faQuestion,
-  faGift,
+  faSmile,
 } from "@fortawesome/pro-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
@@ -22,7 +22,7 @@ const buttons: Array<{
   },
   {
     link: "https://github.com/sponsors/echoja",
-    icon: faGift,
+    icon: faHandsHoldingDollar,
     srOnly: "블로그 주인에게 후원하기 (깃허브 스폰서)",
   },
   {
