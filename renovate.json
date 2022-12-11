@@ -1,0 +1,14 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:base", "group:allNonMajor"],
+  "rangeStrategy": "bump",
+  "prHourlyLimit": 0,
+  "prConcurrentLimit": 0,
+  "ignoreDeps": [
+    "@fortawesome/fontawesome-svg-core",
+    "@fortawesome/free-brands-svg-icons",
+    "@fortawesome/pro-regular-svg-icons",
+    "@fortawesome/pro-solid-svg-icons",
+    "@fortawesome/react-fontawesome"
+  ]
+}
