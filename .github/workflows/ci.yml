@@ -16,11 +16,11 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
 
-      - uses: pnpm/action-setup@v2.2.2
+      - uses: pnpm/action-setup@v2
         with:
-          version: 7.11.0
+          version: 7.14.1
 
       - name: package install
         run: pnpm install
@@ -41,7 +41,7 @@ jobs:
 
       - uses: supabase/setup-cli@v1
         with:
-          version: 1.6.0
+          version: 1.22.3
 
       - run: |
           supabase link --project-ref $SUPABASE_PROJECT_ID --password $SUPABASE_DB_PASSWORD
