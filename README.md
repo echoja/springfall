@@ -12,8 +12,7 @@
 
 - vscode - 개발 에디터
 - [direnv](https://direnv.net/)로 환경 변수를 관리합니다.
-- Node.js 와 pnpm 은 [asdf](https://asdf-vm.com/)로 설치합니다. (`.tool-versions` 파일 참고)
-- font awesome pro 여야 합니다. (font awesome pro 가 아니더라도 상관없도록 지원 추가)
+- **Node.js** 와 **pnpm** 은 [asdf](https://asdf-vm.com/)로 설치합니다. (`.tool-versions` 파일 참고)
 
 개발 서버를 실행시키려면 다음 명령을 실행합니다.
 
@@ -49,7 +48,6 @@ supabase start
 
 저장소 → Settings → Secrets → Actions → 우측 상단 New repository secret 으로 추가.
 
-- `FONTAWESOME_NPM_AUTH_TOKEN`
 - `SUPABASE_ACCESS_TOKEN`
 - `SUPABASE_DB_PASSWORD`
 - `SUPABASE_PROJECT_ID`
