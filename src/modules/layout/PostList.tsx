@@ -9,9 +9,15 @@ interface IPostListProps {
   posts: Post[];
   count: number;
   currentPage: number;
+  loading: boolean;
 }
 
-const PostList: React.FC<IPostListProps> = ({ count, posts, currentPage }) => {
+const PostList: React.FC<IPostListProps> = ({
+  count,
+  posts,
+  currentPage,
+  loading,
+}) => {
   const maxPage = useMemo(() => {
     return Math.ceil(count / POSTS_PER_PAGE);
   }, [count]);
@@ -34,26 +40,36 @@ const PostList: React.FC<IPostListProps> = ({ count, posts, currentPage }) => {
     );
   }, [paginationEnd, paginationStart]);
 
+  const postArticlesArea = useMemo(() => {
+    if (loading) {
+      return <div>로딩중...</div>;
+    }
+    if (posts.length === 0) {
+      return <div>글이 없습니다.</div>;
+    }
+
+    return posts.map((post) => (
+      <article key={post.id}>
+        <Link
+          className="inline-flex items-center gap-2 mb-2 font-sans text-lg font-bold group"
+          href={`/post/${post.id}`}
+        >
+          <span className="inline-block transition-colors duration-1000 group-hover:text-teal-600">
+            <FaRegularSeedling className="w-4 h-4" />
+          </span>
+          <span>{post.title}</span>
+        </Link>
+        {post.summary ? (
+          <p className="pl-6 m-0 text-sm text-gray-500">{post.summary}</p>
+        ) : null}
+      </article>
+    ));
+  }, [loading, posts]);
+
   return (
     <div>
       <h1 className="mb-5 text-3xl font-semibold">글 목록</h1>
-      <div className="mb-5">
-        {posts.length === 0 ? <div>글이 없습니다.</div> : null}
-        {posts.map((post) => (
-          <article key={post.id}>
-            <Link
-              className="inline-flex items-center gap-2 font-bold group"
-              href={`/post/${post.id}`}
-            >
-              <span className="inline-block transition-colors duration-1000 group-hover:text-teal-600">
-                <FaRegularSeedling className="w-4 h-4" />
-              </span>
-              <span>{post.title}</span>
-            </Link>
-            {post.summary ? <p>{post.summary}</p> : null}
-          </article>
-        ))}
-      </div>
+      <div className="flex flex-col gap-3 mb-5">{postArticlesArea}</div>
       <div className="flex items-center">
         <span className="inline-block mr-1">
           <FaRegularCabinetFiling className="w-4 h-4" />
