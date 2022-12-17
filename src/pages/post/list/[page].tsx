@@ -6,12 +6,13 @@ import type { Post } from "@modules/supabase/supabase";
 import { getAnonClient } from "@modules/supabase/supabase";
 import { NextSeo } from "next-seo";
 import { useRouter } from "next/router";
-import { useMemo, useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const ListPage: MonnomlogPage = () => {
   const router = useRouter();
   const [count, setCount] = useState(0);
   const [posts, setPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const page = useMemo(() => {
     const result = checkPageNumber(router.query.page);
@@ -44,6 +45,7 @@ const ListPage: MonnomlogPage = () => {
       .eq("published", true)
       .range((page - 1) * POSTS_PER_PAGE, page * POSTS_PER_PAGE - 1)
       .then((result) => {
+        setLoading(false);
         if (result.data) {
           setPosts(result.data as Post[]);
         }
@@ -54,7 +56,12 @@ const ListPage: MonnomlogPage = () => {
     <div>
       <NextSeo title={`#${page} | 글 목록`} />
       {page ? (
-        <PostList posts={posts} count={count} currentPage={page} />
+        <PostList
+          posts={posts}
+          count={count}
+          currentPage={page}
+          loading={loading}
+        />
       ) : null}
     </div>
   );
