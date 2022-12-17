@@ -97,6 +97,7 @@ const PostView: MonnomlogPage<IPostViewProps> = ({ post }) => {
       <NextSeo
         title={post.title}
         canonical={url}
+        description={post.summary}
         openGraph={{
           title: post.title,
           description: post.summary,
