@@ -1,8 +1,7 @@
 import { getBaseUrl } from "@common/config";
-import { faAxe } from "@fortawesome/pro-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { renderPublic } from "@modules/content/renderPublic";
 import type { MonnomlogPage } from "@modules/content/types";
+import FaSolidAxe from "@modules/icons/FaSolidAxe";
 import type { Post } from "@modules/supabase/supabase";
 import { getServiceClient } from "@modules/supabase/supabase-service";
 import Utterances from "@modules/utterances";
@@ -140,10 +139,8 @@ const PostView: MonnomlogPage<IPostViewProps> = ({ post }) => {
       <header className="mb-5">
         <h1 className="text-3xl font-semibold">{post.title}</h1>
       </header>
-      <div className="text-gray-500 mb-7">
-        <span className="mr-2 flex-inline">
-          <FontAwesomeIcon icon={faAxe} />
-        </span>
+      <div className="inline-flex items-center gap-2 text-gray-500 mb-7">
+        <FaSolidAxe className="w-4 h-4" />
         <span>
           {formatInTimeZone(
             new Date(post.updated_at),

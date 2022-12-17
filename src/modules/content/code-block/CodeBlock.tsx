@@ -1,7 +1,6 @@
 import { useMyStoreMemo } from "@common/store";
-import { faPenToSquare } from "@fortawesome/pro-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { ICodeBlock, IContentElementProps } from "@modules/content/types";
+import FaPenToSquare from "@modules/icons/FaRegularPenToSquare";
 import type React from "react";
 import { useCallback } from "react";
 import {
@@ -40,7 +39,7 @@ const EditButton: React.FC<{
 
   return (
     <button type="button" onClick={onEditButtonClick}>
-      <FontAwesomeIcon icon={faPenToSquare} />
+      <FaPenToSquare className="w-4 h-4" />
     </button>
   );
 };

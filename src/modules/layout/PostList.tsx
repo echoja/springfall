@@ -1,9 +1,6 @@
 import { POSTS_PER_PAGE } from "@common/config";
-import {
-  faCabinetFiling,
-  faSeedling,
-} from "@fortawesome/pro-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import FaRegularCabinetFiling from "@modules/icons/FaRegularCabinetFiling";
+import FaRegularSeedling from "@modules/icons/FaRegularSeedling";
 import type { Post } from "@modules/supabase/supabase";
 import Link from "next/link";
 import { useMemo } from "react";
@@ -44,11 +41,14 @@ const PostList: React.FC<IPostListProps> = ({ count, posts, currentPage }) => {
         {posts.length === 0 ? <div>글이 없습니다.</div> : null}
         {posts.map((post) => (
           <article key={post.id}>
-            <Link className="font-bold group" href={`/post/${post.id}`}>
-              <span className="inline-block mr-2 transition-colors duration-1000 group-hover:text-teal-600">
-                <FontAwesomeIcon icon={faSeedling} size="sm" />
+            <Link
+              className="inline-flex items-center gap-2 font-bold group"
+              href={`/post/${post.id}`}
+            >
+              <span className="inline-block transition-colors duration-1000 group-hover:text-teal-600">
+                <FaRegularSeedling className="w-4 h-4" />
               </span>
-              {post.title}
+              <span>{post.title}</span>
             </Link>
             {post.summary ? <p>{post.summary}</p> : null}
           </article>
@@ -56,7 +56,7 @@ const PostList: React.FC<IPostListProps> = ({ count, posts, currentPage }) => {
       </div>
       <div className="flex items-center">
         <span className="inline-block mr-1">
-          <FontAwesomeIcon icon={faCabinetFiling} />
+          <FaRegularCabinetFiling className="w-4 h-4" />
         </span>
         {!startReached && <span>...</span>}
         {pageArray.map((page) => {

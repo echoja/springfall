@@ -5,9 +5,6 @@ import {
   editingPostContentDataAtom,
   useMyStoreMemo,
 } from "@common/store";
-import { faAngleLeft } from "@fortawesome/pro-regular-svg-icons";
-import { faFloppyDisk } from "@fortawesome/pro-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PropertyPanelWrapper from "@modules/admin-ui/property-panel/PropertyPanelWrapper";
 import CodeBlockEditModal from "@modules/content/code-block/CodeBlockEditModal";
 import {
@@ -19,10 +16,12 @@ import type { Command } from "@modules/content/types";
 import CommandPalette from "@modules/editor/components/CommandPalette";
 import InsertImageDialog from "@modules/editor/components/InsertImageDialog";
 import { getEditor } from "@modules/editor/custom-slate-editor";
+import FaSolidAngleLeft from "@modules/icons/FaSolidAngleLeft";
+import FaSolidFloppyDisk from "@modules/icons/FaSolidFloppyDisk";
 import { useAtom } from "jotai";
 import Link from "next/link";
 import type React from "react";
-import { useCallback, useState, useMemo, memo, useEffect } from "react";
+import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import type { Descendant, Selection } from "slate";
 import { Slate } from "slate-react";
 import { twMerge } from "tailwind-merge";
@@ -176,7 +175,7 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <Link href="/admin/post/list/1" className="mr-2 btn">
-                  <FontAwesomeIcon icon={faAngleLeft} />
+                  <FaSolidAngleLeft className="w-4 h-4" />
                 </Link>
                 <span className="inline-flex pr-2 font-sans font-semibold">
                   글 편집
@@ -194,7 +193,7 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
                   className="btn"
                   onClick={onSaveButtonClick}
                 >
-                  <FontAwesomeIcon icon={faFloppyDisk} />
+                  <FaSolidFloppyDisk className="w-4 h-4" />
                 </button>
               </div>
             </div>

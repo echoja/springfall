@@ -3,11 +3,6 @@ lockfileVersion: 5.4
 specifiers:
   '@commitlint/config-conventional': ^17.3.0
   '@floating-ui/react-dom-interactions': ^0.10.3
-  '@fortawesome/fontawesome-svg-core': ^6.2.1
-  '@fortawesome/free-brands-svg-icons': ^6.2.1
-  '@fortawesome/pro-regular-svg-icons': ^6.2.1
-  '@fortawesome/pro-solid-svg-icons': ^6.2.1
-  '@fortawesome/react-fontawesome': ^0.2.0
   '@headlessui/react': ^1.7.5
   '@next/bundle-analyzer': ^13.0.6
   '@next/env': ^13.0.6
@@ -68,11 +63,6 @@ specifiers:
 
 dependencies:
   '@floating-ui/react-dom-interactions': 0.10.3_ib3m5ricvtkl2cll7qpr2f6lvq
-  '@fortawesome/fontawesome-svg-core': 6.2.1
-  '@fortawesome/free-brands-svg-icons': 6.2.1
-  '@fortawesome/pro-regular-svg-icons': 6.2.1
-  '@fortawesome/pro-solid-svg-icons': 6.2.1
-  '@fortawesome/react-fontawesome': 0.2.0_z27bm67dtmuyyvss23ckjdrcuy
   '@headlessui/react': 1.7.5_biqbaboplfbrettd7655fr4n2y
   '@next/bundle-analyzer': 13.0.6
   '@next/env': 13.0.6
@@ -590,55 +580,6 @@ packages:
       '@floating-ui/dom': 1.0.4
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
-    dev: false
-
-  /@fortawesome/fontawesome-common-types/6.2.1:
-    resolution: {integrity: sha512-Sz07mnQrTekFWLz5BMjOzHl/+NooTdW8F8kDQxjWwbpOJcnoSg4vUDng8d/WR1wOxM0O+CY9Zw0nR054riNYtQ==, tarball: '@fortawesome/fontawesome-common-types/-/6.2.1/fontawesome-common-types-6.2.1.tgz'}
-    engines: {node: '>=6'}
-    requiresBuild: true
-    dev: false
-
-  /@fortawesome/fontawesome-svg-core/6.2.1:
-    resolution: {integrity: sha512-HELwwbCz6C1XEcjzyT1Jugmz2NNklMrSPjZOWMlc+ZsHIVk+XOvOXLGGQtFBwSyqfJDNgRq4xBCwWOaZ/d9DEA==, tarball: '@fortawesome/fontawesome-svg-core/-/6.2.1/fontawesome-svg-core-6.2.1.tgz'}
-    engines: {node: '>=6'}
-    requiresBuild: true
-    dependencies:
-      '@fortawesome/fontawesome-common-types': 6.2.1
-    dev: false
-
-  /@fortawesome/free-brands-svg-icons/6.2.1:
-    resolution: {integrity: sha512-L8l4MfdHPmZlJ72PvzdfwOwbwcCAL0vx48tJRnI6u1PJXh+j2f3yDoKyQgO3qjEsgD5Fr2tQV/cPP8F/k6aUig==, tarball: '@fortawesome/free-brands-svg-icons/-/6.2.1/free-brands-svg-icons-6.2.1.tgz'}
-    engines: {node: '>=6'}
-    requiresBuild: true
-    dependencies:
-      '@fortawesome/fontawesome-common-types': 6.2.1
-    dev: false
-
-  /@fortawesome/pro-regular-svg-icons/6.2.1:
-    resolution: {integrity: sha512-U3JCqJjwkNSrxgDafsBBUQBbOlvTsa4Odtn7m01NDko45pZu2nh3eqCexovy4y6LzWXXP/Spq+AO29CBpCW8yA==, tarball: '@fortawesome/pro-regular-svg-icons/-/6.2.1/pro-regular-svg-icons-6.2.1.tgz'}
-    engines: {node: '>=6'}
-    requiresBuild: true
-    dependencies:
-      '@fortawesome/fontawesome-common-types': 6.2.1
-    dev: false
-
-  /@fortawesome/pro-solid-svg-icons/6.2.1:
-    resolution: {integrity: sha512-gIGrv/hcw5/UsW0swBfxL9jwb2F+Yut+9QY47ZPs8+Ac9/AmYxIzJ31ZnYawwLdrxU/09Unc+AHbTfn0QXLfvQ==, tarball: '@fortawesome/pro-solid-svg-icons/-/6.2.1/pro-solid-svg-icons-6.2.1.tgz'}
-    engines: {node: '>=6'}
-    requiresBuild: true
-    dependencies:
-      '@fortawesome/fontawesome-common-types': 6.2.1
-    dev: false
-
-  /@fortawesome/react-fontawesome/0.2.0_z27bm67dtmuyyvss23ckjdrcuy:
-    resolution: {integrity: sha512-uHg75Rb/XORTtVt7OS9WoK8uM276Ufi7gCzshVWkUJbHhh3svsUUeqXerrM96Wm7fRiDzfKRwSoahhMIkGAYHw==, tarball: '@fortawesome/react-fontawesome/-/0.2.0/react-fontawesome-0.2.0.tgz'}
-    peerDependencies:
-      '@fortawesome/fontawesome-svg-core': ~1 || ~6
-      react: '>=16.3'
-    dependencies:
-      '@fortawesome/fontawesome-svg-core': 6.2.1
-      prop-types: 15.8.1
-      react: 18.2.0
     dev: false
 
   /@hapi/hoek/9.3.0:
@@ -4240,6 +4181,7 @@ packages:
   /object-assign/4.1.1:
     resolution: {integrity: sha512-rJgTQnkUnH1sFw8yT6VSU3zD3sWmu6sZhIseY8VX+GRu3P6F7Fu+JNDoXfklElbLJSnc3FUQHVe4cU5hj+BcUg==}
     engines: {node: '>=0.10.0'}
+    dev: true
 
   /object-hash/3.0.0:
     resolution: {integrity: sha512-RSn9F68PjH9HqtltsSnqYC1XXoWe9Bju5+213R98cNGttag9q9yAOTzdbsqvIa7aNm5WffBZFpWYr2aWrklWAw==}
@@ -4613,6 +4555,7 @@ packages:
       loose-envify: 1.4.0
       object-assign: 4.1.1
       react-is: 16.13.1
+    dev: true
 
   /property-information/6.1.1:
     resolution: {integrity: sha512-hrzC564QIl0r0vy4l6MvRLhafmUowhO/O3KgVSoXIbbA2Sz4j8HGpJc6T2cubRVwMwpdiG/vKGfhT4IixmKN9w==}
@@ -4692,6 +4635,7 @@ packages:
 
   /react-is/16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
+    dev: true
 
   /react-merge-refs/2.0.1:
     resolution: {integrity: sha512-pywF6oouJWuqL26xV3OruRSIqai31R9SdJX/I3gP2q8jLxUnA1IwXcLW8werUHLZOrp4N7YOeQNZrh/BKrHI4A==}

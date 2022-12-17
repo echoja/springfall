@@ -1,0 +1,8 @@
+.fa-icon {
+  overflow: visible;
+  box-sizing: content-box;
+  display: var(--fa-display, inline-block);
+  height: 1em;
+  overflow: visible;
+  vertical-align: -0.125em;
+}

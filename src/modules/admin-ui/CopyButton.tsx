@@ -1,6 +1,5 @@
-import { faCopy } from "@fortawesome/pro-regular-svg-icons";
-import { faCheck } from "@fortawesome/pro-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import FaRegularCopy from "@modules/icons/FaRegularCopy";
+import FaSolidCheck from "@modules/icons/FaSolidCheck";
 import { memo, useCallback, useState } from "react";
 
 interface ICopyButtonProps {
@@ -28,11 +27,11 @@ const CopyButton: React.FC<ICopyButtonProps> = ({
 
   return isChecked ? (
     <button type="button" className={className}>
-      <FontAwesomeIcon icon={faCheck} />
+      <FaSolidCheck className="w-4 h-4" />
     </button>
   ) : (
     <button type="button" onClick={onCopyButtonClick} className={className}>
-      <FontAwesomeIcon icon={faCopy} />
+      <FaRegularCopy className="w-4 h-4" />
     </button>
   );
 };
