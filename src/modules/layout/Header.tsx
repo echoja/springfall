@@ -1,5 +1,4 @@
-import { faList } from "@fortawesome/pro-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import FaSolidList from "@modules/icons/FaSolidList";
 import Link from "next/link";
 
 import ThemeToggle from "./ThemeToggle";
@@ -13,10 +12,10 @@ const Header = () => {
 
       <div className="ml-auto mr-2">
         <Link
-          className="p-4 transition rounded-full hover:bg-gray-400/10 hover:opacity-90"
+          className="inline-flex p-4 transition rounded-full hover:bg-gray-400/10 hover:opacity-90"
           href="/post/list/1"
         >
-          <FontAwesomeIcon className="w-4 h-4" icon={faList} />
+          <FaSolidList className="w-4 h-4" />
           <span className="sr-only">글 목록</span>
         </Link>
       </div>

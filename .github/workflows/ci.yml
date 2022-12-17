@@ -8,9 +8,6 @@ jobs:
   test:
     runs-on: ubuntu-22.04
 
-    env:
-      FONTAWESOME_NPM_AUTH_TOKEN: ${{ secrets.FONTAWESOME_NPM_AUTH_TOKEN }}
-
     steps:
       - uses: actions/checkout@v3
 

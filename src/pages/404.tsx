@@ -1,5 +1,4 @@
-import { faShoePrints } from "@fortawesome/pro-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import FaRegularShoePrints from "@modules/icons/FaRegularShoePrints";
 import type { Transition } from "framer-motion";
 import { motion } from "framer-motion";
 import { NextSeo } from "next-seo";
@@ -31,11 +30,7 @@ const Page404 = () => {
           <div className="text-center">
             <Link className="text-gray-500" href="/">
               <span className="">홈으로 이동</span>
-              <FontAwesomeIcon
-                className="pl-1.5"
-                size="sm"
-                icon={faShoePrints}
-              />
+              <FaRegularShoePrints className="pl-1.5" />
             </Link>
           </div>
         </div>

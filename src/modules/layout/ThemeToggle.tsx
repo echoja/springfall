@@ -1,15 +1,29 @@
 import { useColorMode } from "@modules/color-mode/color-mode";
 import dynamic from "next/dynamic";
-import { forwardRef } from "react";
+import { forwardRef, useMemo } from "react";
 import { RiMoonFill, RiSunLine } from "react-icons/ri";
 
 const Icon = () => {
   const { colorMode } = useColorMode();
 
-  return colorMode === "light" ? (
-    <RiMoonFill className="w-4 h-4" />
-  ) : (
-    <RiSunLine className="w-4 h-4" />
+  const srOnly = useMemo(
+    () => (
+      <span className="sr-only">
+        {colorMode === "dark" ? "라이트 모드로 전환" : "다크 모드로 전환"}
+      </span>
+    ),
+    [colorMode]
+  );
+
+  return (
+    <>
+      {colorMode === "light" ? (
+        <RiMoonFill className="w-4 h-4" />
+      ) : (
+        <RiSunLine className="w-4 h-4" />
+      )}
+      {srOnly}
+    </>
   );
 };
 
@@ -22,7 +36,7 @@ const ThemeToggle = forwardRef<HTMLButtonElement>(function ThemeToggle(
   props,
   propRef
 ) {
-  const { toggle, colorMode } = useColorMode();
+  const { toggle } = useColorMode();
 
   return (
     <button
@@ -34,9 +48,6 @@ const ThemeToggle = forwardRef<HTMLButtonElement>(function ThemeToggle(
       {...props}
     >
       <DynamicIcon />
-      <span className="sr-only">
-        {colorMode === "dark" ? "라이트 모드로 전환" : "다크 모드로 전환"}
-      </span>
     </button>
   );
 });

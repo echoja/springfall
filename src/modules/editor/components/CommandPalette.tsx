@@ -1,15 +1,14 @@
 import useConst from "@common/hooks/use-const";
 import { useMyStoreMemo } from "@common/store";
 import { getDefaultNodeProps } from "@common/util";
-import { faMagnifyingGlass } from "@fortawesome/pro-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Combobox, Dialog } from "@headlessui/react";
 import {
-  insertRawHtmlItem,
   handler as insertRawHtmlHandler,
+  insertRawHtmlItem,
 } from "@modules/content/raw-html/command-item";
 import type { Command, ElementNode } from "@modules/content/types";
-import { useCallback, useState, memo } from "react";
+import FaSolidMagnifyingGlass from "@modules/icons/FaSolidMagnifyingGlass";
+import { memo, useCallback, useState } from "react";
 import type { Element } from "slate";
 import { Editor, Transforms } from "slate";
 import { useSlate } from "slate-react";
@@ -199,8 +198,7 @@ const CommandPalette: React.FC<ICommandPaletteProps> = ({ onCommand }) => {
         <Dialog.Panel className="max-w-xl mx-auto overflow-hidden transition-all transform bg-white divide-y divide-gray-100 shadow-2xl rounded-xl ring-1 ring-black ring-opacity-5">
           <Combobox value={initialCommand} onChange={onSelected}>
             <div className="relative">
-              <FontAwesomeIcon
-                icon={faMagnifyingGlass}
+              <FaSolidMagnifyingGlass
                 className="absolute w-4 h-4 text-gray-400 pointer-events-none top-4 left-4"
                 aria-hidden="true"
               />

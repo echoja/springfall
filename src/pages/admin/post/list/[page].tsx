@@ -1,8 +1,7 @@
 import { POSTS_PER_PAGE } from "@common/config";
-import { faPen } from "@fortawesome/pro-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AdminSwitch from "@modules/admin-ui/components/AdminSwitch";
 import type { MonnomlogPage } from "@modules/content/types";
+import FaRegularPen from "@modules/icons/FaRegularPen";
 import AdminLayoutWrapper from "@modules/layout/AdminLayout";
 import { checkPageNumber } from "@modules/route";
 import type { Post } from "@modules/supabase/supabase";
@@ -184,12 +183,8 @@ const PostList: MonnomlogPage = () => {
             type="button"
             className="inline-flex items-center px-4 py-2 font-sans text-sm font-medium text-white border border-transparent rounded-md shadow-sm bg-brand-600 hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2"
           >
-            <FontAwesomeIcon
-              icon={faPen}
-              className="w-4 h-4 mr-2 -ml-1"
-              aria-hidden="true"
-            />
-            새 글 쓰기
+            <FaRegularPen className="w-4 h-4 mr-2 -ml-1" aria-hidden="true" />새
+            글 쓰기
           </button>
         </Link>
       </div>

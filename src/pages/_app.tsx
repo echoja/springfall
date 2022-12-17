@@ -1,4 +1,3 @@
-import { config as fontAwesomeConfig } from "@fortawesome/fontawesome-svg-core";
 import { useUpdateSession } from "@modules/auth/use-session";
 import {
   useColorMode,
@@ -13,10 +12,7 @@ import { GoogleAnalytics } from "nextjs-google-analytics";
 
 import defaultSEOConfig from "../../next-seo.config";
 
-import "@fortawesome/fontawesome-svg-core/styles.css";
 import "@common/globals.css";
-
-fontAwesomeConfig.autoAddCss = false;
 
 interface IMyAppProps extends AppProps {
   Component: MonnomlogPage;
