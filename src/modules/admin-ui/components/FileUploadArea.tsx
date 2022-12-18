@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 
 import handleInputFile from "@modules/file/handle-input-file";
 import uploadFile from "@modules/file/upload-file";
@@ -13,7 +13,6 @@ const FileUploadArea: React.FC<IFileUploadAreaProps> = ({ onUploaded }) => {
     await handleInputFile(e, async (file) => {
       const publicUrl = await uploadFile(file, "uploads/wordpress-xml");
       onUploaded?.({ file, publicUrl });
-      console.log("file, publicurl", file, publicUrl);
     });
   };
 

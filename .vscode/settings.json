@@ -1,11 +1,16 @@
 {
   "editor.formatOnSave": true,
-  "editor.codeActionsOnSave": [
-    "source.organizeImports",
-    "source.fixAll"
-  ],
+  "editor.codeActionsOnSave": ["source.organizeImports", "source.fixAll"],
   "typescript.tsdk": "node_modules/.pnpm/typescript@4.9.4/node_modules/typescript/lib",
   "typescript.tsserver.experimental.enableProjectDiagnostics": true,
   "eslint.lintTask.enable": true,
-  "typescript.enablePromptUseWorkspaceTsdk": true
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/bower_components": true,
+    "**/*.code-search": true,
+    "**/__mocks__": true,
+    "**/__snapshots__": true,
+    "pnpm-lock.yaml": true
+  }
 }

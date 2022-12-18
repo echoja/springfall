@@ -14,9 +14,22 @@ export type WordpressJSON = {
   };
 };
 
-export type WordpressItem = {
+export type WordpressPost = {
   title: string;
   content: string;
   pubDate: string;
   post_id: string;
 };
+
+export type WordpressSource = {
+  post_id: string;
+  title: string;
+};
+
+export interface IParseHtmlResult {
+  nodes: Node[];
+  pendingImageUpload: {
+    path: number[];
+    src: string;
+  }[];
+}

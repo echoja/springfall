@@ -42,6 +42,7 @@ specifiers:
   next-seo: ^5.15.0
   next-sitemap: ^3.1.42
   nextjs-google-analytics: ^2.2.2
+  parse5: ^7.1.2
   postcss: ^8.4.20
   prettier: ^2.8.1
   react: ^18.2.0
@@ -91,6 +92,7 @@ dependencies:
   next: 13.0.7_biqbaboplfbrettd7655fr4n2y
   next-seo: 5.15.0_gvvct4imq5upoiloat43sswrza
   nextjs-google-analytics: 2.2.2_next@13.0.7+react@18.2.0
+  parse5: 7.1.2
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
   react-icons: 4.7.1_react@18.2.0
@@ -2208,6 +2210,11 @@ packages:
 
   /entities/3.0.1:
     resolution: {integrity: sha512-WiyBqoomrwMdFG1e0kqvASYfnlb0lp8M5o5Fw2OFq1hNZxxcNk8Ik0Xm7LxzBhuidnZB/UtBqVCgUz3kBOP51Q==}
+    engines: {node: '>=0.12'}
+    dev: false
+
+  /entities/4.4.0:
+    resolution: {integrity: sha512-oYp7156SP8LkeGD0GF85ad1X9Ai79WtRsZ2gxJqtBuzH+98YUV6jkHEKlZkMbcrjJjIVJNIDP/3WL9wQkoPbWA==}
     engines: {node: '>=0.12'}
     dev: false
 
@@ -4420,6 +4427,12 @@ packages:
       json-parse-even-better-errors: 2.3.1
       lines-and-columns: 1.2.4
     dev: true
+
+  /parse5/7.1.2:
+    resolution: {integrity: sha512-Czj1WaSVpaoj0wbhMzLmWD69anp2WH7FXMB9n1Sy8/ZFF9jolSQVMu1Ij5WIyGmcBmhk7EOndpO4mIpihVqAXw==}
+    dependencies:
+      entities: 4.4.0
+    dev: false
 
   /path-exists/3.0.0:
     resolution: {integrity: sha512-bpC7GYwiDYQ4wYLe+FA8lhRjhQCMcQGuSgGGqDkg/QerRWw9CmGRT0iSOVRSZJ29NMLZgIzqaljJ63oaL4NIJQ==}
