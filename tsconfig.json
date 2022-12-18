@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "es2018",
-    "lib": ["es2018", "esnext.asynciterable", "DOM"],
+    "lib": [
+      "es2018",
+      "esnext.asynciterable",
+      "DOM"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -16,18 +20,32 @@
     "jsx": "preserve",
     "baseUrl": "src",
     "incremental": true,
-    "types": ["vitest/globals"],
+    "types": [
+      "vitest/globals"
+    ],
     "paths": {
-      "@common/*": ["common/*"],
-      "@modules/*": ["modules/*"]
-    }
+      "@common/*": [
+        "common/*"
+      ],
+      "@modules/*": [
+        "modules/*"
+      ]
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
     "src",
-    "commitlint.config.js"
+    "commitlint.config.js",
+    ".next/types/**/*.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }

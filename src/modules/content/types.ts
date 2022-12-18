@@ -1,7 +1,7 @@
 import type { Post } from "@modules/supabase/supabase";
 import type { NextPage } from "next";
-import type { ReactNode } from "react";
 import type React from "react";
+import type { ReactNode } from "react";
 import type { BaseEditor, Descendant, Element } from "slate";
 import type {
   ReactEditor,
@@ -9,7 +9,7 @@ import type {
   RenderLeafProps,
 } from "slate-react";
 import type { SetOptional } from "type-fest";
-import type { SetState, GetState } from "zustand";
+import type { GetState, SetState } from "zustand";
 
 declare module "slate" {
   // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -20,7 +20,7 @@ declare module "slate" {
   }
 }
 
-export type LayoutWrapper = React.FC<{ page: ReactNode }>;
+export type LayoutWrapper = React.FC<{ children: ReactNode }>;
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type MonnomlogPage<P = {}> = NextPage<P> & {

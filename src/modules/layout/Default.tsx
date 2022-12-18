@@ -3,7 +3,7 @@ import type { LayoutWrapper } from "@modules/content/types";
 import Footer from "./Footer";
 import Header from "./Header";
 
-const Default: LayoutWrapper = ({ page }) => {
+const Default: LayoutWrapper = ({ children: page }) => {
   return (
     <div className="max-w-screen-md mx-auto">
       <div className="p-4 md:p-8 sm:p-6">
