@@ -13,6 +13,7 @@ specifiers:
   '@types/is-url': ^1.2.30
   '@types/markdown-it': ^12.2.3
   '@types/react': ^18.0.26
+  '@upstash/qstash': ^0.3.2
   autoprefixer: ^10.4.13
   axios: ^1.2.1
   commitlint: ^17.3.0
@@ -72,6 +73,7 @@ dependencies:
   '@next/env': 13.0.7
   '@supabase/supabase-js': 2.2.1_encoding@0.1.13
   '@tailwindcss/forms': 0.5.3_tailwindcss@3.2.4
+  '@upstash/qstash': 0.3.2
   axios: 1.2.1
   date-fns: 2.29.3
   date-fns-tz: 1.3.7_date-fns@2.29.3
@@ -346,6 +348,10 @@ packages:
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
     dev: true
+
+  /@deno/shim-crypto/0.3.1:
+    resolution: {integrity: sha512-ed4pNnfur6UbASEgF34gVxR9p7Mc3qF+Ygbmjiil8ws5IhNFhPDFy5vE5hQAUA9JmVsSxXPcVLM5Rf8LOZqQ5Q==}
+    dev: false
 
   /@emotion/is-prop-valid/0.8.8:
     resolution: {integrity: sha512-u5WtneEAr5IDG2Wv65yhunPSMLIpuKsbuOktRojfrEiEvRyC85LgPMZI63cr7NUqT8ZIGdSVg8ZKGxIug4lXcA==}
@@ -1193,6 +1199,12 @@ packages:
       '@typescript-eslint/types': 5.46.0
       eslint-visitor-keys: 3.3.0
     dev: true
+
+  /@upstash/qstash/0.3.2:
+    resolution: {integrity: sha512-R5mKygCpGFwihsST18I/if3TxYkgumKKs6cfB7JAc1FGBDLSxSycAX5HTWcuFjhL/HFO+hRkI7U9f6BHHrUkWA==}
+    dependencies:
+      '@deno/shim-crypto': 0.3.1
+    dev: false
 
   /JSONStream/1.3.5:
     resolution: {integrity: sha512-E+iruNOY8VV9s4JEbe1aNEm6MiszPRr/UfcHMz0TQh1BXSxHK+ASV1R6W4HpjBhSeS+54PIsAMCBmwD06LLsqQ==}

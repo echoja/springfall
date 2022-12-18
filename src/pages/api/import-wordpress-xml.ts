@@ -1,15 +1,15 @@
 import { getJsonFromBody } from "@common/util";
 import { XMLParser } from "fast-xml-parser";
-import type { NextRequest } from "next/server";
+import type { NextApiRequest } from "next";
 import { NextResponse } from "next/server";
 
-export default async (req: NextRequest) => {
+export default async (req: NextApiRequest) => {
   const parser = new XMLParser();
 
   if (req.method !== "POST") {
     return NextResponse.json(
-      { error: "Only POST requests are allowed" },
-      { status: 405 }
+      { error: "Method Not Allowed" },
+      { status: 405, headers: { Allow: "POST" } }
     );
   }
 

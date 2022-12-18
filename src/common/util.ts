@@ -1,6 +1,6 @@
 import type { CreatePostInput, ICodeBlock } from "@modules/content/types";
 import type { Post } from "@modules/supabase/supabase";
-import type { NextRequest } from "next/server";
+import type { NextApiRequest } from "next";
 import rfdc from "rfdc";
 import type { Element } from "slate";
 
@@ -54,7 +54,7 @@ export function getCreatePostInput(post: Post): CreatePostInput {
 }
 
 export async function getJsonFromBody<T>(
-  req: NextRequest
+  req: NextApiRequest
 ): Promise<Partial<T>> {
   const reader = req.body?.getReader();
   if (!reader) {
