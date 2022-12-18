@@ -1,5 +1,6 @@
-import type { ICodeBlock, CreatePostInput } from "@modules/content/types";
+import type { CreatePostInput, ICodeBlock } from "@modules/content/types";
 import type { Post } from "@modules/supabase/supabase";
+import type { NextRequest } from "next/server";
 import rfdc from "rfdc";
 import type { Element } from "slate";
 
@@ -50,4 +51,29 @@ export function getCreatePostInput(post: Post): CreatePostInput {
     published: post.published,
     summary: post.summary,
   };
+}
+
+export async function getJsonFromBody<T>(
+  req: NextRequest
+): Promise<Partial<T>> {
+  const reader = req.body?.getReader();
+  if (!reader) {
+    throw new Error("No reader");
+  }
+
+  const decoder = new TextDecoder();
+  let body = "";
+  const read = async () => {
+    const result = await reader.read();
+    if (result.done) {
+      return;
+    }
+    body += decoder.decode(result.value, { stream: true });
+    await read();
+  };
+
+  await read();
+  body += decoder.decode();
+
+  return JSON.parse(body) as T;
 }

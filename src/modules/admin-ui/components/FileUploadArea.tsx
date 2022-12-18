@@ -1,8 +1,22 @@
 "use client";
 
-interface IFileUploadAreaProps {}
+import handleInputFile from "@modules/file/handle-input-file";
+import uploadFile from "@modules/file/upload-file";
+import type { ChangeEvent } from "react";
 
-const FileUploadArea: React.FC<IFileUploadAreaProps> = () => {
+interface IFileUploadAreaProps {
+  onUploaded?: (args: { file: File; publicUrl: string }) => void;
+}
+
+const FileUploadArea: React.FC<IFileUploadAreaProps> = ({ onUploaded }) => {
+  const handleChangeFile = async (e: ChangeEvent<HTMLInputElement>) => {
+    await handleInputFile(e, async (file) => {
+      const publicUrl = await uploadFile(file, "uploads/wordpress-xml");
+      onUploaded?.({ file, publicUrl });
+      console.log("file, publicurl", file, publicUrl);
+    });
+  };
+
   return (
     <div className="flex items-center justify-center w-full">
       <label
@@ -37,7 +51,7 @@ const FileUploadArea: React.FC<IFileUploadAreaProps> = () => {
           id="dropzone-file"
           type="file"
           className="hidden"
-          onChange={(e) => console.log(e)}
+          onChange={handleChangeFile}
         />
       </label>
     </div>

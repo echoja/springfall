@@ -24,6 +24,7 @@ specifiers:
   eslint-config-next: ^13.0.7
   eslint-config-prettier: ^8.5.0
   eslint-config-sznm: ^1.0.1
+  fast-xml-parser: ^4.0.12
   framer-motion: ^7.10.2
   happy-dom: ^8.1.0
   hotkeys-js: ^3.10.1
@@ -75,6 +76,7 @@ dependencies:
   date-fns: 2.29.3
   date-fns-tz: 1.3.7_date-fns@2.29.3
   encoding: 0.1.13
+  fast-xml-parser: 4.0.12
   framer-motion: 7.10.2_biqbaboplfbrettd7655fr4n2y
   hotkeys-js: 3.10.1
   immer: 9.0.16
@@ -2847,6 +2849,13 @@ packages:
     resolution: {integrity: sha512-DCXu6Ifhqcks7TZKY3Hxp3y6qphY5SJZmrWMDrKcERSOXWQdMhU9Ig/PYrzyw/ul9jOIyh0N4M0tbC5hodg8dw==}
     dev: true
 
+  /fast-xml-parser/4.0.12:
+    resolution: {integrity: sha512-/Nmo3823Rfx7UTJosQNz6hBVbszfv1Unb7A4iNJZhvCGCgtIHv/uODmrYIH8vc05+XKZ4hNIOv6SlBejvJgATw==}
+    hasBin: true
+    dependencies:
+      strnum: 1.0.5
+    dev: false
+
   /fastq/1.14.0:
     resolution: {integrity: sha512-eR2D+V9/ExcbF9ls441yIuN6TI2ED1Y2ZcA5BmMtJsOkWOFRJQ0Jt0g1UwqXJJVAb+V+umH5Dfr8oh4EVP7VVg==}
     dependencies:
@@ -5236,6 +5245,10 @@ packages:
     dependencies:
       acorn: 8.8.1
     dev: true
+
+  /strnum/1.0.5:
+    resolution: {integrity: sha512-J8bbNyKKXl5qYcR36TIO8W3mVGVHrmmxsd5PAItGkmyzwJvybiw2IVq5nqd0i4LSNSkB/sx9VHllbfFdr9k1JA==}
+    dev: false
 
   /styled-jsx/5.1.0_react@18.2.0:
     resolution: {integrity: sha512-/iHaRJt9U7T+5tp6TRelLnqBqiaIT0HsO0+vgyj8hK2KUk7aejFqRrumqPUlAqDwAj8IbS/1hk3IhBAAK/FCUQ==}

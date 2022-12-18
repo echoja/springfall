@@ -10,38 +10,73 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
+      import_queue: {
+        Row: {
+          id: number;
+          created_at: string;
+          updated_at: string;
+          deleted_at: string | null;
+          title: string;
+          content: string;
+          published_at: string;
+          source_info: Json;
+          tags: string[];
+        };
+        Insert: {
+          id?: number;
+          created_at?: string;
+          updated_at?: string;
+          deleted_at?: string | null;
+          title?: string;
+          content?: string;
+          published_at: string;
+          source_info?: Json;
+          tags?: string[];
+        };
+        Update: {
+          id?: number;
+          created_at?: string;
+          updated_at?: string;
+          deleted_at?: string | null;
+          title?: string;
+          content?: string;
+          published_at?: string;
+          source_info?: Json;
+          tags?: string[];
+        };
+      };
       posts: {
         Row: {
           id: number;
-          removed_at: string | null;
-          user_id: string;
           created_at: string;
           updated_at: string;
+          removed_at: string | null;
           published: boolean;
           summary: string;
           title: string;
+          user_id: string;
           content: Json;
         };
         Insert: {
           id?: number;
-          removed_at?: string | null;
-          user_id: string;
           created_at?: string;
           updated_at?: string;
+          removed_at?: string | null;
           published?: boolean;
           summary?: string;
           title?: string;
+          user_id: string;
           content?: Json;
         };
         Update: {
           id?: number;
-          removed_at?: string | null;
-          user_id?: string;
           created_at?: string;
           updated_at?: string;
+          removed_at?: string | null;
           published?: boolean;
           summary?: string;
           title?: string;
+          user_id?: string;
           content?: Json;
         };
       };
