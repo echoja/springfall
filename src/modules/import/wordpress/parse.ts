@@ -117,6 +117,7 @@ const elementParserMap: {
   th: () => ({ type: "TABLE_CELL", header: true }),
   hr: () => ({ type: "HR" }),
   iframe: (el) => ({ type: "RAW_HTML", html: serializeOuter(el) }),
+  script: (el) => ({ type: "RAW_HTML", html: serializeOuter(el) }),
 };
 
 const spreadTextAttrs = (
@@ -279,11 +280,7 @@ export const htmlToSlateFragment = (
   }
 
   // TODO: 지원해야 함
-  if (
-    nodeName === "figcaption" ||
-    nodeName === "figure" ||
-    nodeName === "script"
-  ) {
+  if (nodeName === "figcaption" || nodeName === "figure") {
     return null;
   }
 
