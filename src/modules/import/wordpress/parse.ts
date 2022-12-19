@@ -66,8 +66,7 @@ const elementParserMap: {
     type: "LINK",
     url: el.attrs.find((attr) => attr.name === "href")?.value,
   }),
-  // TODO: 구현
-  blockquote: () => ({ type: "PARAGRAPH" }),
+  blockquote: () => ({ type: "BLOCKQUOTE" }),
   h1: () => ({ type: "HEADING", level: 1 }),
   h2: () => ({ type: "HEADING", level: 2 }),
   h3: () => ({ type: "HEADING", level: 3 }),

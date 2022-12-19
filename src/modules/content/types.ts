@@ -50,6 +50,7 @@ export type ElementNode = StandaloneElementNode | PartElementNode;
 
 export type StandaloneElementNode =
   | IParagraph
+  | IBlockquote
   | IHeading
   | ICodeBlock
   | ICallout
@@ -200,6 +201,11 @@ export type ICodeElement = {
 
 export type IParagraph = {
   type: "PARAGRAPH";
+  children: InlineNode[];
+};
+
+export type IBlockquote = {
+  type: "BLOCKQUOTE";
   children: InlineNode[];
 };
 
