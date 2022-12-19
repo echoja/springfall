@@ -8,17 +8,6 @@ import type { Element, Node as SlateNode } from "slate";
 import { Text } from "slate";
 import { jsx } from "slate-hyperscript";
 
-const parseImage = (el: DefaultTreeAdapterMap["element"]) => {
-  const src = el.attrs.find((attr) => attr.name === "src")?.value;
-  return {
-    node: {
-      type: "IMAGE_UPLOAD_PLACEHOLDER",
-      externalUrl: src || undefined,
-      id: nanoid(),
-    },
-  };
-};
-
 const elementParserMap: {
   [tag: string]: (el: DefaultTreeAdapterMap["element"]) => Partial<Element>;
 } = {
@@ -33,6 +22,14 @@ const elementParserMap: {
   h4: () => ({ type: "HEADING", level: 4 }),
   h5: () => ({ type: "HEADING", level: 5 }),
   h6: () => ({ type: "HEADING", level: 6 }),
+  img: (el) => {
+    const src = el.attrs.find((attr) => attr.name === "src")?.value;
+    return {
+      type: "IMAGE_UPLOAD_PLACEHOLDER",
+      externalUrl: src || undefined,
+      id: nanoid(),
+    };
+  },
   // img: (el: HTMLElement) => {
   //   const externalUrl: string | null = el.getAttribute("src");
   //   const id = nanoid();
@@ -63,6 +60,7 @@ const elementParserMap: {
   //     id,
   //   };
   // },
+
   li: () => ({ type: "LIST_ITEM" }),
   ol: () => ({ type: "LIST", ordered: true }),
   p: () => ({ type: "PARAGRAPH" }),
@@ -200,12 +198,6 @@ export const htmlToSlateFragment = (
     nodeName === "div"
   ) {
     return jsx("fragment", {}, children);
-  }
-
-  if (nodeName === "img") {
-    const { node: attrs } = parseImage(node);
-    // TODO: 이미지 업로드 관련 리스트 별도 제작
-    return jsx("element", attrs, children);
   }
 
   const elementParser = elementParserMap[nodeName];
