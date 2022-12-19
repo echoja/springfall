@@ -8,6 +8,15 @@ import type { Element, Node as SlateNode } from "slate";
 import { Text } from "slate";
 import { jsx } from "slate-hyperscript";
 
+import {
+  isCommentNode,
+  isDocument,
+  isDocumentFragment,
+  isDocumentType,
+  isTemplate,
+  isTextNode,
+} from "./check";
+
 const elementParserMap: {
   [tag: string]: (el: DefaultTreeAdapterMap["element"]) => Partial<Element>;
 } = {
@@ -108,44 +117,8 @@ const textParserMap: {
   cite: () => ({ type: "TEXT", cite: true }),
 };
 
-export const isTextNode = (
-  node: DefaultTreeAdapterMap["node"]
-): node is DefaultTreeAdapterMap["textNode"] => {
-  return node.nodeName === "#text";
-};
-
-export const isCommentNode = (
-  node: DefaultTreeAdapterMap["node"]
-): node is DefaultTreeAdapterMap["commentNode"] => {
-  return node.nodeName === "#comment";
-};
-
-export const isDocumentType = (
-  node: DefaultTreeAdapterMap["node"]
-): node is DefaultTreeAdapterMap["documentType"] => {
-  return node.nodeName === "#documentType";
-};
-
-export const isDocument = (
-  node: DefaultTreeAdapterMap["node"]
-): node is DefaultTreeAdapterMap["document"] => {
-  return node.nodeName === "#document";
-};
-
-export const isDocumentFragment = (
-  node: DefaultTreeAdapterMap["node"]
-): node is DefaultTreeAdapterMap["documentFragment"] => {
-  return node.nodeName === "#document-fragment";
-};
-
-export const isTemplate = (
-  node: DefaultTreeAdapterMap["node"]
-): node is DefaultTreeAdapterMap["template"] => {
-  return node.nodeName === "template";
-};
-
 // eslint-disable-next-line complexity
-export const htmlToSlateFragment = (
+const htmlToSlateNode = (
   node: DefaultTreeAdapterMap["node"]
 
   // TODO: 복잡도 낮추기
@@ -182,7 +155,7 @@ export const htmlToSlateFragment = (
   }
 
   let children = parent.childNodes
-    .map((child) => htmlToSlateFragment(child))
+    .map((child) => htmlToSlateNode(child))
     .flat();
 
   if (children.length === 0) {
@@ -233,3 +206,5 @@ export const htmlToSlateFragment = (
   console.error(node);
   throw new Error(`Unknown node!: ${node.nodeName}`);
 };
+
+export default htmlToSlateNode;

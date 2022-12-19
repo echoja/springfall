@@ -2,7 +2,7 @@ import { getPublishedPost, parseXml } from "@modules/import/wordpress/parse";
 import fs from "fs";
 import { parse, parseFragment, serialize, serializeOuter } from "parse5";
 
-import { htmlToSlateFragment } from "./parse";
+import htmlToSlateNode from "./html-to-slate-node";
 import sanitize from "./sanitize";
 
 const xmlFile = fs.readFileSync(
@@ -64,7 +64,7 @@ describe("htmlToSlateFragment", () => {
     <h6>hello h6</h6>
     <img src="test-src">
     `);
-    const result = htmlToSlateFragment(html);
+    const result = htmlToSlateNode(html);
     expect(result).toMatchSnapshot();
   });
 
@@ -72,7 +72,7 @@ describe("htmlToSlateFragment", () => {
     const html = parse(`
     <p>123<em>h<strong>e<s>l</s>l</strong>o</em>h1</p>
     `);
-    const result = htmlToSlateFragment(html);
+    const result = htmlToSlateNode(html);
     expect(result).toMatchInlineSnapshot(`
       [
         {
@@ -125,7 +125,7 @@ describe("htmlToSlateFragment", () => {
     const html = parse(`
     <p>123h<strong>easdf <a href="http://naver.com">adf</a> asdf</strong>asdf asdf</p>
     `);
-    const result = htmlToSlateFragment(html);
+    const result = htmlToSlateNode(html);
     expect(result).toMatchInlineSnapshot(`
       [
         {
@@ -172,7 +172,7 @@ describe("htmlToSlateFragment", () => {
     wpItems.forEach((post) => {
       it(`실제 워드프레스 포스팅을 잘 변환해야 함: ${post.post_id}`, () => {
         const htmlParsed = parse(sanitize(post.content));
-        const result = htmlToSlateFragment(htmlParsed);
+        const result = htmlToSlateNode(htmlParsed);
         expect(result).toMatchSnapshot();
       });
     });
