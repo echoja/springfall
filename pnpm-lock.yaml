@@ -29,6 +29,7 @@ specifiers:
   framer-motion: ^7.10.2
   happy-dom: ^8.1.0
   hotkeys-js: ^3.10.1
+  html-tags: ^3.2.0
   husky: ^8.0.2
   immer: ^9.0.16
   is-hotkey: ^0.2.0
@@ -82,6 +83,7 @@ dependencies:
   fast-xml-parser: 4.0.12
   framer-motion: 7.10.2_biqbaboplfbrettd7655fr4n2y
   hotkeys-js: 3.10.1
+  html-tags: 3.2.0
   immer: 9.0.16
   is-hotkey: 0.2.0
   is-url: 1.2.4
@@ -3307,6 +3309,11 @@ packages:
 
   /html-entities/2.3.3:
     resolution: {integrity: sha512-DV5Ln36z34NNTDgnz0EWGBLZENelNAtkiFA4kyNOG2tDI6Mz1uSWiq1wAKdyjnJwyDiDO7Fa2SO1CTxPXL8VxA==}
+    dev: false
+
+  /html-tags/3.2.0:
+    resolution: {integrity: sha512-vy7ClnArOZwCnqZgvv+ddgHgJiAFXe3Ge9ML5/mBctVJoUoYPCdxVucOywjDARn6CVoh3dRSFdPHy2sX80L0Wg==}
+    engines: {node: '>=8'}
     dev: false
 
   /human-signals/2.1.0:

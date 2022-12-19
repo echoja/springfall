@@ -1,10 +1,12 @@
 /* eslint-disable no-param-reassign */
+import { deepclone } from "@common/util";
 import { convert } from "@modules/content/code-block/convert";
 import { XMLParser } from "fast-xml-parser";
 import { nanoid } from "nanoid";
 import type { DefaultTreeAdapterMap } from "parse5";
 import { parse } from "parse5";
-import type { Element, Node as SlateNode, Text } from "slate";
+import type { Element, Node as SlateNode } from "slate";
+import { Text } from "slate";
 import { jsx } from "slate-hyperscript";
 
 import type { WordpressJSON, WordpressPost } from "./type";
@@ -114,6 +116,24 @@ const elementParserMap: {
   tr: () => ({ type: "TABLE_ROW" }),
   td: () => ({ type: "TABLE_CELL" }),
   th: () => ({ type: "TABLE_CELL", header: true }),
+  hr: () => ({ type: "HR" }),
+};
+
+const spreadTextAttrs = (
+  node: SlateNode,
+  textAttr: Partial<Text>
+): SlateNode => {
+  if (Text.isText(node)) {
+    return { ...textAttr, ...node };
+  }
+
+  const newChildren = node.children.map((child) => {
+    return spreadTextAttrs(child, textAttr);
+  }) as typeof node.children;
+
+  const result = deepclone(node);
+  result.children = newChildren;
+  return result;
 };
 
 const textParserMap: {
@@ -187,7 +207,12 @@ export const htmlToSlateFragment = (
     return { type: "TEXT", text: "\n" };
   }
 
-  if (isCommentNode(node) || isDocumentType(node) || isTemplate(node)) {
+  if (
+    isCommentNode(node) ||
+    isDocumentType(node) ||
+    isTemplate(node) ||
+    node.nodeName === "head"
+  ) {
     return null;
   }
 
@@ -215,13 +240,11 @@ export const htmlToSlateFragment = (
     node.nodeName === "body" ||
     node.nodeName === "html" ||
     isDocument(node) ||
-    isDocumentFragment(node)
+    isDocumentFragment(node) ||
+    node.nodeName === "span" ||
+    node.nodeName === "div"
   ) {
     return jsx("fragment", {}, children);
-  }
-
-  if (node.nodeName === "head") {
-    return null;
   }
 
   if (node.nodeName === "img") {
@@ -244,13 +267,25 @@ export const htmlToSlateFragment = (
   }
   const textParser = textParserMap[nodeName];
   if (textParser) {
-    try {
-      const attrs = textParserMap[nodeName]?.(node);
-      return children.map((child) => jsx("text", attrs, child));
-    } catch (e) {
-      console.log("children", children);
-      throw e;
-    }
+    const attrs = textParser(node);
+
+    return children.map((child) => {
+      if (!child || child.type === "TEXT") {
+        return jsx("text", attrs, child);
+      }
+      return spreadTextAttrs(child, attrs);
+    });
+  }
+
+  // TODO: 지원해야 함
+  if (
+    node.nodeName === "iframe" ||
+    node.nodeName === "figcaption" ||
+    node.nodeName === "figure" ||
+    node.nodeName === "script" ||
+    node.nodeName === "cite"
+  ) {
+    return null;
   }
 
   // eslint-disable-next-line no-console
