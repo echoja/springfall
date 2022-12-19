@@ -146,6 +146,7 @@ const textParserMap: {
   s: () => ({ type: "TEXT", strikethrough: true }),
   strong: () => ({ type: "TEXT", bold: true }),
   u: () => ({ type: "TEXT", underline: true }),
+  cite: () => ({ type: "TEXT", cite: true }),
 };
 
 export function parseHtml(html: string): IParseHtmlResult {
@@ -282,8 +283,7 @@ export const htmlToSlateFragment = (
     node.nodeName === "iframe" ||
     node.nodeName === "figcaption" ||
     node.nodeName === "figure" ||
-    node.nodeName === "script" ||
-    node.nodeName === "cite"
+    node.nodeName === "script"
   ) {
     return null;
   }
