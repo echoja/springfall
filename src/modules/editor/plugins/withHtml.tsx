@@ -19,8 +19,7 @@ const ELEMENT_TAGS: {
     type: "LINK",
     url: el.getAttribute("href") || undefined,
   }),
-  // TODO: 구현
-  BLOCKQUOTE: () => ({ type: "PARAGRAPH" }),
+  BLOCKQUOTE: () => ({ type: "BLOCKQUOTE" }),
   H1: () => ({ type: "HEADING", level: 1 }),
   H2: () => ({ type: "HEADING", level: 2 }),
   H3: () => ({ type: "HEADING", level: 3 }),
@@ -85,6 +84,7 @@ const TEXT_TAGS: {
 
 type Fragment = Node | string | null | (Node | string | null)[];
 
+// TODO: parse5 버전으로 대체
 export const deserialize = (
   el: HTMLElement,
   editor: Editor
