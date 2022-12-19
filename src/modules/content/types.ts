@@ -145,7 +145,7 @@ export type IImageUploadPlaceholder = {
   type: "IMAGE_UPLOAD_PLACEHOLDER";
   children: [EmptyText];
   id: string;
-  externalUrl?: string;
+  src?: string;
 };
 
 export type IImageCaption = {

@@ -27,10 +27,10 @@ const ELEMENT_TAGS: {
   H5: () => ({ type: "HEADING", level: 5 }),
   H6: () => ({ type: "HEADING", level: 6 }),
   IMG: (el: HTMLElement, editor: Editor) => {
-    const externalUrl: string | null = el.getAttribute("src");
+    const src: string | null = el.getAttribute("src");
     const id = nanoid();
-    if (externalUrl) {
-      srcToFile(externalUrl).then((file) => {
+    if (src) {
+      srcToFile(src).then((file) => {
         if (!file) {
           removeImageUploadPlaceholder(editor, id);
           return;
@@ -52,7 +52,7 @@ const ELEMENT_TAGS: {
 
     return {
       type: "IMAGE_UPLOAD_PLACEHOLDER",
-      externalUrl: externalUrl || undefined,
+      src: src || undefined,
       id,
     };
   },

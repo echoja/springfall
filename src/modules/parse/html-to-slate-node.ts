@@ -35,7 +35,7 @@ const elementParserMap: {
     const src = el.attrs.find((attr) => attr.name === "src")?.value;
     return {
       type: "IMAGE_UPLOAD_PLACEHOLDER",
-      externalUrl: src || undefined,
+      src: src || undefined,
       id: nanoid(),
     };
   },

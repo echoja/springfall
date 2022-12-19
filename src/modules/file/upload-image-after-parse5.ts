@@ -3,14 +3,16 @@ import { Element } from "slate";
 
 export async function uploadImageAfterParse5(node: SlateNode | SlateNode[]) {}
 
+type PendingImages = Map<string, { path: number[]; src: string }>;
+
 export function getPendingImagesRecursive(
   node: SlateNode,
   currentPath: number[] = []
-): Map<string, { path: number[] }> {
-  const result: Map<string, { path: number[] }> = new Map();
+): PendingImages {
+  const result: PendingImages = new Map();
 
-  if (node.type === "IMAGE_UPLOAD_PLACEHOLDER") {
-    result.set(node.id, { path: currentPath });
+  if (node.type === "IMAGE_UPLOAD_PLACEHOLDER" && node.src) {
+    result.set(node.id, { path: currentPath, src: node.src });
   }
 
   if (Element.isElement(node)) {
@@ -29,12 +31,12 @@ export function getPendingImagesRecursive(
 }
 
 export function getPendingImages(nodes: SlateNode[]) {
-  const result: Map<string, { path: number[] }> = new Map();
+  const result: PendingImages = new Map();
 
   nodes.forEach((node, index) => {
     const childResult = getPendingImagesRecursive(node, [index]);
     childResult.forEach((value, key) => {
-      childResult.set(key, value);
+      result.set(key, value);
     });
   });
 
