@@ -44,6 +44,8 @@
       }
     ],
 
+    "@typescript-eslint/switch-exhaustiveness-check": "error",
+
     "@next/next/no-img-element": "off",
 
     "react-hooks/exhaustive-deps": [

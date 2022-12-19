@@ -4,7 +4,7 @@ import { convert } from "@modules/content/code-block/convert";
 import { XMLParser } from "fast-xml-parser";
 import { nanoid } from "nanoid";
 import type { DefaultTreeAdapterMap } from "parse5";
-import { parse } from "parse5";
+import { parse, serializeOuter } from "parse5";
 import type { Element, Node as SlateNode } from "slate";
 import { Text } from "slate";
 import { jsx } from "slate-hyperscript";
@@ -116,6 +116,7 @@ const elementParserMap: {
   td: () => ({ type: "TABLE_CELL" }),
   th: () => ({ type: "TABLE_CELL", header: true }),
   hr: () => ({ type: "HR" }),
+  iframe: (el) => ({ type: "RAW_HTML", html: serializeOuter(el) }),
 };
 
 const spreadTextAttrs = (
@@ -237,17 +238,17 @@ export const htmlToSlateFragment = (
   }
 
   if (
-    node.nodeName === "body" ||
-    node.nodeName === "html" ||
+    nodeName === "body" ||
+    nodeName === "html" ||
     isDocument(node) ||
     isDocumentFragment(node) ||
-    node.nodeName === "span" ||
-    node.nodeName === "div"
+    nodeName === "span" ||
+    nodeName === "div"
   ) {
     return jsx("fragment", {}, children);
   }
 
-  if (node.nodeName === "img") {
+  if (nodeName === "img") {
     const { node: attrs } = parseImage(node);
     // TODO: 이미지 업로드 관련 리스트 별도 제작
     return jsx("element", attrs, children);
@@ -279,10 +280,9 @@ export const htmlToSlateFragment = (
 
   // TODO: 지원해야 함
   if (
-    node.nodeName === "iframe" ||
-    node.nodeName === "figcaption" ||
-    node.nodeName === "figure" ||
-    node.nodeName === "script"
+    nodeName === "figcaption" ||
+    nodeName === "figure" ||
+    nodeName === "script"
   ) {
     return null;
   }

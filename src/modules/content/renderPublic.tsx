@@ -1,6 +1,7 @@
 import type { ReactElement } from "react";
 import type { Descendant, Element } from "slate";
 
+import PublicBlockquote from "./blockquote/PublicParagraph";
 import PublicCallout from "./callout/PublicCallout";
 import PublicCodeBlock from "./code-block/PublicCodeBlock";
 import PublicCodeBlockElement from "./code-block/PublicCodeElement";
@@ -20,7 +21,7 @@ import PublicTableCell from "./table/PublicTableCell";
 import PublicTableGroup from "./table/PublicTableGroup";
 import PublicTableRow from "./table/PublicTableRow";
 import PublicText from "./text/PublicText";
-import type { IText, CommonRenderElementProps } from "./types";
+import type { CommonRenderElementProps, IText } from "./types";
 
 export function renderPublicElement(props: CommonRenderElementProps) {
   const { element } = props;
@@ -61,6 +62,8 @@ export function renderPublicElement(props: CommonRenderElementProps) {
       return <PublicTableCell {...props} element={element} />;
     case "RAW_HTML":
       return <PublicRawHtml {...props} element={element} />;
+    case "BLOCKQUOTE":
+      return <PublicBlockquote {...props} element={element} />;
     default:
       return null;
   }

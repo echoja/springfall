@@ -32,6 +32,10 @@ const PublicText: React.FC<CommonRenderLeafProps> = (
     children = <u>{children}</u>;
   }
 
+  if (leaf.cite) {
+    children = <cite>{children}</cite>;
+  }
+
   return <span>{children}</span>;
 };
 

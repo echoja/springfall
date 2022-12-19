@@ -1,5 +1,5 @@
 import fs from "fs";
-import { parse } from "parse5";
+import { parse, parseFragment, serialize, serializeOuter } from "parse5";
 
 import { getPublishedPost, htmlToSlateFragment, parseXml } from "./parse";
 import sanitize from "./sanitize";
@@ -37,6 +37,29 @@ describe("parse5", () => {
     const result = parse(html);
     const body = result.childNodes.find((node) => node.nodeName === "body");
     expect(body).toMatchInlineSnapshot("undefined");
+  });
+
+  describe("serialize", () => {
+    test("iframe", () => {
+      const fragment = parseFragment(
+        '<iframe src="test" width="200"></iframe>'
+      );
+      expect(serialize(fragment)).toEqual(
+        '<iframe src="test" width="200"></iframe>'
+      );
+    });
+    test("복잡한 iframe", () => {
+      const fragment = parseFragment(
+        '<iframe id="cp_embed_oNzRdJX" src="//codepen.io/anon/embed/oNzRdJX?height=500&theme-id=1&slug-hash=oNzRdJX&default-tab=result" height="500" scrolling="no" frameborder="0" allowfullscreen allowpaymentrequest name="CodePen Embed oNzRdJX" title="CodePen Embed oNzRdJX" class="cp_embed_iframe" style="width:100%;overflow:hidden">CodePen Embed Fallback</iframe>'
+      );
+
+      expect(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        serializeOuter(fragment.childNodes[0] as any)
+      ).toMatchInlineSnapshot(
+        '"<iframe id=\\"cp_embed_oNzRdJX\\" src=\\"//codepen.io/anon/embed/oNzRdJX?height=500&amp;theme-id=1&amp;slug-hash=oNzRdJX&amp;default-tab=result\\" height=\\"500\\" scrolling=\\"no\\" frameborder=\\"0\\" allowfullscreen=\\"\\" allowpaymentrequest=\\"\\" name=\\"CodePen Embed oNzRdJX\\" title=\\"CodePen Embed oNzRdJX\\" class=\\"cp_embed_iframe\\" style=\\"width:100%;overflow:hidden\\">CodePen Embed Fallback</iframe>"'
+      );
+    });
   });
 });
 
