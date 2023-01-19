@@ -2,8 +2,7 @@
   "extends": [
     "sznm/react",
     "plugin:react/jsx-runtime",
-    "plugin:@next/next/recommended",
-    "prettier"
+    "plugin:@next/next/recommended"
   ],
   "rules": {
     // const PostList: MonnomlogPage<IPostListProps> = (props) => { ... } 와 같이 썼을 때

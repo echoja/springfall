@@ -3,7 +3,7 @@ import { Element } from "slate";
 
 export async function uploadImageAfterParse5(node: SlateNode | SlateNode[]) {}
 
-type PendingImages = Map<string, { path: number[]; src: string }>;
+export type PendingImages = Map<string, { path: number[]; src: string }>;
 
 export function getPendingImagesRecursive(
   node: SlateNode,

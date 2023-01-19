@@ -21,6 +21,7 @@ export interface Database {
           published_at: string;
           source_info: Json;
           tags: string[];
+          post_id: number | null;
         };
         Insert: {
           id?: number;
@@ -32,6 +33,7 @@ export interface Database {
           published_at: string;
           source_info?: Json;
           tags?: string[];
+          post_id?: number | null;
         };
         Update: {
           id?: number;
@@ -43,6 +45,7 @@ export interface Database {
           published_at?: string;
           source_info?: Json;
           tags?: string[];
+          post_id?: number | null;
         };
       };
       posts: {
