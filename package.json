@@ -6,7 +6,7 @@
     "t": "vitest",
     "test": "vitest",
     "test:ci": "vitest run",
-    "dev": "concurrently --names N,Q -c bgBlue.bold,bgCyan.bold 'next dev' 'quirrel'",
+    "dev": "next dev",
     "build": "next build && next-sitemap --config next-sitemap.config.js",
     "start": "next start",
     "analyze": "ANALYZE=true yarn build",
