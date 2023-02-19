@@ -1,10 +1,11 @@
+import Link from "next/link";
+import { memo } from "react";
+
 import FaGitHub from "@modules/icons/FaGitHub";
 import FaRegularSmile from "@modules/icons/FaRegularSmile";
 import FaSolidHandsHoldingDollar from "@modules/icons/FaSolidHandsHoldingDollar";
 import FaSolidQuestion from "@modules/icons/FaSolidQuestion";
 import FaTwitter from "@modules/icons/FaTwitter";
-import Link from "next/link";
-import { memo } from "react";
 
 const buttons: Array<{
   Icon: React.FC<React.SVGProps<SVGSVGElement>>;

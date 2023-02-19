@@ -1,5 +1,6 @@
-import { DEFAULT_UTTERANCES_REPO, getUtterancesRepo } from "@common/config";
 import { useEffect, useState } from "react";
+
+import { DEFAULT_UTTERANCES_REPO, getUtterancesRepo } from "@common/config";
 
 import { useColorMode } from "./color-mode/color-mode";
 

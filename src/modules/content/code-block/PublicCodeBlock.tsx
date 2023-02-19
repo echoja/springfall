@@ -1,6 +1,5 @@
-import CopyButton from "@modules/admin-ui/CopyButton";
-
 import type { IContentElementProps, ICodeBlock } from "../types";
+import CopyButton from "@modules/admin-ui/CopyButton";
 
 import Buttons from "./Buttons";
 import codeNodeToString from "./code-node-to-string";

@@ -1,18 +1,18 @@
+import { Combobox, Dialog } from "@headlessui/react";
+import { memo, useCallback, useState } from "react";
+import { Editor, Element, Transforms } from "slate";
+import { useSlate } from "slate-react";
+import { twMerge } from "tailwind-merge";
+
 import useConst from "@common/hooks/use-const";
 import { useMyStoreMemo } from "@common/store";
 import { getDefaultNodeProps } from "@common/util";
-import { Combobox, Dialog } from "@headlessui/react";
 import {
   handler as insertRawHtmlHandler,
   insertRawHtmlItem,
 } from "@modules/content/raw-html/command-item";
 import type { Command, ElementNode } from "@modules/content/types";
 import FaSolidMagnifyingGlass from "@modules/icons/FaSolidMagnifyingGlass";
-import { memo, useCallback, useState } from "react";
-import type { Element } from "slate";
-import { Editor, Transforms } from "slate";
-import { useSlate } from "slate-react";
-import { twMerge } from "tailwind-merge";
 
 const commands: Command[] = [
   {
@@ -139,7 +139,7 @@ const CommandPalette: React.FC<ICommandPaletteProps> = ({ onCommand }) => {
         case "CONVERT": {
           const resultEntry = Editor.above<ElementNode>(editor, {
             at: editor.selection?.anchor,
-            match: (n) => Editor.isBlock(editor, n),
+            match: (n) => Element.isElement(n) && Editor.isBlock(editor, n),
           });
 
           if (resultEntry) {
@@ -164,7 +164,7 @@ const CommandPalette: React.FC<ICommandPaletteProps> = ({ onCommand }) => {
         case "CONVERT_HEADING": {
           const resultEntry = Editor.above<ElementNode>(editor, {
             at: editor.selection?.anchor,
-            match: (n) => Editor.isBlock(editor, n),
+            match: (n) => Element.isElement(n) && Editor.isBlock(editor, n),
           });
           if (resultEntry) {
             Transforms.setNodes(

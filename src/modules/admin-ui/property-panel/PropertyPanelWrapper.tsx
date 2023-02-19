@@ -1,8 +1,9 @@
-import { deepclone } from "@common/util";
 import { memo, useMemo } from "react";
 import type { Path } from "slate";
 import { Editor } from "slate";
 import { useSlate, useSlateSelector } from "slate-react";
+
+import { deepclone } from "@common/util";
 
 import PropertyPanel from "./PropertyPanel";
 

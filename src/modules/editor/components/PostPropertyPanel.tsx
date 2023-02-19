@@ -1,8 +1,9 @@
+import { useAtom } from "jotai";
+import React, { useCallback } from "react";
+
 import { editingPostAtom } from "@common/store";
 import SwitchGroup from "@modules/admin-ui/components/SwitchGroup";
 import TextareaGroup from "@modules/admin-ui/components/TextareaGroup";
-import { useAtom } from "jotai";
-import React, { useCallback } from "react";
 
 const PostPropertyPanel: React.FC = () => {
   const [editingPost, setEditingPost] = useAtom(editingPostAtom);

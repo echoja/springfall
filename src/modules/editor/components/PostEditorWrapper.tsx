@@ -1,3 +1,11 @@
+import { useAtom } from "jotai";
+import Link from "next/link";
+import type React from "react";
+import { memo, useCallback, useEffect, useMemo, useState } from "react";
+import type { Descendant, Selection } from "slate";
+import { Slate } from "slate-react";
+import { twMerge } from "tailwind-merge";
+
 import { isDevelopment } from "@common/config";
 import { useHotkeys } from "@common/hooks/use-hotkeys";
 import {
@@ -18,13 +26,6 @@ import InsertImageDialog from "@modules/editor/components/InsertImageDialog";
 import { getEditor } from "@modules/editor/custom-slate-editor";
 import FaSolidAngleLeft from "@modules/icons/FaSolidAngleLeft";
 import FaSolidFloppyDisk from "@modules/icons/FaSolidFloppyDisk";
-import { useAtom } from "jotai";
-import Link from "next/link";
-import type React from "react";
-import { memo, useCallback, useEffect, useMemo, useState } from "react";
-import type { Descendant, Selection } from "slate";
-import { Slate } from "slate-react";
-import { twMerge } from "tailwind-merge";
 
 import ContentEditorEditable from "./ContentEditorEditable";
 import DebugPopover from "./DebugPopover";

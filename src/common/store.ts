@@ -1,9 +1,10 @@
-import type { AdminStore, Stores, Set, Get } from "@modules/content/types";
-import type { Post } from "@modules/supabase/supabase";
 import { atom } from "jotai";
 import { useCallback } from "react";
 import create from "zustand";
 import { devtools } from "zustand/middleware";
+
+import type { AdminStore, Stores, Set, Get } from "@modules/content/types";
+import type { Post } from "@modules/supabase/supabase";
 
 const defaultPost: Post = {
   title: "",

@@ -1,7 +1,8 @@
-import { useUser } from "@modules/auth/use-session";
-import { getAnonClient } from "@modules/supabase/supabase";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+
+import { useUser } from "@modules/auth/use-session";
+import { getAnonClient } from "@modules/supabase/supabase";
 
 const useAdminAuth = () => {
   const router = useRouter();

@@ -1,3 +1,5 @@
+import type { Path } from "slate";
+
 import useContentNode from "@common/hooks/use-content-node";
 import CodeBlockPropertyPanel from "@modules/content/code-block/property-panel/CodeBlockPropertyPanel";
 import CodeLinePropertyPanel from "@modules/content/code-block/property-panel/CodeLinePropertyPanel";
@@ -5,7 +7,6 @@ import ImagePropertyPanel from "@modules/content/image/property-panel/ImagePrope
 import ListPropertyPanel from "@modules/content/list/ListPropertyPanel";
 import RawHtmlPropertyPanel from "@modules/content/raw-html/RawHtmlPropertyPanel";
 import TablePropertyPanel from "@modules/content/table/TablePropertyPanel";
-import type { Path } from "slate";
 
 const PropertyPanel: React.FC<{ nodePath: Path }> = ({ nodePath: path }) => {
   // Editor 로부터 얻은 node 는 반응성이 없으므로 데이터(atom)으로부터 직접 node를 가져옴

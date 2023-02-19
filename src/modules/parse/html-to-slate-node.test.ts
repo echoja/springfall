@@ -1,6 +1,7 @@
-import { getPublishedPost, parseXml } from "@modules/import/wordpress/parse";
 import fs from "fs";
 import { parse, parseFragment, serialize, serializeOuter } from "parse5";
+
+import { getPublishedPost, parseXml } from "@modules/import/wordpress/parse";
 
 import htmlToSlateNode from "./html-to-slate-node";
 import sanitize from "./sanitize";

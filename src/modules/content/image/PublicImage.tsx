@@ -1,5 +1,6 @@
-import type { IContentElementProps, IImage } from "@modules/content/types";
 import NextImage from "next/image";
+
+import type { IContentElementProps, IImage } from "@modules/content/types";
 
 import style from "./style.module.css";
 

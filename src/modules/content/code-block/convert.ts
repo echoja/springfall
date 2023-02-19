@@ -1,4 +1,3 @@
-import { deepclone } from "@common/util";
 import type { RefractorElement, RefractorRoot, Text } from "refractor";
 import { refractor } from "refractor";
 import shLang from "refractor/lang/bash";
@@ -16,6 +15,7 @@ import type {
   IText,
   Language,
 } from "../types";
+import { deepclone } from "@common/util";
 
 import codeNodeToString from "./code-node-to-string";
 

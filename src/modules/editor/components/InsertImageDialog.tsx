@@ -1,7 +1,5 @@
 /* This example requires Tailwind CSS v2.0+ */
-import { useMyStoreMemo } from "@common/store";
 import { Dialog } from "@headlessui/react";
-import replaceImageUploadPlaceholder from "@modules/content/image/replace-image-upload-holder";
 import { nanoid } from "nanoid";
 import type { ChangeEvent } from "react";
 import { memo, useCallback, useRef } from "react";
@@ -10,6 +8,8 @@ import { Editor, Transforms } from "slate";
 import { useSlate } from "slate-react";
 
 import { uploadImage } from "../upload";
+import { useMyStoreMemo } from "@common/store";
+import replaceImageUploadPlaceholder from "@modules/content/image/replace-image-upload-holder";
 
 const InsertImageDialog: React.FC<{ selection: Selection | null }> = ({
   selection,

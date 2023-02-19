@@ -1,6 +1,4 @@
-import { useMyStore } from "@common/store";
 import { Transition } from "@headlessui/react";
-import type { Post } from "@modules/supabase/supabase";
 import {
   Fragment,
   memo,
@@ -11,6 +9,9 @@ import {
 } from "react";
 import { useSlateSelection } from "slate-react";
 import { twMerge } from "tailwind-merge";
+
+import { useMyStore } from "@common/store";
+import type { Post } from "@modules/supabase/supabase";
 
 const emptyArray: ReadonlyArray<number | string> = [];
 

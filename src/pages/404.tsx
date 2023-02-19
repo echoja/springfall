@@ -1,8 +1,9 @@
-import FaRegularShoePrints from "@modules/icons/FaRegularShoePrints";
 import type { Transition } from "framer-motion";
 import { motion } from "framer-motion";
-import { NextSeo } from "next-seo";
 import Link from "next/link";
+import { NextSeo } from "next-seo";
+
+import FaRegularShoePrints from "@modules/icons/FaRegularShoePrints";
 
 const animate = { y: 20 };
 const transition: Transition = {

@@ -1,8 +1,9 @@
 "use client";
 
+import { GoogleAnalytics } from "nextjs-google-analytics";
+
 import { useUpdateSession } from "@modules/auth/use-session";
 import { useColorModeEffect } from "@modules/color-mode/color-mode";
-import { GoogleAnalytics } from "nextjs-google-analytics";
 
 const RootClientLayout: React.FC = () => {
   useColorModeEffect();

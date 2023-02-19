@@ -1,9 +1,10 @@
+import { useSelected } from "slate-react";
+import { twMerge } from "tailwind-merge";
+
 import type {
   IContentElementProps,
   IImageCaption,
 } from "@modules/content/types";
-import { useSelected } from "slate-react";
-import { twMerge } from "tailwind-merge";
 
 import isEmptyImageCaption from "./is-empty-image-caption";
 import style from "./style.module.css";

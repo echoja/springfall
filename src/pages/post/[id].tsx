@@ -1,3 +1,10 @@
+import { formatInTimeZone } from "date-fns-tz";
+import Joi from "joi";
+import type { GetStaticPaths, GetStaticProps } from "next";
+import { useRouter } from "next/router";
+import { ArticleJsonLd, NextSeo } from "next-seo";
+import { useMemo } from "react";
+
 import { getBaseUrl } from "@common/config";
 import { renderPublic } from "@modules/content/renderPublic";
 import type { MonnomlogPage } from "@modules/content/types";
@@ -5,12 +12,6 @@ import FaSolidAxe from "@modules/icons/FaSolidAxe";
 import type { Post } from "@modules/supabase/supabase";
 import { getServiceClient } from "@modules/supabase/supabase-service";
 import Utterances from "@modules/utterances";
-import { formatInTimeZone } from "date-fns-tz";
-import Joi from "joi";
-import type { GetStaticPaths, GetStaticProps } from "next";
-import { ArticleJsonLd, NextSeo } from "next-seo";
-import { useRouter } from "next/router";
-import { useMemo } from "react";
 
 interface IPostViewProps {
   post?: Post;

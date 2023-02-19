@@ -1,5 +1,6 @@
-import type { ICodeLine, IContentElementProps } from "@modules/content/types";
 import { twMerge } from "tailwind-merge";
+
+import type { ICodeLine, IContentElementProps } from "@modules/content/types";
 
 import style from "./style.module.css";
 

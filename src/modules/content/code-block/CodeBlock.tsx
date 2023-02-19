@@ -1,6 +1,3 @@
-import { useMyStoreMemo } from "@common/store";
-import type { ICodeBlock, IContentElementProps } from "@modules/content/types";
-import FaPenToSquare from "@modules/icons/FaRegularPenToSquare";
 import type React from "react";
 import { useCallback } from "react";
 import {
@@ -11,6 +8,9 @@ import {
 } from "slate-react";
 
 import CopyButton from "../../admin-ui/CopyButton";
+import { useMyStoreMemo } from "@common/store";
+import type { ICodeBlock, IContentElementProps } from "@modules/content/types";
+import FaPenToSquare from "@modules/icons/FaRegularPenToSquare";
 
 import Buttons from "./Buttons";
 import codeNodeToString from "./code-node-to-string";

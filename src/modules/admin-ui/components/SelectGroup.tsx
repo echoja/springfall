@@ -1,8 +1,9 @@
-import useConst from "@common/hooks/use-const";
 import { nanoid } from "nanoid";
 import type { ChangeEvent } from "react";
 import { memo, useCallback, useMemo } from "react";
 import { twMerge } from "tailwind-merge";
+
+import useConst from "@common/hooks/use-const";
 
 function SelectGroup<T extends string | undefined>({
   onChange,

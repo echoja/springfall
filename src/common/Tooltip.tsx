@@ -1,26 +1,26 @@
-import type { Placement } from "@floating-ui/react-dom-interactions";
+import type { Placement } from "@floating-ui/react";
 import {
-  useFloating,
-  autoUpdate,
-  offset,
-  flip,
-  shift,
-  useHover,
-  useFocus,
-  useDismiss,
-  useRole,
-  useInteractions,
-  FloatingPortal,
   arrow,
-} from "@floating-ui/react-dom-interactions";
+  autoUpdate,
+  flip,
+  FloatingPortal,
+  offset,
+  shift,
+  useDismiss,
+  useFloating,
+  useFocus,
+  useHover,
+  useInteractions,
+  useRole,
+} from "@floating-ui/react";
 import { AnimatePresence, motion } from "framer-motion";
 import type { HTMLProps, ReactNode } from "react";
 import {
-  useRef,
   cloneElement,
   forwardRef,
   isValidElement,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import { mergeRefs } from "react-merge-refs";

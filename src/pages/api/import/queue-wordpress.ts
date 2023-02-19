@@ -1,8 +1,9 @@
+import type { NextApiRequest } from "next";
+import { NextResponse } from "next/server";
+
 import { getJsonFromBody } from "@common/util";
 import insertQueue from "@modules/import/wordpress/insert-queue";
 import { getPublishedPost, parseXml } from "@modules/import/wordpress/parse";
-import type { NextApiRequest } from "next";
-import { NextResponse } from "next/server";
 
 export default async (req: NextApiRequest) => {
   if (req.method !== "POST") {

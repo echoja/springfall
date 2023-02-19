@@ -1,3 +1,9 @@
+import type { AppProps } from "next/app";
+import Head from "next/head";
+import { DefaultSeo } from "next-seo";
+import { GoogleAnalytics } from "nextjs-google-analytics";
+
+import defaultSEOConfig from "../../next-seo.config";
 import { useUpdateSession } from "@modules/auth/use-session";
 import {
   useColorMode,
@@ -5,12 +11,6 @@ import {
 } from "@modules/color-mode/color-mode";
 import type { MonnomlogPage } from "@modules/content/types";
 import Default from "@modules/layout/Default";
-import { DefaultSeo } from "next-seo";
-import type { AppProps } from "next/app";
-import Head from "next/head";
-import { GoogleAnalytics } from "nextjs-google-analytics";
-
-import defaultSEOConfig from "../../next-seo.config";
 
 import "@common/globals.css";
 

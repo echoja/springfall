@@ -1,12 +1,13 @@
 /* eslint-disable no-param-reassign */
-import { deepclone } from "@common/util";
-import { convert } from "@modules/content/code-block/convert";
 import { nanoid } from "nanoid";
 import type { DefaultTreeAdapterMap } from "parse5";
 import { serializeOuter } from "parse5";
 import type { Element, Node as SlateNode } from "slate";
 import { Text } from "slate";
 import { jsx } from "slate-hyperscript";
+
+import { deepclone } from "@common/util";
+import { convert } from "@modules/content/code-block/convert";
 
 import {
   isCommentNode,

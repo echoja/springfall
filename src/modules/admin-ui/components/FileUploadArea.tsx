@@ -1,8 +1,9 @@
 // "use client";
 
+import type { ChangeEvent } from "react";
+
 import handleInputFile from "@modules/file/handle-input-file";
 import uploadFile from "@modules/file/upload-file";
-import type { ChangeEvent } from "react";
 
 interface IFileUploadAreaProps {
   onUploaded?: (args: { file: File; publicUrl: string }) => void;

@@ -1,9 +1,10 @@
+import type React from "react";
+import { twMerge } from "tailwind-merge";
+
 import type {
   CommonRenderElementProps,
   IHeading,
 } from "@modules/content/types";
-import type React from "react";
-import { twMerge } from "tailwind-merge";
 
 export interface IHeadingProps extends CommonRenderElementProps {
   element: IHeading;

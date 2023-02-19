@@ -1,7 +1,7 @@
-import ClientHead from "@modules/layout/ClientHead";
 import { NextSeo } from "next-seo";
 
 import defaultSEOConfig from "../../next-seo.config";
+import ClientHead from "@modules/layout/ClientHead";
 
 export default function Head() {
   return (

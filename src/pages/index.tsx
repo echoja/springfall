@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
-import { NextSeo } from "next-seo";
 import Image from "next/image";
 import Link from "next/link";
+import { NextSeo } from "next-seo";
 
 const Home = () => {
   return (

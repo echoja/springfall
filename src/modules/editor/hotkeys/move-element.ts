@@ -1,6 +1,6 @@
 import isHotkey from "is-hotkey";
 import type { KeyboardEvent } from "react";
-import { Transforms, Editor } from "slate";
+import { Editor, Element, Transforms } from "slate";
 
 // move element up/down with opt+up/down
 const moveElement = (event: KeyboardEvent<HTMLDivElement>, editor: Editor) => {
@@ -8,7 +8,7 @@ const moveElement = (event: KeyboardEvent<HTMLDivElement>, editor: Editor) => {
 
   const selectionBlockEntry = Editor.above(editor, {
     at: selection || undefined,
-    match: (n) => Editor.isBlock(editor, n),
+    match: (n) => Element.isElement(n) && Editor.isBlock(editor, n),
   });
 
   if (!selectionBlockEntry) {

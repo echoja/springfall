@@ -1,16 +1,17 @@
 /* This example requires Tailwind CSS v2.0+ */
-import { useHotkeys } from "@common/hooks/use-hotkeys";
-import { useMyStoreMemo } from "@common/store";
-import { deepclone } from "@common/util";
 import { Dialog } from "@headlessui/react";
-import codeNodeToString from "@modules/content/code-block/code-node-to-string";
-import { createCodeBlock } from "@modules/content/code-block/convert";
-import type { ICodeBlock } from "@modules/content/types";
 import type { ChangeEvent } from "react";
 import { useEffect, memo, useCallback, useRef, useState } from "react";
 import type { NodeEntry } from "slate";
 import { Transforms, Editor } from "slate";
 import { useSlateStatic } from "slate-react";
+
+import { useHotkeys } from "@common/hooks/use-hotkeys";
+import { useMyStoreMemo } from "@common/store";
+import { deepclone } from "@common/util";
+import codeNodeToString from "@modules/content/code-block/code-node-to-string";
+import { createCodeBlock } from "@modules/content/code-block/convert";
+import type { ICodeBlock } from "@modules/content/types";
 
 const CodeBlockEditModal: React.FC = () => {
   const uploadButtonRef = useRef(null);

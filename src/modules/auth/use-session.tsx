@@ -1,7 +1,8 @@
-import { getAnonClient } from "@modules/supabase/supabase";
 import type { Session } from "@supabase/supabase-js";
 import { atom, useAtom } from "jotai";
 import { useCallback, useEffect } from "react";
+
+import { getAnonClient } from "@modules/supabase/supabase";
 
 const sessionAtom = atom<Session | null | "UNAUTHORIZED">(null);
 

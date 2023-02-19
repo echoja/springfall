@@ -1,3 +1,11 @@
+import type { Draft } from "immer";
+import produce from "immer";
+import type { NextApiRequest, NextApiResponse } from "next";
+import { NextResponse } from "next/server";
+import { parse } from "parse5";
+import type { Node } from "slate";
+import { Element } from "slate";
+
 import { deepclone, getJsonFromBody } from "@common/util";
 import { srcToFile } from "@modules/editor/upload";
 import getImageFileSize from "@modules/file/get-image-size";
@@ -7,13 +15,6 @@ import { getPendingImages } from "@modules/file/upload-image-after-parse5";
 import htmlToSlateNode from "@modules/parse/html-to-slate-node";
 import { getServiceClient } from "@modules/supabase/supabase-service";
 import type { Json } from "@modules/supabase/supabase-types";
-import type { Draft } from "immer";
-import produce from "immer";
-import type { NextApiRequest, NextApiResponse } from "next";
-import { NextResponse } from "next/server";
-import { parse } from "parse5";
-import type { Node } from "slate";
-import { Element } from "slate";
 
 async function uploadImageWithReplacement({
   nodes,

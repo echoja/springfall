@@ -1,9 +1,10 @@
+import Link from "next/link";
+import { useMemo } from "react";
+
 import { POSTS_PER_PAGE } from "@common/config";
 import FaRegularCabinetFiling from "@modules/icons/FaRegularCabinetFiling";
 import FaRegularSeedling from "@modules/icons/FaRegularSeedling";
 import type { Post } from "@modules/supabase/supabase";
-import Link from "next/link";
-import { useMemo } from "react";
 
 interface IPostListProps {
   posts: Post[];

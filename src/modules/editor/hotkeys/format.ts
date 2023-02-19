@@ -1,7 +1,8 @@
-import type { Mark } from "@modules/content/types";
 import isHotkey from "is-hotkey";
 import type { KeyboardEvent } from "react";
 import { Editor } from "slate";
+
+import type { Mark } from "@modules/content/types";
 
 // Define our own custom set of helpers.
 function isMarkActive(editor: Editor, mark: Mark) {

@@ -1,4 +1,3 @@
-import { renderElement, renderLeaf } from "@modules/content/render";
 import type { KeyboardEvent } from "react";
 import { useMemo, useCallback, memo } from "react";
 import { Editable, useSlateStatic } from "slate-react";
@@ -6,6 +5,7 @@ import { twMerge } from "tailwind-merge";
 
 import onKeyDown from "../on-key-down";
 import renderPlaceholder from "../render-placeholder";
+import { renderElement, renderLeaf } from "@modules/content/render";
 
 const ContentEditorEditable: React.FC = () => {
   const editor = useSlateStatic();

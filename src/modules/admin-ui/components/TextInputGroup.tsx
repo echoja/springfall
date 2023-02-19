@@ -1,9 +1,10 @@
-import useConst from "@common/hooks/use-const";
-import useEditPropertyInternalValue from "@common/hooks/use-edit-property-internal-value";
 import { nanoid } from "nanoid";
 import type { ChangeEvent } from "react";
 import { memo, useCallback } from "react";
 import { twMerge } from "tailwind-merge";
+
+import useConst from "@common/hooks/use-const";
+import useEditPropertyInternalValue from "@common/hooks/use-edit-property-internal-value";
 
 function TextInputGroup({
   onChange,

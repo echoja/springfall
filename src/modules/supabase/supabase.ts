@@ -1,7 +1,8 @@
 // TODO: move to module dir
 
-import type { ContentType } from "@modules/content/types";
 import { createClient } from "@supabase/supabase-js";
+
+import type { ContentType } from "@modules/content/types";
 
 import type { Database } from "./supabase-types";
 
