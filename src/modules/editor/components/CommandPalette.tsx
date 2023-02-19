@@ -9,8 +9,7 @@ import {
 import type { Command, ElementNode } from "@modules/content/types";
 import FaSolidMagnifyingGlass from "@modules/icons/FaSolidMagnifyingGlass";
 import { memo, useCallback, useState } from "react";
-import type { Element } from "slate";
-import { Editor, Transforms } from "slate";
+import { Editor, Element, Transforms } from "slate";
 import { useSlate } from "slate-react";
 import { twMerge } from "tailwind-merge";
 
@@ -139,7 +138,7 @@ const CommandPalette: React.FC<ICommandPaletteProps> = ({ onCommand }) => {
         case "CONVERT": {
           const resultEntry = Editor.above<ElementNode>(editor, {
             at: editor.selection?.anchor,
-            match: (n) => Editor.isBlock(editor, n),
+            match: (n) => Element.isElement(n) && Editor.isBlock(editor, n),
           });
 
           if (resultEntry) {
@@ -164,7 +163,7 @@ const CommandPalette: React.FC<ICommandPaletteProps> = ({ onCommand }) => {
         case "CONVERT_HEADING": {
           const resultEntry = Editor.above<ElementNode>(editor, {
             at: editor.selection?.anchor,
-            match: (n) => Editor.isBlock(editor, n),
+            match: (n) => Element.isElement(n) && Editor.isBlock(editor, n),
           });
           if (resultEntry) {
             Transforms.setNodes(

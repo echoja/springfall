@@ -1,4 +1,4 @@
-import { Editor, Transforms, Element, Range, Point } from "slate";
+import { Editor, Element, Point, Range, Transforms } from "slate";
 
 import type { IList } from "../types";
 
@@ -15,7 +15,7 @@ const withListShortcuts = (editor: Editor) => {
     if (text.endsWith(" ") && selection && Range.isCollapsed(selection)) {
       const { anchor } = selection;
       const block = Editor.above(editor, {
-        match: (n) => Editor.isBlock(editor, n),
+        match: (n) => Element.isElement(n) && Editor.isBlock(editor, n),
       });
       const path = block ? block[1] : [];
       const start = Editor.start(editor, path);
@@ -34,7 +34,7 @@ const withListShortcuts = (editor: Editor) => {
         };
 
         Transforms.setNodes<Element>(editor, newProperties, {
-          match: (n) => Editor.isBlock(editor, n),
+          match: (n) => Element.isElement(n) && Editor.isBlock(editor, n),
         });
 
         const list: IList = {
@@ -63,7 +63,7 @@ const withListShortcuts = (editor: Editor) => {
 
     if (selection && Range.isCollapsed(selection)) {
       const match = Editor.above(editor, {
-        match: (n) => Editor.isBlock(editor, n),
+        match: (n) => Element.isElement(n) && Editor.isBlock(editor, n),
       });
 
       if (match) {
@@ -105,7 +105,7 @@ const withListShortcuts = (editor: Editor) => {
 
     if (selection && Range.isCollapsed(selection)) {
       const match = Editor.above(editor, {
-        match: (n) => Editor.isBlock(editor, n),
+        match: (n) => Element.isElement(n) && Editor.isBlock(editor, n),
       });
       if (match) {
         const [block] = match;
