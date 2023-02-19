@@ -91,7 +91,7 @@ async function uploadImageWithReplacement({
 
 export default async function SubmitWordpressFromQueue(
   req: NextApiRequest,
-  res: NextApiResponse
+  _res: NextApiResponse
 ) {
   if (req.method !== "POST") {
     return NextResponse.json(
@@ -130,9 +130,12 @@ export default async function SubmitWordpressFromQueue(
   }
 
   const htmlParsed = parse(importing.data.content);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const slateParsed = htmlToSlateNode(htmlParsed);
 
+  // TODO: implementation
   if (!slateParsed || !Array.isArray(slateParsed)) {
+    // eslint-disable-next-line no-console
     console.log(`No data after parsing for import queue of id ${id}`);
   } else {
     const pendingImages = getPendingImages(slateParsed);
@@ -147,13 +150,13 @@ export default async function SubmitWordpressFromQueue(
         data: replacedNodes,
       } as unknown as Json,
       published: true,
-      user_id,
+      user_id: "TODO",
     });
   }
 
   return NextResponse.json({
     message: "OK",
-    data: res.data,
+    data: "",
   });
 }
 

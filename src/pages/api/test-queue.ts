@@ -28,6 +28,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     delay: 15000,
   });
 
+  // eslint-disable-next-line no-console
   console.log(resFromQueue);
 
   // { messageId: "msg_xxxxxxxxxxxxxxxx" }

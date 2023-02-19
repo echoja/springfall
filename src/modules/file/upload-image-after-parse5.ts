@@ -1,7 +1,9 @@
 import type { Node as SlateNode } from "slate";
 import { Element } from "slate";
 
-export async function uploadImageAfterParse5(node: SlateNode | SlateNode[]) {}
+export async function uploadImageAfterParse5(_node: SlateNode | SlateNode[]) {
+  // TODO: implement this
+}
 
 export type PendingImages = Map<string, { path: number[]; src: string }>;
 
