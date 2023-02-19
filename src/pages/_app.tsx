@@ -38,7 +38,9 @@ const MyApp = ({ Component, pageProps }: IMyAppProps) => {
       </Head>
       <GoogleAnalytics trackPageViews />
       <DefaultSeo {...defaultSEOConfig} />
-      <LayoutWrapper page={<Component {...pageProps} />} />
+      <LayoutWrapper>
+        <Component {...pageProps} />
+      </LayoutWrapper>
     </>
   );
 };

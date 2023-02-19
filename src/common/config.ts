@@ -41,6 +41,12 @@ export function getBaseUrl() {
   );
 }
 
+export const getQStashConfig = () => ({
+  nextSigningKey: process.env.QSTASH_NEXT_SIGNING_KEY || undefined,
+  currentSigningKey: process.env.QSTASH_CURRENT_SIGNING_KEY || undefined,
+  token: process.env.QSTASH_TOKEN || undefined,
+});
+
 export const DEFAULT_UTTERANCES_REPO = "owner/repo";
 
 export function getUtterancesRepo() {

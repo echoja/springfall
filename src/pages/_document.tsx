@@ -1,5 +1,5 @@
 import type { DocumentContext } from "next/document";
-import Document, { Html, Head, Main, NextScript } from "next/document";
+import Document, { Head, Html, Main, NextScript } from "next/document";
 
 const APP_NAME = "monnomlog";
 
@@ -8,12 +8,8 @@ export const getInitialProps = async (ctx: DocumentContext) => {
 };
 export default function MyDocument() {
   return (
-    <Html lang="en">
+    <Html lang="ko">
       <Head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap"
-          rel="stylesheet"
-        />
         <link
           type="image/png"
           sizes="96x96"

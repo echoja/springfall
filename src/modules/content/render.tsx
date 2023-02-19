@@ -1,5 +1,6 @@
 import type { RenderElementProps, RenderLeafProps } from "slate-react";
 
+import Blockquote from "./blockquote/Blockquote";
 import Callout from "./callout/Callout";
 import CodeBlock from "./code-block/CodeBlock";
 import CodeElement from "./code-block/CodeElement";
@@ -21,6 +22,7 @@ import TableGroup from "./table/TableGroup";
 import TableRow from "./table/TableRow";
 import Text from "./text/Text";
 
+// eslint-disable-next-line complexity
 export function renderElement(props: RenderElementProps) {
   const { element } = props;
   switch (element.type) {
@@ -62,6 +64,8 @@ export function renderElement(props: RenderElementProps) {
       return <TableCell {...props} element={element} />;
     case "RAW_HTML":
       return <RawHtml {...props} element={element} />;
+    case "BLOCKQUOTE":
+      return <Blockquote {...props} element={element} />;
     default:
       throw new Error(`no element found: ${element.type}`);
   }

@@ -19,8 +19,7 @@ const ELEMENT_TAGS: {
     type: "LINK",
     url: el.getAttribute("href") || undefined,
   }),
-  // TODO: 구현
-  BLOCKQUOTE: () => ({ type: "PARAGRAPH" }),
+  BLOCKQUOTE: () => ({ type: "BLOCKQUOTE" }),
   H1: () => ({ type: "HEADING", level: 1 }),
   H2: () => ({ type: "HEADING", level: 2 }),
   H3: () => ({ type: "HEADING", level: 3 }),
@@ -28,10 +27,10 @@ const ELEMENT_TAGS: {
   H5: () => ({ type: "HEADING", level: 5 }),
   H6: () => ({ type: "HEADING", level: 6 }),
   IMG: (el: HTMLElement, editor: Editor) => {
-    const externalUrl: string | null = el.getAttribute("src");
+    const src: string | null = el.getAttribute("src");
     const id = nanoid();
-    if (externalUrl) {
-      srcToFile(externalUrl).then((file) => {
+    if (src) {
+      srcToFile(src).then((file) => {
         if (!file) {
           removeImageUploadPlaceholder(editor, id);
           return;
@@ -53,7 +52,7 @@ const ELEMENT_TAGS: {
 
     return {
       type: "IMAGE_UPLOAD_PLACEHOLDER",
-      externalUrl: externalUrl || undefined,
+      src: src || undefined,
       id,
     };
   },
@@ -85,6 +84,7 @@ const TEXT_TAGS: {
 
 type Fragment = Node | string | null | (Node | string | null)[];
 
+// TODO: parse5 버전으로 대체
 export const deserialize = (
   el: HTMLElement,
   editor: Editor

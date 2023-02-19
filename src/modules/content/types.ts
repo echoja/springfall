@@ -1,7 +1,7 @@
 import type { Post } from "@modules/supabase/supabase";
 import type { NextPage } from "next";
-import type { ReactNode } from "react";
 import type React from "react";
+import type { ReactNode } from "react";
 import type { BaseEditor, Descendant, Element } from "slate";
 import type {
   ReactEditor,
@@ -9,7 +9,7 @@ import type {
   RenderLeafProps,
 } from "slate-react";
 import type { SetOptional } from "type-fest";
-import type { SetState, GetState } from "zustand";
+import type { GetState, SetState } from "zustand";
 
 declare module "slate" {
   // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -20,7 +20,7 @@ declare module "slate" {
   }
 }
 
-export type LayoutWrapper = React.FC<{ page: ReactNode }>;
+export type LayoutWrapper = React.FC<{ children: ReactNode }>;
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type MonnomlogPage<P = {}> = NextPage<P> & {
@@ -50,6 +50,7 @@ export type ElementNode = StandaloneElementNode | PartElementNode;
 
 export type StandaloneElementNode =
   | IParagraph
+  | IBlockquote
   | IHeading
   | ICodeBlock
   | ICallout
@@ -144,7 +145,7 @@ export type IImageUploadPlaceholder = {
   type: "IMAGE_UPLOAD_PLACEHOLDER";
   children: [EmptyText];
   id: string;
-  externalUrl?: string;
+  src?: string;
 };
 
 export type IImageCaption = {
@@ -203,6 +204,11 @@ export type IParagraph = {
   children: InlineNode[];
 };
 
+export type IBlockquote = {
+  type: "BLOCKQUOTE";
+  children: InlineNode[];
+};
+
 export type ILink = {
   type: "LINK";
   url: string;
@@ -221,6 +227,7 @@ export type IText = {
   italic?: boolean;
   code?: boolean;
   kbd?: boolean;
+  cite?: boolean;
 };
 
 export type Mark = keyof Omit<IText, "type" | "text">;

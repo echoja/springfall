@@ -1,6 +1,5 @@
 import getImageFileSize from "@modules/file/get-image-size";
-import { getAnonClient } from "@modules/supabase/supabase";
-import { nanoid } from "nanoid";
+import uploadFile from "@modules/file/upload-file";
 
 export async function srcToFile(src: string) {
   try {
@@ -26,38 +25,6 @@ export async function srcToFile(src: string) {
   }
 }
 
-export const uploadFile = async (file: File) => {
-  // insert id to filename
-  const lastDot = file.name.lastIndexOf(".");
-  const newFilename = `${file.name.substring(
-    0,
-    lastDot
-  )}-${nanoid()}${file.name.substring(lastDot)}`;
-
-  // TODO: 이미지 업로드 Progrss Bar 구현
-  // https://github.com/supabase/storage-api/issues/23#issuecomment-973277262
-  const { data, error } = await getAnonClient()
-    .storage.from("uploads")
-    .upload(newFilename, file, {
-      cacheControl: "3600",
-      upsert: false,
-      contentType: file.type,
-    });
-
-  if (error) {
-    throw error;
-  }
-  if (!data) {
-    throw new Error("no response data");
-  }
-
-  const {
-    data: { publicUrl },
-  } = getAnonClient().storage.from("uploads").getPublicUrl(data.path);
-
-  return publicUrl;
-};
-
 type UploadResult =
   | {
       type: "IMAGE_UPLOAD_SUCCESS";
@@ -80,7 +47,7 @@ export const uploadImage = (
         if (file.type.includes("image")) {
           const [actualSize, url] = await Promise.all([
             getImageFileSize(file),
-            uploadFile(file),
+            uploadFile(file, "uploads"),
           ] as const);
           return { type: "IMAGE_UPLOAD_SUCCESS", ...actualSize, url };
         }

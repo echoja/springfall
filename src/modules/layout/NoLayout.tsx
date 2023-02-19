@@ -1,6 +1,6 @@
 import type { LayoutWrapper } from "@modules/content/types";
 
-const NoLayoutWrapper: LayoutWrapper = ({ page }) => {
+const NoLayoutWrapper: LayoutWrapper = ({ children: page }) => {
   return <div>{page}</div>;
 };
 
