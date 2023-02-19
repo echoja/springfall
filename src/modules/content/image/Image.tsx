@@ -1,7 +1,8 @@
-import type { IContentElementProps, IImage } from "@modules/content/types";
 import NextImage from "next/image";
 import { useSelected } from "slate-react";
 import { twMerge } from "tailwind-merge";
+
+import type { IContentElementProps, IImage } from "@modules/content/types";
 
 import style from "./style.module.css";
 

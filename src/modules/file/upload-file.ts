@@ -1,5 +1,6 @@
-import { getAnonClient } from "@modules/supabase/supabase";
 import { nanoid } from "nanoid";
+
+import { getAnonClient } from "@modules/supabase/supabase";
 
 const uploadFile = async (file: File, storageName: string) => {
   // insert id to filename

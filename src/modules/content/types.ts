@@ -1,4 +1,3 @@
-import type { Post } from "@modules/supabase/supabase";
 import type { NextPage } from "next";
 import type React from "react";
 import type { ReactNode } from "react";
@@ -10,6 +9,8 @@ import type {
 } from "slate-react";
 import type { SetOptional } from "type-fest";
 import type { GetState, SetState } from "zustand";
+
+import type { Post } from "@modules/supabase/supabase";
 
 declare module "slate" {
   // eslint-disable-next-line @typescript-eslint/naming-convention

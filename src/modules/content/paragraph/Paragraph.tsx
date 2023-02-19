@@ -1,6 +1,7 @@
-import type { IContentElementProps, IParagraph } from "@modules/content/types";
 import { useSelected } from "slate-react";
 import { twMerge } from "tailwind-merge";
+
+import type { IContentElementProps, IParagraph } from "@modules/content/types";
 
 const Paragraph: React.FC<IContentElementProps<IParagraph>> = ({
   attributes,

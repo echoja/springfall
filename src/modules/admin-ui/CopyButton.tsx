@@ -1,6 +1,7 @@
+import { memo, useCallback, useState } from "react";
+
 import FaRegularCopy from "@modules/icons/FaRegularCopy";
 import FaSolidCheck from "@modules/icons/FaSolidCheck";
-import { memo, useCallback, useState } from "react";
 
 interface ICopyButtonProps {
   className?: string;

@@ -1,7 +1,8 @@
 "use client";
 
-import FileUploadArea from "@modules/admin-ui/components/FileUploadArea";
 import { useCallback } from "react";
+
+import FileUploadArea from "@modules/admin-ui/components/FileUploadArea";
 
 const WordpressImportFileUpload: React.FC = () => {
   const handleUploaded = useCallback(

@@ -1,10 +1,11 @@
-import SelectGroup from "@modules/admin-ui/components/SelectGroup";
-import type { ICodeLine } from "@modules/content/types";
 import type React from "react";
 import { memo } from "react";
 import type { Path } from "slate";
 import { Transforms } from "slate";
 import { useSlateStatic } from "slate-react";
+
+import SelectGroup from "@modules/admin-ui/components/SelectGroup";
+import type { ICodeLine } from "@modules/content/types";
 
 const CodeLinePropertyPanel: React.FC<{ node: ICodeLine; path: Path }> = ({
   node,

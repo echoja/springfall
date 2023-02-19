@@ -1,12 +1,13 @@
+import { useRouter } from "next/router";
+import { NextSeo } from "next-seo";
+import { useEffect, useMemo, useState } from "react";
+
 import { POSTS_PER_PAGE } from "@common/config";
 import type { MonnomlogPage } from "@modules/content/types";
 import PostList from "@modules/layout/PostList";
 import { checkPageNumber } from "@modules/route";
 import type { Post } from "@modules/supabase/supabase";
 import { getAnonClient } from "@modules/supabase/supabase";
-import { NextSeo } from "next-seo";
-import { useRouter } from "next/router";
-import { useEffect, useMemo, useState } from "react";
 
 const ListPage: MonnomlogPage = () => {
   const router = useRouter();

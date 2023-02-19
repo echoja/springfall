@@ -1,4 +1,3 @@
-import { withImage } from "@modules/content/image/slate-api";
 import { memo } from "react";
 import { createEditor, Editor, Element } from "slate";
 import { withHistory } from "slate-history";
@@ -6,6 +5,7 @@ import { withReact } from "slate-react";
 
 import { withLinkBlock } from "../content/link/api";
 import type { CommonRenderElementProps } from "../content/types";
+import { withImage } from "@modules/content/image/slate-api";
 
 import withHtml from "./plugins/withHtml";
 import withShortcuts from "./plugins/withShortcuts";

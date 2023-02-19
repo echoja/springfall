@@ -1,6 +1,5 @@
-import InlineChromiumBugfix from "@modules/editor/components/InlineChromiumBugfix";
-
 import type { IContentElementProps, ILink } from "../types";
+import InlineChromiumBugfix from "@modules/editor/components/InlineChromiumBugfix";
 
 import style from "./style.module.css";
 

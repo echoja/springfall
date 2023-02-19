@@ -1,6 +1,7 @@
-import type { IContentElementProps, IHeading } from "@modules/content/types";
 import type React from "react";
 import { twMerge } from "tailwind-merge";
+
+import type { IContentElementProps, IHeading } from "@modules/content/types";
 
 const defaultHeadingClassName = "font-semibold mt-[1.5em] mb-[0.5em]";
 

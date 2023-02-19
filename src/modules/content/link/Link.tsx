@@ -1,8 +1,8 @@
-import InlineChromiumBugfix from "@modules/editor/components/InlineChromiumBugfix";
 import { useSelected } from "slate-react";
 import { twMerge } from "tailwind-merge";
 
 import type { IContentElementProps, ILink } from "../types";
+import InlineChromiumBugfix from "@modules/editor/components/InlineChromiumBugfix";
 
 import style from "./style.module.css";
 

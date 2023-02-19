@@ -8,12 +8,12 @@ import {
   ListBulletIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import type { LayoutWrapper } from "@modules/content/types";
 import Link from "next/link";
 import { Fragment, useMemo, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 import useAdminAuth from "../auth/use-admin-auth";
+import type { LayoutWrapper } from "@modules/content/types";
 
 const AdminLayoutWrapper: LayoutWrapper = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);

@@ -1,13 +1,13 @@
 /* eslint-disable no-param-reassign */
-import { convert } from "@modules/content/code-block/convert";
-import removeImageUploadPlaceholder from "@modules/content/image/remove-image-upload-placeholder";
-import replaceImageUploadPlaceholder from "@modules/content/image/replace-image-upload-holder";
 import { nanoid } from "nanoid";
 import type { Editor, Element, Node, Text } from "slate";
 import { Transforms } from "slate";
 import { jsx } from "slate-hyperscript";
 
 import { srcToFile, uploadImage } from "../upload";
+import { convert } from "@modules/content/code-block/convert";
+import removeImageUploadPlaceholder from "@modules/content/image/remove-image-upload-placeholder";
+import replaceImageUploadPlaceholder from "@modules/content/image/replace-image-upload-holder";
 
 const ELEMENT_TAGS: {
   [tag: HTMLElement["nodeName"]]: (

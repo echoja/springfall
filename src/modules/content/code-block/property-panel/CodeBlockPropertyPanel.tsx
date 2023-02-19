@@ -1,14 +1,14 @@
-import { deepclone } from "@common/util";
-import SelectGroup from "@modules/admin-ui/components/SelectGroup";
-import SwitchGroup from "@modules/admin-ui/components/SwitchGroup";
-import TextInputGroup from "@modules/admin-ui/components/TextInputGroup";
-import type { ICodeBlock, Language } from "@modules/content/types";
 import React from "react";
 import type { Path } from "slate";
 import { Transforms } from "slate";
 import { useSlateStatic } from "slate-react";
 
 import { convert } from "../convert";
+import { deepclone } from "@common/util";
+import SelectGroup from "@modules/admin-ui/components/SelectGroup";
+import SwitchGroup from "@modules/admin-ui/components/SwitchGroup";
+import TextInputGroup from "@modules/admin-ui/components/TextInputGroup";
+import type { ICodeBlock, Language } from "@modules/content/types";
 
 const CodeBlockPropertyPanel: React.FC<{ node: ICodeBlock; path: Path }> = ({
   node,

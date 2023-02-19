@@ -1,7 +1,8 @@
-import { getQStashConfig } from "@common/config";
 import { Client } from "@upstash/qstash";
 import { nanoid } from "nanoid";
 import type { NextApiRequest, NextApiResponse } from "next";
+
+import { getQStashConfig } from "@common/config";
 
 const config = getQStashConfig();
 

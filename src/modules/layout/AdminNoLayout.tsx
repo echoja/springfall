@@ -1,6 +1,5 @@
-import type { LayoutWrapper } from "@modules/content/types";
-
 import useAdminAuth from "../auth/use-admin-auth";
+import type { LayoutWrapper } from "@modules/content/types";
 
 const AdminNoLayoutWrapper: LayoutWrapper = ({ children: page }) => {
   useAdminAuth();

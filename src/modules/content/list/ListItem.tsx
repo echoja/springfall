@@ -1,6 +1,7 @@
-import type { IContentElementProps, IListItem } from "@modules/content/types";
 import { useSelected } from "slate-react";
 import { twMerge } from "tailwind-merge";
+
+import type { IContentElementProps, IListItem } from "@modules/content/types";
 
 import style from "./style.module.css";
 

@@ -1,7 +1,8 @@
-import useEditPropertyInternalValue from "@common/hooks/use-edit-property-internal-value";
 import type { ChangeEvent } from "react";
 import { useCallback } from "react";
 import { twMerge } from "tailwind-merge";
+
+import useEditPropertyInternalValue from "@common/hooks/use-edit-property-internal-value";
 
 export default function TextareaGroup({
   onChange,

@@ -1,5 +1,6 @@
-import WordpressImportFileUpload from "@modules/import/wordpress/WordpressImportFileUpload";
 import type React from "react";
+
+import WordpressImportFileUpload from "@modules/import/wordpress/WordpressImportFileUpload";
 
 // interface IWordpressProps {}
 

@@ -1,9 +1,10 @@
-import SwitchGroup from "@modules/admin-ui/components/SwitchGroup";
-import type { ITable } from "@modules/content/types";
 import React from "react";
 import type { Path } from "slate";
 import { Node, Transforms } from "slate";
 import { useSlateStatic } from "slate-react";
+
+import SwitchGroup from "@modules/admin-ui/components/SwitchGroup";
+import type { ITable } from "@modules/content/types";
 
 const TablePropertyPanel: React.FC<{ node: ITable; path: Path }> = ({
   node,

@@ -1,8 +1,8 @@
-import CopyButton from "@modules/admin-ui/CopyButton";
 import type { ReactNode, CSSProperties } from "react";
 import { twMerge } from "tailwind-merge";
 
 import type { ICodeBlock, IContentElementProps } from "../types";
+import CopyButton from "@modules/admin-ui/CopyButton";
 
 import layoutStyle from "./style.module.css";
 

@@ -1,7 +1,8 @@
 // import { getAnonClient } from "@modules/supabase/supabase";
+import type { NextApiRequest, NextApiResponse } from "next";
+
 import { accessTokenKey, refreshTokenKey } from "@modules/auth/const";
 import { getAnonClient } from "@modules/supabase/supabase";
-import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   // TODO: 액세스 토큰 검사 로직 분리

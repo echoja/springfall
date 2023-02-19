@@ -1,5 +1,6 @@
-import FaSolidList from "@modules/icons/FaSolidList";
 import Link from "next/link";
+
+import FaSolidList from "@modules/icons/FaSolidList";
 
 import ThemeToggle from "./ThemeToggle";
 

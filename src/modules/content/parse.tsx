@@ -1,5 +1,6 @@
-import type { Post } from "@modules/supabase/supabase";
 import type { Element, Text } from "slate";
+
+import type { Post } from "@modules/supabase/supabase";
 
 import type { ContentType } from "./types";
 

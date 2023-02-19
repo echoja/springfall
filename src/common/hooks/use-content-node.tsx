@@ -1,8 +1,9 @@
-import { editingPostContentDataAtom } from "@common/store";
 import { useAtom } from "jotai";
 import { selectAtom } from "jotai/utils";
 import { useMemo } from "react";
 import type { Node, Editor, Descendant } from "slate";
+
+import { editingPostContentDataAtom } from "@common/store";
 
 export default function useContentNode(path: number[]) {
   const [atom] = useAtom(

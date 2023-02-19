@@ -1,8 +1,9 @@
-import type { CreatePostInput, ICodeBlock } from "@modules/content/types";
-import type { Post } from "@modules/supabase/supabase";
 import type { NextApiRequest } from "next";
 import rfdc from "rfdc";
 import type { Element } from "slate";
+
+import type { CreatePostInput, ICodeBlock } from "@modules/content/types";
+import type { Post } from "@modules/supabase/supabase";
 
 /**
  * query(`string | string[] | undefined`)를 number로 변환합니다.

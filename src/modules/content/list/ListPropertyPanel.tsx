@@ -1,9 +1,10 @@
-import SwitchGroup from "@modules/admin-ui/components/SwitchGroup";
-import type { IList } from "@modules/content/types";
 import React from "react";
 import type { Path } from "slate";
 import { Transforms } from "slate";
 import { useSlateStatic } from "slate-react";
+
+import SwitchGroup from "@modules/admin-ui/components/SwitchGroup";
+import type { IList } from "@modules/content/types";
 
 const ListPropertyPanel: React.FC<{ node: IList; path: Path }> = ({
   node,

@@ -1,7 +1,8 @@
-import { useColorMode } from "@modules/color-mode/color-mode";
 import dynamic from "next/dynamic";
 import { forwardRef, useMemo } from "react";
 import { RiMoonFill, RiSunLine } from "react-icons/ri";
+
+import { useColorMode } from "@modules/color-mode/color-mode";
 
 const Icon = () => {
   const { colorMode } = useColorMode();

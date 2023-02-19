@@ -1,6 +1,7 @@
-import type { IBlockquote, IContentElementProps } from "@modules/content/types";
 import { useSelected } from "slate-react";
 import { twMerge } from "tailwind-merge";
+
+import type { IBlockquote, IContentElementProps } from "@modules/content/types";
 
 const Blockquote: React.FC<IContentElementProps<IBlockquote>> = ({
   attributes,

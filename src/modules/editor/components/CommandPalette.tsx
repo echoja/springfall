@@ -1,17 +1,18 @@
+import { Combobox, Dialog } from "@headlessui/react";
+import { memo, useCallback, useState } from "react";
+import { Editor, Element, Transforms } from "slate";
+import { useSlate } from "slate-react";
+import { twMerge } from "tailwind-merge";
+
 import useConst from "@common/hooks/use-const";
 import { useMyStoreMemo } from "@common/store";
 import { getDefaultNodeProps } from "@common/util";
-import { Combobox, Dialog } from "@headlessui/react";
 import {
   handler as insertRawHtmlHandler,
   insertRawHtmlItem,
 } from "@modules/content/raw-html/command-item";
 import type { Command, ElementNode } from "@modules/content/types";
 import FaSolidMagnifyingGlass from "@modules/icons/FaSolidMagnifyingGlass";
-import { memo, useCallback, useState } from "react";
-import { Editor, Element, Transforms } from "slate";
-import { useSlate } from "slate-react";
-import { twMerge } from "tailwind-merge";
 
 const commands: Command[] = [
   {
