@@ -12,75 +12,75 @@ export interface Database {
     Tables: {
       import_queue: {
         Row: {
-          id: number;
-          created_at: string;
-          updated_at: string;
-          deleted_at: string | null;
-          title: string;
           content: string;
+          created_at: string;
+          deleted_at: string | null;
+          id: number;
+          post_id: number | null;
           published_at: string;
           source_info: Json;
           tags: string[];
-          post_id: number | null;
+          title: string;
+          updated_at: string;
         };
         Insert: {
-          id?: number;
-          created_at?: string;
-          updated_at?: string;
-          deleted_at?: string | null;
-          title?: string;
           content?: string;
+          created_at?: string;
+          deleted_at?: string | null;
+          id?: number;
+          post_id?: number | null;
           published_at: string;
           source_info?: Json;
           tags?: string[];
-          post_id?: number | null;
+          title?: string;
+          updated_at?: string;
         };
         Update: {
-          id?: number;
-          created_at?: string;
-          updated_at?: string;
-          deleted_at?: string | null;
-          title?: string;
           content?: string;
+          created_at?: string;
+          deleted_at?: string | null;
+          id?: number;
+          post_id?: number | null;
           published_at?: string;
           source_info?: Json;
           tags?: string[];
-          post_id?: number | null;
+          title?: string;
+          updated_at?: string;
         };
       };
       posts: {
         Row: {
-          id: number;
+          content: Json;
           created_at: string;
-          updated_at: string;
-          removed_at: string | null;
+          id: number;
           published: boolean;
+          removed_at: string | null;
           summary: string;
           title: string;
+          updated_at: string;
           user_id: string;
-          content: Json;
         };
         Insert: {
-          id?: number;
+          content?: Json;
           created_at?: string;
-          updated_at?: string;
-          removed_at?: string | null;
+          id?: number;
           published?: boolean;
+          removed_at?: string | null;
           summary?: string;
           title?: string;
+          updated_at?: string;
           user_id: string;
-          content?: Json;
         };
         Update: {
-          id?: number;
+          content?: Json;
           created_at?: string;
-          updated_at?: string;
-          removed_at?: string | null;
+          id?: number;
           published?: boolean;
+          removed_at?: string | null;
           summary?: string;
           title?: string;
+          updated_at?: string;
           user_id?: string;
-          content?: Json;
         };
       };
     };
