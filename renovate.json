@@ -10,5 +10,6 @@
     "@fortawesome/pro-regular-svg-icons",
     "@fortawesome/pro-solid-svg-icons",
     "@fortawesome/react-fontawesome"
-  ]
+  ],
+  "updateNotScheduled": false
 }
