@@ -41,7 +41,7 @@ specifiers:
   nanoid: ^4.0.1
   next: ^13.2.4
   next-seo: ^5.15.0
-  next-sitemap: ^3.1.55
+  next-sitemap: ^4.0.5
   nextjs-google-analytics: ^2.3.3
   parse5: ^7.1.2
   postcss: ^8.4.21
@@ -127,7 +127,7 @@ devDependencies:
   happy-dom: 8.9.0_encoding@0.1.13
   husky: 8.0.3
   lint-staged: 13.2.0
-  next-sitemap: 3.1.55_jccvrrmb7rb3yyi3af3znueaea
+  next-sitemap: 4.0.5_jccvrrmb7rb3yyi3af3znueaea
   postcss: 8.4.21
   prettier: 2.8.4
   standard-version: 9.5.0
@@ -4160,8 +4160,8 @@ packages:
       react-dom: 18.2.0_react@18.2.0
     dev: false
 
-  /next-sitemap/3.1.55_jccvrrmb7rb3yyi3af3znueaea:
-    resolution: {integrity: sha512-ZjkRfkqoSLbU+e8W9TWWe0zfOGNA47lpvm35kNcUCmj73gpLX2PIn51gwHT/B6bgGVAFYY0OXixJDrxIIwcEHw==}
+  /next-sitemap/4.0.5_jccvrrmb7rb3yyi3af3znueaea:
+    resolution: {integrity: sha512-kIABX4n8wJqY2sttRjivBF2r1MgQ1pg12y87qGT+5meippq0ivxaNSRldMDOj8pIGhXW6uFAsCxyH/JftqkwWQ==}
     engines: {node: '>=14.18'}
     hasBin: true
     peerDependencies:
