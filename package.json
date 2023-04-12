@@ -73,7 +73,7 @@
     "@types/react": "^18.0.28",
     "autoprefixer": "^10.4.14",
     "commitlint": "^17.4.4",
-    "concurrently": "^7.6.0",
+    "concurrently": "^8.0.1",
     "eslint": "^8.36.0",
     "eslint-config-next": "^13.2.4",
     "eslint-config-prettier": "^8.7.0",
