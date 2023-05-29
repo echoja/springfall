@@ -12,5 +12,6 @@
     "**/__mocks__": true,
     "**/__snapshots__": true,
     "pnpm-lock.yaml": true
-  }
+  },
+  "mdx.experimentalLanguageServer": true
 }

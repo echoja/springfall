@@ -21,7 +21,9 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 });
 
 const withMDX = require("@next/mdx")({
-  extension: /\.mdx?$/,
+  // options: {
+  //   providerImportSource: "@mdx-js/react",
+  // },
 });
 
 module.exports = withMDX(withBundleAnalyzer(config));
