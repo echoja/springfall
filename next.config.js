@@ -1,8 +1,9 @@
 /** @type {import('next').NextConfig} */
 const config = {
   experimental: {
-    appDir: true,
+    mdxRs: true,
   },
+
   reactStrictMode: true,
   eslint: {
     dirs: ["src"],
@@ -19,4 +20,6 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: process.env.ANALYZE === "true",
 });
 
-module.exports = withBundleAnalyzer(config);
+const withMDX = require("@next/mdx")();
+
+module.exports = withMDX(withBundleAnalyzer(config));

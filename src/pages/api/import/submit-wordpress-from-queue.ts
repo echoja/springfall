@@ -1,5 +1,5 @@
 import type { Draft } from "immer";
-import produce from "immer";
+import { produce } from "immer";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { NextResponse } from "next/server";
 import { parse } from "parse5";
@@ -162,5 +162,5 @@ export default async function SubmitWordpressFromQueue(
 }
 
 export const config = {
-  runtime: "experimental-edge",
+  runtime: "edge",
 };

@@ -8,5 +8,5 @@ export default (req: NextApiRequest) => {
 };
 
 export const config = {
-  runtime: "experimental-edge",
+  runtime: "edge",
 };
