@@ -12,7 +12,7 @@
     "analyze": "ANALYZE=true yarn build",
     "lint": "next lint",
     "type-check": "tsc --noEmit",
-    "gen:sb": "cat src/modules/supabase/supabase-types-beginning.txt > src/modules/supabase/supabase-types.ts && supabase gen types typescript --local >> src/modules/supabase/supabase-types.ts && prettier --write src/modules/supabase/supabase-types.ts",
+    "gen:sb": "supabase status && cat src/modules/supabase/supabase-types-beginning.txt > src/modules/supabase/supabase-types.ts && supabase gen types typescript --local >> src/modules/supabase/supabase-types.ts && prettier --write src/modules/supabase/supabase-types.ts",
     "gen": "pnpm gen:sb",
     "sb-diff": "supabase db diff --use-migra -f",
     "sb-push": "supabase db push",
