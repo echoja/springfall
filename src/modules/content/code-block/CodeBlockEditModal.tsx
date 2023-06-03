@@ -1,9 +1,9 @@
 /* This example requires Tailwind CSS v2.0+ */
 import { Dialog } from "@headlessui/react";
 import type { ChangeEvent } from "react";
-import { useEffect, memo, useCallback, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
 import type { NodeEntry } from "slate";
-import { Transforms, Editor } from "slate";
+import { Editor, Transforms } from "slate";
 import { useSlateStatic } from "slate-react";
 
 import { useHotkeys } from "@common/hooks/use-hotkeys";

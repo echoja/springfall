@@ -1,7 +1,7 @@
 import type { NextApiRequest } from "next";
 import { NextResponse } from "next/server";
 
-import { getJsonFromBody } from "@common/util";
+import { getJsonFromBody } from "@common/client-only-util";
 import insertQueue from "@modules/import/wordpress/insert-queue";
 import { getPublishedPost, parseXml } from "@modules/import/wordpress/parse";
 

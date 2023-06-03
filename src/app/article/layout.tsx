@@ -1,5 +1,9 @@
-import ArticleMDXProvider from "@modules/article-mdx-provider";
+import ArticleMDXProvider from "@modules/article/article-mdx-provider";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return <ArticleMDXProvider>{children}</ArticleMDXProvider>;
+  return (
+    <ArticleMDXProvider>
+      <article>{children}</article>
+    </ArticleMDXProvider>
+  );
 }

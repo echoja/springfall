@@ -127,6 +127,7 @@ const PostView: MonnomlogPage<IPostViewProps> = ({ post }) => {
           // ],
         }}
       />
+
       <ArticleJsonLd
         type="Blog"
         url={url}

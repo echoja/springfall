@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 
 import FaSolidList from "@modules/icons/FaSolidList";

@@ -4,9 +4,9 @@ import { Editor, Element, Transforms } from "slate";
 import { useSlate } from "slate-react";
 import { twMerge } from "tailwind-merge";
 
+import { getDefaultNodeProps } from "@common/client-only-util";
 import useConst from "@common/hooks/use-const";
 import { useMyStoreMemo } from "@common/store";
-import { getDefaultNodeProps } from "@common/util";
 import {
   handler as insertRawHtmlHandler,
   insertRawHtmlItem,

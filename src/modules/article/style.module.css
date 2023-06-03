@@ -1,0 +1,15 @@
+.image-figure {
+  @apply mb-6 max-w-fit mx-auto;
+}
+
+.image {
+  @apply rounded shadow-md md:shadow-lg;
+}
+
+.image-caption {
+  @apply p-2 text-sm font-sans text-gray-500;
+}
+
+:global(.dark) .image-caption {
+  @apply text-gray-400;
+}

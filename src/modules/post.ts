@@ -1,4 +1,4 @@
-import { getCreatePostInput } from "@common/util";
+import { getCreatePostInput } from "@common/client-only-util";
 
 import { requestWithAuth } from "./auth/request-with-auth";
 import type { Post } from "./supabase/supabase";

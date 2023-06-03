@@ -11,6 +11,11 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     // Allows customizing built-in components, e.g. to add styling.
     // h1: ({ children }) => <h1 style={{ fontSize: "100px" }}>{children}</h1>,
+    h2: ({ children }) => (
+      <h2 className="font-semibold mt-[1.5em] mb-[0.5em] text-2xl">
+        {children}
+      </h2>
+    ),
     ...components,
   };
 }

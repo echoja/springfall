@@ -6,7 +6,8 @@ import { parse } from "parse5";
 import type { Node } from "slate";
 import { Element } from "slate";
 
-import { deepclone, getJsonFromBody } from "@common/util";
+import { getJsonFromBody } from "@common/client-only-util";
+import { deepclone } from "@common/util";
 import { srcToFile } from "@modules/editor/upload";
 import getImageFileSize from "@modules/file/get-image-size";
 import uploadFile from "@modules/file/upload-file";

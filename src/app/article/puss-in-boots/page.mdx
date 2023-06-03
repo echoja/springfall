@@ -1,16 +1,94 @@
-export const meta = {
-  author: "Rich Haines",
-};
-
 import Image from "next/image";
 
+import puss0 from "./puss0.jpg";
 import puss1 from "./puss1.jpg";
 import puss2 from "./puss2.jpg";
 import puss3 from "./puss3.jpg";
 import puss4 from "./puss4.jpg";
 import puss5 from "./puss5.jpg";
 
-# 장화신은 고양이: 끝내주는 모험 포스터
+import dayjs from "dayjs";
+
+import ArticleImage from "@modules/article/ArticleImage";
+import { ArticleJsonLd } from "next-seo";
+import createMetadata from "@modules/create-metadata";
+import ArticleHeader from "@modules/article/ArticleHeader";
+
+export const authorName = "김태훈";
+export const authorUrl = "https://github.com/echoja";
+export const authors = [
+  {
+    name: authorName,
+    url: authorUrl,
+  },
+];
+
+export const title = "[영화 리뷰] 장화신은 고양이: 끝내주는 모험 (스포)";
+export const url = "https://springfall.cc/article/puss-in-boots";
+export const summary = "장화신은 고양이는 용감해졌다.";
+export const createdAt = dayjs("2023-02-12").toISOString();
+export const updatedAt = dayjs("2023-02-12").toISOString();
+
+export const image = puss0;
+
+export const metadata = createMetadata({
+  title,
+  canonical: url,
+  description: summary,
+  openGraph: {
+    title,
+    description: summary,
+    url,
+    type: "article",
+    article: {
+      publishedTime: createdAt,
+      modifiedTime: updatedAt,
+      // expirationTime: new Date(post.updated_at).setFullYear(toISOString(),
+      // section: "Section II",
+      // TODO: 작가 링크 추가
+      // authors: [
+      //   "https://www.example.com/authors/@firstnameB-lastnameB",
+      // ],
+      // TODO: add tags
+      // tags: ["Tag A", "Tag B", "Tag C"],
+    },
+    images: [
+      {
+        url: image.src,
+        width: image.width,
+        height: image.height,
+        alt: "장화신은 고양이: 끝내주는 모험 포스터",
+      },
+    ],
+  },
+});
+
+<ArticleJsonLd
+  useAppDir
+  url={url}
+  title={title}
+  images={[image.src]}
+  authorName={authors}
+  datePublished={createdAt}
+  dateModified={updatedAt}
+  publisherName={authorName}
+  description={summary}
+  isAccessibleForFree
+/>
+
+{/* publisherLogo="https://www.example.com/photos/logo.jpg" */}
+
+{/* --------------------------------------------------------------- */}
+{/* --------------------------------------------------------------- */}
+{/* --------------------------------------------------------------- */}
+
+<ArticleHeader title={title} updatedAt={updatedAt} />
+
+<ArticleImage
+  img={puss0}
+  alt="장화신은 고양이: 끝내주는 모험 포스터"
+  caption="장화신은 고양이: 끝내주는 모험 포스터"
+/>
 
 오랜만에 영화를 보았습니다. 이 영화를 선택한 이유는, 딱히 없습니다. 드림웍스라는 이름에 대해 특별한 인상이 있는 건 아닙니다. 슈렉도 기억이 굉장히 가물가물합니다. 슈렉 시리즈에선 지금까지 여전히 기억속에 살아있는 장면이 있는데, 바로 장화신은 고양이가 모자를 들고 귀엽게 들고 있는 장면입니다. (아래 이미지) 초딩 시절 이 장면을 싸이월드에도 올리곤 했습니다. 영화를 조금이나마 더 친근하게 느껴졌다면, 감명받았던 느낌이 아직 남아있기 때문이겠죠.
 
