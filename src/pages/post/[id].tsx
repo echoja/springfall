@@ -54,6 +54,15 @@ export const getStaticProps: GetStaticProps<IPostViewProps> = async ({
   }
   const id = parseInt(params.id, 10);
 
+  if (id === 10) {
+    return {
+      redirect: {
+        destination: "/article/puss-in-boots",
+        permanent: true,
+      },
+    };
+  }
+
   const schema = Joi.number().integer().min(1);
   const result = schema.validate(id);
   if (result.error) {

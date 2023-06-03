@@ -14,16 +14,6 @@ const config = {
       process.env.NEXT_PUBLIC_SUPABASE_URL.split("://")[1],
     ],
   },
-
-  async redirects() {
-    return [
-      {
-        source: "/post/10",
-        destination: "/article/puss-in-boots",
-        permanent: true,
-      },
-    ];
-  },
 };
 
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
