@@ -31,7 +31,7 @@ const buttons: Array<{
     srOnly: "트위터",
   },
   {
-    link: "https://github.com/monnomlog-donkasu/monnomlog-alpha",
+    link: "https://github.com/echoja/springfall",
     Icon: FaGitHub,
     srOnly: "본 블로그의 소스 코드 보기 (깃허브)",
   },
