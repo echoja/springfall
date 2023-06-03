@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from "react";
 
 import { DEFAULT_UTTERANCES_REPO, getUtterancesRepo } from "@common/config";

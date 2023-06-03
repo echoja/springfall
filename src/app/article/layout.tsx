@@ -1,9 +1,10 @@
-import ArticleMDXProvider from "@modules/article/article-mdx-provider";
+import Utterances from "@modules/utterances";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <ArticleMDXProvider>
-      <article>{children}</article>
-    </ArticleMDXProvider>
+    <>
+      <article className="mb-20">{children}</article>
+      <Utterances />
+    </>
   );
 }
