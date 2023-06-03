@@ -2,7 +2,9 @@ import MDX from "./page.mdx";
 
 export { metadata } from "./page.mdx";
 
-export default MDX;
+export default function Page() {
+  return <MDX />;
+}
 
 // export const authors = [
 //   {
