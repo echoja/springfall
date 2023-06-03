@@ -10,6 +10,13 @@ export const metadata: Metadata = {
     default: "봄가을",
     template: "%s | 봄가을",
   },
+  icons: {
+    icon: "/icons8-spa-flower-96.png",
+  },
+  twitter: {
+    card: "summary_large_image",
+    creator: "@springfall_cc",
+  },
 };
 
 export default function RootLayout({

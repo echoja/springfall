@@ -38,18 +38,20 @@ export const metadata = createMetadata({
     description: summary,
     url,
     type: "article",
-    article: {
-      publishedTime: createdAt,
-      modifiedTime: updatedAt,
-      // expirationTime: new Date(post.updated_at).setFullYear(toISOString(),
-      // section: "Section II",
-      // TODO: 작가 링크 추가
-      // authors: [
-      //   "https://www.example.com/authors/@firstnameB-lastnameB",
-      // ],
-      // TODO: add tags
-      // tags: ["Tag A", "Tag B", "Tag C"],
-    },
+    publishedTime: createdAt,
+    modifiedTime: updatedAt,
+    // article: {
+    //   publishedTime: createdAt,
+    //   modifiedTime: updatedAt,
+    //   // expirationTime: new Date(post.updated_at).setFullYear(toISOString(),
+    //   // section: "Section II",
+    //   // TODO: 작가 링크 추가
+    //   // authors: [
+    //   //   "https://www.example.com/authors/@firstnameB-lastnameB",
+    //   // ],
+    //   // TODO: add tags
+    //   // tags: ["Tag A", "Tag B", "Tag C"],
+    // },
     images: [
       {
         url: image.src,
@@ -58,6 +60,9 @@ export const metadata = createMetadata({
         alt: "장화신은 고양이: 끝내주는 모험 포스터",
       },
     ],
+  },
+  alternates: {
+    canonical: url,
   },
 });
 
