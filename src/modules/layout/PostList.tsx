@@ -49,22 +49,27 @@ const PostList: React.FC<IPostListProps> = ({
       return <div>글이 없습니다.</div>;
     }
 
-    return posts.map((post) => (
-      <article key={post.id}>
-        <Link
-          className="inline-flex items-center gap-2 mb-2 font-sans text-lg font-bold group"
-          href={`/post/${post.id}`}
-        >
-          <span className="inline-block transition-colors duration-1000 group-hover:text-teal-600">
-            <FaRegularSeedling className="w-4 h-4" />
-          </span>
-          <span>{post.title}</span>
-        </Link>
-        {post.summary ? (
-          <p className="pl-6 m-0 text-sm text-gray-500">{post.summary}</p>
-        ) : null}
-      </article>
-    ));
+    return posts.map((post) => {
+      const link =
+        post.id === 10 ? "/article/puss-in-boots" : `/post/${post.id}`;
+
+      return (
+        <article key={post.id}>
+          <Link
+            className="inline-flex items-center gap-2 mb-2 font-sans text-lg font-bold group"
+            href={link}
+          >
+            <span className="inline-block transition-colors duration-1000 group-hover:text-teal-600">
+              <FaRegularSeedling className="w-4 h-4" />
+            </span>
+            <span>{post.title}</span>
+          </Link>
+          {post.summary ? (
+            <p className="pl-6 m-0 text-sm text-gray-500">{post.summary}</p>
+          ) : null}
+        </article>
+      );
+    });
   }, [loading, posts]);
 
   return (
