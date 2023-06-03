@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 import puss0 from "./puss0.jpg";
 import puss1 from "./puss1.jpg";
 import puss2 from "./puss2.jpg";
@@ -92,7 +90,11 @@ export const metadata = createMetadata({
 
 오랜만에 영화를 보았습니다. 이 영화를 선택한 이유는, 딱히 없습니다. 드림웍스라는 이름에 대해 특별한 인상이 있는 건 아닙니다. 슈렉도 기억이 굉장히 가물가물합니다. 슈렉 시리즈에선 지금까지 여전히 기억속에 살아있는 장면이 있는데, 바로 장화신은 고양이가 모자를 들고 귀엽게 들고 있는 장면입니다. (아래 이미지) 초딩 시절 이 장면을 싸이월드에도 올리곤 했습니다. 영화를 조금이나마 더 친근하게 느껴졌다면, 감명받았던 느낌이 아직 남아있기 때문이겠죠.
 
-<Image src={puss1} alt="슈렉 시리즈에서 고양이가 보여줬던 명장면" />
+<ArticleImage
+  img={puss1}
+  alt="슈렉 시리즈에서 고양이가 보여줬던 명장면"
+  caption="슈렉 시리즈에서 고양이가 보여줬던 명장면"
+/>
 
 슈렉 시리즈에서 고양이가 보여줬던 명장면
 
@@ -104,9 +106,11 @@ export const metadata = createMetadata({
 
 하나는 액션! 예전에 드림웍스가 만들었던 \<배드 가이즈>(2022)에서도 느낀 부분이지만, 과장된 애니메이션이 저는 참 좋습니다. 뭔가 애니메이션이 아니고서는 가질 수 없는 통쾌함이 있는데, 그걸 아주 빵빵 잘 터트려줍니다. 디즈니 애니메이션은 뭔가 부드럽고 아름다운 느낌이라면, 드림웍스는 조금 날 것의 화려한 애니메이션이란 느낌이 듭니다. 약간 어이가 없어서 실웃음이 날 수도 있지만, 필자는 그런 게 좋습니다.
 
-<Image src={puss2} alt="엄지 손톱 밑에 끼워넣는 잔인함..." />
-
-{/* ![](https://fihlabpnyfjjtgmmdpmo.supabase.co/storage/v1/object/public/uploads/aacaf63a274a6d7a70ee565dbbe7f0e60622621c-pjUGbksPWyC5F_cdaOTZb.jpeg) */}
+<ArticleImage
+  img={puss2}
+  alt="엄지 손톱 밑에 끼워넣는 잔인함..."
+  caption="엄지 손톱 밑에 끼워넣는 잔인함..."
+/>
 
 엄지 손톱 밑에 끼워넣는 잔인함...
 
@@ -118,9 +122,11 @@ export const metadata = createMetadata({
 
 만약 한번만 더 속마음을 드러내는 걸 망설였다면 좀 짜증났을 건데, (스토리상 어차피 전부 알게 될 테니까...) 그러지 않아서 좋았습니다. 말랑손은 마음의 상처를 조금이나마 치유합니다. 장화신은 고양이도 한 단계 성장합니다. 하지만 완전히 성장하지는 못합니다. 죽음에 대한 두려움이 남아있었으니까요.
 
-{/* ![](https://fihlabpnyfjjtgmmdpmo.supabase.co/storage/v1/object/public/uploads/ad8fc619fc3764c9099e10ca164406101fa780c9-PuTRi0Ala3XdUutlr3Yt4.jpeg) */}
-
-<Image src={puss3} alt="속마음을 터놓는 장화신은 고양이" />
+<ArticleImage
+  img={puss3}
+  alt="속마음을 터놓는 장화신은 고양이"
+  caption="속마음을 터놓는 장화신은 고양이"
+/>
 
 속마음을 터놓는 장화신은 고양이
 
@@ -132,9 +138,11 @@ export const metadata = createMetadata({
 
 전체연령가인 애니메이션에서 죽음이라는 건 다루기가 굉장히 까다로울 것 같습니다. '죽음은 누구에게나 공평하게 찾아온다'라는 무겁고 진중한 명제는 언제나 어색하게 다가옵니다. 그걸 드림웍스는 훌륭하게 다룬 것 같습니다. 감정이라는 걸 훌륭하게 의인화하여 이야기를 풀어냈던 디즈니 애니메이션 영화 \<인사이드 아웃>(2015)처럼, 장화신은 고양이에서는 이 늑대 캐릭터로 훌륭하게 죽음을 동화적으로 풀어냅니다.
 
-{/* ![](https://fihlabpnyfjjtgmmdpmo.supabase.co/storage/v1/object/public/uploads/60d5f3c35023225df61588fc29991201b5ca99f2-q7zpu07TvKW8uNb6Fk4ua.jpeg) */}
-
-<Image src={puss4} alt="죽음을 언제나 지켜봐왔다는 늑대" />
+<ArticleImage
+  img={puss4}
+  alt="죽음을 언제나 지켜봐왔다는 늑대"
+  caption="죽음을 언제나 지켜봐왔다는 늑대"
+/>
 
 죽음을 언제나 지켜봐왔다는 늑대
 
@@ -146,9 +154,7 @@ export const metadata = createMetadata({
 
 그리고 제 생각에는 또 다른 초월적인 개념이 있다고 생각합니다. 정확한 단어로는 표현하기가 힘듭니다. 무한한 자비, 종교적 실천, 끝없는 관용, 예수, 석가모니, 마음의 양심 등을 대변한다고 할까요, 그 주인공은 페리토입니다.
 
-{/* ![](https://fihlabpnyfjjtgmmdpmo.supabase.co/storage/v1/object/public/uploads/1e2c2199a0783c28ee0acdcce55d3635d78f966e-im1jrUzMQsQtmiihEtqzV.jpeg) */}
-
-<Image src={puss5} alt="밝은 페리토" />
+<ArticleImage img={puss5} alt="밝은 페리토" caption="밝은 페리토" />
 
 말랑손 키티와 장화신은 고양이는 세속적입니다. 반면 페리토는 솔직하며 밝습니다. 그 순수한 면은 욕할 때 진가를 발휘합니다. 입에 담기 어려운 극심한 욕설도 초월한 마음을 가진 페리토에게는 재미있는 단어의 배열일 뿐입니다. 사사로운 것에 의미를 하나하나 부여하지 않습니다.
 
