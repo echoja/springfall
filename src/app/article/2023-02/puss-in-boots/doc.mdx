@@ -9,12 +9,7 @@ import dayjs from "dayjs";
 
 import ArticleImage from "@modules/article/ArticleImage";
 import { ArticleJsonLd } from "next-seo";
-import {
-  createMetadata,
-  authorName,
-  authorUrl,
-  authorList,
-} from "@modules/metadata";
+import { createMetadata, authorName, authorList } from "@modules/metadata";
 import ArticleHeader from "@modules/article/ArticleHeader";
 
 export const title = "[영화 리뷰] 장화신은 고양이: 끝내주는 모험 (스포)";
@@ -28,6 +23,16 @@ export const imageAlt = "장화신은 고양이: 끝내주는 모험 포스터";
 {/* ---------------------------------------------------------- */}
 {/* ---------------------------------------------------------- */}
 {/* ---------------------------------------------------------- */}
+
+export const item = {
+  title,
+  url,
+  summary,
+  createdAt,
+  updatedAt,
+  image,
+  imageAlt,
+};
 
 export const metadata = createMetadata({
   title,

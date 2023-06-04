@@ -1,13 +1,9 @@
+import dayjs from "dayjs";
 import Link from "next/link";
 import { useMemo } from "react";
 
-import {
-  image as companyContestImage,
-  summary as companyContestSummary,
-  title as companyContestTitle,
-  url as companyContestUrl,
-} from "@app/article/2023-06/company-contest/page.mdx";
 import { POSTS_PER_PAGE } from "@common/config";
+import items from "@modules/article/items";
 import FaRegularCabinetFiling from "@modules/icons/FaRegularCabinetFiling";
 import FaRegularSeedling from "@modules/icons/FaRegularSeedling";
 import type { Post } from "@modules/supabase/supabase";
@@ -83,30 +79,24 @@ const PostList: React.FC<IPostListProps> = ({
       <h2 className="mb-5 text-2xl font-semibold">글 목록 (New ⚠️ 공사중)</h2>
 
       <div className="mb-40">
-        {[
-          {
-            title: companyContestTitle,
-            image: companyContestImage,
-            url: companyContestUrl,
-            summary: companyContestSummary,
-          },
-        ].map(({ summary, title, url }) => {
-          const link = new URL(url || "https://example.com/").pathname;
+        {items.map(({ summary, title, url, createdAt }) => {
+          const href = new URL(url).pathname;
 
           return (
-            <article key={title}>
+            <article key={title} className="mb-10">
               <Link
-                className="inline-flex items-center gap-2 mb-2 font-sans text-lg font-bold group"
-                href={link}
+                className="inline-flex items-start gap-2 font-sans text-lg font-bold group"
+                href={href}
               >
                 <span className="inline-block transition-colors duration-1000 group-hover:text-teal-600">
                   <FaRegularSeedling className="w-4 h-4" />
                 </span>
                 <span>{title}</span>
               </Link>
-              {summary ? (
-                <p className="pl-6 m-0 text-sm text-gray-500">{summary}</p>
-              ) : null}
+              <p className="pl-6 mt-0 mb-4 text-xs text-gray-400">
+                {dayjs(createdAt).format("YYYY.MM.DD.")}
+              </p>
+              <p className="pl-6 m-0 text-sm text-gray-500">{summary}</p>
             </article>
           );
         })}
