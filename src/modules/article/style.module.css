@@ -13,3 +13,64 @@
 :global(.dark) .image-caption {
   @apply text-gray-400;
 }
+
+.ol,
+.ul {
+  @apply pl-[1.5em] my-[0.8em];
+}
+
+.ol {
+  @apply list-decimal;
+}
+
+.ul {
+  @apply list-disc;
+}
+
+.li {
+  @apply my-[0.4em];
+}
+
+.link {
+  @apply underline underline-offset-2 decoration-brand-400 hover:decoration-2 decoration-1 text-black font-semibold transition;
+}
+
+:global(.dark) .link {
+  @apply text-white;
+}
+
+.heading {
+  @apply font-semibold mt-[1.5em] mb-[0.5em];
+}
+
+.heading1 {
+  @apply heading text-4xl;
+}
+
+.heading2 {
+  @apply heading text-2xl;
+}
+
+.heading3 {
+  @apply heading text-xl;
+}
+
+.heading4 {
+  @apply heading text-lg;
+}
+
+.heading5 {
+  @apply heading;
+}
+
+.heading6 {
+  @apply heading text-sm;
+}
+
+.inline-code {
+  @apply text-[87.5%] px-[0.25em] py-[0.1em] rounded bg-slate-100;
+}
+
+:global(.dark) .inline-code {
+  @apply bg-slate-600;
+}
