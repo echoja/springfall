@@ -9,25 +9,25 @@ import dayjs from "dayjs";
 
 import ArticleImage from "@modules/article/ArticleImage";
 import { ArticleJsonLd } from "next-seo";
-import createMetadata from "@modules/create-metadata";
+import {
+  createMetadata,
+  authorName,
+  authorUrl,
+  authorList,
+} from "@modules/metadata";
 import ArticleHeader from "@modules/article/ArticleHeader";
-
-export const authorName = "김태훈";
-export const authorUrl = "https://github.com/echoja";
-export const authors = [
-  {
-    name: authorName,
-    url: authorUrl,
-  },
-];
 
 export const title = "[영화 리뷰] 장화신은 고양이: 끝내주는 모험 (스포)";
 export const url = "https://springfall.cc/article/puss-in-boots";
 export const summary = "장화신은 고양이는 용감해졌다.";
 export const createdAt = dayjs("2023-02-12").toISOString();
 export const updatedAt = dayjs("2023-02-12").toISOString();
-
 export const image = puss0;
+export const imageAlt = "장화신은 고양이: 끝내주는 모험 포스터";
+
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
 
 export const metadata = createMetadata({
   title,
@@ -40,24 +40,12 @@ export const metadata = createMetadata({
     type: "article",
     publishedTime: createdAt,
     modifiedTime: updatedAt,
-    // article: {
-    //   publishedTime: createdAt,
-    //   modifiedTime: updatedAt,
-    //   // expirationTime: new Date(post.updated_at).setFullYear(toISOString(),
-    //   // section: "Section II",
-    //   // TODO: 작가 링크 추가
-    //   // authors: [
-    //   //   "https://www.example.com/authors/@firstnameB-lastnameB",
-    //   // ],
-    //   // TODO: add tags
-    //   // tags: ["Tag A", "Tag B", "Tag C"],
-    // },
     images: [
       {
         url: image.src,
         width: image.width,
         height: image.height,
-        alt: "장화신은 고양이: 끝내주는 모험 포스터",
+        alt: imageAlt,
       },
     ],
   },
@@ -66,12 +54,14 @@ export const metadata = createMetadata({
   },
 });
 
+authors
+
 <ArticleJsonLd
   useAppDir
   url={url}
   title={title}
   images={[image.src]}
-  authorName={authors}
+  authorName={authorList}
   datePublished={createdAt}
   dateModified={updatedAt}
   publisherName={authorName}
@@ -79,13 +69,11 @@ export const metadata = createMetadata({
   isAccessibleForFree
 />
 
-{/* publisherLogo="https://www.example.com/photos/logo.jpg" */}
-
-{/* --------------------------------------------------------------- */}
-{/* --------------------------------------------------------------- */}
-{/* --------------------------------------------------------------- */}
-
 <ArticleHeader title={title} updatedAt={updatedAt} />
+
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
 
 <ArticleImage
   img={puss0}
