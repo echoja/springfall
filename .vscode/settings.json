@@ -11,7 +11,8 @@
     "**/*.code-search": true,
     "**/__mocks__": true,
     "**/__snapshots__": true,
-    "pnpm-lock.yaml": true
+    "pnpm-lock.yaml": true,
+    ".next": true
   },
   "mdx.experimentalLanguageServer": true
 }

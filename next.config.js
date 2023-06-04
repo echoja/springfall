@@ -19,7 +19,7 @@ const config = {
     return [
       {
         source: "/post/10",
-        destination: "/article/puss-in-boots",
+        destination: "/article/2023-02/puss-in-boots",
         permanent: true,
       },
     ];

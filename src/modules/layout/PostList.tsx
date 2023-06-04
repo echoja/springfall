@@ -57,7 +57,7 @@ const PostList: React.FC<IPostListProps> = ({
 
     return posts.map((post) => {
       const link =
-        post.id === 10 ? "/article/puss-in-boots" : `/post/${post.id}`;
+        post.id === 10 ? "/article/2023-02/puss-in-boots" : `/post/${post.id}`;
 
       return (
         <article key={post.id}>
