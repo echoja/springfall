@@ -4,8 +4,9 @@ declare module "*/doc.mdx" {
 
   import type { ArticleItem } from "@modules/article/types";
 
-  // eslint-disable-next-line no-restricted-exports
-  export { default } from "*.mdx";
+  import MDX from "*.mdx";
+
+  export default MDX;
 
   export const metadata: Metadata;
   export const title: string;
