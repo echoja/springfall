@@ -8,7 +8,7 @@ import {
   Heading4,
   Heading5,
   Heading6,
-} from "@modules/article/formats";
+} from "@modules/article/format-components";
 import {
   ListItem,
   OrderedList,
