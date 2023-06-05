@@ -1,4 +1,4 @@
-declare module "*/doc.mdx" {
+declare module "*/page.mdx" {
   import type { Metadata } from "next";
   import type { StaticImageData } from "next/image";
 

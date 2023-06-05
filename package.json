@@ -58,6 +58,8 @@
     "react-icons": "^4.9.0",
     "react-merge-refs": "^2.0.2",
     "refractor": "^4.8.1",
+    "remark-directive": "^2.0.1",
+    "remark-directive-rehype": "^0.4.2",
     "rfdc": "^1.3.0",
     "slate": "^0.94.1",
     "slate-history": "^0.93.0",

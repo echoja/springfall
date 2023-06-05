@@ -1,8 +1,12 @@
+import bundleAnalyzer from "@next/bundle-analyzer";
+import mdx from "@next/mdx";
+import remarkDirectiveRehype from "remark-directive-rehype";
+
 /** @type {import('next').NextConfig} */
 const config = {
-  experimental: {
-    mdxRs: true,
-  },
+  // experimental: {
+  //   mdxRs: true,
+  // },
 
   reactStrictMode: true,
   eslint: {
@@ -24,16 +28,18 @@ const config = {
       },
     ];
   },
+
+  pageExtensions: ["ts", "tsx", "js", "jsx", "md", "mdx"],
 };
 
-const withBundleAnalyzer = require("@next/bundle-analyzer")({
+const withBundleAnalyzer = bundleAnalyzer({
   enabled: process.env.ANALYZE === "true",
 });
 
-const withMDX = require("@next/mdx")({
-  // options: {
-  //   providerImportSource: "@mdx-js/react",
-  // },
+const withMDX = mdx({
+  options: {
+    remarkPlugins: [remarkDirectiveRehype],
+  },
 });
 
-module.exports = withMDX(withBundleAnalyzer(config));
+export default withMDX(withBundleAnalyzer(config));
