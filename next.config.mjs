@@ -1,9 +1,11 @@
+import remarkCustomContainer from "@echoja/remark-custom-container";
 import bundleAnalyzer from "@next/bundle-analyzer";
 import mdx from "@next/mdx";
-import remarkDirectiveRehype from "remark-directive-rehype";
+import remarkGfm from "remark-gfm";
 
 /** @type {import('next').NextConfig} */
 const config = {
+  /** mdxRS 로 하면 `remarkPlugins` 가 먹히지 않음.  */
   // experimental: {
   //   mdxRs: true,
   // },
@@ -36,9 +38,20 @@ const withBundleAnalyzer = bundleAnalyzer({
   enabled: process.env.ANALYZE === "true",
 });
 
+/** @type {import("@echoja/remark-custom-container").CustomContainerOptions }*/
+const customContainerOptions = {
+  optionsByClassName: [
+    {
+      selector: "details",
+      containerTag: "details",
+      titleTag: "summary",
+    },
+  ],
+};
+
 const withMDX = mdx({
   options: {
-    remarkPlugins: [remarkDirectiveRehype],
+    remarkPlugins: [[remarkCustomContainer, customContainerOptions], remarkGfm],
   },
 });
 
