@@ -1,0 +1,82 @@
+import i1 from "./i1.jpeg";
+
+import dayjs from "dayjs";
+import ArticleImage from "@modules/article/ArticleImage";
+import { ArticleJsonLd } from "next-seo";
+import { createMetadata, authorName, authorList } from "@modules/metadata";
+import ArticleHeader from "@modules/article/ArticleHeader";
+
+export const title = "중요한 건 꺾였지만 그냥 하는 마음 (작성중)";
+export const url = "https://springfall.cc/article/2023-06/why-writing";
+export const summary =
+  "블로그에 글을 꾸준히 쓰려고 하는 이유를 생각해봤습니다. 굳이 따지자면, 재미입니다. 그리고 '재미'라는 것은 너무나 마법같습니다.";
+export const createdAt = dayjs("2023-06-11").toISOString();
+export const updatedAt = dayjs("2023-06-11").toISOString();
+export const image = i1;
+export const imageAlt = "종이 위에서 무언가를 쓰고 있는 펜의 모습";
+
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+
+export const item = {
+  title,
+  url,
+  summary,
+  createdAt,
+  updatedAt,
+  image,
+  imageAlt,
+};
+
+export const metadata = createMetadata({
+  title,
+  canonical: url,
+  description: summary,
+  openGraph: {
+    title,
+    description: summary,
+    url,
+    type: "article",
+    publishedTime: createdAt,
+    modifiedTime: updatedAt,
+    images: [
+      {
+        url: image.src,
+        width: image.width,
+        height: image.height,
+        alt: imageAlt,
+      },
+    ],
+  },
+  alternates: {
+    canonical: url,
+  },
+});
+
+<ArticleJsonLd
+  useAppDir
+  url={url}
+  title={title}
+  images={[image.src]}
+  authorName={authorList}
+  datePublished={createdAt}
+  dateModified={updatedAt}
+  publisherName={authorName}
+  description={summary}
+  isAccessibleForFree
+/>
+
+<ArticleHeader title={title} updatedAt={updatedAt} />
+
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+
+![](https://images.unsplash.com/photo-1455390582262-044cdead277a?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb)
+
+<ArticleImage
+  alt="멋진 사무실 모습"
+  caption="사무실의 자리가 충분하던 시대는 끝났다...!"
+  img={i1}
+/>

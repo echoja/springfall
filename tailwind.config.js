@@ -8,6 +8,7 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: [
+          '"Pretendard Variable"',
           "ui-sans-serif",
           "system-ui",
           "-apple-system",
@@ -24,7 +25,6 @@ module.exports = {
           '"Noto Color Emoji"',
         ],
         serif: [
-          '"MaruBuri"',
           "ui-serif",
           "Georgia",
           "Cambria",
