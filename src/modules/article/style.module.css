@@ -1,5 +1,5 @@
 .image-figure {
-  @apply mb-6 max-w-fit mx-auto;
+  @apply my-10 max-w-fit mx-auto;
 }
 
 .image {
