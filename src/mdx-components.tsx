@@ -1,14 +1,14 @@
 import type { MDXComponents } from "mdx/types";
 
 import {
-  Anchor,
-  Code,
   Heading2,
   Heading3,
   Heading4,
   Heading5,
   Heading6,
-} from "@modules/article/format-components";
+  Quote,
+} from "@modules/article/block-components";
+import { Anchor, Code } from "@modules/article/format-components";
 import {
   ListItem,
   OrderedList,
@@ -33,6 +33,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     h6: Heading6,
     ol: OrderedList,
     ul: UnorderdList,
+    blockquote: Quote,
     code: Code,
     a: Anchor,
     li: ListItem,

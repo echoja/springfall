@@ -83,9 +83,9 @@ const PostList: React.FC<IPostListProps> = ({
           const href = new URL(url).pathname;
 
           return (
-            <article key={title} className="mb-10">
+            <article key={title} className="mb-12">
               <Link
-                className="inline-flex items-start gap-2 font-sans text-lg font-bold group"
+                className="inline-flex items-start gap-2 mb-2 font-sans text-lg font-bold group"
                 href={href}
               >
                 <span className="inline-block transition-colors duration-1000 group-hover:text-teal-600">
@@ -93,10 +93,12 @@ const PostList: React.FC<IPostListProps> = ({
                 </span>
                 <span>{title}</span>
               </Link>
+              <p className="pl-6 mt-0 mb-3 text-sm text-gray-500 dark:text-gray-300">
+                {summary}
+              </p>
               <p className="pl-6 mt-0 mb-4 text-xs text-gray-400">
                 {dayjs(createdAt).format("YYYY.MM.DD.")}
               </p>
-              <p className="pl-6 m-0 text-sm text-gray-500">{summary}</p>
             </article>
           );
         })}

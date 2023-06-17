@@ -74,3 +74,11 @@
 :global(.dark) .inline-code {
   @apply bg-slate-600;
 }
+
+.quote {
+  @apply my-[2em] pl-4 border-l-4 border-gray-300 text-gray-600 dark:text-gray-200;
+}
+
+:global(.dark) .quote {
+  @apply text-gray-400;
+}
