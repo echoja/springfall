@@ -171,7 +171,11 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
   return (
     <div>
       {initialized && (
-        <Slate value={postContentData} onChange={onSlateChange} editor={editor}>
+        <Slate
+          initialValue={postContentData}
+          onChange={onSlateChange}
+          editor={editor}
+        >
           <div className="p-2 shadow-md">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
