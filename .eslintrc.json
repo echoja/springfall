@@ -4,6 +4,10 @@
     "plugin:react/jsx-runtime",
     "plugin:@next/next/recommended"
   ],
+  "parserOptions": {
+    "project": "./tsconfig.eslint.json"
+  },
+  "ignorePatterns": ["node_modules", ".next", "out", "vitest.config.ts"],
   "rules": {
     // const PostList: MonnomlogPage<IPostListProps> = (props) => { ... } 와 같이 썼을 때
     // props 에 타입이 없다고 오진하고 에러를 발생시킴.
