@@ -1,0 +1,133 @@
+import dayjs from "dayjs";
+import i1 from "./i1.png";
+import i2 from "./i2.png";
+import i3 from "./i3.png";
+import i4 from "./i4.png";
+import i5 from "./i5.png";
+import ArticleImage from "@modules/article/ArticleImage";
+import { ArticleJsonLd } from "next-seo";
+import { createMetadata, authorName, authorList } from "@modules/metadata";
+import ArticleHeader from "@modules/article/ArticleHeader";
+
+export const title = "draw.io(diagrams.net) 자동 배치로 효율화하기";
+export const url = "https://springfall.cc/article/2023-03/draw-io-auto-layout";
+export const summary =
+  "검증된 다이어그램 그리기 도구인 draw.io 에서 문서가 복잡해질 때 아주 유용하게 사용할 수 있는 레이아웃 배치 기능을 사용해봅니다.";
+export const createdAt = dayjs("2023-03-11").toISOString();
+export const updatedAt = dayjs("2023-03-11").toISOString();
+export const image = i1;
+export const imageAlt = "스트림 그림 설명";
+
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+
+export const item = {
+  title,
+  url,
+  summary,
+  createdAt,
+  updatedAt,
+  image,
+  imageAlt,
+};
+
+export const metadata = createMetadata({
+  title,
+  canonical: url,
+  description: summary,
+  openGraph: {
+    title,
+    description: summary,
+    url,
+    type: "article",
+    publishedTime: createdAt,
+    modifiedTime: updatedAt,
+    images: [
+      {
+        url: image.src,
+        width: image.width,
+        height: image.height,
+        alt: imageAlt,
+      },
+    ],
+  },
+  alternates: {
+    canonical: url,
+  },
+});
+
+<ArticleJsonLd
+  useAppDir
+  url={url}
+  title={title}
+  images={[image.src]}
+  authorName={authorList}
+  datePublished={createdAt}
+  dateModified={updatedAt}
+  publisherName={authorName}
+  description={summary}
+  isAccessibleForFree
+/>
+
+<ArticleHeader title={title} updatedAt={updatedAt} />
+
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+
+[draw.io(diagrams.net)](https://app.diagrams.net/) 는 아주 편안하고 강력하고 검증된 다이어그램 그리기 도구입니다. 각종 순서도를 그리기 편해서 많이 애용합니다. 하지만, 쓰기 불편한 점이 하나 있다면, 구조가 조금만 복잡해지더라도 화살표를 어떻게 배치할지 요소들을 어떻게 배치할지 고민이 된다는 것입니다.
+
+우리의 관심사는 결국 한눈에 잘 이해되게 보이기만 하면 됩니다. 이것을 위해 기가 막힌 기능이 하나 있습니다. 바로 배치 - 레이아웃 - 수직 흐름도 라는 걸 이용하면 됩니다.
+
+일단 다이어그램을 만들어봅시다. 그런데 일단 화살표를 만들 때 유의해야 할 점이 있습니다. "변"에서 "변"을 연결하는 게 아니라 요소끼리 연결해야 한다는 점입니다. 나중에 레이아웃을 자동으로 변경하면서 요소들이 움직일텐데, 화살표가 변에 붙어있으면 화살표가 어색하게 위치하게 됩니다.
+
+<ArticleImage
+  img={i1}
+  alt="화살표 연결 시작"
+  caption={
+    <>
+      화살표를 연결할 때에 꼭짓점이 아니라 저 <strong>파란색 화살표</strong>를
+      활용해야 합니다.
+    </>
+  }
+/>
+
+연결을 마무리 지을 때에도 아래 이미지와 같이 하세요.
+
+<ArticleImage
+  img={i2}
+  alt="화살표 연결 끝"
+  caption={
+    <>
+      화살표가 도착할 때에도 X 점이 아니라 <strong>하늘색 테두리</strong>가
+      나오게끔 연결합니다.
+    </>
+  }
+/>
+
+그렇다면, 아래와 같이 못생긴 다이어그램이 나올 겁니다.
+
+<ArticleImage img={i3} alt="못생긴 다이어그램" caption="못생긴 다이어그램" />
+
+알아보기가 불가능합니다. 이걸 멋지게 바꿔봅시다. `배치 - 레이아웃 - 수직 흐름도`를 선택합니다.
+
+<ArticleImage
+  img={i4}
+  alt="배치 레이아웃 수직흐름도를 선택합니다."
+  caption="배치 - 레이아웃 - 수직흐름도를 선택합니다."
+/>
+
+그럼 짜잔! 아주 예쁜 그래프가 나옵니다.
+
+<ArticleImage
+  img={i5}
+  alt="한눈에 알아보기 쉬운 다이어그램"
+  caption="한눈에 알아보기 쉬운 다이어그램"
+/>
+
+더이상 화살표를 옮기고 요소를 옮기는 데에 시간을 낭비하지 마세요.
+
+위 방법에서 주의해야 할 점은, 요소가 그룹으로 묶여 있을 경우 레이아웃이 아주 난잡하고 이상하게 동작한다는 것입니다. 되도록 그룹을 사용하지 말고, 불가피하게 그룹을 사용해야 한다면 별도의 다이어그램으로 설명해보는 건 어떨까요?
+
+자세한 정보는 [Automatic Layout in draw.io](https://drawio-app.com/blog/automatic-layout-in-draw-io/) 공식 문서에서 확인할 수 있으니 한번 살펴보세요.
