@@ -1,10 +1,8 @@
 /* eslint-disable react/jsx-no-useless-fragment */
 /* eslint-disable react/jsx-key */
-/* eslint-disable sonarjs/no-duplicate-string */
 
 import assert from "assert";
-import type React from "react";
-
+import React from "react";
 import reactNodeToString from "./react-node-to-string";
 
 type Test = [input: React.ReactNode, expectedOutput: string];
@@ -33,7 +31,7 @@ describe("react-node-to-string", () => {
       assert.strictEqual(
         reactNodeToString(test[0]),
         test[1],
-        `Test ${index} failed`
+        `Test ${index} failed`,
       );
     });
   });

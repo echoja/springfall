@@ -1,4 +1,4 @@
-import type React from "react";
+import React from "react";
 import { memo } from "react";
 import type { Path } from "slate";
 import { Transforms } from "slate";

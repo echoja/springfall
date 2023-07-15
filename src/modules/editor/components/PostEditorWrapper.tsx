@@ -1,6 +1,6 @@
 import { useAtom } from "jotai";
 import Link from "next/link";
-import type React from "react";
+import React from "react";
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import type { Descendant, Selection } from "slate";
 import { Slate } from "slate-react";
@@ -55,14 +55,14 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
     (title: string) => {
       setEditingPost({ ...editingPost, title });
     },
-    [setEditingPost, editingPost]
+    [setEditingPost, editingPost],
   );
 
   const onTitlechange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setTitle(e.target.value);
     },
-    [setTitle]
+    [setTitle],
   );
 
   useEffect(() => {
@@ -121,7 +121,7 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
     (data: Descendant[]) => {
       setEditingPost((prev) => ({ ...prev, content: { data } }));
     },
-    [setEditingPost]
+    [setEditingPost],
   );
 
   const tabLinks = useMemo(() => {
@@ -136,14 +136,14 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
                 return { ...t, current: true };
               }
               return { ...t, current: false };
-            })
+            }),
           );
         }}
         className={twMerge(
           tab.current
             ? "border-brand-500 text-brand-600"
             : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300",
-          "whitespace-nowrap py-3 px-4 border-b-2 font-medium text-sm font-sans"
+          "whitespace-nowrap py-3 px-4 border-b-2 font-medium text-sm font-sans",
         )}
         aria-current={tab.current ? "page" : undefined}
       >
@@ -154,7 +154,6 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
 
   const onCommand = useCallback(
     (command: Command) => {
-      // eslint-disable-next-line sonarjs/no-small-switch
       switch (command.type) {
         case "INSERT_IMAGE": {
           openImageDialog();
@@ -165,7 +164,7 @@ const PostEditorWrapper: React.FC<IPostEditorWrapperProps> = ({
           break;
       }
     },
-    [openImageDialog]
+    [openImageDialog],
   );
 
   return (

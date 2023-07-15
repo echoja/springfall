@@ -90,7 +90,7 @@ const elementParserMap: {
 
 const spreadTextAttrs = (
   node: SlateNode,
-  textAttr: Partial<Text>
+  textAttr: Partial<Text>,
 ): SlateNode => {
   if (Text.isText(node)) {
     return { ...textAttr, ...node };
@@ -120,10 +120,9 @@ const textParserMap: {
 
 // eslint-disable-next-line complexity
 const htmlToSlateNode = (
-  node: DefaultTreeAdapterMap["node"]
+  node: DefaultTreeAdapterMap["node"],
 
   // TODO: 복잡도 낮추기
-  // eslint-disable-next-line sonarjs/cognitive-complexity
 ): SlateNode | null | SlateNode[] => {
   if (isTextNode(node)) {
     const text = node.value.replace(/([ \t]+$)|(^[ \t]+)/, "");

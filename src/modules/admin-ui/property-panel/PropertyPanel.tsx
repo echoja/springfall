@@ -12,7 +12,6 @@ const PropertyPanel: React.FC<{ nodePath: Path }> = ({ nodePath: path }) => {
   // Editor 로부터 얻은 node 는 반응성이 없으므로 데이터(atom)으로부터 직접 node를 가져옴
   const node = useContentNode(path);
 
-  // eslint-disable-next-line sonarjs/no-small-switch
   switch (node.type) {
     case "CODE_BLOCK":
       return <CodeBlockPropertyPanel node={node} path={path} />;

@@ -9,11 +9,11 @@ import type { Post } from "@modules/supabase/supabase";
  * 실패시 NaN을 반환합니다.
  */
 export function parseQueryToNumber(
-  queryVar: string | string[] | undefined
+  queryVar: string | string[] | undefined,
 ): number {
   return Number.parseInt(
     (Array.isArray(queryVar) ? queryVar[0] : queryVar) ?? "",
-    10
+    10,
   );
 }
 
@@ -23,9 +23,8 @@ export function noopFunction(..._args: any): any {
 }
 
 export function getDefaultNodeProps(
-  type: Element["type"]
+  type: Element["type"],
 ): Omit<Partial<Element>, "type" | "children"> {
-  // eslint-disable-next-line sonarjs/no-small-switch
   switch (type) {
     case "CODE_BLOCK": {
       const result: ICodeBlock = {
@@ -52,7 +51,7 @@ export function getCreatePostInput(post: Post): CreatePostInput {
 }
 
 export async function getJsonFromBody<T>(
-  req: NextApiRequest
+  req: NextApiRequest,
 ): Promise<Partial<T>> {
   const reader = req.body?.getReader();
   if (!reader) {

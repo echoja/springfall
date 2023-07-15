@@ -1,10 +1,10 @@
-import type React from "react";
+import React from "react";
 import { twMerge } from "tailwind-merge";
 
 import style from "./fa-icon.module.css";
 
 const FaSolidMagnifyingGlass: React.FC<React.SVGProps<SVGSVGElement>> = (
-  props
+  props,
 ) => {
   const { className } = props;
   return (

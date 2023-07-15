@@ -1,5 +1,5 @@
 import { Switch } from "@headlessui/react";
-import type React from "react";
+import React from "react";
 import { useCallback, useMemo, useState } from "react";
 import { twMerge } from "tailwind-merge";
 

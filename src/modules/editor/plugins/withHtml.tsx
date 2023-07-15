@@ -4,15 +4,15 @@ import type { Editor, Element, Node, Text } from "slate";
 import { Transforms } from "slate";
 import { jsx } from "slate-hyperscript";
 
-import { srcToFile, uploadImage } from "../upload";
 import { convert } from "@modules/content/code-block/convert";
 import removeImageUploadPlaceholder from "@modules/content/image/remove-image-upload-placeholder";
 import replaceImageUploadPlaceholder from "@modules/content/image/replace-image-upload-holder";
+import { srcToFile, uploadImage } from "../upload";
 
 const ELEMENT_TAGS: {
   [tag: HTMLElement["nodeName"]]: (
     el: HTMLElement,
-    editor: Editor
+    editor: Editor,
   ) => Partial<Element>;
 } = {
   A: (el: HTMLElement) => ({
@@ -87,9 +87,8 @@ type Fragment = Node | string | null | (Node | string | null)[];
 // TODO: parse5 버전으로 대체
 export const deserialize = (
   el: HTMLElement,
-  editor: Editor
+  editor: Editor,
   // TODO: complexity 해결
-  // eslint-disable-next-line sonarjs/cognitive-complexity
 ): Fragment => {
   if (el.nodeType === 3) {
     return el.textContent === "\n"
@@ -161,7 +160,7 @@ const withHtml = (editor: Editor) => {
         if (Array.isArray(fragment)) {
           const filtered = fragment.filter(
             (n): n is Exclude<typeof n, null | string> =>
-              Boolean(n) && typeof n !== "string"
+              Boolean(n) && typeof n !== "string",
           );
 
           Transforms.insertFragment(editor, filtered);

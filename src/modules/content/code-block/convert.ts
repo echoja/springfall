@@ -8,6 +8,7 @@ import pythonLang from "refractor/lang/python";
 import rustLang from "refractor/lang/rust";
 import tsxLang from "refractor/lang/tsx";
 
+import { deepclone } from "@common/util";
 import type {
   ICodeBlock,
   ICodeElement,
@@ -15,7 +16,6 @@ import type {
   IText,
   Language,
 } from "../types";
-import { deepclone } from "@common/util";
 
 import codeNodeToString from "./code-node-to-string";
 
@@ -54,7 +54,6 @@ export function getText(node: Text):
   };
 }
 
-// eslint-disable-next-line sonarjs/cognitive-complexity
 export function getElement(node: RefractorElement):
   | {
       left: RefractorElement | null;
@@ -120,7 +119,7 @@ export function getElement(node: RefractorElement):
 }
 
 export function convertElement(
-  node: RefractorElement | Text
+  node: RefractorElement | Text,
 ): ICodeElement | IText {
   if (node.type === "element") {
     return {
@@ -238,7 +237,7 @@ export function unifyCodeBlock(codeBlock: ICodeBlock): ICodeBlock {
 
 export function convertRefactorToCodeBlock(
   root: RefractorRoot,
-  lang: Language
+  lang: Language,
 ): ICodeBlock {
   const lines = getLines(root);
   const codeLines: ICodeLine[] = lines.map((line) => {
