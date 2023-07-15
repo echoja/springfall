@@ -1,12 +1,12 @@
-import dayjs from "dayjs";
-import Link from "next/link";
-import { useMemo } from "react";
-
 import { POSTS_PER_PAGE } from "@common/config";
 import items from "@modules/article/items";
 import FaRegularCabinetFiling from "@modules/icons/FaRegularCabinetFiling";
 import FaRegularSeedling from "@modules/icons/FaRegularSeedling";
 import type { Post } from "@modules/supabase/supabase";
+import dayjs from "dayjs";
+import Link from "next/link";
+import { useMemo } from "react";
+import { twMerge } from "tailwind-merge";
 
 interface IPostListProps {
   posts: Post[];
@@ -29,17 +29,17 @@ const PostList: React.FC<IPostListProps> = ({
   const paginationEnd = Math.min(maxPage, currentPage + 2);
   const endReached = useMemo(
     () => paginationEnd === maxPage,
-    [maxPage, paginationEnd]
+    [maxPage, paginationEnd],
   );
   const startReached = useMemo(
     () => paginationStart === minPage,
-    [minPage, paginationStart]
+    [minPage, paginationStart],
   );
 
   const pageArray = useMemo(() => {
     return Array.from(
       { length: paginationEnd - paginationStart + 1 },
-      (_, i) => paginationStart + i
+      (_, i) => paginationStart + i,
     );
   }, [paginationEnd, paginationStart]);
 
@@ -78,31 +78,49 @@ const PostList: React.FC<IPostListProps> = ({
     <div>
       <h2 className="mb-5 text-2xl font-semibold">글 목록 (New ⚠️ 공사중)</h2>
 
-      <div className="mb-40">
-        {items.map(({ summary, title, url, createdAt }) => {
+      <ul role="list" className="mb-20 space-y-6">
+        {items.map(({ summary, title, url, createdAt }, idx) => {
           const href = new URL(url).pathname;
 
           return (
-            <article key={title} className="mb-12">
-              <Link
-                className="inline-flex items-start gap-2 mb-2 font-sans text-lg font-bold group"
-                href={href}
+            <li key={title} className="relative flex gap-x-4">
+              <div
+                className={twMerge(
+                  idx === items.length - 1 ? "h-6" : "-bottom-6",
+                  "absolute left-0 top-0 flex w-6 justify-center",
+                )}
               >
-                <span className="inline-block transition-colors duration-1000 group-hover:text-teal-600">
-                  <FaRegularSeedling className="w-4 h-4" />
-                </span>
-                <span>{title}</span>
-              </Link>
-              <p className="pl-6 mt-0 mb-3 text-sm text-gray-500 dark:text-gray-300">
-                {summary}
-              </p>
-              <p className="pl-6 mt-0 mb-4 text-xs text-gray-400">
-                {dayjs(createdAt).format("YYYY.MM.DD.")}
-              </p>
-            </article>
+                <div className="w-px bg-gray-200 dark:bg-gray-700" />
+              </div>
+
+              <>
+                <div className="relative flex items-center justify-center flex-none w-6 h-6 mt-3 bg-white rounded-full dark:bg-gray-900">
+                  <div className="w-1.5 h-1.5 rounded-full ring-1 ring-inset ring-gray-300 dark:ring-gray-600"></div>
+                </div>
+                <div className="relative flex-auto p-3 ">
+                  <div className="flex justify-between gap-x-4">
+                    <div className="py-0.5 text-sm leading-5 font-medium text-gray-900">
+                      <Link href={href}>
+                        <span className="absolute inset-0 transition rounded-md ring-1 ring-inset ring-gray-200 hover:ring-gray-300 dark:ring-gray-700 dark:hover:ring-gray-600"></span>
+                        {title}
+                      </Link>
+                    </div>
+                    <time
+                      dateTime={createdAt}
+                      className="flex-none py-0.5 text-xs leading-5 text-gray-400"
+                    >
+                      {dayjs(createdAt).format("YYYY.MM.DD.")}
+                    </time>
+                  </div>
+                  <p className="text-sm leading-6 text-gray-500 dark:text-gray-300">
+                    {summary}
+                  </p>
+                </div>
+              </>
+            </li>
           );
         })}
-      </div>
+      </ul>
 
       <h2 className="mb-5 text-2xl font-semibold">글 목록</h2>
       <div className="flex flex-col gap-3 mb-5">{postArticlesArea}</div>
