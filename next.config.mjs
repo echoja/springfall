@@ -1,3 +1,4 @@
+import { remarkCodeHike } from "@code-hike/mdx";
 import remarkCustomContainer from "@echoja/remark-custom-container";
 import bundleAnalyzer from "@next/bundle-analyzer";
 import mdx from "@next/mdx";
@@ -38,7 +39,7 @@ const withBundleAnalyzer = bundleAnalyzer({
   enabled: process.env.ANALYZE === "true",
 });
 
-/** @type {import("@echoja/remark-custom-container").CustomContainerOptions }*/
+/** @type {import("@echoja/remark-custom-container").CustomContainerOptions } */
 const customContainerOptions = {
   optionsByClassName: [
     {
@@ -51,7 +52,22 @@ const customContainerOptions = {
 
 const withMDX = mdx({
   options: {
-    remarkPlugins: [[remarkCustomContainer, customContainerOptions], remarkGfm],
+    remarkPlugins: [
+      [remarkCustomContainer, customContainerOptions],
+      remarkGfm,
+      [
+        remarkCodeHike,
+        {
+          lineNumbers: false,
+          showCopyButton: true,
+          theme: "nord",
+          skipLanguages: ["mermaid"],
+          staticMediaQuery: "not screen, (max-width: 768px)",
+          autoImport: true,
+          autoLink: false,
+        },
+      ],
+    ],
   },
 });
 

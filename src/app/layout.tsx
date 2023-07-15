@@ -1,3 +1,4 @@
+import "@code-hike/mdx/dist/index.css";
 import "@common/globals.css";
 import type { Metadata } from "next";
 

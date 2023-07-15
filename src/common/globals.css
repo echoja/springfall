@@ -15,7 +15,7 @@
   }
 
   body {
-    @apply font-sans keep-all;
+    @apply font-sans;
   }
 
   h1,
@@ -40,7 +40,7 @@
   }
 
   article {
-    @apply leading-[1.9];
+    @apply leading-[1.8];
   }
 
   article p {
@@ -71,10 +71,6 @@
 }
 
 @layer utilities {
-  .keep-all {
-    word-break: keep-all;
-  }
-
   .max-content {
     width: max-content;
   }
