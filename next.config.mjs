@@ -60,6 +60,11 @@ const config = {
         permanent: true,
       },
       {
+        source: "/post/3",
+        destination: "/article/2023-07/ts-data-structure",
+        permanent: true,
+      },
+      {
         source: "/post/2",
         destination: "/article/2022-10/hello-sadness",
         permanent: true,
