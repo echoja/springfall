@@ -12,6 +12,7 @@ import { item as PussInBoots } from "@app/article/2023-02/puss-in-boots/page.mdx
 import { item as DrawIOAutoLayout } from "@app/article/2023-03/draw-io-auto-layout/page.mdx";
 import { item as CompanyContest } from "@app/article/2023-06/company-contest/page.mdx";
 import { item as WhyWriting } from "@app/article/2023-06/why-writing/page.mdx";
+import { item as TSDataStructure } from "@app/article/2023-07/ts-data-structure/page.mdx";
 
 const items = [
   PussInBoots,
@@ -26,6 +27,7 @@ const items = [
   JavascriptSmoothAnimation,
   HelloSadness,
   Company,
+  TSDataStructure,
 ];
 
 items.sort((a, b) => dayjs(b.createdAt).diff(a.createdAt));

@@ -1,0 +1,293 @@
+import i1 from "./i1.jpeg";
+
+import dayjs from "dayjs";
+import ArticleImage from "@modules/article/ArticleImage";
+import { ArticleJsonLd } from "next-seo";
+import { createMetadata, authorName, authorList } from "@modules/metadata";
+import ArticleHeader from "@modules/article/ArticleHeader";
+
+export const title = "타입스트립트 데이터 핸들링 마스터하기 (작성중)";
+export const url = "https://springfall.cc/article/2023-07/ts-data-structure";
+export const summary = "";
+export const createdAt = dayjs("2023-07-16").toISOString();
+export const updatedAt = dayjs("2023-07-16").toISOString();
+export const image = i1;
+export const imageAlt = "종이 위에서 무언가를 쓰고 있는 펜의 모습";
+
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+
+export const item = {
+  title,
+  url,
+  summary,
+  createdAt,
+  updatedAt,
+  image,
+  imageAlt,
+};
+
+export const metadata = createMetadata({
+  title,
+  canonical: url,
+  description: summary,
+  openGraph: {
+    title,
+    description: summary,
+    url,
+    type: "article",
+    publishedTime: createdAt,
+    modifiedTime: updatedAt,
+    images: [
+      {
+        url: image.src,
+        width: image.width,
+        height: image.height,
+        alt: imageAlt,
+      },
+    ],
+  },
+  alternates: {
+    canonical: url,
+  },
+});
+
+<ArticleJsonLd
+  useAppDir
+  url={url}
+  title={title}
+  images={[image.src]}
+  authorName={authorList}
+  datePublished={createdAt}
+  dateModified={updatedAt}
+  publisherName={authorName}
+  description={summary}
+  isAccessibleForFree
+/>
+
+<ArticleHeader title={title} updatedAt={updatedAt} desc={summary} />
+
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+
+## 들어가기 전에
+
+데이터. 모든 것이 데이터입니다. DB에 있는 데이터도 데이터이고, 사용자가 input 폼에 입력하는 것도 데이터입니다. 데이터는 다양한 곳에서 다양하게 활용되는 만큼 전략 또한 다양합니다. 저는 특히 비즈니스 로직에서 타입스크립트를 사용한다고 했을 때, 거기서 데이터를 **잘** 다루는 방법에 대해 적어보고자 합니다.
+
+필자가 생각하는, 데이터를 **잘 다루기** 혹은 **쉽게** 하기 등에 대해서 한번 묘사하고 넘어가겠습니다. 이런 감성(?)이 이 글의 방향성이기도 합니다. 타입스크립트에서 데이터를 잘 다룬다고 했을 때에는 다음과 같은 느낌적인 느낌을 지니고 있다고 해도 무방합니다.
+
+### 타입 확장이 쉬워야 합니다.
+
+비슷한 데이터끼리 논리를 묶는 작업은 프로그래머의 사명입니다. 간단한 논리는 함수를 만들어버린 후 그걸 재사용합니다. 객체가 등장하면서 상황은 훨씬 복잡해졌습니다. 데이터는 타입과 메소드가 서로 묶였습니다. 비슷하지만 다른 틀을 만들어내기 위해 상속에 상속에 상속을 시킵니다. 여러 인스턴스들은 다형성을 지닌채 이곳저곳 돌아다닙니다. 타입시스템이 복잡해지자 디자인패턴이 등장했습니다.
+
+객체지향 프로그래밍 시대를 관통하면서 부상한 [다양한 디자인패턴](https://refactoring.guru/ko/design-patterns/catalog)은 React 와 같은 프론트엔드 프레임워크와 잘 맞지 않습니다. 데이터 설계의 폭이 줄어들었습니다. 지엽적인 방법이 많이 생겨났고, 타입스크립트도 등장했지만 여전히 **데이터를 잘 다루는 일반적인 방법은 찾기 어렵습니다**. 타협점을 그때그때 찾아야 합니다.
+
+### 데이터 변환은 쉬워야 합니다.
+
+데이터는 어디에나 다양한 형태로 존재하지만, 우리의 비즈니스 로직에서 쉽게 다뤄야 합니다. 그를 위해 하나의 통일된 타입으로 변환하는 작업이 필요하고, 그 작업이 쉬워야 합니다.
+
+예를 들어, 예약 시간을 정하려고 하는 사용자가 날짜와 시간을 `<input type="number" >` 넣고 숫자로 잘 설정하면, 실제 데이터를 우리가 다루기 위해 Date 의 형태로 잘 변환되어야 합니다. 데이터베이스에 저장된 데이터도 마찬가지입니다. 보통 [ISO_8601](http://ko.wikipedia.org/wiki/ISO_8601) 형태 (예: `2012-02-08T07:50:43.309Z`)와 같이 문자열처럼 저장되는데, 이를 우리가 다루기 쉬운 Date 형태로 변환해야 합니다.
+
+또한 데이터는 JSON 으로도 쉽게 변환될 수 있어야겠습니다. 클라이언트와 서버 간 소통을 할 때 대부분 JSON 형태로 데이터를 주고 받기 때문입니다.
+
+앞으로 예제로서 Date 형태를 자주 맞닥뜨리게 될 겁니다.
+
+### 타입 수정은 쉬워야 합니다.
+
+서비스를 만들고 개선시켜나가다 보면 어떤 DB에 컬럼이 새로 생기는 등 데이터 구조에 변화가 생깁니다. 비즈니스 로직을 바꾸기 위해 타입도 바꿉니다. 하지만 빡빡한 타입 시스템이 우릴 자꾸 괴롭힙니다. 새로운 비즈니스 요구 때문에 수정한 데이터 설계에 맞춰 데이터 타입을 잘 변경하고 싶은데, 에러를 자꾸 물고 늘어집니다. 개발의 효율성을 위해 타입스크립트를 사용하는 건데, 그 타입 시스템에 맞추기 위해 아등바등하는 자신의 모습을 보면 갑자기 주객전도가 된 듯한 느낌입니다. 어떻게 쉽게 해결할 수 없는 타입 에러 때문에 `as any` 와 같은 극약처방이 점점 많아지는 기분입니다.
+
+## 목표
+
+다시 요약하면, 우리 설계의 다음과 같습니다.
+
+1. 타입 확장 쉽게 - 같아야 하는 로직은 하나만, 달라야 하는 로직을 잘 나눌 수 있도록 하기.
+1. 데이터 변환 쉽게 - Date 다뤄보기
+1. 타입 변경 쉽게 - 필드 추가해보기
+
+## 설계
+
+처음에는 그냥 차근차근 어떤 스토리를 풀어나가면서 설계를 개선해나가는 형태로 글을 작성하고자 했으나, 그렇게 하는 게 많이 힘든 것 같아서... ㅋㅋ 그냥 처음부터 예제와 함께 결론을 내세우겠습니다.
+
+- 당신은 네이버 블로그 에디터 개발자입니다. (에디터를 예제로 제시하는 이유는 가장 드라마틱하게 비즈니스 요구사항이 바뀌는 곳이라고 생각해서입니다.)
+
+일단 콘텐츠는 "인용구", "이미지", "일반 문단" 이렇게 세 가지로 가정하겠습니다. 이때 **타입 확장이 쉽다**고 한다는 건 어떤 걸 뜻하는 걸까요? 바로 다음 두 가지 상황을 뜻합니다.
+
+- 일반적인 로직이 존재합니다. 즉, 각 콘텐츠는 적절하게 **렌더링** 되어야 합니다.
+- 개별적인 로직이 존재합니다. 즉, 각 콘텐츠는 저마다 렌더링되는 **방식이 다릅니다**.
+
+일반적인 render 함수를 상상해볼 수 있을 겁니다. 그러나 각 타입에 따라 로직은 쪼개져야 합니다.
+
+**데이터 변환이 쉽다**라는 말은 또 여기서 어떻게 적용될 수 있을까요? 여기서는 일단 간단하게 포스팅 "생성일" 정도에서 사용되는 Date 타입으로 예를 들겠습니다. **타입 수정은 쉽다**는 어떻게 할까요? 여기서는 "이미지" 콘텐츠에 필드를 추가하는 식으로 예시를 들어보겠습니다.
+
+## 코드
+
+```tsx
+import type { Dayjs } from "dayjs";
+import dayjs from "dayjs";
+import { useCallback, useEffect, useState } from "react";
+
+interface IQuote {
+  type: "quote";
+  text: string;
+  source: string;
+}
+
+interface IImage {
+  type: "image";
+  src: string;
+  width: number;
+  height: number;
+}
+
+interface IParagraph {
+  type: "paragraph";
+  text: string;
+}
+
+type Content = IQuote | IImage | IParagraph;
+
+interface IPost {
+  modifiedAt: Dayjs;
+  contents: Content[];
+}
+
+interface IPostUntrusted {
+  modifiedAt?: Dayjs;
+  contents?: Partial<Content>[];
+}
+
+function createPost(postUntrusted: IPostUntrusted = {}): IPost {
+  return {
+    modifiedAt: dayjs(),
+    ...postUntrusted,
+    contents: postUntrusted.contents
+      ? postUntrusted.contents.map(createContent)
+      : [],
+  };
+}
+
+function createContent(content: Partial<Content> = {}): Content {
+  switch (content?.type) {
+    case "quote":
+      return createQuote(content);
+    case "image":
+      return createImage(content);
+    case "paragraph":
+      return createParagraph(content);
+    default:
+      throw new Error("Invalid content type");
+  }
+}
+
+function createQuote(content: Partial<IQuote> = {}): IQuote {
+  return {
+    text: "",
+    source: "",
+    ...content,
+    type: "quote",
+  };
+}
+
+function createImage(content: Partial<IImage> = {}): IImage {
+  return {
+    src: "",
+    width: 0,
+    height: 0,
+    ...content,
+    type: "image",
+  };
+}
+
+function createParagraph(content: Partial<IParagraph> = {}): IParagraph {
+  return {
+    text: "",
+    ...content,
+    type: "paragraph",
+  };
+}
+
+function render(content: Content) {
+  switch (content.type) {
+    case "quote":
+      return renderQuote(content);
+    case "image":
+      return renderImage(content);
+    case "paragraph":
+      return renderParagraph(content);
+  }
+}
+
+function renderQuote(content: IQuote) {
+  return (
+    <blockquote>
+      <p>{content.text}</p>
+      <cite>{content.source}</cite>
+    </blockquote>
+  );
+}
+
+function renderImage(content: IImage) {
+  return (
+    <img
+      src={content.src}
+      width={content.width}
+      height={content.height}
+      alt=""
+    />
+  );
+}
+
+function renderParagraph(content: IParagraph) {
+  return <p>{content.text}</p>;
+}
+
+export const PostEditor: React.FC<{
+  post: IPost;
+}> = ({ post }) => {
+  const { modifiedAt: createdAt, contents } = post;
+  return (
+    <article>
+      <div>Created At: {createdAt.format("YYYY-MM-DD")}</div>
+      {contents.map((content) => render(content))}
+    </article>
+  );
+};
+
+export const Page: React.FC = () => {
+  const [post, setPost] = useState<IPost>(createPost());
+
+  const onSave = useCallback(() => {
+    // 저장 로직
+    somethingDo(post);
+  }, [post]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("/api/post/1");
+        const json = (await response.json()) as IPostUntrusted;
+        const post = createPost(json);
+        setPost(post);
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  return (
+    <div>
+      <PostEditor post={post} />
+      <button onClick={() => onSave()}>저장</button>
+    </div>
+  );
+};
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function somethingDo(post: IPost) {
+  throw new Error("Function not implemented.");
+}
+```
