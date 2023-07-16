@@ -136,5 +136,5 @@
 }
 
 .iframe-wrapper {
-  @apply bg-gray-50 rounded-lg py-10;
+  @apply bg-gray-400/5 rounded-lg py-10;
 }
