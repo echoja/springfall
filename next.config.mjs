@@ -69,6 +69,11 @@ const config = {
         destination: "/article/2022-10/hello-sadness",
         permanent: true,
       },
+      {
+        source: "/post/1",
+        destination: "/article/2022-09/company",
+        permanent: true,
+      },
     ];
   },
 
