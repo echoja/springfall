@@ -51,6 +51,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     tr: TR,
     td: TD,
     th: TH,
+    hr: () => <hr className="my-12" />,
     ...components,
   };
 }

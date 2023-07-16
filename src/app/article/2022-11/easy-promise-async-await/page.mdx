@@ -1,0 +1,1372 @@
+import dayjs from "dayjs";
+import i1 from "./i1.jpeg";
+import i2 from "./i2.png";
+import i3 from "./i3.jpeg";
+import ArticleImage from "@modules/article/ArticleImage";
+import { ArticleJsonLd } from "next-seo";
+import { createMetadata, authorName, authorList } from "@modules/metadata";
+import ArticleHeader from "@modules/article/ArticleHeader";
+
+export const title =
+  "[Javascript] 비동기, Promise, async, await 확실하게 이해하기";
+export const url =
+  "https://springfall.cc/article/2022-11/easy-promise-async-await";
+export const summary =
+  "초보자 입장에서 헷갈리기 쉬운 자바스크립트의 Promise 에 대해 낱낱이 파헤칩니다. 더 나아가 async와 await을 올바르게 사용하는 법까지 소개합니다.";
+export const createdAt = dayjs("2022-11-02").toISOString();
+export const updatedAt = dayjs("2022-11-02").toISOString();
+export const image = i3;
+export const imageAlt = "비동기 작업은 고기잡이 배를 떠나보내는 것과 비슷하다";
+
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+
+export const item = {
+  title,
+  url,
+  summary,
+  createdAt,
+  updatedAt,
+  image,
+  imageAlt,
+};
+
+export const metadata = createMetadata({
+  title,
+  canonical: url,
+  description: summary,
+  openGraph: {
+    title,
+    description: summary,
+    url,
+    type: "article",
+    publishedTime: createdAt,
+    modifiedTime: updatedAt,
+    images: [
+      {
+        url: image.src,
+        width: image.width,
+        height: image.height,
+        alt: imageAlt,
+      },
+    ],
+  },
+  alternates: {
+    canonical: url,
+  },
+});
+
+<ArticleJsonLd
+  useAppDir
+  url={url}
+  title={title}
+  images={[image.src]}
+  authorName={authorList}
+  datePublished={createdAt}
+  dateModified={updatedAt}
+  publisherName={authorName}
+  description={summary}
+  isAccessibleForFree
+/>
+
+<ArticleHeader title={title} updatedAt={updatedAt} />
+
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+
+## 개요
+
+본 글은 자바스크립트에서 **Promise** 에 대한 개념을 잡기 위해 작성한 글입니다. 자바스크립트의 기본 문법을 먼저 알아야 이 글을 조금 더 수월하게 보실 수 있습니다. 필자는 [Node.js](https://nodejs.org/en/) 기반에서 실행시키고 있습니다. 최대한 차근차근 설명하려고 했기 때문에 예제 코드는 실제 현업에서 쓰이는 것과는 다소 차이가 있을 수 있습니다.
+
+소스코드는 https://github.com/echoja/easy-promise-async-await 에서 확인하실 수 있습니다. 예시 코드를 실행시키는 방법은 위 리포지토리에 들어가면 확인하실 수 있습니다~!
+
+## 함수 - 코드를 원할 때 갖다 쓰겠다.
+
+일단 익숙하디 익숙할 함수부터 그냥 간단하게 볼까요?
+
+코드는 _기본적으로 한줄한줄 **순차적**으로 실행됩니다_. 위에서 아래까지 하나하나 차례대로요. 아래 코드를 실행시켜 볼까요?
+
+<CH.Code>
+
+```js src/1.mjs
+console.log(1);
+console.log(2);
+console.log(3);
+console.log(4);
+console.log(5);
+```
+
+---
+
+```none output
+1
+2
+3
+4
+5
+
+```
+
+</CH.Code>
+
+위 결과가 너무 뻔한 결과인 것 같지요?
+
+이제 함수라는 것을 도입했을 때 코드의 흐름이 어떻게 흘러가는지 살펴봅시다.
+
+<CH.Code>
+
+```js src/2.mjs
+// focus(1,2,3)
+function a() {
+  console.log("a called!");
+}
+console.log(1);
+console.log(2);
+// focus
+a();
+console.log(3);
+console.log(4);
+```
+
+---
+
+```none output
+1
+2
+a called!
+3
+4
+```
+
+</CH.Code>
+
+`a called!` 가 `2`, `3` 사이에 등장했습니다. `console.log("a called!");` 라는 코드가 가장 위쪽에 있지만, 실제로 함수를 **호출**하는 때에는 `2` 를 출력한 직후입니다. 이로써 우리는 소스 코드상의 순서와 상관없이 코드의 실행 순서를 우리 마음대로 주무를 수 있게 되었습니다.
+
+그렇습니다. **함수는 정의한다고 실행되지 않습니다.** **함수가 호출되어야 그 함수의 내용이 실행됩니다.** 이것만 잘 기억하고 있다면 함수의 순서가 상당히 꼬여있는 것 같아도 차근차근 따라가서 실제 순서를 파악할 수 있을 겁니다.
+
+함수를 다루는 좀 더 복잡한 예시를 봅시다.
+
+<CH.Code>
+
+```js src/3.mjs focus=1,2,3,5,6,7,8,9,12
+function b() {
+  console.log("b called!");
+}
+
+function a(another) {
+  console.log("a started!");
+  another();
+  console.log("a ended!");
+}
+console.log(1);
+console.log(2);
+a(b);
+console.log(3);
+console.log(4);
+```
+
+---
+
+```none output
+1
+2
+a started!
+b called!
+a ended!
+3
+4
+
+```
+
+</CH.Code>
+
+자바스크립트에서는 **함수를 변수처럼 이용할 수 있습니다**. 즉 함수를 함수의 인자로 넘기는 것도 가능하죠! `a` 함수는 `another` 이라는 인자를 받아서 호출하고 있습니다.
+
+함수의 인자를 사용할 때는 숫자나 문자형 등의 값을 쓰는 경우가 많습니다. 그런데 `another` 이 함수인지 아닌지 어떻게 판단하는 걸까요? 결론적으로 이야기하면 특별히 타입 검사를 수행하지 않습니다. 식별자(변수 이름) 바로 뒤에 괄호`()` 가 등장하게 되면 이건 함수라 가정하고 일단 호출해보자! 하고 시도를 합니다. 만약 `another` 가 함수가 아니라면 호출을 시도할 때 `TypeError: another is not a function` 에러가 나게 되겠지요.
+
+하여튼 함수 `a`의 내용 또한 `a`가 실제로 호출될 때 실행될 텐데, 그 때는 이전과 마찬가지로 `2` 와 `3` 사이 입니다. `a`를 호출할 때 인자로 우리는 `b` 를 전달했고, `b` 는 `another` 이 되어 `a started!` 와 `a ended!` 사이에서 호출됩니다. 이윽고 `console.log("b called!")` 도 호출이 됩니다.
+
+여기에서 유의해야 할 점은 `b`가 `a`의 인자로 전달될 시점에도 `b`는 호출(실행)되지 않는다는 점입니다. `b`가 동에 번쩍 서에 번쩍 한다 하더라도 **실제로 호출되기 전까지는 실행되지 않습니다.**
+
+`a` 함수를 호출할 때 `b` 함수를 전달하는 것. 이를 우리는 _콜백 함수를 전달한다_ 라고 종종 이야기합니다. callback.. 뒤로 돌리는 호출? 대충 나중에 호출된다는 뜻일까요? 아무튼 지금 당장에 호출되는 것이 아니라 `a` 함수 내에서 나중에 `b` 함수를 호출할 것이다! 라고 지레짐작할 수 있습니다. 대충 그런 느낌으로 알면 됩니다.
+
+함수에 대한 내용을 먼저 정리하는 이유는, Promise 에서 작업의 단위를 함수로 관리하기 때문입니다. 그러니까 함수 자체를 넘기고, 받고, 정체를 알 수 없는 함수를 우리가 직접 호출하고 지지고 볶고 난리가 납니다. 그래서 이런 짓거리를 하기 전에 개념을 확실히 해두고 싶었습니다.
+
+정리하면 아래와 같습니다.
+
+- 함수는 작업을 미리 정의해놓고, 원할 때 호출하여 그 내용을 실제로 실행시킬 수 있습니다.
+- 함수는 함수의 인자로 전달될 수 있습니다.
+
+## 이제 당신은 어부 마을 주민
+
+자, 이제 슬슬 몰입감을 위해 스토리를 만들어보겠습니다.
+
+당신은 어느 어부 마을에 들어갔습니다. 낯선 마을에 빈털터리로 들어왔습니다. 당신은 마을 주민들의 신뢰를 얻기 위해 정당한 일을 하고 그 댓가로 음식을 받을 것입니다. 그 일은.. 바로 어부 아저씨들이 잡아온 물고기들을 손질하는 것!!
+
+```js src/4.mjs
+function prepareOneFish() {
+  let start = new Date().getTime();
+  while (new Date().getTime() < start + 1000) {
+    // preparing fish
+  }
+}
+
+console.log("Start One Fish!");
+prepareOneFish();
+console.log("Finish One Fish!");
+```
+
+우선 코드에 웬 뜬금없이 `new Date()` 가 등장하냐구요? 코드를 간단하게 해석하면, 내용물이 빈 `while` 문이 돌면서 조건을 **끊임없이** 검사합니다. `start + 1000` 은 시작한 지 1초가 지난 시점이며, 현재 시간이 시작한지 1초가 지났다면 조건이 거짓이 되면서 루프를 탈출하게 됩니다. (`getTime` 함수는 [공식 문서](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Date/getTime) 를 참조해주세요.)
+
+즉 순수하게 1초가 걸리는 함수를 흉내낸 것입니다. 생선을 다듬는 일은 모든 신경을 집중하여 진행해야 하기 때문에 다른 생각을 할 겨를이 없습니다. 컴퓨터로 따지면 **CPU 100% 풀가동**해야 하는 일인 것이지요. 이 CPU 풀가동 이라는 키워드를 잘 기억해두시기 바랍니다.
+
+위 코드를 실행하면 결과는 아래와 같이 나오고, 시간은 1초가 걸립니다.
+
+```none
+Start One Fish!
+Finish One Fish!
+
+```
+
+만약 세 마리의 물고기를 손질해야 한다면 어떡할까요?
+
+<CH.Code>
+
+```js src/5.mjs focus=9,10,11
+function prepareOneFish() {
+  let start = new Date().getTime();
+  while (new Date().getTime() < start + 1000) {
+    // preparing fish
+  }
+}
+
+console.log("Start Three Fish!");
+prepareOneFish();
+prepareOneFish();
+prepareOneFish();
+console.log("Finish Three Fish!");
+```
+
+---
+
+```none output
+Start Three Fish!
+Finish Three Fish!
+
+```
+
+</CH.Code>
+
+저기 저 `prepareOneFish` 함수를 세 번 호출해야 된다고 가정했을 때, 지구가 반쪽이 나도 우리는 3초보다 빠른 시간 안에 마무리지을 수 없습니다. 당신이라는 자원은 한정되어 있고, 정말 열심히 해야 1초에 하나를 쳐낼 수 밖에 없기 때문입니다. 심지어 비동기 로직에 태운다 하더라도 3초가 걸립니다. 이것에 대한 이야기는 잠시 뒤에 자세히 나눠보죠.
+
+## 번뜩이는 아이디어
+
+시간이 흘러흘러 당신은 이제 마을에서 어느정도 인정을 받았습니다. 그래서 당신은 이제 물고기 손질팀의 팀장이 되었습니다. 당신에게는 **세 명의 귀여운 팀원**이 생겼습니다. 그래서 이제 팀원들에게 일을 시킬 수 있고, 당신은 팀원들이 일을 잘 하고 있는지 적당히 감시만 하면 됩니다!
+
+사람이 그만큼 늘어났으니, 우리는 더 효율적이라고 기대합니다. 세 명에게 한꺼번에 하나의 물고기를 손질하라고 요청을 보내는 것입니다! 그렇다면 이제 상황은 바뀌었습니다.
+
+- 당신은 **일을 하지 않고** 기다리기만 하면 됩니다. (CPU를 풀가동 할 필요가 없습니다.)
+- 한 번에 세 명이 동시에 일을 할 수 있습니다. 즉 세 명이 동시에 세 마리를 손질한다면 **총 시간은 1초** 밖에 걸리지 않으리라 예상할 수 있습니다.
+
+하지만, 그것을 어떻게 코딩해볼 수 있을까요?
+
+## 비동기 - 동시에 여러 작업을 해볼 수 있어! 그러나…
+
+자바스크립트에서는 아무 일도 안하고 단순히 기다리기만 하는 함수가 있습니다. 바로 `setTimeout` 함수입니다. 이 함수의 첫번째 인자는 **기다린 후에 실행시킬 함수, 그 다음은 기다릴 밀리초 입니다.** 좋습니다. 이 함수를 통해서 이제 세 명에게 일괄적으로 일을 시켜보는 걸 흉내내는 코드를 작성해봅시다.
+
+<CH.Code>
+
+```js src/6.mjs
+console.log("모두에게 일을 시켜보자!");
+
+setTimeout(() => {
+  console.log("A: 일을 마쳤습니다!");
+}, 1000);
+
+setTimeout(() => {
+  console.log("B: 일을 마쳤습니다!");
+}, 1000);
+
+setTimeout(() => {
+  console.log("C: 일을 마쳤습니다!");
+}, 1000);
+
+console.log("일은 전부 시켜놓았다!");
+```
+
+---
+
+```none output
+모두에게 일을 시켜보자!
+일은 전부 시켜놓았다!
+A: 일을 마쳤습니다!
+B: 일을 마쳤습니다!
+C: 일을 마쳤습니다!
+
+```
+
+</CH.Code>
+
+참고로 [화살표 함수](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Functions/Arrow_functions) 는 함수를 간략하게 표기하는 방법입니다.
+
+대박입니다. 1초 밖에 시간이 걸리지 않았습니다. 일을 시켜놓기만 하면 알아서 척척 잘 합니다! 일을 시키는 시점은 누군가 끝난 이후에 순차적으로 되는 게 아닙니다. 한 순간에 동시에 일을 시킵니다. 한 사람이 하면 3초가 걸릴 일을 1초만 소요해도 된다는 뜻입니다!
+
+자 그러면, 상황을 조금만 바꿔봅시다. 팀원들은 아무래도 팀장보단 일을 잘 못하죠. 이런 상황을 가정하여, 팀원들의 작업 소요 시간을 각각 2,000ms, 1,500ms, 1,000ms 로 조정해봅시다.
+
+<CH.Code>
+
+```js src/7.mjs focus=5,9,13
+console.log("모두에게 일을 시켜보자!");
+
+setTimeout(() => {
+  console.log("A: 일을 마쳤습니다!");
+}, 2000);
+
+setTimeout(() => {
+  console.log("B: 일을 마쳤습니다!");
+}, 1500);
+
+setTimeout(() => {
+  console.log("C: 일을 마쳤습니다!");
+}, 1000);
+
+console.log("일은 전부 시켜놓았다!");
+```
+
+---
+
+```none output
+모두에게 일을 시켜보자!
+일은 전부 시켜놓았다!
+C: 일을 마쳤습니다!
+B: 일을 마쳤습니다!
+A: 일을 마쳤습니다!
+
+```
+
+</CH.Code>
+
+우리는 여기서 기존의 동기 방식과는 다르게 동작한다는 걸 확실히 알 수 있습니다.
+
+우선, **`setTimeout` 함수 자체의 실행은 즉시 실행되고 리턴됩니다**. 위 프로그램을 실행하자마자 `모두에게 일을 시켜보자!` 메시지가 출력되었음을 우리는 확인할 수 있습니다. 즉 순식간에 제일 아래까지 코드 실행이 완료되었다는 걸 의미합니다.
+
+`setTimeout` 함수가 즉시 종료되는 이유는 작업을 예약하는 일이 전부이기 때문입니다. 예약하는 것 자체는 단숨에 끝납니다. 그렇다면 작업을 도대체 어디에 저장해놓고 있을까요? 그것에 관한 자세한 설명은 [이벤트 루프](https://medium.com/sjk5766/javascript-%EB%B9%84%EB%8F%99%EA%B8%B0-%ED%95%B5%EC%8B%AC-event-loop-%EC%A0%95%EB%A6%AC-422eb29231a8) 를 설명하는 글에서 더 자세히 알아보실 수 있을 겁니다. 우리는 구체적인 작동 원리보다는 대략 어떻게 진행하겠구나를 먼저 감을 익히자구요.
+
+<ArticleImage
+  img={i1}
+  caption="시간의 흐름에 따른 순서"
+  alt="시간의 흐름에 따른 순서"
+/>
+
+우리는 지금까지 `setTimeout` 이라는 함수를 통해 **시간이 좀 걸리지만 기다리기만 하면 되는 작업**을 흉내내 보았습니다. 앞서 이야기한 이야기에서 팀원들은 네트워크 멀리 떨어져 있는 외부의 컴퓨터이고, 일을 시킨다는 건 네트워크로 날리는 요청을 비유한 것입니다. 인터넷을 통해 웹사이트에 요청을 보낸 다음 응답이 올 때까지 우리는 마냥 기다려야 합니다. 이런 작업들이 비동기로 하기가 좋은 겁니다.
+
+다시 정리해봅시다.
+
+1. `setTimeout` 은 인자로 들어온 콜백 함수를 예약하기만 하고 바로 끝난다.
+2. `setTimeout` 에 의해 기다리는 동작은 본래의 코드 흐름과는 상관 없이 따로따로 독립적으로 돌아간다. (위 그림처럼 세 개 동시에 기다리는 모습이다.)
+3. 이렇게 따로따로 독립적으로 돌아가는 작업을 비동기 작업이라고 한다.
+
+그렇다면 어떤 작업들이 비동기로 진행될까요? 브라우저에서는 이른바 ajax라 불리웠던 [XMLHttpRequest 객체](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Synchronous_and_Asynchronous_Requests) 를 활용하여 비동기적으로 요청을 보내고 받을 수 있을테고, 최근에는 [Fetch API](https://developer.mozilla.org/ko/docs/Web/API/Fetch_API) 를 사용하는 방법들이 늘고 있습니다. Node.js 에서는, 예를 들자면, [파일을 다룰 때 쓰는 모든 함수](https://nodejs.org/api/fs.html) 들이 비동기로 구성되어 있습니다. 파일을 읽으려먼 우리의 하드디스크나 SSD를 동작시켜야 하는데 이 때 CPU 입장에서는 SSD가 너무 느려터져서 속이 답답할 지경일 겁니다. 한 번에 여러 개의 파일을 읽을 수 있다면 좋겠지요?
+
+## 비동기 작업의 문제점 (1) - 흐름을 예측하기 어렵다
+
+동기적으로 동작한다는 건 우리가 가장 먼저 살펴보았던, 한 사람이 순차적으로 세 개의 생선을 손질하느라 총 3초가 걸린 케이스입니다. 시간이 오래 걸리기는 하지만, 무엇이 어떻게 진행될 지는 명확합니다. 모든 생선이 손질된 이후에 요리를 시작할 수 있으므로 요리를 시작하는 코드는 가장 마지막에 적으면 됩니다.
+
+반면, **비동기 코드에서는 비교적 효율적이기는 하지만 무엇이 어떤 순서로 진행될지 예측하기가 상당히 어렵습니다**.
+
+우리가 임의로 일을 시킬때 작업을 동시에 시작할 수 있으므로 상당한 효율을 달성했습니다! 그렇습니다. 우리는 동시에 시작하기만 할 수 있지, 어떤 작업이 언제 끝나리라는 건 알 수 없습니다. 지금은 가장 먼저 시킨 녀석이 가장 나중에 끝나리라는 결과를 예상할 수 있지만, 만약 이게 단순한 네트워크 요청이라고 가정한다면요? 모든 생선 손질이 끝나고 요리를 시작해야 하는 코드는 도대체 어디에 작성되어야 하는 걸까요?
+
+앞선 예제에서, 소요 시간이 랜덤으로 1~2초 걸린다고 가정해보아요. (`Math.random() * 1000 + 1000`) 여기서 요리를 시작해야 하는 코드를.. 머리를 최대한 굴려서 작성해봅시다.
+
+```js src/7.1.mjs
+console.log("모두에게 일을 시켜보자! (각 팀원은 1~2초의 소요시간이다.)");
+
+let aFinished = false;
+let bFinished = false;
+let cFinished = false;
+
+setTimeout(
+  () => {
+    console.log("A: 일을 마쳤습니다!");
+    aFinished = true;
+    if (aFinished && bFinished && cFinished) {
+      console.log("일을 다 마쳤으니 이제 요리를 시작하자!");
+    }
+  },
+  Math.random() * 1000 + 1000,
+);
+
+setTimeout(
+  () => {
+    console.log("B: 일을 마쳤습니다!");
+    bFinished = true;
+    if (aFinished && bFinished && cFinished) {
+      console.log("일을 다 마쳤으니 이제 요리를 시작하자!");
+    }
+  },
+  Math.random() * 1000 + 1000,
+);
+
+setTimeout(
+  () => {
+    console.log("C: 일을 마쳤습니다!");
+    cFinished = true;
+    if (aFinished && bFinished && cFinished) {
+      console.log("일을 다 마쳤으니 이제 요리를 시작하자!");
+    }
+  },
+  Math.random() * 1000 + 1000,
+);
+
+console.log("일은 전부 시켜놓았다!");
+```
+
+보시다시피 끔찍한 코드가 나왔습니다. 아무리 간단하게 표현한다 하더라도 저 걸거치는 변수를 어떻게 할 말끔한 방법은 잘 생각나지 않습니다.
+
+## 비동기 작업의 문제점 (2) - 콜백 지옥
+
+비동기 작업은 그 특성상 **각각의 비동기 작업이 "끝"났을 때 뒤에 이어질 작업을 미리 부여**하는 식으로 흐름을 제어합니다. 그 후처리 작업은 앞서 `setTimeout` 에서 살펴본 것처럼 함수 단위로 집어 넣습니다. 네, 비동기 작업은 이런 식으로밖에 흐름을 제어하지 못합니다!! 만약 비동기 작업이 차례대로 주루룩 이어져있다면, 이는 우리가 자바스크립트를 배울 때 한번 쯤 들어봤던, [콜백 지옥](https://velog.io/@yujo/JS%EC%BD%9C%EB%B0%B1-%EC%A7%80%EC%98%A5%EA%B3%BC-%EB%B9%84%EB%8F%99%EA%B8%B0-%EC%A0%9C%EC%96%B4) 을 뜻합니다. 이 글에서는 콜백 지옥에 관련하여 크게 다루지는 않습니다.
+
+종종 콜백 지옥에 의해서 Promise 가 등장했다는 설명이 있는데 이는 반은 맞고 반은 틀렸습니다. 콜백을 통해 다음 할 일을 정하는 개념은 Promise 에서도 동일합니다. 콜백 지옥이라는 상황이 벌어지는 이유는, 비동기 작업을 관리한다는 개념 자체가 없어서 코드가 지저분해질 수 밖에 없기 때문입니다. 극단적인 예를 들자면, 호랑이 상사가 **함수 없이** 코딩하라고 시킨다면, 할 수는 있겠죠…? 그런데 복사 붙여넣기의 굉장한 향연이겠죠?
+
+지금까지, 동기와 비동기를 설명했습니다. 그 차이점을, 느낌적인 느낌으로 표현하면 다음과 같습니다.
+
+**동기의 대략적인 특징**
+
+- 동시에 여러 작업을 수행할 수 없다.
+- 흐름을 예측하기 쉽다. 먼저 수행되고 나중에 수행되는 것들이 명확하다.
+
+**비동기의 대략적인 특징**
+
+- 동시에 여러 작업을 수행할 수 **있다.**
+- 흐름을 예측하기 어렵다. 즉 무엇이 먼저 완료될 지 보장할 수 없다.
+
+## Promise
+
+**`Promise` 는 비동기 작업의 단위** 입니다. 지금까지 이야기했던 것들은 자바스크립트에서 동시에 여러 가지 작업을 할 수 있다는 개념을 비동기로 은근슬쩍 설명했고, 지금부터는 **`Promise` 를 통해 어떻게 비동기 작업들을 쉽게 관리할 수 있는지**를 본격적으로 알아보겠습니다.
+
+### 기본 사용법
+
+우선 `Promise` 로 관리할 비동기 작업을 만들 때에는, `Promise` 에서 요구하는 방법대로 만들어야 합니다. 여러가지 방법이 있지만 제일 정석적인 방법은 `new Promise(...)` 하는 것입니다. 아래 예제 코드를 봐주세요.
+
+```js
+const promise1 = new Promise((resolve, reject) => {
+  // 비동기 작업
+});
+```
+
+문법적으로 보충 설명해보겠습니다.
+
+1. 변수의 이름은 `promise1` 이며, `const` 로 선언했기 때문에 재할당이 되지 않습니다. 하나의 변수로 끝까지 해당 `Promise` 를 관리하는 것이 가독성도 좋고 유지보수도 하기 좋습니다.
+2. `new Promise(...)` 로 `Promise` 객체를 새롭게 만들었습니다. 생성자는 함수와 동일하게 동작하므로, 괄호`()` 를 써서 함수를 호출하는 것과 같은 모습입니다.
+3. **생성자는 특별한 함수 하나를 인자로 받습니다.** (여기서 인자로 들어가는 함수의 형태는 [화살표 함수](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Functions/Arrow_functions) 입니다.)
+
+이 **특별한 함수**를 공식 문서에서는 **`executor`** 라는 이름으로 부릅니다. 이 함수에 대해 더 자세히 설명하면 다음과 같습니다.
+
+1. `executor`는 첫번째 인수로 `resolve` , 두번째 인수로 `reject` 를 받습니다. (우리가 변수명을 정하는 것 처럼, 우리 맘대로 해도 사실 상관은 없지만, 국룰을 따르도록 합시다.)
+2. `resolve` 는 `executor` 내에서 호출할 수 있는 또 다른 함수입니다. `resolve` 를 호출하게 된다면 “**이 비동기 작업이 성공했어!**” 라는 뜻입니다.
+3. `reject` 또한 `executor` 내에서 호출할 수 있는 또 다른 함수입니다. `reject` 를 호출하게 된다면 “**이 비동기 작업이 실패했어…**” 라는 뜻입니다.
+
+으악! 생성자 내에 함수 내에 또 다른 함수를 호출한다니 이게 무슨 말입니까! 이게 콜백보다 훨씬 복잡하면 복잡했지 결코 간단해보이지는 않는데요? … 아니에요.. 편하다구요… 진짜 믿어주세요. async-await 까지 가야 Promise의 진면모가 드러난답니다. 하여튼 우리는 `promise1` 이라는 `Promise` 객체를 얻게 되었습니다!
+
+Promise 의 특징으로, `new Promise(...)` 하는 순간 여기에 할당된 비동기 작업은 바로 시작됩니다. 우리가 앞서 이야기했듯이 함수란 으레 정의하는 시점과 호출하는 시점이 다르다고 했었지만, new Promise 는 그냥 기다리지 않고 바로 호출해버립니다.
+
+비동기 작업의 특징은 작업이 언제 끝날지 모르기 때문에 일단 배를 떠나보낸다고 이야기했습니다. 그럼 그 이후에 이 작업이 성공하거나 실패하는 순간에 우리가 또 뒷처리를 해줘야겠죠? Promise 가 끝나고 난 다음의 동작을 우리가 설정해줄 수 있는데, 그것이 바로 **`then` 메소드**와 **`catch` 메소드**입니다.
+
+- `then` 메소드는 해당 Promise 가 성공했을 때의 동작을 지정합니다. 인자로 함수를 받습니다.
+- `catch` 메소드는 해당 Promise 가 실패했을 때의 동작을 지정합니다. 인자로 함수를 받습니다.
+- 위 함수들은 체인 형태로 활용할 수 있습니다. (연속적으로 호출할 수 있습니다. 아래 예제에서 확인하도록 합니다.)
+
+`executor` 로 새로운 `Promise` 를 만든 다음 `then` 과 `catch` 를 이용하여 후속 동작까지 지정해줘야 어느정도 제대로 돌아가는 `Promise`를 만나보실 수 있습니다. 그래서 우선 설명을 엄청 나열했구요, 이제 드디어 예시 코드를 확인해봅시다.
+
+<CH.Code>
+
+```js src/8.mjs
+const promise1 = new Promise((resolve, reject) => {
+  resolve();
+});
+
+promise1
+  .then(() => {
+    console.log("then!");
+  })
+  .catch(() => {
+    console.log("catch!");
+  });
+```
+
+---
+
+```none output
+then!
+
+```
+
+</CH.Code>
+
+`then` 에 함수를 넣어주었고, 연속적으로 `catch` 에도 함수를 넣어줬습니다. 이 Promise 에서는 바로 `resolve` 가 호출되었기 때문에 성공으로 간주하여 `then` 에 있는 동작만 실행됩니다. 이제 아래와 같은 코드를 쓴다면 어떻게 될까요? `resolve` 부분을 `reject` 로 수정했습니다.
+
+<CH.Code>
+
+```js src/9.mjs focus=2
+const promise1 = new Promise((resolve, reject) => {
+  reject();
+});
+
+promise1
+  .then(() => {
+    console.log("then!");
+  })
+  .catch(() => {
+    console.log("catch!");
+  });
+```
+
+---
+
+```none output
+catch!
+
+```
+
+</CH.Code>
+
+예상대로 `catch!` 만 출력됩니다.
+
+위 예제에서는 비동기 작업이라고 해도 뭔가 기다리는 작업은 하나도 하지 않았습니다. 기다리는 작업은 아까 얘기했듯이 인터넷으로부터 데이터를 가져오는 작업이라든지, 파일을 읽고 쓰는 작업을 의미합니다. 기다리는 작업이 하나도 없다면 비동기를 쓸 이유는 없습니다. 위 예제들은 어디까지나 Promise 의 동작 방식을 설명하기 위한 예제임을 반드시 기억해주세요.
+
+### 재사용하기
+
+`new Promise(...)` 를 하는 순간 비동기 작업이 시작되는데, 비슷한 비동기 작업을 수행할 때마다 매번 `new Promise(...)` 를 해줘야 할까요? 그렇지 않습니다. 그럴 때는 그냥 `new Promise(...)` 한 것을 그대로 리턴하는 함수를 만들어 사용하면 됩니다. 아래 함수는 `age` 인자를 받아서 그 값에 따라 `resolve` 또는 `reject`를 호출합니다.
+
+<CH.Code>
+
+```js src/10.mjs
+function startAsync(age) {
+  return new Promise((resolve, reject) => {
+    if (age > 20) resolve();
+    else reject();
+  });
+}
+
+const promise1 = startAsync(25);
+promise1
+  .then(() => {
+    console.log("1 then!");
+  })
+  .catch(() => {
+    console.log("1 catch!");
+  });
+
+const promise2 = startAsync(15);
+promise2
+  .then(() => {
+    console.log("2 then!");
+  })
+  .catch(() => {
+    console.log("2 catch!");
+  });
+```
+
+---
+
+```none output
+1 then!
+2 catch!
+
+```
+
+</CH.Code>
+
+이제 `startAsync` 함수를 호출하는 순간 `new Promise(...)` 가 실행하게 되어 비동기 작업이 시작됩니다. 비동기 작업이 성공할지 실패할지는 장담할 수 없으므로 이전 예제와 동일하게 `then` 과 `catch` 로 후속 동작을 지정해 두었습니다.
+
+`promise1` 은 성공하고, `promise2` 는 실패하도록 만들었는데요, 그래서 `promise1` 에서는 `catch` 으로 등록했던 함수는 실행되지 않고 `then` 으로 지정한 동작만 수행합니다. `promise2` 는 반대로 `then` 동작은 수행하지 않고 `catch` 동작만 수행합니다.
+
+### 작업 결과를 전달하기
+
+**우리는 `resolve`, `reject` 함수에 인자를 전달함으로써 `then` 및 `catch` 함수에서 비동기 작업으로부터 정보를 얻을 수 있습니다.** 바로 아래 예제를 보시죠.
+
+<CH.Code>
+
+```js src/11.mjs
+function startAsync(age) {
+  return new Promise((resolve, reject) => {
+    if (age > 20) resolve(`${age} success`);
+    else reject(new Error(`${age} is not over 20`));
+  });
+}
+
+const promise1 = startAsync(25);
+promise1
+  .then((value) => {
+    console.log(value);
+  })
+  .catch((error) => {
+    console.error(error);
+  });
+
+const promise2 = startAsync(15);
+promise2
+  .then((value) => {
+    console.log(value);
+  })
+  .catch((error) => {
+    console.error(error);
+  });
+```
+
+---
+
+```none output
+25 success
+Error: 15 is not over 20
+    at file:///Users/user/Desktop/easy-promise-async-await/src/11.mjs:4:17
+    at new Promise (<anonymous>)
+    at startAsync (file:///Users/th.kim/Desktop/easy-promise-async-await/src/11.mjs:2:10)
+    at file:///Users/user/Desktop/easy-promise-async-await/src/11.mjs:17:18
+    at ModuleJob.run (node:internal/modules/esm/module_job:193:25)
+    at async Promise.all (index 0)
+    at async ESMLoader.import (node:internal/modules/esm/loader:526:24)
+    at async loadESM (node:internal/process/esm_loader:91:5)
+    at async handleMainPromise (node:internal/modules/run_main:65:12)
+
+```
+
+</CH.Code>
+
+### 기타 고려사항
+
+이외 `executor` 를 만들때 조금 고려해야 할 부분은 다음과 같습니다. 이는 좀 더 자세한 내용이므로 빨리 async - await 의 매력을 느끼고 싶다면 넘어가도 좋습니다.
+
+- `executor` 내부에서 에러가 `throw` 된다면 해당 에러로 `reject` 가 수행됩니다.
+- `executor` 의 리턴 값은 무시됩니다.
+- 첫 번째 `reject` 혹은 `resolve` 만 유효합니다. (두 번째부터는 무시됩니다. 이미 해당 함수가 호출되었다면 `throw` 또한 무시됩니다.)
+
+아래 간단한 예시들로 살펴봅시다.
+
+<CH.Code>
+
+```js src/12.mjs
+// catch 로 연결됩니다.
+const throwError = new Promise((resolve, reject) => {
+  throw Error("error");
+});
+throwError
+  .then(() => console.log("throwError success"))
+  .catch(() => console.log("throwError catched"));
+
+// 아무런 영향이 없습니다.
+const ret = new Promise((resolve, reject) => {
+  return "returned";
+});
+ret
+  .then(() => console.log("ret success"))
+  .catch(() => console.log("ret catched"));
+
+// resolve 만 됩니다.
+const several1 = new Promise((resolve, reject) => {
+  resolve();
+  reject();
+});
+several1
+  .then(() => console.log("several1 success"))
+  .catch(() => console.log("several1 catched"));
+
+// reject 만 됩니다.
+const several2 = new Promise((resolve, reject) => {
+  reject();
+  resolve();
+});
+several2
+  .then(() => console.log("several2 success"))
+  .catch(() => console.log("several2 catched"));
+
+// resolve 만 됩니다.
+const several3 = new Promise((resolve, reject) => {
+  resolve();
+  throw new Error("error");
+});
+several3
+  .then(() => console.log("several3 success"))
+  .catch(() => console.log("several3 catched"));
+```
+
+---
+
+```none output
+several1 success
+several3 success
+throwError catched
+several2 catched
+
+```
+
+</CH.Code>
+
+어차피 첫 번째 `resolve`, `reject` 만 영향을 주기 때문에, 한 번 해당 함수가 호출되면 바로 `return` 을 하여 비동기 작업을 빠져나가는 것이 여러모로 정신 건강에 도움이 됩니다. 아래는 이전에 작성했던 `startAsync` 함수를 살짝 손을 본 겁니다.
+
+```js
+function startAsync(age) {
+  return new Promise((resolve, reject) => {
+    if (age > 20) {
+      // 뭔가를 합니다.
+      return resolve(`${age} success`);
+    }
+    // 또 뭔가를 합니다.
+    return reject(new Error(`${age} is not over 20`));
+    // 여기 있는 코드는 절대 실행되지 않습니다.
+  });
+}
+```
+
+### 간단한 동작 원리와 의의
+
+지금까지의 설명을 (이해하기 쉬운 형태로 왜곡하여) 그림으로 표현하자면 아래와 같습니다.
+
+<ArticleImage
+  img={i2}
+  caption="Promise를 표현한 그림"
+  alt="Promise를 표현한 그림"
+/>
+
+Promise는 세 가지 상태를 지닙니다. 바로 대기(pending), 이행(fulfilled), 거부(rejected) 이며 이행 상태일 때 `then`, 거부 상태일 때 `catch` 로 등록한 동작들이 실행됩니다. 지금까지 “_성공_” 이라고 이야기한 것들은 사실 “_이행 상태_“와 연계된 것이고, “_실패_“는 “_거부_“와 동일한 상태인 것입니다.
+
+우리가 Promise를 생성한 후에, 이 상태가 실제로 어떤지 확인할 수 있을까요? 아쉽게도 그런 방법은 없습니다. 자바스크립트를 실행하는 브라우저 혹은 Node.js 에서 알아서 관리하는 녀석들이라 베일에 싸여 있습니다.
+
+Promise 의 의의를 한마디로 이야기해보죠. `Promise` 는 **비동기 작업을 생성/시작하는 부분(`new Promise(...)`)과 작업 이후의 동작 지정 부분(`then`, `catch`)을 분리함으로써 보다 유연한 설계를 가능토록 합니다.**
+
+### 요약
+
+지금까지 열심히 달려왔습니다. Promise 를 만드는 순간 비동기 작업이 시작되며, 비동기 작업을 성공으로 간주하고 싶을 때 `resolve`를 호출하고, 실패라 간주하고 싶다면 `reject` 함수를 호출합니다. 이 비동기 작업이 성공했을 때 후속 조치를 지정하고 싶다면 `then`으로, 실패 시의 후속 조치는 `catch` 로 지정하는 것까지 함께 살펴보았습니다.
+
+## 실습: `setTimeout` Promise 버전으로 만들기
+
+Promise 버전으로 만든다는 말은, 비동기스럽게 동작하지만 Promise 기반이 아니라 다른 방법으로 동작하는 것들을 Promise 기반으로 동작하도록 만든다는 것입니다. 이 글에서 가장 흔하게 접할 수 있는 `setTimeout` 부터 살펴보도록 하겠습니다.
+
+우선 `setTimeout` 의 속성을 살펴보면서, 어떻게 Promise로 만들 수 있을까 생각해봅시다.
+
+```js
+setTimeout(callback, delay);
+```
+
+`setTimeout` 은 해당 함수를 주어진 밀리초 뒤에 실행합니다. 이 말을 조금 더 풀어서 쓴다면, 주어진 delay를 기다리는 걸 완료한다면, 성공(fulfilled)했다는 것이고, 성공했다면 callback 을 실행하면 될 것 같습니다.
+
+그렇다면 실패하는 케이스는 어떻게 될까요? **일단 고려하지 맙시다.** 왜냐하면 본래의 setTimeout 에서, 문제가 생겼을 때의 동작을 정의하는 부분이 없기 때문입니다. 에러는 일어나지 않는다고 가정해도 좋을 것 같습니다.
+
+우리는 new Promise 에 넘길 executor를 만들 때 성공하는 케이스에서 resolve를, 실패하는 케이스에서는 reject를 호출하면 된다고 했습니다. 그리고 성공 이후의 동작은 then 메소드를 이용해서 넘기면 됩니다. 한번 해볼까요?
+
+`setTimeoutPromise` 함수를 호출하게 되었을 때 벌어지는 일을 풀어서 쓰면 다음과 같습니다.
+
+1. `setTimeout` 이 즉시 실행됩니다.
+2. `delay` 밀리초 뒤에 `resolve` 함수가 호출됩니다.
+3. 해당 Promise의 `then` 으로 연결된 후속 작업이 실행됩니다.
+
+여기서는 기다렸다는 사실만 중요하므로, **`resolve` 에 별다른 값을 전달하고 있지 않음**을 확인할 수 있습니다.
+
+```js src/13.mjs
+function setTimeoutPromise(delay) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve();
+    }, delay);
+  });
+}
+
+console.log("setTimeoutPromise가 시작됩니다.");
+
+const promise = setTimeoutPromise(1000);
+
+promise.then(() => {
+  console.log("끝났습니다!");
+});
+```
+
+---
+
+위 `setTimeoutPromise` 함수는 화살표 함수의 간편함을 극도로 활용해서, 아주 짧게 표현할 수도 있습니다. 우선 `setTimeout` 에 넘길 함수의 형태와 `resolve` 를 사용하는 형태가 동일하므로 (인자를 사용하지 않으므로) `resolve`를 그대로 넣을 수 있습니다.
+
+```js src/13.mjs focus=3
+function setTimeoutPromise(delay) {
+  return new Promise((resolve, reject) => {
+    setTimeout(resolve, delay);
+  });
+}
+
+console.log("setTimeoutPromise가 시작됩니다.");
+
+const promise = setTimeoutPromise(1000);
+
+promise.then(() => {
+  console.log("끝났습니다!");
+});
+```
+
+---
+
+그리고 executor 에서 `reject`는 사용하지 않기 때문에 생략할 수 있습니다. executor의 리턴 값도 중요하지 않으므로, 중괄호 또한 생략할 수 있습니다.
+
+```js src/13.mjs focus=2
+function setTimeoutPromise(delay) {
+  return new Promise((resolve) => setTimeout(resolve, delay));
+}
+
+console.log("setTimeoutPromise가 시작됩니다.");
+
+const promise = setTimeoutPromise(1000);
+
+promise.then(() => {
+  console.log("끝났습니다!");
+});
+```
+
+좋습니다. 이제 async 함수를 살펴보도록 합시다.
+
+## `async`: 비동기 작업을 만드는 손쉬운 방법
+
+`async` 키워드는 **함수를 선언할 때** 붙여줄 수 있습니다. `async` 키워드가 붙은 함수를 **async 함수**로, `async` 가 없는 함수는 일반 함수라고 부르도록 하겠습니다. 의미를 생각해본다면 async 함수는 비동기 작업 그 자체를 뜻한다는 말일 것 같은데, 실제로 우리가 어떻게 사용해볼 수 있을까요?
+
+async 함수는 `Promise` 와 굉장히 밀접한 연관을 가지고 있는데, 기존에 작성하던 `executor` 로부터 몇 가지 규칙만 적용한다면 `new Promise(…)` 를 리턴하는 함수를 `async` 함수로 손쉽게 변환할 수 있습니다.
+
+- 함수에 `async` 키위드를 붙입니다.
+- `new Promise...` 부분을 없애고 `executor` 본문 내용만 남깁니다.
+- `resolve(value);` 부분을 `return value;` 로 변경합니다.
+- `reject(new Error(…));` 부분을 `throw new Error(…);` 로 수정합니다.
+
+자 그럼 기다릴 것 없이 이전에 작성했던 `startAsync` 함수를 async 함수로 바꾸어봅시다.
+
+<CH.Code>
+
+```js src/14.mjs focus=9:12
+// 기존
+// function startAsync(age) {
+//   return new Promise((resolve, reject) => {
+//     if (age > 20) resolve(`${age} success`);
+//     else reject(new Error(`${age} is not over 20`));
+//   });
+// }
+
+async function startAsync(age) {
+  if (age > 20) return `${age} success`;
+  else throw new Error(`${age} is not over 20`);
+}
+
+const promise1 = startAsync(25);
+promise1
+  .then((value) => {
+    console.log(value);
+  })
+  .catch((error) => {
+    console.error(error);
+  });
+
+const promise2 = startAsync(15);
+promise2
+  .then((value) => {
+    console.log(value);
+  })
+  .catch((error) => {
+    console.error(error);
+  });
+```
+
+---
+
+```none output
+25 success
+Error: 15 is not over 20
+    at startAsync (file:///Users/th.kim/Desktop/easy-promise-async-await/src/13.mjs:11:14)
+    at file:///Users/th.kim/Desktop/easy-promise-async-await/src/13.mjs:23:18
+    at ModuleJob.run (node:internal/modules/esm/module_job:193:25)
+    at async Promise.all (index 0)
+    at async ESMLoader.import (node:internal/modules/esm/loader:526:24)
+    at async loadESM (node:internal/process/esm_loader:91:5)
+    at async handleMainPromise (node:internal/modules/run_main:65:12)
+
+```
+
+</CH.Code>
+
+놀랍게도 완전히 똑같이 동작합니다. 세부적으로야 동작이 미묘하게 다를 수는 있겠지만 실제로 사용하는 입장에서 차이점을 느낄 수 없어요! 그래서 우리는 다음 진리를 얻게 되었습니다.
+
+**`async` 함수의 리턴 값은 무조건 `Promise` 입니다** !
+
+이 단순한 문장에 의해서 우리는 async 함수를 일반 함수처럼 사용할 수 없다는 걸 절실히 깨닫게 되었습니다. (혹은 앞으로 무수히 깨닫게 될 것입니다….) 분명히 위 함수에서는 우리가 문자열을 리턴했는데, `promise1`과 `promise2` 는 문자열이 아닙니다! 이게 무슨 일입니까!! 네… 우리는 무조건 async 함수를 실행시킨 뒤 `then` 과 `catch` 를 활용하여 흐름을 제어해야 합니다. 정말 익숙하지 않습니다. 비동기 작업을 하려면 지금까지 써왔던 코딩의 느낌을 모두 바꿔야 할까요? 아니오, 그렇지 않습니다. async 함수 안에서는 `await` 를 쓸 수 있습니다.
+
+또 한가지 사소하게 다른 점은, 에러 메시지가 두 줄 줄어들었습니다. `new Promise (<anonymous>)` 부분이 사라진 것을 확인할 수 있습니다.
+
+### 모든 비동기 동작을 async 함수로 만들 수 있는 건 아닙니다.
+
+우리가 앞서 만들었던 setTimeout 의 Promise 버전을 떠올려봅시다. 그런데 이 함수는 async 함수로 만들 수 없습니다. 왜냐구요? 우리가 async 함수를 만들던 규칙 중 이런 것이 있었습니다.
+
+- `resolve(value);` 부분을 `return value;` 로 변경합니다.
+
+그러나 우리에겐 resolve(value) 부분이 없습니다. 더 정확히 말하자면, resolve 를 우리가 호출하는 게 아니라, 다른 녀석(setTimeout)이 호출합니다. 즉 우리가 resolve 호출에 대해 관여할 수 있는 길이 없습니다. `setTimeoutPromise` 는 그냥 그대로 써야 합니다.
+
+## `await`: Promise 가 끝날 때까지 기다리거라.
+
+`await` 는 왠지 wait 이 있으니까 기다리라는 뜻 같습니다. 맞습니다. `await` 는 Promise 가 fulfilled 가 되든지 rejected 가 되든지 아무튼 간에 끝날 때까지 기다리는 함수입니다. 쓰임새는 그렇구요, `await` 은 또 쓸 수 있는 제약 조건이 있습니다. 바로 **async 함수 내부에서만 사용할 수 있습니다.** 왜 `await` 은 async 함수 내에서만 쓸 수 있는가는 조금 뒤에 알아보고, 일단은 어떻게 사용할 수 있는지 코드를 확인해봅시다.
+
+<CH.Code>
+
+```js src/15.mjs focus=10:30
+function setTimeoutPromise(delay) {
+  return new Promise((resolve) => setTimeout(resolve, delay));
+}
+
+async function startAsync(age) {
+  if (age > 20) return `${age} success`;
+  else throw new Error(`${age} is not over 20`);
+}
+
+async function startAsyncJobs() {
+  await setTimeoutPromise(1000);
+  const promise1 = startAsync(25);
+
+  try {
+    const value = await promise1;
+    console.log(value);
+  } catch (e) {
+    console.error(e);
+  }
+
+  const promise2 = startAsync(15);
+
+  try {
+    const value = await promise2;
+    console.log(value);
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+startAsyncJobs();
+```
+
+---
+
+```none output
+25 success
+Error: 15 is not over 20
+    at startAsync (/home/taehoon/Desktop/playground-nodejs/index.js:17:14)
+    at startAsyncJobs (/home/taehoon/Desktop/playground-nodejs/index.js:29:20)
+
+```
+
+</CH.Code>
+
+본격적으로 `await` 가 어떤 일을 하는지 알아보기 전에 자잘한 변경사항부터 짚고 넘어갑시다.
+
+`startAsyncJobs` 함수를 새로 만들었습니다. 이 함수 내에서 `await` 을 사용하기 위해 async 함수로 정의내린 후, 코드의 마지막 부분에서 호출함으로써 비동기 작업을 시작했습니다. 기존의 `then` 과 `catch` 하던 작업들은 모두 이 함수 내에 있습니다.
+
+이젠 `await` 의 특성을 봅시다.
+
+1. 문법적으로 `await [[Promise 객체]]` 이렇게 사용합니다.
+2. **`await` 은 Promise 가 완료될 때까지 기다립니다.** 그러므로 `setTimeoutPromise` 의 `executor` 에서 `resolve` 함수가 호출될 때까지 기다립니다. 그 시간동안 `startAsyncJobs` 의 진행은 멈춰있습니다.
+3. **`await` 은 Promise 가 `resolve` 한 값을 내놓습니다.** async 함수 내부에서는 리턴하는 값을 `resolve` 한 값으로 간주하므로, `${age} success` 가 `value`로 들어온다는 점을 알 수 있습니다.
+4. **해당 `Promise` 에서 `reject` 가 발생한다면 예외가 발생합니다.** 이 예외 처리를 하기 위해 `try-catch` 구문을 사용했습니다. `reject` 로 넘긴 에러(async 함수 내에서는 `throw` 한 에러)는 `catch` 절로 넘어갑니다. 이로써 익숙한 에러 처리 흐름으로 진행할 수 있습니다.
+
+`await` 은 `then` 과 `catch` 의 동작을 모두 자기 나름대로 처리합니다. 그래서 async 함수 내에서 `then`, `catch` 메소드의 존재를 잊게 할 수 있습니다. 즉 콜백 함수를 넘기고 흐름을 제어하던 때가 엊그제 같은데… 라며 과거 회상을 할 수 있다는 뜻입니다!
+
+## 왜 `await` 은 async 함수에서만 쓸 수 있을까요?
+
+**비동기 작업으로부터 파생된 모든 작업은 비동기 작업으로 간주할 수 있습니다**. 어느 항구 마을에서 커다란 고기잡이 배를 바다로 떠나보낸다고 가정합시다. 커다란 고기잡이 배는 비동기 작업의 시작입니다. 동이 틀 무렵 고기잡이 배는 떠났고, 그 고기잡이 배는 나름 열심히 일할 겁니다. 고기잡이 배에서 다른 소형 배를 다시 내보내든 그물을 준비하는 작업을 하든 큰 배를 떠나보낸 항구 입장에서는 신경쓸 일이 없습니다. 배 안에서 일어나는 게 비동기 작업이든 동기 작업이든, 항구 입장에서는 모두 비동기 작업입니다.
+
+<ArticleImage
+  img={i3}
+  caption="떠나보낸 비동기 작업"
+  alt="떠나보낸 비동기 작업"
+/>
+
+동기 환경에서 비동기 작업을 마냥 기다리는 건 의미가 없습니다. 비동기 작업의 의의가 뭘까요? 항구에서 배를 떠나보낸 뒤, 그 동안 어제 잡아왔던 물고기를 포장하거나 새로운 거래처를 뚫는 등 **다른 작업들을 수행할 수 있도록** 하는 것입니다. 고기잡이 배를 떠나보내고 아무것도 하지 않고 기다리기만 한다면 비동기 작업의 의의가 없습니다. 바꿔 말하면, 동기적으로 실행되는 프로그램(Node.js 등의 자바스크립트 런타임)에서 처음으로 비동기 작업이 시작되었을 때, 그걸 기다리는 행위는 무의미합니다.
+
+반면 비동기 환경에서 비동기 작업의 결과를 기다리겠다는 것은 다소 의미가 있습니다. 기다린다는 것은 동기 작업처럼 동작한다는 뜻이고, 이는 종종 유용합니다. 예를 들어 생선들을 모두 손질해야 요리를 시작할 수 있을 것입니다. 고기잡에 배 내에서도, 그물을 일단 건져 올려야 그물을 다시 내릴 수 있을 것입니다. 그래서 **마냥 기다리는 게 정답**일 때도 있습니다. 그 때 `await` 을 사용하는 것입니다.
+
+하여튼 비동기는 동작 특성상 실제 작업과 그 작업의 후속조치를 따로 분리시킬 수 밖에 없는데, (그래서 `then`, `catch` 등을 썼는데) `async` 와 `await`을 쓰면 하나의 흐름 속에서 코딩할 수 있게 해줍니다! 실제 작업이 끝난 다음 그 후속조치를 수행한다. 가 아니라, 실제 작업이 끝나는 걸 **기다린 다음** 다음 코드를 수행한다의 느낌으로, 코딩할 수 있는 것이죠. 기다리는 게 뭐죠? 동기 코드를 쓸 때 마냥 기다렸죠? 그걸 할 수 있다는 것입니다. **`async`와 `await`은 우리가 예전에 동기 코드를 작성했던 익숙한 감각으로 비동기 작업들을 코딩할 수 있게 해줍니다.** 당장 `then`과 `catch`를 사용한 코드와 `async`, `await` 까지 활용한 코드를 비교해보면 체감이 확 될 것입니다.
+
+## `await` 을 사용할 수 없는 상황일 때
+
+Promise 를 반환하는 (혹은 async) 함수를 사용하면서 `await` 까지 쓰고 싶은데, `await` 을 쓸 수 없는 상황이 있을 수 있습니다. 보통 특정 라이브러리에서 프로그래머에게 요구하는 동작의 형태가, 일반 함수여야 하는 케이스가 그렇습니다. 이런 상황에서는 머리를 최대한 굴려서, 적절한 전략을 떠올려야 합니다.
+
+위에서 먼저 살펴보았지만, 예를 들어 `setTimeout` 은, 그 자체로는 `async` 함수 안에서 `await`을 걸 수가 없습니다. `setTimeout` 은 무조건 콜백 함수를 인자로 받기 때문입니다. 그래서 우리는 `setTimeout`을 감싸는 Promise 를 만들었습니다.
+
+전략은 상황마다 너무 다르기 때문에, 그냥 여러가지로 검색을 해보라는 답 밖에 드릴 수 없을 것 같습니다. 예를 들면 [Express](https://expressjs.com/) 에서 요청 핸들러는 무조건 일반 함수로 만들어야 하되 “성공”을 알리는 방법, 그리고 “실패”를 알리는 방법 또한 정해져 있는데, 이를 이용해 [async 함수를 집어넣어볼 수](https://changjoopark.medium.com/7e8ffe0fcc84) 도 있습니다.
+
+## `.then` 혹은 `await` 가 없다면 어떻게 될까?
+
+아래 코드를 확인해보며 어떻게 동작할지 예측해봅시다.
+
+```js src/16.mjs
+function setTimeoutPromise(delay) {
+  return new Promise((resolve) => setTimeout(resolve, delay));
+}
+
+async function startAsync() {
+  setTimeoutPromise(1000);
+  setTimeoutPromise(1500);
+  setTimeoutPromise(2000); // 프로그래머는 뭔가 기다리겠다는 의도를 비쳤습니다.
+}
+
+console.log("시작입니다.");
+
+const promise = startAsync();
+
+promise.then(() => {
+  console.log("끝났습니다?");
+  process.exit(0); // 프로그래머는 이 때에 모든 작업이 완료되었다고 생각합니다.
+});
+```
+
+요즘 Node.js 는 프로그램의 끝에 도달한 시점에 아직 실행중인(pending) Promise 가 모두 완료될 때까지 기다려주지만, `process.exit(0);` 로 모든 작업이 끝나는 시점을 명시적으로 표현해봤습니다. 즉, 저 지점은 프로그래머가 모든 작업이 끝났다고 의도한 지점인 셈입니다.
+
+프로그래머는 `setTimeoutPromise` 를 사용함으로써 2,000 밀리초를 기다리고 싶다는 의도를 비쳤지만, 위 코드는 실행되자말자 아래 출력을 남기고 즉시 종료됩니다.
+
+```
+시작입니다.
+끝났습니다?
+
+```
+
+`startAsync` 함수의 문제점은 명백합니다. `setTimeoutPromise` 에 `await` 을 걸지 않았다는 것입니다. `await`을 걸지 않는다는 뜻은, 해당 비동기 작업 이후의 작업을 정의하지 않겠다는 뜻입니다. 그렇다고 `setTimeoutPromise` 로 생성한 Promise 에 대해 곧바로 `await`을 거는 것도 말이 안 됩니다. 비동기 작업이 진행되고 있을 동안 하고 싶은 작업이 무궁무진하게 많을 수 있기 때문입니다.
+
+결론은 이겁니다. **Promise 에 `await` 을 바로 걸 필요는 없지만, 무조건 언젠가 빠짐없이 걸기는 해야 한다.** 입니다. 그렇지 않으면 프로그래머의 의도는 하늘 너머 날아가 버립니다. await 을 적절히 걸어야 한다는 감각은 처음 비동기를 익힐 때 쉽사리 적응되지 않는 감각이므로, 자주 쓰면서 습관을 만들어낼 수 밖에 없습니다.
+
+## `.then` 과 `await` 을 동시에 실행한다면 어떻게 될까?
+
+처음에는 비동기 작업의 흐름이 이해가 안되다 보니 이리저리 여러번 시도해보면서 짬뽕같은 코드가 만들어질 수도 있습니다! 아래 코드를 볼까요?
+
+```js src/16.1.mjs focus=6:8
+function setTimeoutPromise(delay) {
+  return new Promise((resolve) => setTimeout(resolve, delay));
+}
+
+async function startAsync() {
+  await setTimeoutPromise(1000).then(() => {
+    console.log("1초 지났습니다.");
+  });
+}
+
+console.log("시작입니다.");
+
+startAsync();
+```
+
+`startAsync` 함수 내부에서는 `await` 과 `then`을 동시에 쓰고 있습니다. 이는 문법적으로 전혀 틀리지 않습니다. 그러나 이 코드는 상당한 혼동을 동료 프로그래머에게 줍니다! 왜냐하면, **의도가 불분명**하기 때문입니다.
+
+앞서 `new Promise(…)`를 리턴하는 함수를 `async` 함수로 변환하는 작업을 해봤습니다. 왜 했을까요? 코드가 더 직관적으로 바뀌기 때문입니다. 네. `.then(…)`을 하지 않고 `await` 을 거는 이유 또한, 코딩을 더 쉽게 하기 위함입니다. 똑같이 동작하는 건데, 다르게 표현할 뿐입니다.
+
+그러므로 되도록 async-await 을 사용하고, 불가피한 곳에서 어쩔 수 없이 resolve-reject-then-catch 을 사용해야 합니다. 위 코드에서는 `then` 이 불필요하므로, 아래와 같이 적을 수 있습니다.
+
+```js src/16.2.mjs focus=6:7
+function setTimeoutPromise(delay) {
+  return new Promise((resolve) => setTimeout(resolve, delay));
+}
+
+async function startAsync() {
+  await setTimeoutPromise(1000);
+  console.log("1초 지났습니다.");
+}
+
+console.log("시작입니다.");
+
+startAsync();
+```
+
+## `.then` 에 `async` 함수를 넣는다면 어떻게 될까?
+
+위와 마찬가지로, 일관된 스타일을 지향하는 것이 낫습니다. 아래 코드를 살펴볼까요?
+
+```js src/16.3.mjs focus=6:10
+function setTimeoutPromise(delay) {
+  return new Promise((resolve) => setTimeout(resolve, delay));
+}
+
+async function startAsync() {
+  await setTimeoutPromise(1000).then(async () => {
+    await setTimeoutPromise(1000);
+    console.log("A");
+  });
+  console.log("B");
+}
+
+startAsync();
+```
+
+출력은 A, B 순차적으로 나오므로, 우리의 의도에 부합하긴 하지만, 코드가 상당히 난잡합니다. async 만 작성해야 한다면, 다음과 같이 작성합니다.
+
+```js src/16.4.mjs focus=6:9
+function setTimeoutPromise(delay) {
+  return new Promise((resolve) => setTimeout(resolve, delay));
+}
+
+async function startAsync() {
+  await setTimeoutPromise(1000);
+  await setTimeoutPromise(1000);
+  console.log("A");
+  console.log("B");
+}
+
+startAsync();
+```
+
+`.then` 으로만 구현한다면, 다음과 같이 작성합니다. `await` 을 사용하지 않으므로, `async` 또한 필요 없습니다.
+
+```js src/16.5.mjs focus=6:9
+function setTimeoutPromise(delay) {
+  return new Promise((resolve) => setTimeout(resolve, delay));
+}
+
+function startAsync() {
+  setTimeoutPromise(1000)
+    .then(() => setTimeoutPromise(1000))
+    .then(() => console.log("A"))
+    .then(() => console.log("B"));
+}
+
+startAsync();
+```
+
+## `Promise.all`: 여러 비동기 동작을 한꺼번에 기다리기
+
+아래와 같이 직원의 `id` 를 입력하면 그 직원의 나이를 반환해주는 `fetchAge` 함수가 있다고 가정합시다. (내부적으로는 1초 기다린 뒤 랜덤 나이를 반환하는 식입니다.) 그 다음 `id` 0번 부터 9번까지의 직원의 나이에 대한 평균치를 구하고 싶습니다. 그렇다면 모든 결과를 한 데 모아서 평균치를 구하면 되겠지요! 여기서의 비동기 동작의 의존 관계는 지금과는 사뭇 다른 느낌입니다. 0번부터 9번까지 직원의 정보를 요청하는 것은 비동기로 작업하면 되지만, 모든 비동기 작업이 완료되고 나서 다음 작업을 해야 합니다!
+
+일단 코딩해봅시다. 다음 예제를 보자구요.
+
+<CH.Code>
+
+```js src/17.mjs
+function setTimeoutPromise(ms) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => resolve(), ms);
+  });
+}
+
+async function fetchAge(id) {
+  await setTimeoutPromise(1000);
+  console.log(`${id} 사원 데이터 받아오기 완료!`);
+  return parseInt(Math.random() * 20, 10) + 25;
+}
+
+async function startAsyncJobs() {
+  let ages = [];
+  for (let i = 0; i < 10; i++) {
+    let age = await fetchAge(i);
+    ages.push(age);
+  }
+
+  console.log(
+    `평균 나이는? ==> ${
+      ages.reduce((prev, current) => prev + current, 0) / ages.length
+    }`,
+  );
+}
+
+startAsyncJobs();
+```
+
+---
+
+```none output
+0 사원 데이터 받아오기 완료!
+1 사원 데이터 받아오기 완료!
+2 사원 데이터 받아오기 완료!
+3 사원 데이터 받아오기 완료!
+4 사원 데이터 받아오기 완료!
+5 사원 데이터 받아오기 완료!
+6 사원 데이터 받아오기 완료!
+7 사원 데이터 받아오기 완료!
+8 사원 데이터 받아오기 완료!
+9 사원 데이터 받아오기 완료!
+평균 나이는? ==> 33
+
+```
+
+</CH.Code>
+
+`reduce`가 익숙하지 않다면 [공식 문서](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce) 를 참조해주세요.
+
+뭔가 끔찍한 점을 눈치채셨나요? 사원의 정보를 받아오는 작업은 비동기이므로 동시에 수행할 수 있습니다. 그게 1초가 걸린다면, 사원 수가 많아져도 1초 안팎으로 이루어져야 합니다. 그런데 위 코드로는 1초에 작업 하나씩 수행하고 있습니다! 이는 동기 코드를 짤 때와 다를 바가 없습니다! 위는 모든 코드가 수행되는 데 무려 10초나 걸립니다.
+
+`for` 안에 `await` 가 들어가있다는 걸 눈여겨봐주세요. 이것 때문에 재앙이 시작되었습니다. 이 코드는 1번 사원의 정보를 받아오려고 시도조차 하기 전에 0번 사원의 정보를 기다리고 있습니다. 전혀 그럴 필요가 없을 텐데요.
+
+묻고 따지지 말고 다음 코드로 바꿔봅시다.
+
+<CH.Code>
+
+```js src/18.mjs focus=12:16
+function setTimeoutPromise(delay) {
+  return new Promise((resolve) => setTimeout(resolve, delay));
+}
+
+async function fetchAge(id) {
+  await setTimeoutPromise(1000);
+  console.log(`${id} 사원 데이터 받아오기 완료!`);
+  return Math.round(Math.random() * 20) + 25;
+}
+
+async function startAsyncJobs() {
+  const ids = Array.from({ length: 10 }).map((_, index) => index);
+
+  const promises = ids.map(fetchAge);
+
+  const ages = await Promise.all(promises);
+
+  console.log(
+    `평균 나이는? ==> ${
+      ages.reduce((prev, current) => prev + current, 0) / ages.length
+    }`,
+  );
+}
+
+startAsyncJobs();
+```
+
+---
+
+```none output
+0 사원 데이터 받아오기 완료!
+1 사원 데이터 받아오기 완료!
+2 사원 데이터 받아오기 완료!
+3 사원 데이터 받아오기 완료!
+4 사원 데이터 받아오기 완료!
+5 사원 데이터 받아오기 완료!
+6 사원 데이터 받아오기 완료!
+7 사원 데이터 받아오기 완료!
+8 사원 데이터 받아오기 완료!
+9 사원 데이터 받아오기 완료!
+평균 나이는? ==> 33.1
+
+```
+
+</CH.Code>
+
+와우. 1초만에 해결되었습니다. 우선 코드를 확인해봅시다.
+
+우선 자바스크립트스럽게 바꾸기 위해 id를 모두 배열에 넣고 시작했습니다. `Array.from({ length: 10 })` 을 하게 되면 10칸짜리 배열이 생기고, map 함수를 통해 index 로 내용이 채워지도록 했습니다. `ids` 는 `[0, 1, 2, …, 9]` 입니다.
+
+그 다음 `ids`에 `map` 을 적용합니다. 위 코드를 좀 더 풀어서 쓴다면, `[0, 1, 2, …, 9]` 는 `[fetchAge(0), fetchAge(1), fetchAge(2), …, fetchAge(9)]` 이 될 것입니다. `fetchAge` 함수는 async 함수이므로 리턴값은 Promise 입니다. 함수 호출의 결과는 Promise 이므로, 결론적으로 Promise 배열이 되었습니다! 이로써 어떤 배열의 **map 함수에다가 async 함수를 넣으면, 무조건 Promise 의 배열을 얻는다**는 걸 알 수 있습니다.
+
+`Promise.all` 이라는 것이 새로 등장했습니다. 이 함수는 인자로 **Promise 의 배열**을 받으며, 하나의 특별한 Promise 를 새로 생성합니다. 이 Promise는 배열로 받은 모든 비동기 작업이 성공했다면 내부적으로 `resolve` 를 호출하며, 하나라도 비동기 작업이 실패한다면 `reject` 를 호출합니다. `Promise.all` 의 결과물은, 각각의 Promise에 대한 resolve된 값이 배열로 담겨있습니다. 여기에서 `await`을 걸게 된다면, 10개의 Promise 가 모두 성공함으로써 number 배열을 리턴할 것이며, 하나라도 실패한다면 예외를 발생시킬 것입니다.
+
+## 재미있는 사실들
+
+### `then`, `catch` 메소드들은 사실 새로운 `Promise` 객체를 만든다
+
+리턴값이 Promise 라는 점은 우리가 메소드 체이닝을 할 수 있을 때부터 눈치챘을 수도 있습니다. 새롭게 만들어진 Promise 는 [정해진 규칙](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Promise/then#%EB%B0%98%ED%99%98%EA%B0%92) 이 있습니다. 우리는 그냥 순차적으로 뭔가 잘 되겠지 하며 사용하면 대개 큰 문제는 없습니다.
+
+### `finally` 로 이행/거부와 상관 없는 동작을 지정해줄 수 있다.
+
+Promise 는 `finally` 라는 메소드도 있습니다. 이 함수는 Promise 가 fulfilled, rejected 에 상관없이 가장 마지막으로 실행됩니다.
+
+### `then` 의 두 번째 인자로 onRejected 를 받을 수 있다.
+
+`then` 만 쓰더라도 reject 된 Promise 에 대한 처리를 할 수 있습니다.
+
+<CH.Code>
+
+```js src/19.mjs
+const throwError = new Promise((resolve, reject) => {
+  throw new Error("error");
+});
+
+throwError.then(
+  () => console.log("throwError success"),
+  () => console.log("throwError catched"),
+);
+```
+
+---
+
+```none output
+throwError catched
+
+```
+
+</CH.Code>
+
+하지만 `then` 의 내부에서 에러가 발생한다면, 그 때는 그 에러를 책임져줄 코드가 없게 됩니다. 그래서 그냥 `catch` 를 마지막 즈음에 쓰는 게 가장 마음이 편합니다. 아래는 예시 코드입니다.
+
+<CH.Code>
+
+```js src/20.mjs focus=7:9,12
+const throwError = new Promise((resolve, reject) => {
+  resolve("success");
+});
+
+throwError
+  .then(
+    () => {
+      throw new Error("weird error");
+    },
+    () => console.log("throwError catched"),
+  )
+  .catch((e) => console.log("final catch"));
+```
+
+---
+
+```none output
+final catch
+
+```
+
+</CH.Code>
+
+### 여러 Promise를 한 번에 기다리되, 각각의 결과를 보고 싶을 땐?
+
+[Promise.allSettled](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Promise/allSettled) 를 사용합니다. 이 글에서는 자세히 다루지 않습니다.
+
+## 기다리는 작업이어야 비동기가 비동기처럼 보인다
+
+앞서 계속 강조했던 부분은, **기다리기만 하면 되는 작업을 비동기로 하면 좋다** 입니다. 자바스크립트는 코드를 동시에 수행하지 않습니다. 기다리는 건 동시에 기다릴 수 있어도 코드 수행은 한 번에 하나만 할 수 있습니다. 그래서 만약 돌아가는 코드 자체가 빡세다면, 그러니까 우리가 처음에 3마리의 물고기를 혼자서 손질하기 위해 CPU 를 풀로 땡겨 썼다면 비동기 코드는 결코 비동기로 보이지 않고 뚝뚝 끊기게 됩니다. 아래 예제 코드를 확인해봅시다.
+
+<CH.Code>
+
+```js src/21.mjs
+async function prepareOneFish() {
+  let start = new Date().getTime();
+  while (new Date().getTime() < start + 1000) {
+    // preparing fish
+  }
+  return "finished";
+}
+
+console.log("Start!");
+prepareOneFish().then(console.log);
+prepareOneFish().then(console.log);
+prepareOneFish().then(console.log);
+console.log("Finish!");
+```
+
+---
+
+```none output
+Start!
+Finish!
+finished
+finished
+finished
+
+```
+
+</CH.Code>
+
+처음 Start! 가 출력되고, 3초 뒤, Finish!와 세 개의 finished 가 한꺼번에 출력되었습니다. 이것이 의미하는 바는 무엇일까요?
+
+우리가 처음에 비동기 작업을 시작하면, 일단 시작은 한다고 했습니다. 그러나 CPU를 풀로 땡겨 쓰기 때문에, prepareOneFish 함수의 호출 한 번 자체가 1초가 걸립니다. Finish! 출력이 3초 뒤에 되었다는 말은, 코드가 곧장 거기까지 쭉 가지 못했다는 뜻입니다. 바꿔 말하자면, 작업을 예약하는 행위 자체가 1초가 걸린다는 뜻입니다. 예약 세 번을 하니, 3초가 걸리지요.
+
+평소에 `then`으로 등록된 동작을 포함하여 많은 코드들이 동시에 수행되는 것처럼 보이는 건, 일반적인 상황에서는, CPU를 풀로 땡겨 쓰는 케이스는 잘 없고 기다리기만 하면 되는 작업 (비동기로 처리하기 적합한 작업)이 많기 때문입니다. 기술적으로 접근한다면, [브라우저 혹은 Node.js 에서는 내부적으로 여러 작업 큐를 활용](https://jakearchibald.com/2015/tasks-microtasks-queues-and-schedules/) 하고 있습니다. 너무 고급 내용이므로 여기서는 자세히 다루지 않습니다.
+
+## 결론
+
+지금까지의 내용을 요약해봅시다.
+
+1. 기다리기만 하면 되는 작업을 비동기로 처리할 수 있습니다. 동시에 여러 작업이 진행되어서 비교적 효율적이지만, 흐름 제어는 동기 코드보다 어렵습니다.
+2. Promise 를 생성할 때에는 `resolve`, `reject` 함수를 적절히 호출하는 작업을 넣어주고, 이후 생성된 Promise 에 대해 `then`, `catch` 메서드를 호출하여 후속 조치를 정해줍니다.
+3. `new Promise(…)`는 async 함수로 적절하게 변환할 수 있습니다.
+4. async 함수 내에서 Promise 에 대해 `await` 을 걸어서 작업을 기다릴 수 있습니다.
+5. 스타일은 되도록 일관되게 작성하는 게 좋습니다. async-await 을 사용하든지, resolve-reject-then-catch 를 사용합니다.
+6. 여러 Promise 를 동시에 기다리려면 `Promise.all` 를 사용합니다.
+
+긴 여정, 수고 많으셨습니다. Promise 는 쓰기가 좋습니다. `async` 와 `await` 도 훌륭합니다. 해피코딩합시다.
