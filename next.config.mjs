@@ -59,6 +59,11 @@ const config = {
         destination: "/article/2022-11/everything",
         permanent: true,
       },
+      {
+        source: "/post/2",
+        destination: "/article/2022-10/hello-sadness",
+        permanent: true,
+      },
     ];
   },
 

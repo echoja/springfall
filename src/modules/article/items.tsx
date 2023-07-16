@@ -2,6 +2,7 @@ import dayjs from "dayjs";
 
 import { item as NodejsStream } from "@app/article/2021-12/node-js-stream/page.mdx";
 import { item as Company } from "@app/article/2022-09/company/page.mdx";
+import { item as HelloSadness } from "@app/article/2022-10/hello-sadness/page.mdx";
 import { item as JavascriptSmoothAnimation } from "@app/article/2022-10/javascript-smooth-animation/page.mdx";
 import { item as EasyPromiseAsyncAwait } from "@app/article/2022-11/easy-promise-async-await/page.mdx";
 import { item as Everything } from "@app/article/2022-11/everything/page.mdx";
@@ -23,6 +24,7 @@ const items = [
   EasyPromiseAsyncAwait,
   Everything,
   JavascriptSmoothAnimation,
+  HelloSadness,
   Company,
 ];
 
