@@ -1,4 +1,5 @@
 import items from "@modules/article/items";
+import { metadataBase } from "@modules/metadata";
 import dayjs from "dayjs";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -13,7 +14,7 @@ const Home = () => {
     <>
       <ul role="list" className="mb-20 space-y-6">
         {items.map(({ summary, title, url, createdAt }, idx) => {
-          const href = new URL(url).pathname;
+          const href = new URL(url, metadataBase).pathname;
 
           return (
             <li key={title} className="relative flex gap-x-4">

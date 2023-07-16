@@ -5,8 +5,10 @@ import type { Metadata } from "next";
 import Footer from "@modules/layout/Footer";
 import Header from "@modules/layout/Header";
 import RootClientLayout from "@modules/layout/RootClientLayout";
+import { metadataBase } from "@modules/metadata";
 
 export const metadata: Metadata = {
+  metadataBase,
   title: {
     default: "봄가을",
     template: "%s | 봄가을",
