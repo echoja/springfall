@@ -1,8 +1,4 @@
 import type { NextApiRequest } from "next";
-import type { Element } from "slate";
-
-import type { CreatePostInput, ICodeBlock } from "@modules/content/types";
-import type { Post } from "@modules/supabase/supabase";
 
 /**
  * query(`string | string[] | undefined`)를 number로 변환합니다.
@@ -20,34 +16,6 @@ export function parseQueryToNumber(
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function noopFunction(..._args: any): any {
   // noop
-}
-
-export function getDefaultNodeProps(
-  type: Element["type"],
-): Omit<Partial<Element>, "type" | "children"> {
-  switch (type) {
-    case "CODE_BLOCK": {
-      const result: ICodeBlock = {
-        type: "CODE_BLOCK",
-        children: [],
-        lang: "tsx",
-        showCopy: true,
-        showLines: true,
-      };
-      return result;
-    }
-    default:
-      return {};
-  }
-}
-
-export function getCreatePostInput(post: Post): CreatePostInput {
-  return {
-    title: post.title,
-    content: post.content,
-    published: post.published,
-    summary: post.summary,
-  };
 }
 
 export async function getJsonFromBody<T>(

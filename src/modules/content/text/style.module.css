@@ -1,7 +1,0 @@
-.code {
-  @apply text-[87.5%] px-[0.25em] py-[0.1em] rounded bg-slate-100;
-}
-
-:global(.dark) .code {
-  @apply bg-slate-600;
-}

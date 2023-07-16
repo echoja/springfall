@@ -1,4 +1,4 @@
-import type { LayoutWrapper } from "@modules/content/types";
+import type { LayoutWrapper } from "@modules/layout/types";
 
 import Footer from "./Footer";
 import Header from "./Header";

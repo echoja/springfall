@@ -3,10 +3,3 @@
 
 pnpm type-check
 pnpm lint
-
-# pnpm gen
-# if [ "$(git diff --ignore-space-at-eol src/modules/supabase/supabase-types.ts | wc -l)" -gt "0" ]; then
-#   echo "아래 변경사항이 적용되지 않았습니다."
-#   git diff
-#   exit 1
-# fi
