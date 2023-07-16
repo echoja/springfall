@@ -98,10 +98,10 @@ const PostList: React.FC<IPostListProps> = ({
                   <div className="w-1.5 h-1.5 rounded-full ring-1 ring-inset ring-gray-300 dark:ring-gray-600"></div>
                 </div>
                 <div className="relative flex-auto p-3 ">
-                  <div className="flex justify-between gap-x-4">
+                  <div className="flex justify-between gap-x-4 mb-0.5">
                     <div className="py-0.5 text-sm leading-5 font-medium text-gray-900">
                       <Link href={href}>
-                        <span className="absolute inset-0 transition rounded-md ring-1 ring-inset ring-gray-200 hover:ring-gray-300 dark:ring-gray-700 dark:hover:ring-gray-600"></span>
+                        <span className="absolute inset-0 transition rounded-md ring-1 ring-inset ring-gray-200 hover:ring-gray-400 dark:ring-gray-700 dark:hover:ring-gray-600"></span>
                         {title}
                       </Link>
                     </div>
@@ -112,7 +112,7 @@ const PostList: React.FC<IPostListProps> = ({
                       {dayjs(createdAt).format("YYYY.MM.DD.")}
                     </time>
                   </div>
-                  <p className="text-sm leading-6 text-gray-500 dark:text-gray-300">
+                  <p className="text-sm leading-5 text-gray-500 dark:text-gray-300">
                     {summary}
                   </p>
                 </div>

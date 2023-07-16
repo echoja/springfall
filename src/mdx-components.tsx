@@ -7,6 +7,13 @@ import {
   Heading5,
   Heading6,
   Quote,
+  TBody,
+  TD,
+  TFoot,
+  TH,
+  THead,
+  TR,
+  Table,
 } from "@modules/article/block-components";
 import { Anchor, Code } from "@modules/article/format-components";
 import {
@@ -37,6 +44,13 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     code: Code,
     a: Anchor,
     li: ListItem,
+    table: Table,
+    thead: THead,
+    tbody: TBody,
+    tfoot: TFoot,
+    tr: TR,
+    td: TD,
+    th: TH,
     ...components,
   };
 }

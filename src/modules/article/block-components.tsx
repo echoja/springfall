@@ -31,3 +31,39 @@ export function Paragraph({ children }: { children?: React.ReactNode }) {
 export function Quote({ children }: { children?: React.ReactNode }) {
   return <blockquote className={style.quote}>{children}</blockquote>;
 }
+
+export function Table({ children }: { children?: React.ReactNode }) {
+  return (
+    <div className={style["table-wrapper-1"]}>
+      <div className={style["table-wrapper-2"]}>
+        <div className={style["table-wrapper-3"]}>
+          <table className={style.table}>{children}</table>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function THead({ children }: { children?: React.ReactNode }) {
+  return <thead className={style.thead}>{children}</thead>;
+}
+
+export function TBody({ children }: { children?: React.ReactNode }) {
+  return <tbody className={style.tbody}>{children}</tbody>;
+}
+
+export function TFoot({ children }: { children?: React.ReactNode }) {
+  return <tfoot className={style.tfoot}>{children}</tfoot>;
+}
+
+export function TR({ children }: { children?: React.ReactNode }) {
+  return <tr className={style.tr}>{children}</tr>;
+}
+
+export function TH({ children }: { children?: React.ReactNode }) {
+  return <th className={style.th}>{children}</th>;
+}
+
+export function TD({ children }: { children?: React.ReactNode }) {
+  return <td className={style.td}>{children}</td>;
+}
