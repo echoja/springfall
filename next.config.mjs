@@ -25,8 +25,23 @@ const config = {
   async redirects() {
     return [
       {
+        source: "/post/12",
+        destination: "/article/2023-03/draw-io-auto-layout",
+        permanent: true,
+      },
+      {
+        source: "/post/11",
+        destination: "/article/2023-02/knou-tips",
+        permanent: true,
+      },
+      {
         source: "/post/10",
         destination: "/article/2023-02/puss-in-boots",
+        permanent: true,
+      },
+      {
+        source: "/post/9",
+        destination: "/article/2022-11/i-me-mom-mom",
         permanent: true,
       },
       {
@@ -37,6 +52,11 @@ const config = {
       {
         source: "/post/5",
         destination: "/article/2022-10/javascript-smooth-animation",
+        permanent: true,
+      },
+      {
+        source: "/post/6",
+        destination: "/article/2022-11/everything",
         permanent: true,
       },
     ];
