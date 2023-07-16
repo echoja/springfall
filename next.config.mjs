@@ -29,6 +29,11 @@ const config = {
         destination: "/article/2023-02/puss-in-boots",
         permanent: true,
       },
+      {
+        source: "/post/7",
+        destination: "/article/2022-11/easy-promise-async-await",
+        permanent: true,
+      },
     ];
   },
 
