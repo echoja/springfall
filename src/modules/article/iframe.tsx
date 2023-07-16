@@ -1,3 +1,4 @@
+import { twMerge } from "tailwind-merge";
 import style from "./style.module.css";
 
 export default function IFrame(
@@ -5,7 +6,10 @@ export default function IFrame(
 ) {
   return (
     <div className={style["iframe-wrapper"]}>
-      <iframe {...props} />
+      <iframe
+        {...props}
+        className={twMerge("mx-auto shadow-xl", props.className)}
+      />
     </div>
   );
 }
