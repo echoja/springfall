@@ -34,6 +34,11 @@ const config = {
         destination: "/article/2022-11/easy-promise-async-await",
         permanent: true,
       },
+      {
+        source: "/post/5",
+        destination: "/article/2022-10/javascript-smooth-animation",
+        permanent: true,
+      },
     ];
   },
 
