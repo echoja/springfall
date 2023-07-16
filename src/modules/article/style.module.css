@@ -134,3 +134,7 @@
 :global(.dark) .tbody {
   @apply divide-gray-600 bg-white/5;
 }
+
+.iframe-wrapper {
+  @apply bg-gray-50 rounded-lg py-10;
+}
