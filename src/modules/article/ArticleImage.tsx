@@ -8,14 +8,16 @@ export default function ArticleImage({
   img,
   caption,
   alt,
+  width,
 }: {
   img: StaticImageData;
   caption?: React.ReactNode;
+  width?: number;
   alt: string;
 }): ReactElement {
   return (
     <figure className={style["image-figure"]}>
-      <Image className={style.image} src={img} alt={alt} />
+      <Image className={style.image} width={width} src={img} alt={alt} />
       {caption && (
         <figcaption className={style["image-caption"]}>{caption}</figcaption>
       )}
