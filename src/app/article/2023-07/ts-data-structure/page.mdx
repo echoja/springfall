@@ -10,7 +10,7 @@ export const title = "타입스트립트 데이터 핸들링 마스터하기 (�
 export const url = "https://springfall.cc/article/2023-07/ts-data-structure";
 export const summary = "";
 export const createdAt = dayjs("2023-07-16").toISOString();
-export const updatedAt = dayjs("2023-07-16").toISOString();
+export const updatedAt = dayjs("2023-07-23").toISOString();
 export const image = i1;
 export const imageAlt = "종이 위에서 무언가를 쓰고 있는 펜의 모습";
 
@@ -291,3 +291,20 @@ function somethingDo(post: IPost) {
   throw new Error("Function not implemented.");
 }
 ```
+
+자 이제 코드 설명 들어가겠습니다.
+
+### Discriminated Unions
+
+구별된 유니온, 서로소 유니온 등등 명확하게 번역된 단어는 없습니다.
+
+이 기법을 사용하는 이유는 Narrowing 을 쉽게 하기 위해서입니다. [Narrowing 을 하는 이유와 예시](/article/2023-07/why-need-narrowing)는 여기서 다루지 않겠습니다. 한국어로 하면 타입 좁혀나가기라고 이야기할 수 있겠습니다.
+
+https://www.typescriptlang.org/docs/handbook/2/narrowing.html#discriminated-unions
+
+https://basarat.gitbook.io/typescript/type-system/discriminated-unions
+
+https://ahnheejong.name/articles/safe-data-modeling-using-disjoint-union-type/
+`Content` 는 `IQuote`, `IImage`, `IParagraph` 를 합친 타입입니다. 이 타입간의 구분은 `type` 필드를 통하빈다.
+
+- `IPostUntrusted` 는 `IPost` 의 필드 중 일부만을 사용하는 타입입니다. 이 타입은 `createPost` 에서 사용됩니다.

@@ -14,6 +14,7 @@ import { item as CompanyContest } from "@app/article/2023-06/company-contest/pag
 import { item as WhyWriting } from "@app/article/2023-06/why-writing/page.mdx";
 import { item as HumanLife } from "@app/article/2023-07/human-life/page.mdx";
 import { item as TSDataStructure } from "@app/article/2023-07/ts-data-structure/page.mdx";
+import { item as WhyNeedNarrowing } from "@app/article/2023-07/why-need-narrowing/page.mdx";
 
 const items = [
   PussInBoots,
@@ -30,6 +31,7 @@ const items = [
   HumanLife,
   Company,
   TSDataStructure,
+  WhyNeedNarrowing,
 ];
 
 items.sort((a, b) => dayjs(b.createdAt).diff(a.createdAt));

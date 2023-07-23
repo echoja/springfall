@@ -1,0 +1,243 @@
+import i1 from "./i1.jpg";
+
+import dayjs from "dayjs";
+import ArticleImage from "@modules/article/ArticleImage";
+import { ArticleJsonLd } from "next-seo";
+import { createMetadata, authorName, authorList } from "@modules/metadata";
+import ArticleHeader from "@modules/article/ArticleHeader";
+
+export const title = "타입스크립트에서 Narrowing (타입 좁히기)가 필요한 이유";
+export const url = "https://springfall.cc/article/2023-07/why-need-narrowing";
+export const summary =
+  "타입스크립트 세계에서 타입을 다루는 방법 중 하나인 Narrowing 에 대해 고찰해봅니다.";
+export const createdAt = dayjs("2023-07-23").toISOString();
+export const updatedAt = dayjs("2023-07-23").toISOString();
+export const image = i1;
+export const imageAlt = "좁은 골목";
+
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+
+export const item = {
+  title,
+  url,
+  summary,
+  createdAt,
+  updatedAt,
+  image,
+  imageAlt,
+};
+
+export const metadata = createMetadata({
+  title,
+  canonical: url,
+  description: summary,
+  openGraph: {
+    title,
+    description: summary,
+    url,
+    type: "article",
+    publishedTime: createdAt,
+    modifiedTime: updatedAt,
+    images: [
+      {
+        url: image.src,
+        width: image.width,
+        height: image.height,
+        alt: imageAlt,
+      },
+    ],
+  },
+  alternates: {
+    canonical: url,
+  },
+});
+
+<ArticleJsonLd
+  useAppDir
+  url={url}
+  title={title}
+  images={[image.src]}
+  authorName={authorList}
+  datePublished={createdAt}
+  dateModified={updatedAt}
+  publisherName={authorName}
+  description={summary}
+  isAccessibleForFree
+/>
+
+<ArticleHeader title={title} updatedAt={updatedAt} desc={summary} />
+
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+
+<ArticleImage
+  img={i1}
+  alt="좁은 골목"
+  caption={
+    <>
+      Narrowing 은 넓게 퍼져있는 범위를 좀 더 좁혀나간다는 뜻입니다. 사진:{" "}
+      <a href="https://unsplash.com/ko/s/%EC%82%AC%EC%A7%84/narrowing?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">
+        Unsplash
+      </a>
+      -<a href="https://unsplash.com/@_miltiadis_?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Miltiadis Fragkidis</a>
+    </>
+  }
+  width={700}
+/>
+
+## 왜 필요한가
+
+다른 객체지향 언어에서는 타입 좁혀나가기란 다소 지양해야 하는 패턴입니다. 간략하게 알아보기 위해 자바의 `instanceof` 키워드를 가지고 **ChatGPT** 가 제시한 대답을 인용하겠습니다.
+
+> 질문: **java에서 instanceof 를 쓰는 건 안티패턴이야?**
+>
+> "instanceof"는 Java에서 특정 객체가 특정 클래스의 인스턴스인지를 확인하는 키워드입니다. "instanceof"를 적절하게 사용하면 코드의 안정성과 가독성을 높일 수 있습니다. 그러나 "instanceof"를 사용하면서도 고려해야 할 몇 가지 중요한 사항들이 있습니다.
+>
+> 1. **Overuse and Type Checking**: `instanceof`의 과다한 사용은 객체 지향 프로그래밍의 원칙을 위반하는 것일 수 있습니다. 예를 들어, 객체의 형(type)을 확인하고 이에 따라 특정 동작을 수행하도록 코드를 작성하면, 코드는 강하게 결합된 상태가 되고 유지보수가 어렵게 됩니다.
+> 2. **Violating the Liskov Substitution Principle (LSP)**: LSP는 하위 클래스는 기본 클래스로 교체 가능해야 한다는 원칙입니다. `instanceof`를 사용하여 특정 하위 클래스를 확인하고 해당 하위 클래스에 특정 동작을 수행하도록 코드를 작성하면, LSP를 위반하는 것입니다. 이렇게 되면 코드는 강하게 결합되어 유연성이 감소합니다.
+> 3. **Polymorphism**: `instanceof`를 사용하는 대신 다형성을 사용하여 코드를 더 간결하고 유연하게 만들 수 있습니다. 적절한 메소드 오버라이딩과 인터페이스 구현을 통해, 동일한 메소드 호출이 여러 객체에서 다른 동작을 수행하도록 할 수 있습니다.
+>
+> 따라서, `instanceof`를 사용하는 것이 항상 안티패턴인 것은 아니지만, 적절하게 사용되지 않을 때 객체 지향 설계의 원칙을 위반하게 만들 수 있으므로 주의해야 합니다.
+
+갓 챗지피티!!
+
+하여튼 객체지향 프로그래밍의 세계에서는 **하위 타입에서 세분화된 동작을 정의하는 게 미덕**입니다. C++ 도 거의 마찬가지일 겁니다. 이런 전통적인 느낌을 지닌 채 타입스크립트의 세계에 발을 들이게 되면 다소 당황할지도 모릅니다. 자바스크립트란 본래 클래스라는 것도 없었고, 굉장히 유연한 프로토타입 기반으로 동작하기에 런타임에 결정되는 것들이 너무나도 많다는 사실! 이게 언어냐 라고 부르짖는 사람들이 많은 것도 이해가 됩니다.
+
+런타임에 결정되는 것이 많다는 건 굉장한 유연성을 제공합니다. 유연하다는 장점은 곧 코드가 중구난방이 되고 예측이 불가능하다는 단점과 만나게 됩니다. 왜 자바스크립트는 처음 태어났을 때부터 이런 설계를 갖게 되었을까요? 프로토타입에 대한 고찰은 임성묵 님의 [자바스크립트는 왜 프로토타입을 선택했을까](https://medium.com/@limsungmook/%EC%9E%90%EB%B0%94%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8%EB%8A%94-%EC%99%9C-%ED%94%84%EB%A1%9C%ED%86%A0%ED%83%80%EC%9E%85%EC%9D%84-%EC%84%A0%ED%83%9D%ED%96%88%EC%9D%84%EA%B9%8C-997f985adb42) 라는 굉장한 글을 추천드립니다.
+
+태생적인 문제입니다. 타입 시스템이 빡빡해질 수 없는 근본적인 이유가 자바스크립트에 있습니다. 타입스크립트는 자바스크립트의 슈퍼셋입니다. 타입스크립트는 고민해야 합니다. 기존의 자바스크립트 코드 생성을 문제 없이 하면서도, 정적 타입 분석이 줄 수 있는 효율성과 편리함을 제공할 수 있을까! 그 고민의 결과물 중 하나가 Narrowing 이라고 생각합니다. **예측하기 쉬운 코드의 흐름을 타입스크립트가 읽어서 타입을 적절하게 조정해주는 시스템**. 타입스크립트가 아닌 다른 언어에서는 보기가 힘들죠.
+
+## 널 값 검사하기
+
+가장 흔하게 사용되는 Narrowing 사용 예시는 널값 검사겠지요!
+
+```tsx
+function Team1Projects() {
+  const fetcher: Fetcher<Project[], string> = (id) => getProjectsByTeamId(id);
+  const { data: projects } = useSWR("team-1", fetcher);
+
+  /** if 문을 만나기 전 까지는 `projects` 의 타입은 `Project[] | null` 입니다. */
+
+  if (!projects) {
+    return "loading...";
+  }
+
+  /** 이제 여기서부터 `projects` 의 타입은 `Project[]` 입니다. */
+
+  return "You have " + projects.length + " projects";
+}
+```
+
+보통 React 컴포넌트에서 네트워크와 연관되면 렌더링되는 코드는 실행 중인데 데이터는 비동기로 요청 중일 수도 있습니다. 이 때 타입은 `Project[] | null` 과 같이 잡히곤 합니다. 그럴 때 `if (!projects) ... ` 처럼 하고 `return` 문을 활용하고 한다면, 이 코드는 `Project[]` 타입으로 좁혀집니다. 안전하게 `length` 속성을 사용할 수 있는 것이지요.
+
+## Discriminated Unions
+
+구별된 유니온, 서로소 유니온 등등 명확하게 번역된 단어는 없습니다. 간단하게 절차와 사용 예를 소개하겠습니다.
+
+1. 여러 비슷한 타입을 하나로 묶고자 할 때 사용합니다.
+2. 기준점이 되는 하나의 필드(보통 `type` 이라는 이름으로 짓습니다)를 생각합니다.
+3. 스트링 리터럴로 각 타입마다 다르게 하고, 이들을 묶는 통합 타입 하나까지 생각합니다.
+
+위 순서대로 블로그 에디터를 개발하는 개발자의 심정이 되어 상상해봅시다.
+
+1. 블로그에는 다양한 콘텐츠가 들어갑니다. 콘텐츠 종류는 다양하지만 공통으로 처리할 것도 있어서 타입을 적절하게 구성하고 싶습니다.
+2. 기준점이 되는 하나의 필드(보통 `type` 이라는 이름으로 짓습니다)를 생각합니다.
+3. 인용문은 `quote`, 이미지는 `image`, 단락은 `paragraph` 로 구분하고, 이들을 묶는 통합 타입 `Content` 까지 생각합니다.
+
+그렇다면 아래와 같이 인터페이스와 타입을 생성할 수 있습니다.
+
+```tsx
+interface IQuote {
+  type: "quote";
+  text: string;
+  source: string;
+}
+
+interface IImage {
+  type: "image";
+  src: string;
+  width: number;
+  height: number;
+}
+
+interface IParagraph {
+  type: "paragraph";
+  text: string;
+}
+
+type Content = IQuote | IImage | IParagraph;
+```
+
+이렇게 만들고 나서, 실제 `Content` 타입을 다룰 때는 아래와 같이 `type` 필드를 기준으로 분기처리를 할 수 있습니다. 작성할 `render` 함수는 해당 콘텐츠를 jsx 컴포넌트로 변환하는 함수입니다.
+
+```tsx
+function render(content: Content) {
+  switch (content.type) {
+    case "quote":
+      return renderQuote(content);
+    case "image":
+      return renderImage(content);
+    case "paragraph":
+      return renderParagraph(content);
+  }
+}
+
+function renderQuote(content: IQuote) {
+  return (
+    <blockquote>
+      <p>{content.text}</p>
+      <cite>{content.source}</cite>
+    </blockquote>
+  );
+}
+
+function renderImage(content: IImage) {
+  return (
+    <img
+      src={content.src}
+      width={content.width}
+      height={content.height}
+      alt=""
+    />
+  );
+}
+
+function renderParagraph(content: IParagraph) {
+  return <p>{content.text}</p>;
+}
+```
+
+---
+
+네. 이해가 잘 되시나요? 그 외에도 다른 예시를 찾아보자면, 우리가 가끔 사용하는 `Promise.allSettled` 함수의 결과물은 `PromiseSettledResult<T>` 인데, 이는 아래와 같이 이루어져 있습니다!
+
+```ts
+interface PromiseFulfilledResult<T> {
+  status: "fulfilled";
+  value: T;
+}
+
+interface PromiseRejectedResult {
+  status: "rejected";
+  reason: any;
+}
+
+type PromiseSettledResult<T> =
+  | PromiseFulfilledResult<T>
+  | PromiseRejectedResult;
+```
+
+우리가 `allSettled`의 결과물을 다룰 때 `status` 필드를 기준으로 분기처리를 할 수 있는 이유입니다. 그 외에도 좋은 글들이 많으니 아래를 참조해주세요.
+
+- [타입스크립트 공식 문서 - Narrowing](https://www.typescriptlang.org/docs/handbook/2/narrowing.html#discriminated-unions)
+- [Typescript Deep Dive](https://basarat.gitbook.io/typescript/type-system/discriminated-unions)
+- [안희종 님의 "서로소 유니온 타입을 사용한 안전한 데이터 모델링"](https://ahnheejong.name/articles/safe-data-modeling-using-disjoint-union-type/)
+
+실제로 이 기법을 효과적으로 사용하기 위해서는 경험이 조금 필요할 수 있지만, 복잡하고 어려운 타입스크립트의 세계에서 가성비가 짱인 강력한 도구라고 믿습니다. 좀 [커다란 타입스크립트 기반 웹앱을 만들 때 굉장히 유용하게 사용](/article/2023-07/why-need-narrowing)될 수도 있으므로 Discriminated Unions 는 익숙해지도록 합시당.
+
+## 결론
+
+Narrowing 을 여래저래 잘 사용해봅시다~!

@@ -2,6 +2,8 @@ import Link from "next/link";
 
 import style from "./style.module.css";
 
+import { ExternalLink } from "lucide-react";
+
 // eslint-disable-next-line import/prefer-default-export
 export function Anchor({
   children,
@@ -10,14 +12,23 @@ export function Anchor({
   children?: React.ReactNode;
   href?: string;
 }) {
+  const isInternal = href?.startsWith("/article");
+
   return (
     <Link
       className={style.link}
-      target="_blank"
-      rel="noopener noreferrer"
+      {...(!isInternal
+        ? {
+            target: "_blank",
+            rel: "noopener noreferrer",
+          }
+        : {})}
       href={href || ""}
     >
       {children}
+      {!isInternal && (
+        <ExternalLink size="0.8em" className=" text-brand-400 ml-0.5 inline" />
+      )}
     </Link>
   );
 }

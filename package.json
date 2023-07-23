@@ -32,6 +32,7 @@
     "hotkeys-js": "^3.11.2",
     "html-tags": "^3.3.1",
     "jotai": "^2.2.2",
+    "lucide-react": "^0.263.0",
     "next": "^13.4.10",
     "next-seo": "^6.1.0",
     "nextjs-google-analytics": "^2.3.3",

@@ -164,3 +164,5 @@ export const Page: React.FC = () => {
 function somethingDo(post: IPost) {
   throw new Error("Function not implemented.");
 }
+
+Promise.allSettled;
