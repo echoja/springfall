@@ -1,0 +1,169 @@
+import i1 from "./i1.png";
+import i2 from "./i2.png";
+
+import dayjs from "dayjs";
+import ArticleImage from "@modules/article/ArticleImage";
+import { ArticleJsonLd } from "next-seo";
+import { createMetadata, authorName, authorList } from "@modules/metadata";
+import ArticleHeader from "@modules/article/ArticleHeader";
+
+export const title = "ESLint 가 필요한 이유 (작성중)";
+export const url = "https://springfall.cc/article/2023-07/why-eslint";
+export const summary =
+  "Node.js 프로젝트에서 많이 사용되는 Lint 도구인 ESLint 가 필요한 이유에 대해 알아봅니다.";
+export const createdAt = dayjs("2023-07-30").toISOString();
+export const updatedAt = dayjs("2023-07-30").toISOString();
+export const image = i1;
+export const imageAlt = "npx create-next-app@latest 실행화면";
+
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+
+export const item = {
+  title,
+  url,
+  summary,
+  createdAt,
+  updatedAt,
+  image,
+  imageAlt,
+};
+
+export const metadata = createMetadata({
+  title,
+  canonical: url,
+  description: summary,
+  openGraph: {
+    title,
+    description: summary,
+    url,
+    type: "article",
+    publishedTime: createdAt,
+    modifiedTime: updatedAt,
+    images: [
+      {
+        url: image.src,
+        width: image.width,
+        height: image.height,
+        alt: imageAlt,
+      },
+    ],
+  },
+  alternates: {
+    canonical: url,
+  },
+});
+
+<ArticleJsonLd
+  useAppDir
+  url={url}
+  title={title}
+  images={[image.src]}
+  authorName={authorList}
+  datePublished={createdAt}
+  dateModified={updatedAt}
+  publisherName={authorName}
+  description={summary}
+  isAccessibleForFree
+/>
+
+<ArticleHeader title={title} updatedAt={updatedAt} desc={summary} />
+
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+
+타입스크립트 기반 프로젝트를 만들 때 거의 세트로 따라다니는 놈들이 있습니다. 최근인지 아닌지는 잘 모르겠습니다. 아, 타입스크립트 또한 부가적인 녀석일 수도 있죠. 가볍게 살펴볼까요
+
+더도말고 덜도말고, 현재 아주 인기있는 React 기반 풀스택 웹 프레임워크인 [Next.js](http://nextjs.org)의 기본 세팅에 포함된 파일을 살펴볼까요?
+
+```bash
+npx create-next-app@latest
+```
+
+<ArticleImage
+  img={i1}
+  alt="npx create-next-app@latest 실행화면"
+  caption="npx create-next-app@latest 실행화면"
+/>
+
+엔터를 열심히 누르면 됩니다. 그럼 아래와 같은 파일이 나옴을 확인할 수 있을 겁니다. 주요한 것만 살펴봅시다.
+
+<ArticleImage
+  img={i2}
+  alt="Next.js 프로젝트 파일 구성"
+  caption="Next.js 프로젝트 파일 구성"
+  width={200}
+/>
+
+- `package.json` : Node.js 기반 프로젝트에서 구심점이 되는 파일입니다. 이 파일이 있는 폴더가 곧 프로젝트의 루트 경로를 의미합니다. 프로젝트 이름이나 의존성 패키지 등이 설정되어 있습니다.
+- `next.config.js` : 이 프로젝트는 Next.js 앱입니다. 그래서 그와 관련된 설정을 이 파일에서 정의합니다.
+- `tsconfig.json` : 이 프로젝트는 타입스크립트라는 언어를 사용합니다. 타입스크립트의 필요성은 [우리가 Typescript를 선택한 이유](https://medium.com/@constell99/%EC%9A%B0%EB%A6%AC%EA%B0%80-typescript%EB%A5%BC-%EC%84%A0%ED%83%9D%ED%95%9C-%EC%9D%B4%EC%9C%A0-b0a423654f1e) 라는 글로 대신할게요. 2012년에 출시했다고 하니까 벌써 10년도 더 넘었네요.
+- `README.md` : 간략한 문서를 마크다운 형식으로 쓰는 파일입니다. GitHub 리포지토리에서 메인 소개 문서로 활용됩니다.
+
+나머지는 좀 더 자잘자잘한 파일들입니다. 그리고… 오늘의 주인공! **`.eslintrc.json`**! ESLint 설정 파일입니다. 무려 패키지 설정에 있어서 필수인 파일들과 어깨를 나란히 하고 있습니다. 오. 대단하긴 한가 보네요.
+
+## ESLint 란?
+
+ES 란 ECMAScript 라는 뜻이구요, ECMAScript 가 뭐냐면 자바스크립트의 표준안(문법) 같은 거라고 보시면 됩니다. [린트](<https://ko.wikipedia.org/wiki/%EB%A6%B0%ED%8A%B8_(%EC%86%8C%ED%94%84%ED%8A%B8%EC%9B%A8%EC%96%B4)>)는 소스 코드를 분석하는 프로그램이라는 의미를 가지고 있습니다. 지금에 와서 조금 더 통용되는 느낌적인 느낌은, **코드를 정해진 규칙에 맞게 다듬어주는 도구** 입니다. 그정도 느낌만 가져도 될 거 같습니다.
+
+## 문법으로 충분한가? - 아니오.
+
+자바스크립트는 문법이 이미 있습니다. 문법에 맞지 않는 코드를 작성한다면 Syntax Error 를 일으키죠.
+
+하지만, 그것만으로는 부족합니다. 왜냐하면 프로그램을 문법에 맞게 작성하는 것과 퀄리티 있게 작성하는 것은 다른 차원의 문제이기 때문입니다. 글을 쓸 때도 문법만 알아서는 글을 잘 쓸 수 없을 것입니다. 단어를 적재적소에 사용하고 전체 글의 구성을 잘 다듬어야겠죠. 음, 또 다른 예시. 연필을 종이에 대고 질질 끌 수 있다고 해서 그림을 잘 그린다고 이야기할 수 없겠죠.
+
+코드의 품질을 어느정도 유지해야 하는 이유는 좀 많지만, 결국에는 **생산성** 문제입니다. 프로그램은 계속 개발되어야 하고, 개발하는 사람들은 다양하고, 심지어 과거의 나와 현재의 나는 서로 이해할 수 없는 존재일 수 있습니다. 미래의 나도 어떤 생각을 할지 예측할 수 없습니다. 온 멀티버스를 통틀어서 코드를 적당히 보편적으로 만들고 납득할 수 있을 수준으로 구성해놔야 모두가 행복합니다.
+
+문법 자체를 엄청 빡빡하게 만들어서 강제로 코드 스타일을 정형화하는 [Rust](https://www.rust-lang.org/) 라는 언어도 있습니다. 근데 갑자기 왜 Rust 냐구요? 그러게요. 전혀 상관 없는 이야기니까 빠르게 넘어갑시다.
+
+## 코딩 컨벤션
+
+코딩 컨벤션이란 사람들끼리 합의한 코딩 규칙을 뜻합니다. ESLint 가 코딩 컨벤션을 강제할 수 있도록 하는 도구라고도 볼 수 있습니다.
+
+**ESLint 의 장점은 문서화를 딱히 해놓지 않아도 된다는 겁니다.** 그러니까 Toast UI 팀에서 게시한 코딩 컨벤션 가이드를 따로 작성해놓지 않아도, `.eslintrc.json` 설정 파일로 소통이 가능하다는 것이지요. 뭐 문서화가 필요하다면, 이런 규칙과 저런 규칙이 왜 필요한지에 대한 우리만의 경험을 풀어서 쓸 순 있을 거 같아요.
+
+## ESLint 가 못하는 것들
+
+코드 배치나 추상화와 관련된 부분들은 훨씬 고차원적인 문제이므로, 분석기인 ESLint 가 어떻게 할 수 있는 방법은 많지 않습니다. ChatGPT 정도 되는 AI 가 분석해줘야 할까요? 그렇지만 이놈은 일관성이 없어서 좀 힘들 것 같은데요…
+
+하여튼 이러한 문제도 문서화를 하기는 해야겠죠.
+
+## 실제 예제
+
+위 Next.js 프로젝트에서 `.eslintrc.json` 파일의 내용을 살펴볼까요?
+
+```json
+{
+  "extends": "next/core-web-vitals"
+}
+```
+
+해석해봅시다.
+
+- `extends` : 확장한다!
+- `next/` : Next.js 에서 관리하는…
+- `core-web-vitals` : [코어 웹 바이탈](https://www.cloudflare.com/ko-kr/learning/performance/what-are-core-web-vitals)! 저도 몰라서 찾아봤는데, 대충 웹사이트 속도 측정과 관련된 지표라고 하네요. 큰 의미는 없는 거 같습니다.
+
+종합하면 대충 Next.js 가 생각하는 최적의 규칙 세팅을 그대로 사용한다는 뜻입니다.
+
+맞습니다. ESLint 도 태어난지 세월이 많이 흘렀습니다. ESLint 자체에도 뭔가 컨벤션 같은게 생긴 모양입니다. `.eslintrc.json` 파일은 날이 갈수록 간단해지는 것 같습니다. 하여튼, 뭔가 [미리 설정된 프리셋](https://github.com/vercel/next.js/blob/canary/packages/eslint-config-next/index.js) 같은 것들이 다들 자리를 잡았다는 뜻이고, 우리는 적절하게 걔네들을 가져다 쓰면 된다는 데에 의의가 있습니다.
+
+## 동작 원리
+
+ESLint 는 프로그램입니다. Node.js 기반으로 돌아가죠. 다른 글에서 더 자세히 알아봅시다.
+
+### vscode
+
+내용 추가 예정…
+
+## 쓰지 말아야할 때
+
+세세한 규칙 따위는 필요없을 때 쓰지 않아도 됩니다. 당신이 만약 [내 트리를 꾸며줘!](https://colormytree.me/) 의 개발자인데, 트래픽이 엄청나게 발생하는 와중에 버그가 발동하여 뭐가 맛탱이가 가고 요금 정산기가 하늘을 뚫고 혼돈의 도가니라면, 코드 스타일이고 뭐고 문제 해결에 일단 집중해야겠죠?
+
+또, 아예 일회성이나 테스트용 프로젝트를 만든다면, 또 딱히 필요하지 않을 거예요. 프로그램이 계속 발전될 필요가 없으니까요.
+
+## 요약
+
+추가 예정
