@@ -16,8 +16,8 @@ export default function ArticleHeader({
       <header className="mb-5">
         <h1 className="text-3xl font-semibold">{title}</h1>
       </header>
-      <p>{desc}</p>
-      <div className="inline-flex items-center gap-2 text-gray-500 mb-7">
+      <p className="text-gray-500 dark:text-gray-400">{desc}</p>
+      <div className="inline-flex items-center gap-2 text-gray-500 dark:text-gray-400 mb-7">
         <FaSolidAxe className="w-4 h-4" />
         <span>{dayjs(updatedAt).format("YYYY.MM.DD.")}</span>
       </div>
