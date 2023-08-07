@@ -1,6 +1,8 @@
+"use client";
+
 import type { Dayjs } from "dayjs";
 import dayjs from "dayjs";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 interface IQuote {
   type: "quote";
@@ -23,19 +25,25 @@ interface IParagraph {
 type Content = IQuote | IImage | IParagraph;
 
 interface IPost {
+  title: string;
+  createdAt: Dayjs;
   modifiedAt: Dayjs;
   contents: Content[];
 }
 
 interface IPostUntrusted {
-  modifiedAt?: Dayjs;
+  title?: string;
+  createdAt?: string;
+  modifiedAt?: string;
   contents?: Partial<Content>[];
 }
 
 function createPost(postUntrusted: IPostUntrusted = {}): IPost {
   return {
-    modifiedAt: dayjs(),
+    title: "",
     ...postUntrusted,
+    modifiedAt: dayjs(postUntrusted.modifiedAt),
+    createdAt: dayjs(postUntrusted.createdAt),
     contents: postUntrusted.contents
       ? postUntrusted.contents.map(createContent)
       : [],
@@ -117,31 +125,29 @@ function renderParagraph(content: IParagraph) {
   return <p>{content.text}</p>;
 }
 
-export const PostEditor: React.FC<{
+export const Post: React.FC<{
   post: IPost;
 }> = ({ post }) => {
-  const { modifiedAt: createdAt, contents } = post;
+  const { createdAt, contents, modifiedAt, title } = post;
   return (
     <article>
-      <div>Created At: {createdAt.format("YYYY-MM-DD")}</div>
+      <div>제목: {title}</div>
+      <div>생성일: {createdAt.format("YYYY-MM-DD")}</div>
+      <div>수정일: {modifiedAt.format("YYYY-MM-DD")}</div>
       {contents.map((content) => render(content))}
     </article>
   );
 };
 
-export const Page: React.FC = () => {
+export const PostPage: React.FC = () => {
   const [post, setPost] = useState<IPost>(createPost());
-
-  const onSave = useCallback(() => {
-    // 저장 로직
-    somethingDo(post);
-  }, [post]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/api/post/1");
-        const json = (await response.json()) as IPostUntrusted;
+        // const response = await fetch("/api/post/1");
+        // const json = (await response.json()) as IPostUntrusted;
+        const json = (await import("./test.json")) as IPostUntrusted;
         const post = createPost(json);
         setPost(post);
       } catch (error) {
@@ -154,15 +160,8 @@ export const Page: React.FC = () => {
 
   return (
     <div>
-      <PostEditor post={post} />
-      <button onClick={() => onSave()}>저장</button>
+      <Post post={post} />
+      <button>리스트로...</button>
     </div>
   );
 };
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function somethingDo(post: IPost) {
-  throw new Error("Function not implemented.");
-}
-
-Promise.allSettled;

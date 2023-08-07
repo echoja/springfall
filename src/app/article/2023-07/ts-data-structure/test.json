@@ -1,0 +1,32 @@
+{
+  "title": "[리뷰] 반항하는 인간",
+  "createdAt": "2021-08-01T00:00:00.000Z",
+  "modifiedAt": "2021-08-02T00:00:00.000Z",
+  "contents": [
+    {
+      "type": "paragraph",
+      "text": "이 책은..."
+    },
+    {
+      "type": "image",
+      "src": "https://via.placeholder.com/150/FFFF00/000000",
+      "width": 150,
+      "height": 150
+    },
+    {
+      "type": "quote",
+      "text": "나는 반항한다, 고로 우리는 존재한다.",
+      "source": "알베르 까뮈"
+    },
+    {
+      "type": "paragraph",
+      "text": "내 생각에는..."
+    },
+    {
+      "type": "image",
+      "src": "https://via.placeholder.com/150/FFFF00/000000",
+      "width": 150,
+      "height": 150
+    }
+  ]
+}
