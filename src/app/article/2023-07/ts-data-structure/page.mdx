@@ -1,5 +1,6 @@
 import i1 from "./i1.jpeg";
 import { PostPage } from "./test";
+import ContentGraph from "./ContentGraph";
 
 import dayjs from "dayjs";
 import ArticleImage from "@modules/article/ArticleImage";
@@ -128,33 +129,7 @@ export const metadata = createMetadata({
 
 이를 예시를 들어 그림과 표현하면 아래와 같이 보일 것입니다.
 
-<div className="flex flex-col max-w-lg mx-auto gap-2">
-  <div className="px-6  flex justify-between bg-gray-50 dark:bg-gray-600 rounded-md  ">
-    <div className="text-sm font-bold text-gray-400">
-      제목, 생성일, 수정일 등등
-    </div>
-  </div>
-  <div className="p-6  bg-gray-50 dark:bg-gray-600  rounded-md">
-    <div className="text-sm font-bold mb-4 text-gray-400">콘텐츠</div>
-    <div className="flex flex-col gap-5">
-      <div className="w-full h-14 bg-slate-200 dark:bg-slate-700 rounded shadow flex justify-center items-center">
-        일반 문단
-      </div>
-      <div className="w-full h-20 bg-yellow-200 dark:bg-yellow-700 rounded shadow flex justify-center items-center">
-        이미지
-      </div>
-      <div className="w-full h-20 bg-blue-200 dark:bg-blue-700 rounded shadow flex justify-center items-center">
-        인용구
-      </div>
-      <div className="w-full h-32 bg-slate-200 dark:bg-slate-700 rounded shadow flex justify-center items-center">
-        일반 문단
-      </div>
-      <div className="w-full h-20 bg-yellow-200 dark:bg-yellow-700 rounded shadow flex justify-center items-center">
-        이미지
-      </div>
-    </div>
-  </div>
-</div>
+<ContentGraph />
 
 이런 상황에서, 앞서 이야기한 세 가지 목표를 구체화하겠습니다.
 
