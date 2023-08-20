@@ -16,6 +16,7 @@ import { item as HumanLife } from "@app/article/2023-07/human-life/page.mdx";
 import { item as TSDataStructure } from "@app/article/2023-07/ts-data-structure/page.mdx";
 import { item as WhyEslint } from "@app/article/2023-07/why-eslint/page.mdx";
 import { item as WhyNeedNarrowing } from "@app/article/2023-07/why-need-narrowing/page.mdx";
+import { item as FlutterAsAFrontEndDeveloper1 } from "@app/article/2023-08/adopting-flutter-as-a-front-end-developer-1/page.mdx";
 import { item as SelfThinkingPreface } from "@app/article/2023-08/self-thinking-preface/page.mdx";
 
 const items = [
@@ -36,6 +37,7 @@ const items = [
   WhyNeedNarrowing,
   WhyEslint,
   SelfThinkingPreface,
+  FlutterAsAFrontEndDeveloper1
 ];
 
 items.sort((a, b) => dayjs(b.createdAt).diff(a.createdAt));
