@@ -1,0 +1,126 @@
+import i1 from "./i1.jpg";
+
+import dayjs from "dayjs";
+import ArticleImage from "@modules/article/ArticleImage";
+import { ArticleJsonLd } from "next-seo";
+import { createMetadata, authorName, authorList } from "@modules/metadata";
+import ArticleHeader from "@modules/article/ArticleHeader";
+
+export const title = "프론트 개발자의 Flutter 적응기 1화";
+export const url =
+  "https://springfall.cc/article/2023-08/adopting-flutter-as-a-front-end-developer-1";
+export const summary = "";
+export const createdAt = dayjs("2023-08-20").toISOString();
+export const updatedAt = dayjs("2023-08-20").toISOString();
+export const image = i1;
+export const imageAlt = "선택의 갈림길";
+
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+
+export const item = {
+  title,
+  url,
+  summary,
+  createdAt,
+  updatedAt,
+  image,
+  imageAlt,
+};
+
+export const metadata = createMetadata({
+  title,
+  canonical: url,
+  description: summary,
+  openGraph: {
+    title,
+    description: summary,
+    url,
+    type: "article",
+    publishedTime: createdAt,
+    modifiedTime: updatedAt,
+    images: [
+      {
+        url: image.src,
+        width: image.width,
+        height: image.height,
+        alt: imageAlt,
+      },
+    ],
+  },
+  alternates: {
+    canonical: url,
+  },
+});
+
+<ArticleJsonLd
+  useAppDir
+  url={url}
+  title={title}
+  images={[image.src]}
+  authorName={authorList}
+  datePublished={createdAt}
+  dateModified={updatedAt}
+  publisherName={authorName}
+  description={summary}
+  isAccessibleForFree
+/>
+
+<ArticleHeader title={title} updatedAt={updatedAt} desc={summary} />
+
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+
+{/* <ArticleImage */}
+{/* img={i1} */}
+{/* alt="선택의 갈림길" */}
+{/* caption={ */}
+
+{/* <> */}
+{/* 인생은 계속 선택하는 것 ㅎㅎ 사진:{" "} */}
+{/* <a href="https://unsplash.com/ko/%EC%82%AC%EC%A7%84/PXB7yEM5LVs?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText"> */}
+{/* Unsplash */}
+{/* </a>{" "} */}
+{/* -{" "} */}
+{/* <a href="https://unsplash.com/ko/@jontyson?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText"> */}
+{/* Jon Tyson */}
+{/* </a> */}
+{/* </> */}
+{/* } width={400} */}
+
+## 서문
+
+이 글은 기술 포스팅이라기보다는, 에세이에 가깝습니다. 제가 최근에 스레드를 시작하면서 에세이에 좀 맛을 들였거든요. 생각보다 짭짤구리하더라구요. 자꾸 찝어먹게 되는 중독적인 맛. 그 무지성 도파민 분출을 이 공간에서도 해보려 합니다.
+
+이 시리즈는 **Flutter** 에 관한 글입니다.
+
+## Flutter 시작!
+
+Flutter란 Google에서 만든 모바일 앱 개발 프레임워크입니다. React Native와 포지션이 비슷하다고 볼 수 있죠. Dart 라는 언어를 사용합니다.
+
+왜 Flutter 에 관심이 생겼냐구요? 제가 새롭게 시작할 사이드 프로젝트(간단한 포스기앱)가 Flutter 로 만들 예정이기 때문이죠. 그리고 또 새롭게 시작할 예정(Todo앱)인 사이드 프로젝트 또한! 앱으로 만들 생각이 있기에. Flutter 가 사용하기 좋다면 고려해볼만 하다고 아주 조금 생각해봤습니다.
+
+시작을 어떻게 할 수 있을까요?
+
+현재는 과거와 다릅니다. 가장 다른 점은 지금의 우리에겐 ChatGPT 가 있다는 사실이지요. 저는 무려 월 20달러를 내면서 Plus 를 구독하고 있습니다! 이는 꽤 거금입니다. 2023년 4월 25일 기준 26,642원이거든요. 이는 현재 바나프레소 할인된 아이스 아메리카노를 14.80111... 잔 살 수 있는 가격입니다! 헉... 일주일치 커피 값을 내고 있다니, 뽕을 뽑기 위해 머리를 이리저리 굴려보건대, ChatGTP 의 가장 훌륭한 쓰임새 중 하나는 뭔가를 배울 때 아무렇게나 물어볼 수 있다는 점입니다! 그리고 이는 Flutter 뉴비인 저에게도 충분히 쌉해당되는 이야기죠.
+
+## asdf 로 환경 세팅
+
+Flutter 세팅에 관해 검색해보면, 그냥 공식 홈페이지에서 다운로드 받고 뚝딱뚝딱 하라고 합니다. 그러나 제겐 [asdf](https://asdf-vm.com/#/) 가 있습니다. asdf 는 어떤 프로그램의 버전을 관리해주는 툴입니다. 그 프로그램이란 주로 개발 환경과 엮여있는 경우가 많습니다. 예를 들어 Node.js 가 프로젝트마다 버전이 다를 수 있는데, 그 조절을 편리하게 해주는 녀석입니다.
+
+저는 이 회사로 들어오고나서부터 asdf 를 애용하기 시작했습니다. 그래서 뭔가 좀 익숙한 부분이 있지만, asdf 는 뭔가 마계의 마법과 비슷한 느낌이라
+
+asdf 라는 툴이 좋다고는 해도, asdf 가 지원될 수 있도록 모종의 계약이 필요합니다. (그 계약이 어떤 형태인지는 저도 모릅니다) 흠... 확인해봅시다!
+
+```
+asdf plugin list all | grep flutter
+# flutter                      *https://github.com/oae/asdf-flutter.git
+```
+
+오옷! 있습니다.
+
+## Android Studio
+
+너무 졸려서 다음 편에 쓸래요...
