@@ -17,6 +17,7 @@ import { item as TSDataStructure } from "@app/article/2023-07/ts-data-structure/
 import { item as WhyEslint } from "@app/article/2023-07/why-eslint/page.mdx";
 import { item as WhyNeedNarrowing } from "@app/article/2023-07/why-need-narrowing/page.mdx";
 import { item as FlutterAsAFrontEndDeveloper1 } from "@app/article/2023-08/adopting-flutter-as-a-front-end-developer-1/page.mdx";
+import { item as GoLangAsAFrontEndDeveloper1 } from "@app/article/2023-08/adopting-golang-as-a-front-end-developer-1/page.mdx";
 import { item as SelfThinkingPreface } from "@app/article/2023-08/self-thinking-preface/page.mdx";
 
 const items = [
@@ -37,7 +38,8 @@ const items = [
   WhyNeedNarrowing,
   WhyEslint,
   SelfThinkingPreface,
-  FlutterAsAFrontEndDeveloper1
+  FlutterAsAFrontEndDeveloper1,
+  GoLangAsAFrontEndDeveloper1,
 ];
 
 items.sort((a, b) => dayjs(b.createdAt).diff(a.createdAt));

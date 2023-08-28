@@ -1,0 +1,188 @@
+import i1 from "./i1.jpg";
+
+import dayjs from "dayjs";
+import ArticleImage from "@modules/article/ArticleImage";
+import { ArticleJsonLd } from "next-seo";
+import { createMetadata, authorName, authorList } from "@modules/metadata";
+import ArticleHeader from "@modules/article/ArticleHeader";
+
+export const title = "프론트 개발자의 GoLang 적응기 1화";
+export const url =
+  "https://springfall.cc/article/2023-08/adopting-golang-as-a-front-end-developer-1";
+export const summary = "";
+export const createdAt = dayjs("2023-08-28").toISOString();
+export const updatedAt = dayjs("2023-08-28").toISOString();
+export const image = i1;
+export const imageAlt = "선택의 갈림길";
+
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+
+export const item = {
+  title,
+  url,
+  summary,
+  createdAt,
+  updatedAt,
+  image,
+  imageAlt,
+};
+
+export const metadata = createMetadata({
+  title,
+  canonical: url,
+  description: summary,
+  openGraph: {
+    title,
+    description: summary,
+    url,
+    type: "article",
+    publishedTime: createdAt,
+    modifiedTime: updatedAt,
+    images: [
+      {
+        url: image.src,
+        width: image.width,
+        height: image.height,
+        alt: imageAlt,
+      },
+    ],
+  },
+  alternates: {
+    canonical: url,
+  },
+});
+
+<ArticleJsonLd
+  useAppDir
+  url={url}
+  title={title}
+  images={[image.src]}
+  authorName={authorList}
+  datePublished={createdAt}
+  dateModified={updatedAt}
+  publisherName={authorName}
+  description={summary}
+  isAccessibleForFree
+/>
+
+<ArticleHeader title={title} updatedAt={updatedAt} desc={summary} />
+
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+
+Go란 구글에서 만든 언어입니다. Go 는 너무 흔하게 쓰이는 영단어와 모습이 똑같아서, Go 를 검색하기 위해서는 GoLang 이렇게 뒤에 Lang 을 붙어야 합니다. 그냥 한국어로 치면 언어 이름이 `가`인 셈입니다. 너무 흔하잖아요. 그래서 `가어(語)` 이렇게 붙였네요. 실제로 `가어`를 검색해봤을 때 구글 검색어 결과 수가 41,700 건 밖에 안됩니다. 만약 머나먼 미래 샘숭이 구글을 경쟁에서 이긴 후, `가` 언어를 창시하고 검색 잘 되게 하려고 `가어`라고 검색하는 걸 장려한다면 검색어 상위 순위를 충분히 차지할 수 있겠네요!
+
+네 이상 뻘소리였습니다. 적응기는 그냥 뻘소리 대잔치라고 생각해주세요.
+
+아직 Flutter 적응기도 겨우 1화, 아니 마치 똥싸다 끊긴 것 같은 0.5화의 분량만 썼는데 왜 갑자기 또 GoLang 이냐구요? 왜긴 왜야 그냥 하니까 그런거죠.
+
+회사에서 DB 스터디를 하나 하고 있습니다. 바로 아래 링크로요.
+
+https://build-your-own.org/database/
+
+이것은 Go로 데이터베이스 관리 시스-템을 밑바닥부터 만드는 어마어마한 프로젝트입니다. 근데 사실 어마어마하진 않습니다. 생각보다 양은 많지 않아요. B-Tree 등의 기초적(?) 알고리즘, 기본적인 프로그래밍 지식을 독자들이 안다고 상정하고 작성된 강좌입니다. 심지어 전부 다 보지 않을 수 있습니다. 이 강좌의 후반부는 유료(!)인데, 전반부를 해보고 후반부를 결제할지 말지 결정하자고 스터디원끼리 합의했거든요.
+
+> 아니 근데 돈을 받으면 org 지 않아? 비영리단체만 org 쓸 수 있는거 아닌가? 음… 그냥 개인도 제한없이 사용할 수 있다는 걸 보면 꼭 그런 건 아닌가 봅니다~
+
+그런데 사실 이건 제겐 큰 도전입니다. 절대적인 양이 적더라도… 상대적인 느낌이 다르다면? 제 마음의 여유가 겨우 5%밖에 남지 않았는데 1%가 추가된다면 남은 용량의 무려 20%가 사라지는 셈이니 상대적인 양은 많다구요. 그래서 몇화 몇화 이렇게 끊어서 글을 **쏘**려고 합니다. 탕탕탕. (글을 **싼**다는 말은 좀 상스러워서 쏜다고 대체했습니다. 사실 `글쏘기 모임`, 이 이름은, 회사에서 제가 참여 중인 또다른 모임이자 활동은 주로 글쓰기를 하는 모임의 이름이기도 합니다. 그리고 이 글은 제출될 예정이죠. 일타. 쌍피.)
+
+## Go 의 특징
+
+1. 구글에서 만들었습니다. 아니, 생각해보니 Go는 글자 자체로도 구글에 속해있었네요. **Go**ogle.
+2. 파이썬보다 속도가 빠릅니다. 그래서 [AB180 에서도 Go로 시스템을 변경하려고 했습니다](https://engineering.ab180.co/stories/scenario-test).
+3. Rust 나 순수 C 보단 속도가 느립니다. 적당~합니다. (위 글에 따르면.)
+4. Rust보다 쉽습니다. (진짜인지는 차차 검증해봐야죠.)
+5. 컴파일 언어입니다. 자바스크립트와 V8엔진처럼 그냥 실시간으로 돌릴 수 있는 그런 게 아니라, 실행가능한 바이너리 파일이 있어야 실제로 실행할 수 있다는 거죠!
+6. 강타입 언어입니다. 그냥 타입이 쎄다고 보시면 되죠. 파이썬이나 자바스크립트와 다르게.
+
+요즘 현대적인 언어들의 기능은 다들 좀 비슷비슷하리라 생각듭니다.
+
+예전에 Go에 드디어 제네릭 기능이 생겼다! 고 하길래 조금 의아하긴 했습니다. 얼마나 쉽게쉽게 하려고 제네릭 기능까지 없었던 거야… 사실 제네릭이 좀 어렵긴 하지만 나름 강타입 언어에서 효율적인 프로그램 구조를 짜기 위해 필수라고 생각하고 있었습니다. 그런데 이제서야 생겨서 사람들이 환호하고 있다니! 그렇다면 분명 아… 쉬워서 지금까지 잘 쓰고 있었는데 ‘배울 게 하나 더 늘어났네’ 하면서 남몰래 한숨쉬는 사람들도 있겠네요.
+
+자, 우리의 친구 ChatGPT! 도와줘! 회사계정 도와줘! GoLand! 으아앗! 힘이… 넘쳐난다~! 자, 이제 들어가봅시다.
+
+## 설치
+
+Go도 마찬가지로 [asdf](https://asdf-vm.com/)로 설치합니다. asdf 짱짱맨.
+
+```
+asdf plugin add golang
+asdf install golang latest
+asdf global golang latest
+go version # 잘 나오는지 테스트
+```
+
+## 드가자 (Let's Go 라는 뜻)
+
+일단 GoLand 로 프로젝트를 만드니 딸랑 파일 두 개가 만들어집니다.
+
+```
+go.mod
+main.go
+```
+
+사실 `go.mod` 는 만들어지는 게 확실했는데 `main.go` 파일은 기억이 불확실하네요, `main.go` 파일이 없다면 그냥 하나 만듭시다.
+
+`go.mod` 파일의 내용은 아래와 같습니다.
+
+```
+module go-db
+
+go 1.21
+```
+
+음… 대충 보니 이 모듈의 이름은 go-db 이고 go 는 1.21 버전으로 하자! 이 뜻 같습니다. 맞겠죠?
+
+이제 드디어 코드가 나오는 4강으로 코드를 슬금슬금 채워봅니다. https://build-your-own.org/database/04_btree_code_1
+
+```go
+package main
+
+import "fmt"
+
+type BNode struct {
+	data []byte
+}
+
+const (
+	BNODE_NODE = 1 // internal nodes without values
+	BNODE_LEAF = 2 // leaf nodes with values
+)
+
+type BTree struct {
+	// pointer (a nonzero page number)
+	root uint64
+	// callbacks for managing on-disk pages
+	get func(uint64) BNode // dereference a pointer
+	new func(BNode) uint64 // allocate a new page
+	del func(uint64)       // deallocate a page
+}
+
+const HEADER = 4
+
+const BTREE_PAGE_SIZE = 4096
+const BTREE_MAX_KEY_SIZE = 1000
+const BTREE_MAX_VAL_SIZE = 3000
+
+func assert(condition bool) {
+	if !condition {
+		panic("no way")
+	}
+}
+
+func init() {
+	node1max := HEADER + 8 + 2 + 4 + BTREE_MAX_KEY_SIZE + BTREE_MAX_VAL_SIZE
+	assert(node1max <= BTREE_PAGE_SIZE)
+}
+```
+
+대충 찾아보니 아래와 같은 삼단계 변수 선언법이 있다고 합니다.
+
+- `var` 를 붙인다: 재대입할 수 있는 변수를 만든다. 자바스크립트의 `let` 과 유사함. 자바스크립트와 다른 점은, 자바스크립트는 타입과 관련없이 대입이 가능하지만 go에서는 안된다는거. 안되는 이유는, 뇌피셜이긴 하지만, 보통 컴파일 언어에서는 속도를 빡빡하게 하기 위해 함수 실행 시점에 그 함수가 필요로 메모리의 양을 미리 계산할 수 있어야 하고, 이는 변수의 개수와 각각의 타입이 컴파일 시점에서 미리 정해져 있어야 한다는 걸 의미하죠. 그리고 `:=` 는 이 `var` 용법을 짧게 줄인 거라 합니다.
+- `final` 를 붙인다: 재대입할 수 없는 변수를 만든다. 자바스크립트에서 `const` 와 거의 똑같습니다.
+- `const` 를 붙인다: 컴파일 시점 고정값을 만든다. const 변수는 우변에 뭔가 실행시점에 계산을 할 수 있습니다. 실제로 그 값이 메모리에 올라가고 내려갑니다.
+
+다음 시간에 계속...
