@@ -20,6 +20,9 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     creator: "@springfall_cc",
   },
+  other: {
+    "naver-site-verification": "392b57225ecb015316d43c362eb6871db10ff17f",
+  },
 };
 
 export default function RootLayout({
