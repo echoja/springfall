@@ -20,6 +20,7 @@ import { item as FlutterAsAFrontEndDeveloper1 } from "@app/article/2023-08/adopt
 import { item as GoLangAsAFrontEndDeveloper1 } from "@app/article/2023-08/adopting-golang-as-a-front-end-developer-1/page.mdx";
 import { item as SelfThinkingPreface } from "@app/article/2023-08/self-thinking-preface/page.mdx";
 import { item as Moderation } from "@app/article/2023-09/moderation/page.mdx";
+import { item as NoFuncRecord } from "@app/article/2023-09/no-func-record/page.mdx";
 import { item as Prag } from "@app/article/2023-09/the-pragmatic-programmer/page.mdx";
 
 const items = [
@@ -44,6 +45,7 @@ const items = [
   GoLangAsAFrontEndDeveloper1,
   Moderation,
   Prag,
+  NoFuncRecord,
 ];
 
 items.sort((a, b) => dayjs(b.createdAt).diff(a.createdAt));

@@ -1,0 +1,225 @@
+import i1 from "./record.jpg";
+
+import dayjs from "dayjs";
+import ArticleImage from "@modules/article/ArticleImage";
+import { ArticleJsonLd } from "next-seo";
+import { createMetadata, authorName, authorList } from "@modules/metadata";
+import ArticleHeader from "@modules/article/ArticleHeader";
+
+export const title = "[TypeScript] 함수 Record 는 지옥이다";
+export const url = "https://springfall.cc/article/2023-09/no-func-record";
+export const summary =
+  "Object, Map, Record 형태에 함수를 몰아넣고 사용할 때 어려움이 있습니다. 이를 타입 좁히기가 가능한 형태로 바꿔 사용합시다.";
+export const createdAt = dayjs("2023-09-07").toISOString();
+export const updatedAt = dayjs("2023-09-07").toISOString();
+export const image = i1;
+export const imageAlt = "레코드샵";
+
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+
+export const item = {
+  title,
+  url,
+  summary,
+  createdAt,
+  updatedAt,
+  image,
+  imageAlt,
+};
+
+export const metadata = createMetadata({
+  title,
+  canonical: url,
+  description: summary,
+  openGraph: {
+    title,
+    description: summary,
+    url,
+    type: "article",
+    publishedTime: createdAt,
+    modifiedTime: updatedAt,
+    images: [
+      {
+        url: image.src,
+        width: image.width,
+        height: image.height,
+        alt: imageAlt,
+      },
+    ],
+  },
+  alternates: {
+    canonical: url,
+  },
+});
+
+<ArticleJsonLd
+  useAppDir
+  url={url}
+  title={title}
+  images={[image.src]}
+  authorName={authorList}
+  datePublished={createdAt}
+  dateModified={updatedAt}
+  publisherName={authorName}
+  description={summary}
+  isAccessibleForFree
+/>
+
+<ArticleHeader title={title} updatedAt={updatedAt} desc={summary} />
+
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+
+<ArticleImage
+  width={500}
+  img={i1}
+  alt="레코드샵"
+  caption={
+    <>
+      레코드샵.{" "}
+      <a href="https://unsplash.com/ko/@kurbanova?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">
+        Elza Kurbanova
+      </a>{" "}
+      from{" "}
+      <a href="https://unsplash.com/ko/%EC%82%AC%EC%A7%84/f8MLY_HKwqQ?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">
+        Unsplash
+      </a>
+    </>
+  }
+/>
+
+타입스크립트에서 아마 가장 골때리는 것은 Map 계열(Object, Record\<A, B>)과 함수의 조합일 겁니다. 이걸 제대로 다루는 용자는 아직 발견하지 못했습니다. 타입스크립트가 잘못한 걸까요, 아니면 우리가 잘못한 걸까요?
+
+누가 잘못했든지간에 일단 돌아가는 프로그램을 만드는 게 중요하겠지요. 에이~ 우리가 양보하자는 마음으로 갑시다.
+
+## 여정의 시작
+
+그러니까… 아이디어는 다음과 같이 시작했습니다.
+
+1. 이벤트 기반 앱을 만들어보자…
+2. 이벤트 타입을 일단 지정해볼까?
+3. 이벤트를 처리하는 함수를 만들자… 근데 한 곳에 모아두면 좋으니까 `{ 이벤트타입1: 함수1, 이벤트타입2: 함수2 }`의 형태로 handlers 라는 변수를 만들어놓자…
+4. 이 handlers 를 쓰자… **엉?**
+
+네… 위 생각을 기반으로 코딩을 둥당기둥당 해봅시다. 아래와 같은 코드가 나올 겁니다.
+
+```tsx
+// 이벤트 타입 지정
+type AEvent = {
+  type: "A";
+  value: string;
+};
+
+type BEvent = {
+  type: "B";
+  value: number;
+};
+
+type Events = AEvent | BEvent;
+
+// 이벤트를 처리하는 함수들
+const handlers = {
+  A: (event: AEvent) => {
+    console.log(event);
+  },
+  B: (event: BEvent) => {
+    console.log(event);
+  },
+};
+
+// handlers 를 호출하는 함수
+function handleEvent(e: Events) {
+  handlers[e.type](e);
+  /*
+  Argument of type 'Events' is not assignable to parameter of type 'never'.
+  The intersection 'AEvent & BEvent' was reduced to 'never' because property 'type' has conflicting types in some constituents.
+  Type 'AEvent' is not assignable to type 'never'.(2345)
+  */
+}
+```
+
+코드는 어렵지 않죠? 논리적으로 굉장히 말이 됩니다.
+
+1. `handleEvent` 에서는 `e`를 받았고, `e`는 `AEvent` 또는 `BEvent` 입니다.
+2. `handlers[e.type]` 은 짝으로 적절한 핸들러를 가져와야 할 것 같습니다.
+3. 그런데 에러가 나네요…?
+
+네. 저 핸들러를 호출하는 쪽에서 에러가 뜹니다. `AEvent & BEvent` 는 `never` 로 간주된다는 말과 함께… 왜죠? 그 이유 → **인덱스 연산자는 타입 좁히기(Narrowing)가 먹히지 않습니다!** 와우.
+
+그러니까요,
+
+1. `handlers[e.type]` 이 변수의 타입은 말입니다, `(event: AEvent) => void | (event: BEvent) => void` 이렇게 잡혀버립니다.
+2. `e`와 아무런 연관 없이 그냥 하나의 Union 타입입니다!
+3. 호출하려면 `AEvent`와 `BEvent` 를 동시에 만족하는 타입을 요구합니다.
+4. 이것을 동시에 만족하는 타입은 존재하지 않습니다. 그래서 `never` 로 추론됩니다.
+
+캬~ 이것도 논리적으로 말은 되네요. **왜 타입 좁히기가 안될까요?** 저도 잘 모르겠습니다. 그래서 찾아봤습니다. 관련된 [타입스크립트 이슈(Discriminant property type guard not applied with bracket notation)](https://github.com/microsoft/TypeScript/issues/10530)가 나오네요. 명확한 설명이 달려있는 것 같진 않지만, **성능 이슈인 거 같습니다. 6.5% 느려진대요.** 아래가 그 짤막한 내용이 담겨 있는 댓글 링크입니다.
+
+https://github.com/microsoft/TypeScript/issues/10530#issuecomment-253651206
+
+## 제네릭 시도
+
+그렇다면 과연 제네릭으로 하면 제대로 될까요?!
+
+```tsx
+function handleEventGeneric<T extends Events>(e: T) {
+  // 같은 에러
+  handlers[e.type](e);
+}
+```
+
+안돼요. 안되는 이유는 동일합니다. 저기서 `T`가 받을 수 있는 타입은 사실 세 가지입니다. 두 가지가 아니라요.
+
+- `AEvent`
+- `BEvent`
+- `AEvent | BEvent`
+
+엥? AEvent **또는** BEvent 가 아니냐… ㅋㅋ `AEvent | BEvent` 도 **또는** 이죠 뭐… 타입스크립트에서 “또는”이란 정말 정말 어려운 개념인 것 같습니다.
+
+우리의 소망은 `handlers[e.type]` 이 `(event: T) => void` 와 같은 타입으로 잡히는 것이었는데, 안됩니다, 안돼요. 이제는 그만 싸울 때입니다. 우리는 무슨 짓을 해도 타입스크립트를 이길 수 없습니다.
+
+## 타입 좁히기로 간단히 하기
+
+[타입 좁히기](/article/2023-07/why-need-narrowing)를 열심히 실천해야 할 때입니다. 실행 가능한 모든 코드를 첨부하겠습니다.
+
+```tsx
+type AEvent = {
+  type: "A";
+  value: string;
+};
+
+type BEvent = {
+  type: "B";
+  value: number;
+};
+
+type Events = AEvent | BEvent;
+
+function handleA(e: AEvent) {
+  console.log(e);
+}
+
+function handleB(e: BEvent) {
+  console.log(e);
+}
+
+function handleEventFinal(e: Events) {
+  switch (e.type) {
+    case "A":
+      return handleA(e);
+    case "B":
+      return handleB(e);
+  }
+}
+```
+
+switch-case 문이 등장했습니다. 이 녀석은 타입 좁히기가 가능합니다. 즉 `e.type` 이 `"A"`인 케이스에 대해 `e`는 무조건 `AEvent` 라고 추론해버립니다. 네. 함수를 모아놓은 handlers 변수는 갖다 버렸습니다. 이 글의 제목을 되새김질 해주시기 바랍니다. 함수 Record 는 지옥이기 때문에 왠만해선 하지 말고, 차라리 switch-case 를 남용합시다.
+
+추가 꿀팁은, [typescript-eslint 에서 switch-exhaustiveness-check](https://typescript-eslint.io/rules/switch-exhaustiveness-check/) 을 키면 좋습니다. 이 옵션을 키고 이벤트 타입을 새롭게 만들었을 때, `handleEventFinal` 함수 내부에서 모든 타입 케이스를 다루지 않았다고 에러가 발생합니다. 뭔가 빼먹을 일이 줄어드는 거죠!
+
+## 고수 분들의 가르침을 기다립니다.
+
+저 문제를 어떻게 하면 깔쌈하게 해결할 수 있을까요? 저도 알고 싶습니다. 하하하
