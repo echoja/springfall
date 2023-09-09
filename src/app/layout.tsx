@@ -3,7 +3,6 @@ import "@common/globals.css";
 import type { Metadata } from "next";
 
 import Footer from "@modules/layout/Footer";
-import Header from "@modules/layout/Header";
 import RootClientLayout from "@modules/layout/RootClientLayout";
 import { metadataBase } from "@modules/metadata";
 
@@ -38,8 +37,7 @@ export default function RootLayout({
       <body>
         <div className="max-w-screen-md mx-auto">
           <div className="p-4 md:p-8 sm:p-6">
-            <Header />
-            <main className="mt-12 mb-24">{children}</main>
+            {children}
             <Footer />
           </div>
         </div>
