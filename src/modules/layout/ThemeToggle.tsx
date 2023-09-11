@@ -13,7 +13,7 @@ const Icon = () => {
         {colorMode === "dark" ? "라이트 모드로 전환" : "다크 모드로 전환"}
       </span>
     ),
-    [colorMode]
+    [colorMode],
   );
 
   return (
@@ -33,24 +33,23 @@ const DynamicIcon = dynamic(() => Promise.resolve(Icon), {
   loading: () => <div style={{ width: "16px" }} />,
 });
 
-const ThemeToggle = forwardRef<HTMLButtonElement>(function ThemeToggle(
-  props,
-  propRef
-) {
-  const { toggle } = useColorMode();
+const ThemeToggle = forwardRef<HTMLButtonElement>(
+  function ThemeToggle(props, propRef) {
+    const { toggle } = useColorMode();
 
-  return (
-    <button
-      type="button"
-      className="p-4 transition rounded-full hover:bg-gray-400/10 hover:opacity-90"
-      aria-label="theme toggle"
-      onClick={toggle}
-      ref={propRef}
-      {...props}
-    >
-      <DynamicIcon />
-    </button>
-  );
-});
+    return (
+      <button
+        type="button"
+        className="p-2 transition border rounded shadow-sm hover:bg-gray-400/10 hover:opacity-90 border-gray-400/30"
+        aria-label="theme toggle"
+        onClick={toggle}
+        ref={propRef}
+        {...props}
+      >
+        <DynamicIcon />
+      </button>
+    );
+  },
+);
 
 export default ThemeToggle;

@@ -1,7 +1,5 @@
 import dayjs from "dayjs";
 
-import { authorUrl } from "@modules/metadata";
-import Link from "next/link";
 import Balancer from "react-wrap-balancer";
 import { twMerge } from "tailwind-merge";
 import { gray } from "tailwindcss/colors";
@@ -42,10 +40,12 @@ export default function ArticleHeader({
   desc?: string;
 }) {
   return (
-    <header className="mb-16">
-      <HeaderSeparator className="mb-28" />
+    <header className="mb-24">
+      <div className="mb-4 font-mono text-xs text-gray-500 dark:text-gray-400">
+        {dayjs(updatedAt).format("YYYY.MM.DD.")}
+      </div>
       <h1
-        className="text-4xl font-extrabold break-keep dark:text-gray-100"
+        className="mb-2 text-4xl font-extrabold break-keep dark:text-gray-100"
         style={{
           textShadow: `0 0.125rem 0.375rem rgb(0 0 0 / 0.05)`,
           lineHeight: "1.3",
@@ -56,28 +56,6 @@ export default function ArticleHeader({
       <p className="text-sm leading-normal text-gray-500 dark:text-gray-400 break-keep">
         <Balancer>{desc}</Balancer>
       </p>
-      <HeaderSeparator
-        className="flex items-center justify-center w-full font-mono text-xs font-light text-white mt-28 dark:text-gray-950"
-        style={{
-          textShadow: `0 0 0.25rem rgb(0 0 0 / 0.25)`,
-        }}
-      >
-        <div>
-          {dayjs(updatedAt).format("YYYY.MM.DD.")} by{" "}
-          <a
-            href={authorUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-white underline dark:text-gray-950"
-          >
-            @echoja
-          </a>{" "}
-          on{" "}
-          <Link href="/" className="text-white underline dark:text-gray-950">
-            springfall.cc
-          </Link>
-        </div>
-      </HeaderSeparator>
     </header>
   );
 }
