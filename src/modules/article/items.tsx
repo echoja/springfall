@@ -19,6 +19,7 @@ import { item as WhyNeedNarrowing } from "@app/article/2023-07/why-need-narrowin
 import { item as FlutterAsAFrontEndDeveloper1 } from "@app/article/2023-08/adopting-flutter-as-a-front-end-developer-1/page.mdx";
 import { item as GoLangAsAFrontEndDeveloper1 } from "@app/article/2023-08/adopting-golang-as-a-front-end-developer-1/page.mdx";
 import { item as SelfThinkingPreface } from "@app/article/2023-08/self-thinking-preface/page.mdx";
+import { item as Belief } from "@app/article/2023-09/belief/page.mdx";
 import { item as Moderation } from "@app/article/2023-09/moderation/page.mdx";
 import { item as NoFuncRecord } from "@app/article/2023-09/no-func-record/page.mdx";
 import { item as Prag } from "@app/article/2023-09/the-pragmatic-programmer/page.mdx";
@@ -46,6 +47,7 @@ const items = [
   Moderation,
   Prag,
   NoFuncRecord,
+  Belief,
 ];
 
 items.sort((a, b) => dayjs(b.createdAt).diff(a.createdAt));
