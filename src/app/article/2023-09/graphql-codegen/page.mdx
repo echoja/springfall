@@ -1,0 +1,918 @@
+import prag from "./o.jpg";
+import oo from "./oo.png";
+import o1 from "./o1.png";
+import gifss from "./gifss.gif";
+
+import dayjs from "dayjs";
+import ArticleImage from "@modules/article/ArticleImage";
+import { ArticleJsonLd } from "next-seo";
+import { createMetadata, authorName, authorList } from "@modules/metadata";
+import ArticleHeader from "@modules/article/ArticleHeader";
+
+export const title =
+  "GraphQL codegen으로 타입스크립트 환경에서 효율적으로 개발해보자";
+export const url = "https://springfall.cc/article/2023-09/graphql-codegen";
+export const summary =
+  "GraphQL과 TypeScript를 이어주는 길을 직접 만들어줄 필요는 없습니다. codegen으로 꿈을 이룰 수 있습니다! 마냥 현실이 좋다고는 할 순 없지만 조금이라도 개선하는 게 의미가 있죠, 안그래요?";
+export const createdAt = dayjs("2023-09-24").toISOString();
+export const updatedAt = dayjs("2023-09-24").toISOString();
+export const image = prag;
+export const imageAlt = "두렁에 빠진 차를 밀고 있는 사람들";
+
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+
+export const item = {
+  title,
+  url,
+  summary,
+  createdAt,
+  updatedAt,
+  image,
+  imageAlt,
+};
+
+export const metadata = createMetadata({
+  title,
+  canonical: url,
+  description: summary,
+  openGraph: {
+    title,
+    description: summary,
+    url,
+    type: "article",
+    publishedTime: createdAt,
+    modifiedTime: updatedAt,
+    images: [
+      {
+        url: image.src,
+        width: image.width,
+        height: image.height,
+        alt: imageAlt,
+      },
+    ],
+  },
+  alternates: {
+    canonical: url,
+  },
+});
+
+<ArticleJsonLd
+  useAppDir
+  url={url}
+  title={title}
+  images={[image.src]}
+  authorName={authorList}
+  datePublished={createdAt}
+  dateModified={updatedAt}
+  publisherName={authorName}
+  description={summary}
+  isAccessibleForFree
+/>
+
+<ArticleHeader title={title} updatedAt={updatedAt} desc={summary} />
+
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+
+<ArticleImage
+  img={prag}
+  alt="두렁에 빠진 차를 밀고 있는 사람들"
+  caption={
+    <>
+      어떻게든 빠져나가야 한다! Photo by{" "}
+      <a href="https://unsplash.com/@octoberroses?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">
+        Aubrey Odom
+      </a>{" "}
+      on{" "}
+      <a href="https://unsplash.com/photos/T1L9Q5g7eIQ?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">
+        Unsplash
+      </a>
+    </>
+  }
+/>
+
+[GraphQL](https://graphql.org/)이란 API 기술 중 하나입니다. [API](https://aws.amazon.com/ko/what-is/api)란 하나의 프로그램에서 다른 프로그램으로 요청을 주고받을 때 사용하는 기술인데요, 보통은 클라이언트와 서버가 요청을 주고받을 때를 일컫습니다. 프로그램이 나뉘어져 있는 가장 큰 이유는 그냥 돌아가는 컴퓨터가 다르기 때문입니다. 웹앱을 생각해봅시다. 고객이 이용하는 브라우저가 있습니다. 맥북이나 윈도우 데스크톱, 태블릿, 아이폰이나 삼성 갤럭시가 될 수 있겠죠. 반면 서비스를 제공하는 쪽에서는 AWS 나 직접 구축한 서버에서 프로그램이 돌아갈 것입니다. 이 둘 사이에서는 통신이 필요하고, 그 방법을 API 레이어에서 제공해준다는 느낌입니다.
+
+가장 흔하고 많이 쓰이는 방식은 REST입니다. REST. 좋죠. 하지만 이 글에서는 GraphQL과 REST를 비교하고 장단점을 따지고 할 건 아니기 때문에, 쿨하고 스무스하게 넘어가겠습니다.
+
+하여튼, 축하드립니다. GraphQL을 사용하겠다고 마음먹었군요. 그리고 보통 [Node.js](https://nodejs.org/) 환경에서 개발을 할 테니, [타입스크립트](https://www.typescriptlang.org/)와도 피할 수 없는 운명일 것입니다.
+
+타입스크립트 기반 프로젝트(서버든, 클라이언트든)에서. 은근. GraphQL 개발이 좀 어렵습니다. 왜냐하면 GraphQL은 API 에 대한 명세를 지정해줄 뿐이고, 타입스크립트랑 전혀 연관이 없거든요. 우리가 일일히 연결고리를 만들어줘야 합니다.
+
+타입스크립트와 GraphQL이 나온지 시간이 흐르면서 조금 더 효율적으로 연결고리를 만드는 방법들이 개발되었습니다. 저 또한 고민에 고민을 거듭했습니다. GraphQL을 잘 이용하는 게 만족할 만한 수준은 아니지만, 고민 또한 계속하고 싶진 않습니다. 적당히 결론을 짓고 싶어 글을 쓰게 되었습니다.
+
+이 글은 타입스크립트와 GraphQL 에 대한 경험이 있어야 좀 이해될 것 같습니다. 아직 타입스크립트에 익숙하지 않거나 GraphQL 에 입문한지 얼마 되지 않은 분은 언젠가 다시 찾아오기 위해 즐겨찾기 해주시기 부탁드립니다.
+
+다시 정리하죠. 타입스크립트 기반 프로젝트에서 GraphQL를 조금이라도 더 수월하게 개발하기 위한 방법 = codegen 을 알려드리고자 합니다.
+
+## 스키마가 가장 먼저
+
+앞서 이야기했듯 API는 서버와 클라이언트가 어떻게 통신할 수 있을지를 정해줍니다. 슬프게도 보통 클라이언트가 “을”입니다. 어떤 응답을 받고 어떻게 처리해줄지는 서버에 코드가 다 있거든요.
+
+그렇다고 해서 프론트 개발자가 을이라는 건 아닙니다. 우리는 협업을 해야 합니다. 만약 나 혼자 백엔드도 하고 프론트도 하는 풀스택이라면 이중인격자가 되어 스스로와 대화해야 합니다. 어떻게 데이터를 주고받는 게 좋을까? 그 약속을 정하는 것이 먼저입니다. [OpenAPI](https://www.openapis.org/)와 같은 툴이 있는 이유기도 하죠. GraphQL 에서는 그 약속을 스키마라고 부릅니다.
+
+아래는 ChatGPT 한테 GraphQL 샘플 스키마를 만들어달라고 요청한 결과입니다. 직접 사용할 건 아니고 그냥 참고용으로만 봐주세요. `schema.graphql` 파일입니다. 이 스키마 파일은 백엔드에 있을 겁니다.
+
+```graphql schema.graphql
+type Query {
+  getUser(id: ID!): User
+  allUsers: [User!]!
+}
+
+type Mutation {
+  createUser(input: CreateUserInput!): User!
+  updateUser(id: ID!, input: UpdateUserInput!): User
+  deleteUser(id: ID!): Boolean!
+}
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  age: Int
+  posts: [Post!]!
+}
+
+type Post {
+  id: ID!
+  title: String!
+  content: String!
+  author: User!
+}
+
+input CreateUserInput {
+  name: String!
+  email: String!
+  age: Int
+}
+
+input UpdateUserInput {
+  name: String
+  email: String
+  age: Int
+}
+```
+
+문법은 다들 하시죠? 그래도 간략하게 언급하겠습니다.
+
+- 쿼리는 읽기 위한 용도이고 뮤테이션은 변경하기 위한 용도입니다. [CQRS](https://learn.microsoft.com/en-us/azure/architecture/patterns/cqrs) 패턴과 연관이 있습니다.
+- `!`가 있으면 필수라는 뜻이고, `!`없으면 그 데이터가 있어도 되고 없어도 되고 네 맘대로 하라는 뜻입니다. `[TYPE]!` (`!`가 배열 바깥에 있음)는 배열 그 자체에 대한 필수 여부고 `[TYPE!]` (`!`가 배열 안에 있음)은 배열 아이템에 대한 필수 여부를 뜻합니다.
+- 쿼리/뮤테이션의 리턴 값은 `type`으로 구성됩니다.
+- 쿼리/뮤테이션의 인자 값은 `input`으로만 구성됩니다.
+
+## 동작 구현하기
+
+Node.js에서 REST를 구현하기 위해 express와 같은 웹서버 라이브러리를 사용하고, 클라이언트에서는 fetch 등으로 요청을 날립니다. GraphQL 또한 데이터를 주고받기 위한 서버측 라이브러리와 클라이언트측 라이브러리가 있습니다. 지금 2023년. 사람들이 가장 흔하게 찾는 도구는 [Apollo Server](https://www.apollographql.com/docs/apollo-server/) 와 [Apollo Client](https://www.apollographql.com/docs/react) 입니다.
+
+### 서버 예제
+
+저 `graphql.schema` 파일은 API가 무엇인지만 알려줄 뿐, API가 어떻게 동작하는지는 전혀 관여하지 않습니다. 그 구현은 백엔드 개발자의 몫입니다. 구현을 타입스크립트로 해야겠죠?
+
+아래 코드도 ChatGPT 한테 맡겼습니다. 돌아가는 코드는 아닙니다!
+
+```tsx sample-server.ts
+import { ApolloServer } from "apollo-server";
+import fs from "fs";
+import path from "path";
+
+// GraphQL 스키마 로드
+const typeDefs = fs.readFileSync(
+  path.join(__dirname, "./graphql.schema"),
+  "utf8",
+);
+
+// 리졸버
+const resolvers = {
+  Query: {
+    getUser: (_: any, { id }: { id: string }) => {
+      // TODO: 데이터 조회 로직 작성
+    },
+    allUsers: () => {
+      // TODO: 모든 사용자 조회 로직 작성
+    },
+  },
+  Mutation: {
+    createUser: (_: any, { input }: { input: any }) => {
+      // TODO: 사용자 생성 로직 작성
+    },
+    updateUser: (_: any, { id, input }: { id: string; input: any }) => {
+      // TODO: 사용자 업데이트 로직 작성
+    },
+    deleteUser: (_: any, { id }: { id: string }) => {
+      // TODO: 사용자 삭제 로직 작성
+    },
+  },
+  User: {
+    posts: (user: any) => {
+      // TODO: 사용자의 게시글 조회 로직 작성
+    },
+  },
+};
+
+// 서버 생성 및 시작
+const server = new ApolloServer({ typeDefs, resolvers });
+
+server.listen().then(({ url }) => {
+  console.log(`🚀 Server ready at ${url}`);
+});
+```
+
+자, 여기서 문제점이 무엇일까요? **바로 인자의 타입을 `{ input: any }` 와 같이 직접 작성해야 한다는 것입니다.** input 의 타입을 any로 둔다면 타입스크립트의 핵심인 타입 체크 기능을 쓰지 않는다는 것과 같습니다.
+
+그렇다고 직접 타입을 만드는 것도 문제입니다. 우리가 만든 타입이 GraphQL에서 지정한 타입과 미세하게 다르다면? 오타 같은건 충분히 날 수 있죠. 타입스크립트 상으로는 에러가 없겠지만 실제 동작할 때엔 필드가 없다며 에러를 뿜어낼 것입니다! 타입이 잘못 지정되어 있을 때 발생하는 에러는 원인을 찾기가 어렵습니다. any를 쓰는 게 차라리 더 나을 수도?
+
+인자의 타입 뿐만 아니라 **리턴 타입**도 정해져있지 않으므로 우리는 허공으로 돌을 던져 정답을 맞춰야 합니다. 에러가 시한폭탄처럼 꽁꽁 숨겨져 2개월 뒤에 터질 수도 있죠! 서버에서 데이터를 제대로 만들어 전달해준다고 착각해버리는 것입니다. 너무 슬퍼요.
+
+### 클라이언트 예제
+
+아래 코드 또한 예제입니다. 갓지피티의 힘을 빌렸습니다.
+
+```tsx sample-client.tsx
+import { gql, useQuery } from "@apollo/client";
+import React from "react";
+
+const GET_USER = gql`
+  query GetUser($id: ID!) {
+    getUser(id: $id) {
+      id
+      name
+      email
+      age
+    }
+  }
+`;
+
+const UserComponent: React.FC = () => {
+  const { loading, error, data } = useQuery(GET_USER, {
+    variables: { id: "1" },
+  });
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
+
+  const user = data.getUser;
+
+  return (
+    <div>
+      <h1>{user.name}</h1>
+      <p>Email: {user.email}</p>
+      <p>Age: {user.age || "Not available"}</p>
+    </div>
+  );
+};
+
+export default UserComponent;
+```
+
+자, 여기서도 문제가 많습니다.
+
+- ``gql`...` `` 에 있는 Document 가 schema.graphql 에 적혀져있는 대로 제대로 요청하고 있는지 알기 힘듭니다. 없는 필드를 요청한다든지와 같은 문제는 실제 동작 전까진 알 수 없죠.
+- `variables`(인자)에 어떤 값이 들어가야 하는지 알 수 없습니다. 작성된 쿼리를 확인해야 합니다. 여기서는 하나의 파일 안에 몰아넣어서 큰 관계는 없지만, 파일이 만약 분리된다면? 우리 뇌는 슬슬 지쳐가기 시작합니다.
+- `data`(결과) 에 어떤 데이터가 있는지 알 수 없습니다. 작성된 스키마 파일을 확인해야 합니다. 불안에 떨면서 필드에 접근해야 합니다.
+
+이렇듯 GraphQL 을 사용하다보면 TypeScript를 퇴색시키는 것 투성입니다.
+
+여기서 우리의 구세주, 아니 구세주 까진 아니고 그냥 동반자라고 할게요. 동반자가 나왔습니다. 그 이름은 [codegen](https://the-guild.dev/graphql/codegen). 개발 경험이 썩 매끄럽진 않고, 울며 겨자먹기로 하는 느낌이라 동반자로 칭했습니닷. 울며 겨자먹기인 이유는 추후 따로 말씀드리죠.
+
+## 프로젝트 세팅
+
+https://github.com/echoja/graphql-union
+
+우선 들어가서 `git clone` 을 해보시죠. 설명은 중구난방일 것입니다.
+
+우리의 레포는 뭐 이미 다 세팅되어 있는 상태라서, 아래와 같이 명령어를 친 다음
+
+```bash
+npm install
+npm dev
+```
+
+[localhost:3000](http://localhost:3000) 으로 들어가면 뭔가 돌아가는 걸 확인하실 수 있습니다.
+
+그러나 직접 패키지 설치부터 세팅하고 싶으신 분들을 위해 아래 주절주절 설명드리겠습니다. 프로젝트 구성에 관한 설명을 패스하고 싶다면, 바로 “코드 설명” 으로 넘어가셔도 좋습니다.
+
+프론트 및 웹서버는 Next.js를 사용했습니다. Apollo Client 도 사용됩니다. API 서버는 Node.js 기반 Apollo Server 로 구성되었습니다. (엄밀히 하면 Next.js 에서 App Router 를 이용했기 때문에 클라이언트에서 api 서버로가 아닌 서버에서 서버로 요청을 주고 받는 형태가 됐습니다.) 여러 프로젝트를 하나의 리포지토리에서 관리하기 위해 [npm workspaces](https://docs.npmjs.com/cli/using-npm/workspaces) 개념을 사용했습니다.
+
+아무 것도 없는 텅텅 빈 Root 프로젝트에서 새롭게 워크스페이스를 구성하려면 아래 명령어를 치면 됩니다.
+
+```bash
+npm init -w api-server
+npm init -w web
+```
+
+이렇게 하면 각각의 프로젝트 폴더가 생기면서, 내부에 package.json 파일이 생성될 것입니다. 그러곤 루트 프로젝트의 `package.json` 파일을 살펴보면 두 개의 workspace 가 추가되었다는 사실을 발견할 수 있습니다.
+
+```json package.json
+"workspaces": [
+  "api-server",
+  "web"
+],
+```
+
+`npm init -w 경로이름` 명령어를 칠 때마다 루트 프로젝트의 `package.json`, `package-lock.json`, 하위 프로젝트의 `package.json` 이 변경/추가 됩니다. 이와 같이 모노레포 식으로 구성하게 됐을 때 `package-lock.json` 과 같은 락 파일이 전체 폴더에서 하나만 있다는 사실! pnpm(`pnpm-lock.yaml`) 으로 해도, yarn(`yarn.lock`) 으로 해도 마찬가지입니다.
+
+이제 스크립트를 살펴보면 `codegen` 이 있습니다.
+
+```json package.json
+"scripts": {
+  "codegen": "graphql-codegen --config codegen.ts"
+},
+```
+
+codegen과 관련된 패키지는 아래와 같습니다.
+
+```json package.json
+"devDependencies": {
+  "@graphql-codegen/cli": "^5.0.0",
+  "@graphql-codegen/client-preset": "^4.1.0",
+  "@graphql-codegen/introspection": "^4.0.0",
+  "@graphql-codegen/typescript": "^4.0.1",
+  "@graphql-codegen/typescript-operations": "^4.0.1",
+	"@graphql-codegen/typescript-resolvers": "^4.0.1",
+  "@graphql-typed-document-node/core": "^3.2.0",
+  "prettier": "^3.0.3",
+}
+```
+
+뭐가 되게 많네요… 위 패키지를 모두 설치하려면 다음 명령어를 치면 됩니다.
+
+```bash
+npm install -D @graphql-codegen/cli @graphql-codegen/client-preset @graphql-codegen/introspection @graphql-codegen/typescript @graphql-codegen/typescript-operations @graphql-typed-document-node/core prettier
+```
+
+웹은 Next.js 로 했습니다. 핵심은 Apollo Client 겠죠?
+
+```bash
+# 루트 프로젝트에서 실행
+rm web/package.json
+npx create-next-app@latest web
+npm install @apollo/client -w web
+npm install -D graphql prettier -w web
+```
+
+api-server 는 간단한 Node.js 서버이지만, dev 모드를 손쉽게 하기 위해 tsup 이라는 라이브러리를 사용했습니다. Apollo Server 도 함께 설치해줍니다.
+
+```bash
+# 루트 프로젝트에서 실행
+npm install @apollo/server -w api-server
+npm install -D graphql prettier tsup -w api-server
+```
+
+그외 모노레포 관리를 위해 [turborepo](https://turbo.build/) 라는 걸 사용해봤는데, 별 의미는 없으니 패스합니다.
+
+`npm run codegen` 해서 에러가 발생하지 않는다면 성공입니다. 아마 아무런 변화가 없을 겁니다. 먼저 코드를 간략하게 설명한 후, 코드를 바꾸고 다시 명령어를 실행해보도록 하겠습니다.
+
+## 코드 설명
+
+```tsx codegen.ts
+import { CodegenConfig } from "@graphql-codegen/cli";
+
+const config: CodegenConfig = {
+  overwrite: true,
+  generates: {
+    "./web/generated/graphql/": {
+      schema: ["./api-server/**/*.graphql"],
+      documents: ["./web/**/*.tsx", "./web/**/*.ts", "!./web/generated/**/*"],
+      hooks: {
+        afterOneFileWrite: ["prettier --write"],
+      },
+      preset: "client",
+      presetConfig: {
+        gqlTagName: "gql",
+      },
+      config: {
+        enumsAsTypes: true,
+      },
+    },
+    "./api-server/generated/graphql.ts": {
+      hooks: {
+        afterOneFileWrite: ["prettier --write"],
+      },
+      schema: ["./api-server/**/*.graphql"],
+      plugins: ["typescript", "typescript-resolvers"],
+      config: {
+        typesPrefix: "I",
+        enumsAsTypes: true,
+        skipTypename: false,
+        scalars: {
+          jsonb: "any",
+          JSON: "any",
+        },
+      },
+    },
+  },
+};
+
+export default config;
+```
+
+- 본 파일은 codegen 할 때의 동작 방식을 정합니다. 파일의 이름은 상관없고 `graphql-codegen --config codegen.ts` 와 같이 옵션으로 잘 전달해주면 됩니다. (package.json 스크립트 참조)
+- `overwrite` 는 코드젠이 실행할 때 결과를 덮어씌울지를 결정합니다.
+- `generates` 는 키가 생성할 파일 혹은 폴더의 경로고, 그 값은 해당 경로에 무엇을 어떻게 생성할 것인지 알려줍니다.
+- `schema` 란 graphql 스키마 파일을 뜻합니다.
+- `documents` 란 클라이언트에서 요청하는 문자열을 뜻합니다. (mutation, query 둘 다 의미함)
+- `hooks: { afterOneFileWrite: ["prettier --write"] }` 란 파일 하나가 쓰여질 때마다 `prettier` 포매팅을 하겠다는 뜻입니다. 생성된 코드를 읽기 한층 수월하도록 하기 위함입니다.
+- `preset` 이란 용도에 맞게 미리 세팅된 설정을 가져다 쓰겠다는 뜻입니다. 프리셋이 있는 줄 최근에 알았습니다. 여러 플러그인과 config 를 잘 구성해놓은 것 같습니다.
+- `plugins` 어떤 종류의 코드를 생성할지 결정합니다. [플러그인의 종류는 엄청 많습니다](https://the-guild.dev/graphql/codegen/plugins).
+- `config`, `presetConfig` : 플러그인이나 프리셋에서 사용하는 옵션입니다. 플러그인이 많은 만큼 옵션도 많습니다. 하나하나 설정하다간 해가 중천에 있다가도 금방 수평선 너머로 사라질 것이니, 적당히 하는 게 좋습니다. enum 대신 스트링 리터럴 유니온으로 구성된 타입을 사용하기 위한 `enumsAsTypes: true` 옵션 빼고는 쓸만한 걸 못찾았던 기분입니다.
+
+클라이언트와 서버에서 요구하는 파일이 좀 다르다는 걸 짚고 넘어가겠습니다.
+
+클라이언트의 경우 실제 요청을 날릴 때 variables, 선택한 필드 결과에 대한 타입을 지원받기 위해서 document가 필요합니다. 거기에 더해, 어떤 형식으로 요청을 줄 수 있는지에 관한 `input` 타입이 스키마에 명시되어 있으므로 스키마도 필요합니다.
+
+반면 서버에서는 스키마에 맞게만 resolver 를 구성해주면 됩니다. 그래서 document 는 필요가 없습니다.
+
+---
+
+```graphql api-server/src/schema.graphql
+# This "Book" type defines the queryable fields for every book in our data source.
+type Novel {
+  title: String!
+  author: String!
+  genre: String!
+}
+
+type Comic {
+  title: String!
+  author: String!
+  illustrator: String!
+}
+
+type Biography {
+  title: String!
+  author: String!
+  subject: String!
+}
+
+union Book = Novel | Comic | Biography
+
+type Query {
+  books(type: BookType): [Book!]!
+}
+
+enum BookType {
+  NOVEL
+  COMIC
+  BIOGRAPHY
+}
+
+type Query {
+  books: [Book!]!
+}
+```
+
+서버에서의 스키마입니다. 간단하죠? Mutation 은 없습니다. 책(Book)을 세 종류로 했고, union 으로 만들었습니다.
+
+이 스키마 파일을 이용하도록 서버 코드를 간략하게 짜봅시다.
+
+```tsx api-server/src/index.ts
+import { ApolloServer, BaseContext } from "@apollo/server";
+import { startStandaloneServer } from "@apollo/server/standalone";
+import { readFileSync } from "fs";
+import { books } from "./books";
+import { IResolvers } from "./generated/graphql";
+
+const typeDefs = readFileSync("src/schema.graphql").toString("utf-8");
+
+// Resolvers define how to fetch the types defined in your schema.
+// This resolver retrieves books from the "books" array above.
+
+const resolvers: IResolvers = {
+  Query: {
+    books: async (_parent, args) => {
+      switch (args.type) {
+        case "NOVEL":
+          return books.filter((book) => book.__typename === "Novel");
+        case "BIOGRAPHY":
+          return books.filter((book) => book.__typename === "Biography");
+        case "COMIC":
+          return books.filter((book) => book.__typename === "Comic");
+        default:
+          return books;
+      }
+    },
+  },
+};
+
+// The ApolloServer constructor requires two parameters: your schema
+// definition and your set of resolvers.
+const server = new ApolloServer<BaseContext>({
+  typeDefs,
+  resolvers,
+});
+
+// Passing an ApolloServer instance to the `startStandaloneServer` function:
+//  1. creates an Express app
+//  2. installs your ApolloServer instance as middleware
+//  3. prepares your app to handle incoming requests
+const { url } = await startStandaloneServer(server, {
+  listen: { port: 4000 },
+});
+
+console.log(`🚀  Server ready at: ${url}`);
+```
+
+Query 의 `books` 하나 밖에 없었기 때문에, resolver를 하나만 만들어주면 됩니다. 대충 `books`라는 목업 데이터를 받아와서 처리합니다.
+
+```tsx api-server/src/books.ts
+import { IBook } from "./generated/graphql";
+
+export const books: IBook[] = [
+  {
+    __typename: "Novel",
+    title: "The Catcher in the Rye",
+    author: "J.D. Salinger",
+    genre: "Coming-of-age fiction",
+  },
+  /// 중략
+];
+```
+
+여기서 주목해야 할 점은 `IResolvers` 타입입니다. 이게 코드젠에서 만들어주는 타입이거든요.
+
+이 서버를 실제로 어떻게 구동할 지는 `/api-server/package.json` 파일을 참조해주세요. 일단 `npm run dev` 에 다 포함시켜놓긴 했습니다.
+
+그 다음으로 클라이언트 쪽 코드를 확인해봅시다.
+
+```tsx web/app/type/[type]/page.tsx
+import { Biography, Comic, Novel } from "@/components/book";
+import { gql } from "@/generated/graphql";
+import { BookType } from "@/generated/graphql/graphql";
+import { client } from "@/graphql";
+
+export default async function Books({
+  params,
+}: {
+  params: { type: BookType };
+}) {
+  const res = await client.query({
+    query: gql(/* GraphQL */ `
+      query BooksByType($type: BookType) {
+        books(type: $type) {
+          ... on Novel {
+            author
+            title
+            genre
+          }
+          ... on Comic {
+            author
+            title
+            illustrator
+          }
+          ... on Biography {
+            author
+            title
+            subject
+          }
+        }
+      }
+    `),
+    variables: {
+      type: params.type,
+    },
+  });
+
+  return (
+    <main>
+      <h1 className="m-10 text-3xl font-bold">{params.type}</h1>
+      {res.data.books.map((book) => {
+        switch (book.__typename) {
+          case "Novel":
+            return <Novel key={book.title} {...book} />;
+          case "Comic":
+            return <Comic key={book.title} {...book} />;
+          case "Biography":
+            return <Biography key={book.title} {...book} />;
+        }
+      })}
+    </main>
+  );
+}
+```
+
+놀랍게도 쿼리를 날릴 때 `variables`와 그 결과인 `res.data` 가 타입이 먹혀져 있습니다! 이 기가 막힌…!
+
+여기서 주목해야 할 것은 gql 함수입니다. codegen 으로 생성한 코드로부터 가져온 함수입니다. ``gql(/* GraphQL */ `내용`);`` 과 같은 쓰임새입니다. `GraphQL` 주석이 붙은 이유는 IDE 에서 지원하기 위함입니다. 이 gql 함수를 거치면 놀랍게도 타입이 다 먹혀있는 상태로 나옵니다.
+
+## 실제 효용 느껴보기
+
+실제 작업과 유사하게 진행해보겠습니다.
+
+일단 모든 것의 시작은 스키마라고 했습니다. 우리는 새로운 addNovel Mutation 을 추가해보도록 하겠습니다.
+
+```graphql api-server/src/schema.graphql
+type Mutation {
+  addNovel(title: String!, author: String!, genre: String!): Novel!
+}
+```
+
+그 다음 `npm run codegen` 을 때립니다. 오… 뭔가 Git Changes 에 뭔가가 잡힙니다.
+
+`git diff` 를 해볼까요?
+
+```diff
+diff --git a/api-server/src/generated/graphql.ts b/api-server/src/generated/graphql.ts
+index 8f35129..d7730fc 100644
+--- a/api-server/src/generated/graphql.ts
++++ b/api-server/src/generated/graphql.ts
+@@ -19,6 +19,9 @@ export type Incremental<T> =
+   | {
+       [P in keyof T]?: P extends " $fragmentName" | "__typename" ? T[P] : never;
+     };
++export type RequireFields<T, K extends keyof T> = Omit<T, K> & {
++  [P in K]-?: NonNullable<T[P]>;
++};
+ /** All built-in and custom scalars, mapped to their actual values */
+ export type Scalars = {
+   ID: { input: string; output: string };
+@@ -46,6 +49,17 @@ export type IComic = {
+   title: Scalars["String"]["output"];
+ };
+
++export type IMutation = {
++  __typename?: "Mutation";
++  addNovel: INovel;
++};
++
++export type IMutationAddNovelArgs = {
++  author: Scalars["String"]["input"];
++  genre: Scalars["String"]["input"];
++  title: Scalars["String"]["input"];
++};
++
+ export type INovel = {
+   __typename?: "Novel";
+   author: Scalars["String"]["output"];
+@@ -179,6 +193,7 @@ export type IResolversTypes = {
+   BookType: IBookType;
+   Boolean: ResolverTypeWrapper<Scalars["Boolean"]["output"]>;
+   Comic: ResolverTypeWrapper<IComic>;
++  Mutation: ResolverTypeWrapper<{}>;
+   Novel: ResolverTypeWrapper<INovel>;
+   Query: ResolverTypeWrapper<{}>;
+   String: ResolverTypeWrapper<Scalars["String"]["output"]>;
+@@ -190,6 +205,7 @@ export type IResolversParentTypes = {
+   Book: IResolversUnionTypes<IResolversParentTypes>["Book"];
+   Boolean: Scalars["Boolean"]["output"];
+   Comic: IComic;
++  Mutation: {};
+   Novel: INovel;
+   Query: {};
+   String: Scalars["String"]["output"];
+@@ -229,6 +245,19 @@ export type IComicResolvers<
+   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+ };
+
++export type IMutationResolvers<
++  ContextType = any,
++  ParentType extends
++    IResolversParentTypes["Mutation"] = IResolversParentTypes["Mutation"],
++> = {
++  addNovel?: Resolver<
++    IResolversTypes["Novel"],
++    ParentType,
++    ContextType,
++    RequireFields<IMutationAddNovelArgs, "author" | "genre" | "title">
++  >;
++};
++
+ export type INovelResolvers<
+   ContextType = any,
+   ParentType extends
+@@ -257,6 +286,7 @@ export type IResolvers<ContextType = any> = {
+   Biography?: IBiographyResolvers<ContextType>;
+   Book?: IBookResolvers<ContextType>;
+   Comic?: IComicResolvers<ContextType>;
++  Mutation?: IMutationResolvers<ContextType>;
+   Novel?: INovelResolvers<ContextType>;
+   Query?: IQueryResolvers<ContextType>;
+ };
+diff --git a/api-server/src/schema.graphql b/api-server/src/schema.graphql
+index 1b7d9c8..2a07999 100644
+--- a/api-server/src/schema.graphql
++++ b/api-server/src/schema.graphql
+@@ -31,3 +31,7 @@ enum BookType {
+ type Query {
+   books: [Book!]!
+ }
++
++type Mutation {
++  addNovel(title: String!, author: String!, genre: String!): Novel!
++}
+diff --git a/web/generated/graphql/graphql.ts b/web/generated/graphql/graphql.ts
+index affa61c..f8a2ef3 100644
+--- a/web/generated/graphql/graphql.ts
++++ b/web/generated/graphql/graphql.ts
+@@ -47,6 +47,17 @@ export type Comic = {
+   title: Scalars["String"]["output"];
+ };
+
++export type Mutation = {
++  __typename?: "Mutation";
++  addNovel: Novel;
++};
++
++export type MutationAddNovelArgs = {
++  author: Scalars["String"]["input"];
++  genre: Scalars["String"]["input"];
++  title: Scalars["String"]["input"];
++};
++
+ export type Novel = {
+   __typename?: "Novel";
+   author: Scalars["String"]["output"];
+```
+
+몬가 많이 생겼네요…
+
+이제 아래 코드를 작성해볼까요?
+
+```tsx api-server/src/index.ts
+const resolvers: IResolvers = {
+  Query: {
+    // 중략
+  },
+  Mutation: {
+    addNovel: async (_parent, args) => {
+      const { author, genre, title } = args;
+
+      return {
+        author,
+        genre,
+        title,
+      };
+    },
+  },
+};
+```
+
+자동완성이 아름답게 먹히는 걸 볼 수 있습니다.
+
+<ArticleImage
+  width={400}
+  img={gifss}
+  alt="자동완성이 잘 되는 모습"
+  caption="자동완성이 잘 되는 모습. 코파일럿이 자꾸 인터셉트 하지만 꿋꿋이 무시하고 진행합니다."
+/>
+
+이제 클라이언트 쪽에서 Mutation 요청 쿼리를 만들어볼까요? 일단 아래와 같은 코드를 추가해봅시다.
+
+```tsx web/app/type/[type]/page.tsx
+const res = await client.query({
+  // 중략
+});
+
+const addRes = await client.mutate({
+  mutation: gql(/* GraphQL */ `
+    mutation AddNovel($book: BookInput!) {
+      addNovel(book: $book) {
+        auther
+      }
+    }
+  `),
+});
+```
+
+그 다음 `npm run codegen` 을 실행합니다. 위 쿼리는 일부러 좀 이상하게 짰습니다. 이제 무슨 일이 일어날까요?
+
+```bash bash focus=10:21
+> graphql-union@1.0.0 codegen
+> graphql-codegen --config codegen.ts
+
+✔ Parse Configuration
+⚠ Generate outputs
+  ❯ Generate to ./web/generated/graphql/
+    ✔ Load GraphQL schemas
+    ✔ Load GraphQL documents
+    ✖ GraphQL Document Validation failed with 6 errors;
+      Error 0: Unknown type "BookInput". Did you mean "BookType"?
+      at /Users/th.kim/Desktop/graphql-union/web/app/type/[type]/page.tsx:2:32
+      Error 1: Unknown argument "book" on field "Mutation.addNovel".
+      at /Users/th.kim/Desktop/graphql-union/web/app/type/[type]/page.tsx:3:18
+      Error 2: Cannot query field "auther" on type "Novel". Did you mean "author"?
+      at /Users/th.kim/Desktop/graphql-union/web/app/type/[type]/page.tsx:4:11
+      Error 3: Field "addNovel" argument "author" of type "String!" is required, but it w…
+      at /Users/th.kim/Desktop/graphql-union/web/app/type/[type]/page.tsx:3:9
+      Error 4: Field "addNovel" argument "genre" of type "String!" is required, but it wa…
+      at /Users/th.kim/Desktop/graphql-union/web/app/type/[type]/page.tsx:3:9
+      Error 5: Field "addNovel" argument "title" of type "String!" is required, but it wa…
+      at /Users/th.kim/Desktop/graphql-union/web/app/type/[type]/page.tsx:3:9
+  ✔ Generate to ./api-server/src/generated/graphql.ts
+```
+
+오! 에러가 발생했습니다.
+
+1. BookInput 이라는 타입을 찾지 못했음.
+2. Mutation.addNovel 에는 book 인자가 없음!
+3. Novel 타입에는 auth**e**r 이 없음. author 를 하려고 한 게 아닌지?
+4. addNovel 에 author 인자가 String! 인데 찾을 수 없음!
+5. addNovel 에 genre 인자가 String! 인데 찾을 수 없음!
+6. addNovel 에 title 인자가 String! 인데 찾을 수 없음!
+
+에러를 친절히 알려줍니다. 아래 코드로 고쳐볼까요?
+
+```tsx
+const addRes = await client.mutate({
+  mutation: gql(/* GraphQL */ `
+    mutation AddNovel($author: String!, $title: String!, $genre: String!) {
+      addNovel(author: $author, title: $title, genre: $genre) {
+        author
+        title
+        genre
+      }
+    }
+  `),
+});
+```
+
+그 다음 `npm run codegen` 를 실행해봅시다.
+
+이제 코드를 다시 편집해봅시다!
+
+<ArticleImage
+  width={400}
+  img={o1}
+  alt=""
+  caption="variables 에서 자동완성이 되는 모습"
+/>
+<ArticleImage
+  width={300}
+  img={oo}
+  alt=""
+  caption="res.data 에서 자동완성이 되는 모습"
+/>
+
+타입이 제대로 되는 게 보입니다! 야호. 일단… 실습은 여기까지 진행합시다.
+
+## GraphQL Union 으로 타입스크립트의 Discriminated Union 의 이점 취하기
+
+제가 Book 을 굳이 union 으로 지정한 이유가 있었습니다. 왜냐하면 이걸 보여주려구요… GraphQL 스키마에서 유니온으로 정의된 Book의 타입을 살펴보면 다음과 같습니다.
+
+```tsx
+export type Book = Biography | Comic | Novel;
+
+export type BookType = "BIOGRAPHY" | "COMIC" | "NOVEL";
+
+export type Biography = {
+  __typename?: "Biography";
+  author: Scalars["String"]["output"];
+  subject: Scalars["String"]["output"];
+  title: Scalars["String"]["output"];
+};
+
+export type Comic = {
+  __typename?: "Comic";
+  author: Scalars["String"]["output"];
+  illustrator: Scalars["String"]["output"];
+  title: Scalars["String"]["output"];
+};
+
+export type Novel = {
+  __typename?: "Novel";
+  author: Scalars["String"]["output"];
+  genre: Scalars["String"]["output"];
+  title: Scalars["String"]["output"];
+};
+```
+
+이는 `__typename` 필드를 기준으로 타입을 쉽게 정리해볼 수 있단 뜻이죠. 자세한 내용은 [타입스크립트에서 Narrowing (타입 좁히기)](/article/2023-07/why-need-narrowing)가 필요한 이유를 참조해주세요.
+
+## ❌ 템플릿 리터럴은 하지 맙시다.
+
+정확히는 [템플릿 리터럴](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals)은 써도 되는데, 그 안에서 치환 `${...}` 을 쓰지 말자는 뜻입니다. 왜냐하면 이렇게 치환해버렸을 때 codegen 프로그램이 필요한 정보를 알 수 없기 때문입니다. 왜 알 수 없냐구요?
+
+codegen 은 실제 자바스크립트나 타입스크립트를 실행하지 않기 때문입니다. 돌아가는 방식을 유추해 보건대, 구문 해석기에 의해 구문 트리가 만들어질 것입니다. 구문 해석기는 말 그대로 구문만 해석하기 때문에 `GET_USER` 에서는 `queryName` 이라는 이름(name)을 참조하고 있다는 사실만 알 뿐, 여기에 `"getUser"`이라는 값이 있는지 없는지 이런 판단 자체를 내릴 수가 없습니다.
+
+```tsx
+const queryName = "getUser";
+const GET_USER = gql`
+  query GetUser($id: ID!) {
+    ${queryName}(id: $id) {
+      id
+      name
+      email
+      age
+    }
+  }
+`;
+```
+
+위와 같이 코드를 수정하고 `npm run codegen` 을 해본다면 결과가 좀 이상할 것입니다.
+
+## 결론
+
+codegen 을 쓰기 위해서는 `codegen.ts` 파일을 작성하는 방법, 어떤 플러그인이 있는지, 어떤 프리셋이 있는지, 옵션이 어떤 게 있는지 등등 아주 자세하게 파악해야 잘 사용할 수 있습니다. 그래서 잘 쓰기가 까다롭습니다.
+
+안정성도 높지는 않은 기분입니다. npm 다운로드 수가 그렇게 높진 않습니다. 금방 deprecated 되는 것들도 좀 많아 보이구요.
+
+**타입을 일일히 지정해야 하는 폐단만큼은 피하기 위해** 울며 겨자먹기로 코드젠을 도입한다고 볼 수 있죠. GraphQL 과 타입스크립트가 아예 다른 영역에서 한가닥 하는 녀석들인 만큼 항상 현실과 타협해야 하는 기분입니다. 다른 분들은 어떻게 현실과 타협하고 계시는지 궁금하네요! 감사합니다.
+
+## 참조
+
+- [TypeScript with GraphQL done right (charly poly)](https://charlypoly.com/publications/typescript-with-graphql-done-right)
+- [Generating types from a GraphQL schema (Apollo Server)](https://www.apollographql.com/docs/apollo-server/workflow/generate-types/)
+- [Generating types (Apollo Tutorial)](https://www.apollographql.com/tutorials/lift-off-part1/09-codegen)
+- [GraphQL -> Typescript Codegen (Hasura)](https://hasura.io/learn/graphql/typescript-react-apollo/codegen/)
