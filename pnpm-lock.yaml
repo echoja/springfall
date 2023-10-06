@@ -5,8 +5,8 @@ dependencies:
     specifier: ^0.9.0
     version: 0.9.0(react@18.2.0)
   '@echoja/remark-custom-container':
-    specifier: ^1.3.2
-    version: 1.3.2
+    specifier: ^1.4.0
+    version: 1.4.0
   '@headlessui/react':
     specifier: ^1.7.17
     version: 1.7.17(react-dom@18.2.0)(react@18.2.0)
@@ -571,10 +571,8 @@ packages:
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
 
-  /@echoja/remark-custom-container@1.3.2:
-    resolution: {integrity: sha512-Ye108rV6wkE+0ZgHeOWn/RDcAHGWf8ZSNjdmoFSjUjSpJqNcFUjeY5/yxY7sAJkXGMTnnuM+ShHHOXHBvI0y5Q==}
-    dependencies:
-      unist-util-visit: 4.1.2
+  /@echoja/remark-custom-container@1.4.0:
+    resolution: {integrity: sha512-Ih+SEg341rW8pwvAN5Z1yey4cSTsrvZ7g5n+ACTHFvBezjqjDpcoiyNSPfW8GW0mJ+adE0LX2a+XZrIs7Vy17g==}
     dev: false
 
   /@emotion/is-prop-valid@0.8.8:
