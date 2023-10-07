@@ -1,0 +1,141 @@
+import i1 from "./b.jpg";
+import m1 from "./1.jpeg";
+import m2 from "./2.jpeg";
+import m3 from "./3.jpeg";
+import m4 from "./4.jpeg";
+import m5 from "./5.jpeg";
+import m6 from "./6.jpeg";
+import m7 from "./7.jpeg";
+import c1 from "./c1.png";
+import c2 from "./c2.png";
+import c3 from "./c3.png";
+import c4 from "./c4.png";
+import dayjs from "dayjs";
+import ArticleImage from "@modules/article/ArticleImage";
+import { ArticleJsonLd } from "next-seo";
+import { createMetadata, authorName, authorList } from "@modules/metadata";
+import ArticleHeader from "@modules/article/ArticleHeader";
+
+export const title = "<개드립 분석하는 만화>를 회고하며";
+export const url = "https://springfall.cc/article/2023-10/dogdrip";
+export const summary =
+  "오로지 재미만을 위한 낭만의 프로젝트. 그때의 기분과 에너지를 다시금 되새겨보는 시간을 가져봅니다.";
+export const createdAt = dayjs("2023-10-07").toISOString();
+export const updatedAt = dayjs("2023-10-07").toISOString();
+export const image = i1;
+export const imageAlt = "패턴";
+
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+
+export const item = {
+  title,
+  url,
+  summary,
+  createdAt,
+  updatedAt,
+  image,
+  imageAlt,
+};
+
+export const metadata = createMetadata({
+  title,
+  canonical: url,
+  description: summary,
+  openGraph: {
+    title,
+    description: summary,
+    url,
+    type: "article",
+    publishedTime: createdAt,
+    modifiedTime: updatedAt,
+    images: [
+      {
+        url: image.src,
+        width: image.width,
+        height: image.height,
+        alt: imageAlt,
+      },
+    ],
+  },
+  alternates: {
+    canonical: url,
+  },
+});
+
+<ArticleJsonLd
+  useAppDir
+  url={url}
+  title={title}
+  images={[image.src]}
+  authorName={authorList}
+  datePublished={createdAt}
+  dateModified={updatedAt}
+  publisherName={authorName}
+  description={summary}
+  isAccessibleForFree
+/>
+
+<ArticleHeader title={title} updatedAt={updatedAt} desc={summary} />
+
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+
+<ArticleImage
+  img={i1}
+  alt="패턴"
+  caption={
+    <>
+      <a href="https://unsplash.com/ko/@aridley88?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">
+        Andrew Ridley
+      </a>{" "}
+      from{" "}
+      <a href="https://unsplash.com/ko/%EC%82%AC%EC%A7%84/jR4Zf-riEjI?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">
+        Unsplash
+      </a>
+    </>
+  }
+/>
+
+2016년 9월은 언제일까요? 이 글을 쓰고 있는 현재 2023년 9월. 여기에 딱 7년을 빼면 됩니다. 때는 군대 가기 전. 이야. 시간이 정말 어마어마하게도 지났습니다. 시간은 정말 빠릅니다. 시간이 빠르지 않은 적은 없긴 하지만요.
+
+이 아득한 기분은 뭔가 지금 이 순간과 잘 어울립니다. 지금은 금요일 저녁. 회사 일을 대충 마치고 조금 일찍 퇴근해, 집 근처 중국집에서 마라차돌짬뽕을 촵촵 먹었습니다. 배가 부릅니다. 근처 카페에서 아이스아메리카노 하나를 주문합니다. 사람들과 차가 왔다갔다 하는 걸 창밖으로 물끄러미 바라봅니다. 날씨도 좋네요. 잠을 제대로 못잔 탓에 노곤함이 조금 있지만, 이마저 하나의 색깔로 작용하여 지금의 커다란 그림에 일조하고 있습니다.
+
+2016년 9월. 2D 횡스크롤 게임을 [cocos2d-x](https://www.cocos.com/en)로 깔쌈하게 만들어보고 싶었지만 깔쌈하게 실패했습니다. 그때는 일이라는 개념이 별로 없었습니다. 프로패셔널함이 없었고 일정과 업무량에 대한 개념도 없었고 없는게 참 많았네요. 그냥 닥치는 대로 대충 진행하려니 잘 될 턱이 있나요. 어느 순간 답이 없구나 결론을 짓고 접어버렸습니다. 나중에 취미로나 해야지.
+
+대신에 그냥 짧게 재밌어보이는 걸 해보자. 하고 진행한 프로젝트. [개드립 분석하는 만화](https://www.dogdrip.net/111851522)를 만드는 것이었습니다.
+
+[개드립](https://dogdrip.net)이라는 커뮤니티가 있습니다. 유머 사이트입니다. 좀 분위기가 과격한 면이 있습니다. 완전 짬뽕입니다. 여기저기 자료를 수출하고 수입하고 하는 정글입니다. 슈카월드가 눈팅하는 사이트 중 하나이기도 합니다. 커뮤니티 중에선 애정이 가장 큼에도 불구하고 자주 들어가진 않습니다. 커뮤니티 자체는 2012년부터 있었으니 10년이 훌쩍 넘었군용. 짧은 프로젝트를 진행해보려 했던 이유는 당해에 군대를 가야 했기 때문입니다. 시간이 얼마 남지 않았다는 슬픈 사실…
+
+분석은 말 그대로 커뮤니티에 대한 잡다구리한 분석을 해보고 싶었어요. 수집 대상은 유머 게시글이었어요. 게시물 날짜, 댓글 수, 추천 수, 비추천 수 등등과 글을 쓴 사용자의 id, 가입날짜 등이요. 그래서 나온 결과물이 아래 만화입니다.
+
+::: details 만화 보기 (스크롤 압박)
+
+<ArticleImage noShadow img={m1} alt="개드립 분석하는 만화 1" />
+<ArticleImage noShadow img={m2} alt="개드립 분석하는 만화 2" />
+<ArticleImage noShadow img={m3} alt="개드립 분석하는 만화 3" />
+<ArticleImage noShadow img={m4} alt="개드립 분석하는 만화 4" />
+<ArticleImage noShadow img={m5} alt="개드립 분석하는 만화 5" />
+<ArticleImage noShadow img={m6} alt="개드립 분석하는 만화 6" />
+<ArticleImage noShadow img={m7} alt="개드립 분석하는 만화 7" />
+
+:::
+
+::: details 댓글보기
+
+<ArticleImage noShadow img={c1} alt="개드립 분석하는 만화 댓글 1" />
+<ArticleImage noShadow img={c2} alt="개드립 분석하는 만화 댓글 2" />
+<ArticleImage noShadow img={c3} alt="개드립 분석하는 만화 댓글 3" />
+<ArticleImage noShadow img={c4} alt="개드립 분석하는 만화 댓글 4" />
+
+:::
+
+만화가 좀 길죠? 그때 당시에 게시물의 개수는 약 10만 개였습니다. 지금보단 훨씬 작지만 그 때 당시 규모로 치면 또 그렇게 작은 건 아닌 커뮤니티였죠. 지금은 세어보니 대략 59만 개로 그새 6배나 늘었네요. 한 사람당 게시물의 개수 등 눈에 보이지 않는 사소한 정보들을 대량으로 모아놓고 보면 인사이트가 마구 생겼는데 그게 좀 신기했던 경험이었어요.
+
+이렇게 오로지 재미만 보고 해보는 프로젝트는 에너지가 충만한 것 같습니다. 작업을 완료했을 때 마치 한 편의 명논문을 쓴 듯한 (논문을 인생에서 단 한번도 써본 적은 없지만) 기분이었습니다. 정말 뿌듯했죠. 사람들이 재밌어하니 뿌듯함은 배가 되었던 것 같습니다. 지금도 그렇고 이 때에도 관종이었네요. 불특정 다수의 관심은 너무 달달합니다…
+
+지금의 회사에 지원할 때 자기소개서에 이 만화를 첨부했는데요, 그게 별 의미를 갖진 않았고 뭐 하나라도 끼워넣어보자는 심정이었습니다. 입사하고 한참 뒤에 임원분과 이야기를 나눠봤는데 이 만화를 기억하고 있었습니다. 꽤 인상이 깊었던 모양이에요. 그 벅찬 에너지가 전달된 거죠.
+
+그 때의 기분을 좀 다시 살려보는 것도 제 인생에서 중요한 포인트가 될 수 있겠다는 생각이 들었어요. 그래서 이렇게 기록을 또 남겨 놓는거죠. 많은 사람들이 호응해주는 경험은 소중하네요. 앞으로 뭐든지 개발을 할 때 좀 이런 벅찬 마음을 가져야겠습니다. 방법은 잘 모르겠지만요. 병신같지만 멋있는 그런 것. 좀 쪽팔리기도 합니다. 제 성향과 지향점을 이 만화가 참 잘 드러내지 않았나 새삼스럽게 자평해보며 이 포스팅을 마무리 짓습니다...

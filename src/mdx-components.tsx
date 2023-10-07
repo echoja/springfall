@@ -1,12 +1,14 @@
 import type { MDXComponents } from "mdx/types";
 
 import {
+  Details,
   Heading2,
   Heading3,
   Heading4,
   Heading5,
   Heading6,
   Quote,
+  Summary,
   TBody,
   TD,
   TFoot,
@@ -52,6 +54,8 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     td: TD,
     th: TH,
     hr: () => <hr className="my-12" />,
+    details: Details,
+    summary: Summary,
     ...components,
   };
 }

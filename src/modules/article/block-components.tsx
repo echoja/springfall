@@ -67,3 +67,11 @@ export function TH({ children }: { children?: React.ReactNode }) {
 export function TD({ children }: { children?: React.ReactNode }) {
   return <td className={style.td}>{children}</td>;
 }
+
+export function Details({ children }: { children?: React.ReactNode }) {
+  return <details className={style.details}>{children}</details>;
+}
+
+export function Summary({ children }: { children?: React.ReactNode }) {
+  return <summary className={style.summary}>{children}</summary>;
+}

@@ -6,6 +6,10 @@
   @apply rounded shadow-md md:shadow-lg;
 }
 
+.image.no-shadow {
+  @apply shadow-none;
+}
+
 .image-caption {
   @apply p-2 text-sm font-sans text-gray-500;
 }
@@ -32,7 +36,7 @@
 }
 
 .link {
-  @apply underline underline-offset-2 decoration-brand-400 hover:decoration-2 decoration-1 text-black font-semibold transition;
+  @apply underline underline-offset-2 decoration-brand-400 hover:decoration-2 decoration-1 text-black transition;
 }
 
 :global(.dark) .link {
@@ -137,4 +141,42 @@
 
 .iframe-wrapper {
   @apply bg-gray-400/5 rounded-lg py-10;
+}
+
+.details {
+  @apply dark:bg-slate-900 my-10 md:rounded-sm overflow-hidden md:border px-4 md:mx-0 -mx-4;
+}
+
+:global(.dark) .details {
+  @apply border-gray-700;
+}
+
+.summary {
+  @apply py-2 px-4 cursor-pointer block relative text-sm font-semibold;
+}
+
+.summary:before {
+  content: "";
+  transform-origin: 0.2rem 50%;
+  /* transition: 0.25s transform ease; */
+  @apply border-transparent border-solid border-[0.4rem] border-r-transparent border-y-transparent rounded border-l-gray-600  dark:border-gray-800 absolute top-1/2 -translate-y-1/2 left-0 transform transition-transform duration-300 ease-in-out;
+}
+
+:global(.dark) .summary:before {
+  @apply border-l-gray-400;
+}
+
+.details[open] > .summary {
+  @apply mb-5 opacity-70;
+}
+
+.details[open] > .summary:before {
+  /* transform: rotate(90deg); */
+  @apply rotate-90;
+}
+
+.details .summary::-webkit-details-marker,
+.details .summary::marker {
+  /* display: none; */
+  @apply hidden;
 }
