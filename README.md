@@ -4,6 +4,12 @@
 
 ![Vercel](https://vercelbadge.vercel.app/api/echoja/springfall) [![Depfu](https://badges.depfu.com/badges/40013c6c77b7fe975691b4df2f88cb2c/count.svg)](https://depfu.com/github/monnomlog-donkasu/monnomlog-alpha?project_id=36213)
 
+## TODO
+
+- [ ] [미리보기 이미지 생성 제작 #15](https://github.com/echoja/springfall/issues/15)
+- [ ] [홈 화면에서 미리보기 이미지 보여주기 #16](https://github.com/echoja/springfall/issues/16)
+- [ ] theme-color 메타 태그 추가 (app router) #12
+
 ## 개발환경
 
 - vscode - 개발 에디터
