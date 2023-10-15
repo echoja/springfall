@@ -1,6 +1,10 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable global-require */
 /* eslint-disable import/no-extraneous-dependencies */
-const colors = require("tailwindcss/colors");
+// const colors = require("tailwindcss/colors");
+// tailwind.config.js
+import { nextui } from "@nextui-org/react";
+import colors from "tailwindcss/colors";
 
 /** @type {import("tailwindcss").Config} */
 module.exports = {
@@ -50,5 +54,5 @@ module.exports = {
       },
     },
   },
-  plugins: [require("@tailwindcss/forms")],
+  plugins: [require("@tailwindcss/forms"), nextui()],
 };

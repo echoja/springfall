@@ -9,7 +9,8 @@ import dayjs from "dayjs";
 
 import ArticleImage from "@modules/article/ArticleImage";
 import { ArticleJsonLd } from "next-seo";
-import { createMetadata, authorName, authorList } from "@modules/metadata";
+import { authorName, authorList } from "@modules/metadata/constants";
+import getArticleMetadata from "@modules/metadata/getArticleMetadata";
 import ArticleHeader from "@modules/article/ArticleHeader";
 
 export const title = "[영화 리뷰] 장화신은 고양이: 끝내주는 모험 (스포)";
@@ -34,30 +35,7 @@ export const item = {
   imageAlt,
 };
 
-export const metadata = createMetadata({
-  title,
-  canonical: url,
-  description: summary,
-  openGraph: {
-    title,
-    description: summary,
-    url,
-    type: "article",
-    publishedTime: createdAt,
-    modifiedTime: updatedAt,
-    images: [
-      {
-        url: image.src,
-        width: image.width,
-        height: image.height,
-        alt: imageAlt,
-      },
-    ],
-  },
-  alternates: {
-    canonical: url,
-  },
-});
+export const metadata = getArticleMetadata(item);
 
 <ArticleJsonLd
   useAppDir

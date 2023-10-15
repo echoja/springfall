@@ -5,7 +5,7 @@ import {
   renderCategoryIcon,
 } from "@modules/category";
 import Header from "@modules/layout/Header";
-import { metadataBase } from "@modules/metadata";
+import { metadataBase } from "@modules/metadata/constants";
 import dayjs from "dayjs";
 import type { Metadata } from "next";
 import Link from "next/link";

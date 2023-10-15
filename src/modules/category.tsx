@@ -1,7 +1,7 @@
 import type { LucideIcon } from "lucide-react";
-import { Coffee } from "lucide-react";
+import { Coffee, Wand2 } from "lucide-react";
 
-export type Category = "회고" | "리뷰" | "기술" | "일상" | "기타";
+export type Category = "회고" | "리뷰" | "기술" | "일상" | "기타" | "디자인";
 
 export function getCategoryIcon(category: Category): LucideIcon {
   switch (category) {
@@ -19,6 +19,9 @@ export function getCategoryIcon(category: Category): LucideIcon {
     }
     case "기타": {
       throw new Error('Not implemented yet: "기타" case');
+    }
+    case "디자인": {
+      return Wand2;
     }
   }
 }
@@ -39,6 +42,9 @@ export function getCategoryColor(category: Category): string {
     }
     case "기타": {
       throw new Error('Not implemented yet: "기타" case');
+    }
+    case "디자인": {
+      return "#83c9e0";
     }
   }
 }

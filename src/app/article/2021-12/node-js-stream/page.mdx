@@ -2,7 +2,8 @@ import dayjs from "dayjs";
 import i1 from "./i.png";
 import ArticleImage from "@modules/article/ArticleImage";
 import { ArticleJsonLd } from "next-seo";
-import { createMetadata, authorName, authorList } from "@modules/metadata";
+import { authorName, authorList } from "@modules/metadata/constants";
+import getArticleMetadata from "@modules/metadata/getArticleMetadata";
 import ArticleHeader from "@modules/article/ArticleHeader";
 
 export const title = "Node.js 스트림(stream) 개념을 익혀보자";
@@ -28,30 +29,7 @@ export const item = {
   imageAlt,
 };
 
-export const metadata = createMetadata({
-  title,
-  canonical: url,
-  description: summary,
-  openGraph: {
-    title,
-    description: summary,
-    url,
-    type: "article",
-    publishedTime: createdAt,
-    modifiedTime: updatedAt,
-    images: [
-      {
-        url: image.src,
-        width: image.width,
-        height: image.height,
-        alt: imageAlt,
-      },
-    ],
-  },
-  alternates: {
-    canonical: url,
-  },
-});
+export const metadata = getArticleMetadata(item);
 
 <ArticleJsonLd
   useAppDir

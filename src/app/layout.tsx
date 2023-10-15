@@ -4,7 +4,8 @@ import type { Metadata } from "next";
 
 import Footer from "@modules/layout/Footer";
 import RootClientLayout from "@modules/layout/RootClientLayout";
-import { metadataBase } from "@modules/metadata";
+import { metadataBase } from "@modules/metadata/constants";
+import { Providers } from "./providers";
 
 export const metadata: Metadata = {
   metadataBase,
@@ -35,12 +36,14 @@ export default function RootLayout({
     <html lang="ko">
       <RootClientLayout />
       <body>
-        <div className="max-w-screen-md mx-auto">
-          <div className="p-4 md:p-8 sm:p-6">
-            {children}
-            <Footer />
+        <Providers>
+          <div className="max-w-screen-md mx-auto">
+            <div className="p-4 md:p-8 sm:p-6">
+              {children}
+              <Footer />
+            </div>
           </div>
-        </div>
+        </Providers>
       </body>
     </html>
   );

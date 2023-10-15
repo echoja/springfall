@@ -9,7 +9,8 @@ import ExampleComponent from "./example-component";
 import dayjs from "dayjs";
 import ArticleImage from "@modules/article/ArticleImage";
 import { ArticleJsonLd } from "next-seo";
-import { createMetadata, authorName, authorList } from "@modules/metadata";
+import { authorName, authorList } from "@modules/metadata/constants";
+import getArticleMetadata from "@modules/metadata/getArticleMetadata";
 import ArticleHeader from "@modules/article/ArticleHeader";
 
 export const title = "중요한 건 꺾였지만 그냥 하는 마음";
@@ -35,30 +36,7 @@ export const item = {
   imageAlt,
 };
 
-export const metadata = createMetadata({
-  title,
-  canonical: url,
-  description: summary,
-  openGraph: {
-    title,
-    description: summary,
-    url,
-    type: "article",
-    publishedTime: createdAt,
-    modifiedTime: updatedAt,
-    images: [
-      {
-        url: image.src,
-        width: image.width,
-        height: image.height,
-        alt: imageAlt,
-      },
-    ],
-  },
-  alternates: {
-    canonical: url,
-  },
-});
+export const metadata = getArticleMetadata(item);
 
 <ArticleJsonLd
   useAppDir

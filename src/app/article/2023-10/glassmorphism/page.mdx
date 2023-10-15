@@ -1,0 +1,77 @@
+import i1 from "./i1.png";
+import time from "./time.png";
+import ArticleImage from "@modules/article/ArticleImage";
+import { ArticleJsonLd } from "next-seo";
+import { authorName, authorList } from "@modules/metadata/constants";
+import getArticleMetadata from "@modules/metadata/getArticleMetadata";
+import ArticleHeader from "@modules/article/ArticleHeader";
+import {
+  title,
+  url,
+  summary,
+  createdAt,
+  updatedAt,
+  image,
+  imageAlt,
+  category,
+  item,
+} from "./metadata";
+
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+
+export const metadata = getArticleMetadata(item);
+
+<ArticleJsonLd
+  useAppDir
+  url={url}
+  title={title}
+  images={[image.src]}
+  authorName={authorList}
+  datePublished={createdAt}
+  dateModified={updatedAt}
+  publisherName={authorName}
+  description={summary}
+  type="BlogPosting"
+  isAccessibleForFree
+/>
+
+<ArticleHeader title={title} updatedAt={updatedAt} desc={summary} />
+
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+
+<ArticleImage
+  img={i1}
+  alt="글래스모피즘"
+  caption={
+    <>
+      글래스모피즘. from{" "}
+      <a href="https://dribbble.com/shots/14775981-Glassmorphism-After-Effects-Free">
+        Nguyen Tuyen
+      </a>
+    </>
+  }
+/>
+
+글래스모피즘이란 위 이미지와 같이 뭔가 반투명 효과 같은 애플스러운 시각적 디자인 양식을 뜻합니다.
+
+그나저나 아쉽게도 이 글은 이 글래스모피즘을 깊게 파기 위한 글은 아닙니다.
+
+이 글의 진짜 목적은 크게 두 가지 입니다.
+
+1. 코드 제네레이터를 블로그 글 안에 삽입해보기.
+2. [NextUI](https://nextui.org/) 시험해보기.
+
+그리고 그 소재로 글래스모피즘(Glassmorphism)이 사용되었을 뿐입니다. 수단으로써 사용되었을 뿐인 글래스모피즘에게 양해를 표합니다. 이 디자인 양식의 자세한 설명은 [What is Glassmorphism (Design Studio, 2023-09-07, 영어)](https://uxplanet.org/what-is-glassmorphism-8fe8bb6222f7) 글을 추천드립니다.
+
+이 트렌드에 관심이 생긴 계기가 있는데요, macOS Sonoma 로 업데이트하면서 매우 예쁜 잠금화면으로 바뀌었기 때문이었습니다! 아래 이미지처럼요. 이걸 모방해보려구요.
+
+<ArticleImage
+  img={time}
+  width={500}
+  alt="글래스모피즘"
+  caption="macOS Sonoma 잠금화면"
+/>
