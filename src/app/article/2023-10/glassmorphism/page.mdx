@@ -1,5 +1,7 @@
 import i1 from "./i1.png";
 import time from "./time.png";
+import UI from "./ui";
+import idea from "./idea.png";
 import ArticleImage from "@modules/article/ArticleImage";
 import { ArticleJsonLd } from "next-seo";
 import { authorName, authorList } from "@modules/metadata/constants";
@@ -75,3 +77,25 @@ export const metadata = getArticleMetadata(item);
   alt="글래스모피즘"
   caption="macOS Sonoma 잠금화면"
 />
+
+네. 기본적인 아이디어는 https://hype4.academy/tools/glassmorphism-generator 에서 따왔습니다. ... 그리고 장렬하게 실패 중입니다. 위 이미지처럼 텍스트를 backdrop-filter 하는 문제는 전혀 다른 문제였네요. !!! 개힘들어.
+
+일단 여기 아이디어가 있습니다. https://cristiandavideconte.github.io/applyBackdropFilterBlurToText/
+
+<ArticleImage
+  img={idea}
+  width={500}
+  alt="글래스모피즘"
+  caption="뭔가 예쁘게 텍스트 글래스모피즘이 먹혔다."
+/>
+
+svg 이미지가 필요해요, svg 이미지가! 그러기 위해서 아래 라이브러리를 잘 사용하면 어떻게든 되지 않을까?
+
+- https://danmarshall.github.io/google-font-to-svg-path/
+- https://opentype.js.org/
+
+일단 아래는 무시해주세요. 작업 중입니다. 작업이 완료된다면 아마 잘 수정이 되었을 겁니다.
+
+<UI />
+
+저에게 건투를 빌어주세요.
