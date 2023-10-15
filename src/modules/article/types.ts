@@ -1,3 +1,4 @@
+import type { Category } from "@modules/category";
 import type { StaticImageData } from "next/image";
 
 export type ArticleItem = {
@@ -8,4 +9,7 @@ export type ArticleItem = {
   updatedAt: string;
   image: StaticImageData;
   imageAlt: string;
+  category: Category;
+  tags?: string[];
+  series?: { name: string; order: string };
 };

@@ -1,4 +1,9 @@
 import items from "@modules/article/items";
+import {
+  getCategoryColor,
+  getCategoryIcon,
+  renderCategoryIcon,
+} from "@modules/category";
 import Header from "@modules/layout/Header";
 import { metadataBase } from "@modules/metadata";
 import dayjs from "dayjs";
@@ -17,7 +22,7 @@ const Home = () => {
       <Header />
       <main className="mt-12 mb-24">
         <ul role="list" className="mb-20 space-y-6">
-          {items.map(({ summary, title, url, createdAt }, idx) => {
+          {items.map(({ summary, title, url, createdAt, category }, idx) => {
             const href = new URL(url, metadataBase).pathname;
 
             return (
@@ -32,9 +37,19 @@ const Home = () => {
                 </div>
 
                 <>
-                  <div className="relative flex items-center justify-center flex-none w-6 h-6 mt-3 bg-white rounded-full dark:bg-gray-900">
-                    <div className="w-1.5 h-1.5 rounded-full ring-1 ring-inset ring-gray-300 dark:ring-gray-600"></div>
-                  </div>
+                  {category ? (
+                    <div
+                      className="relative flex items-center justify-center flex-none w-6 h-6 mt-3 bg-gray-200 rounded-full dark:bg-gray-900 outline outline-4 outline-white"
+                      style={{ backgroundColor: getCategoryColor(category) }}
+                    >
+                      {/* <div className="w-1.5 h-1.5 rounded-full ring-1 ring-inset ring-gray-300 dark:ring-gray-600"></div> */}
+                      {renderCategoryIcon(getCategoryIcon(category))}
+                    </div>
+                  ) : (
+                    <div className="relative flex items-center justify-center flex-none w-6 h-6 mt-3 bg-white rounded-full dark:bg-gray-900">
+                      <div className="w-1.5 h-1.5 rounded-full ring-1 ring-inset ring-gray-300 dark:ring-gray-600"></div>
+                    </div>
+                  )}
                   <div className="relative flex-auto p-3 ">
                     <div className="flex justify-between gap-x-4 mb-0.5">
                       <div className="py-0.5 text-sm leading-5 font-medium text-gray-900 break-keep">

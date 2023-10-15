@@ -10,26 +10,11 @@ import c1 from "./c1.png";
 import c2 from "./c2.png";
 import c3 from "./c3.png";
 import c4 from "./c4.png";
-import dayjs from "dayjs";
 import ArticleImage from "@modules/article/ArticleImage";
 import { ArticleJsonLd } from "next-seo";
 import { createMetadata, authorName, authorList } from "@modules/metadata";
 import ArticleHeader from "@modules/article/ArticleHeader";
-
-export const title = "<개드립 분석하는 만화>를 회고하며";
-export const url = "https://springfall.cc/article/2023-10/dogdrip";
-export const summary =
-  "오로지 재미만을 위한 낭만의 프로젝트. 그때의 기분과 에너지를 다시금 되새겨보는 시간을 가져봅니다.";
-export const createdAt = dayjs("2023-10-07").toISOString();
-export const updatedAt = dayjs("2023-10-07").toISOString();
-export const image = i1;
-export const imageAlt = "패턴";
-
-{/* ---------------------------------------------------------- */}
-{/* ---------------------------------------------------------- */}
-{/* ---------------------------------------------------------- */}
-
-export const item = {
+import {
   title,
   url,
   summary,
@@ -37,11 +22,18 @@ export const item = {
   updatedAt,
   image,
   imageAlt,
-};
+  category
+
+} from "./metadata";
+
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
+{/* ---------------------------------------------------------- */}
 
 export const metadata = createMetadata({
   title,
   canonical: url,
+  category,
   description: summary,
   openGraph: {
     title,
@@ -74,6 +66,7 @@ export const metadata = createMetadata({
   dateModified={updatedAt}
   publisherName={authorName}
   description={summary}
+  type="BlogPosting"
   isAccessibleForFree
 />
 
