@@ -10,6 +10,13 @@
   "parserOptions": {
     "project": "./tsconfig.eslint.json"
   },
+  "overrides": [
+    {
+      "files": ["*.mdx"],
+      "parser": "espree",
+      "extends": ["plugin:mdx/recommended", "prettier"]
+    }
+  ],
   "ignorePatterns": ["node_modules", ".next", "out", "vitest.config.ts"],
   "rules": {
     // const PostList: MonnomlogPage<IPostListProps> = (props) => { ... } 와 같이 썼을 때

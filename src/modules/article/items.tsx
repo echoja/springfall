@@ -26,6 +26,7 @@ import { item as NoFuncRecord } from "@app/article/2023-09/no-func-record/page.m
 import { item as Prag } from "@app/article/2023-09/the-pragmatic-programmer/page.mdx";
 import { item as Dogdrip } from "@app/article/2023-10/dogdrip/metadata";
 import { item as Glassmorphism } from "@app/article/2023-10/glassmorphism/metadata";
+import { item as Time } from "@app/article/2024-01/time/metadata";
 
 const items = [
   PussInBoots,
@@ -54,6 +55,7 @@ const items = [
   GraphQLCodegen,
   Dogdrip,
   Glassmorphism,
+  Time,
 ];
 
 items.sort((a, b) => dayjs(b.createdAt).diff(a.createdAt));
