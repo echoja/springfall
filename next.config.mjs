@@ -16,7 +16,11 @@ const config = {
     dirs: ["src"],
   },
   images: {
-    domains: ["s3.ap-northeast-2.amazonaws.com"],
+    remotePatterns: [
+      {
+        hostname: "s3.ap-northeast-2.amazonaws.com",
+      },
+    ],
   },
 
   async redirects() {

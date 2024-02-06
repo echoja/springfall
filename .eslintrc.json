@@ -9,7 +9,7 @@
       }
     },
     {
-      "files": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"],
+      "files": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "**/*.mjs"],
       "plugins": ["@typescript-eslint"],
       "extends": [
         "eslint:recommended",

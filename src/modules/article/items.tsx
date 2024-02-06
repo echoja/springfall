@@ -27,6 +27,7 @@ import { item as Prag } from "@app/article/2023-09/the-pragmatic-programmer/page
 import { item as Dogdrip } from "@app/article/2023-10/dogdrip/metadata";
 import { item as Glassmorphism } from "@app/article/2023-10/glassmorphism/metadata";
 import { item as Time } from "@app/article/2024-01/time/metadata";
+import { item as Hof } from "@app/article/2024-02/hof/metadata";
 
 const items = [
   PussInBoots,
@@ -56,6 +57,7 @@ const items = [
   Dogdrip,
   Glassmorphism,
   Time,
+  Hof,
 ];
 
 items.sort((a, b) => dayjs(b.createdAt).diff(a.createdAt));
