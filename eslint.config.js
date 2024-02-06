@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { FlatCompat } from "@eslint/eslintrc";
+import js from "@eslint/js";
 import eslintConfigPrettier from "eslint-config-prettier";
 import * as mdx from "eslint-plugin-mdx";
 import path from "path";
@@ -38,7 +39,7 @@ const config = [
       languageMapper: {},
     }),
     rules: {
-      // ...js.configs.recommended.rules,
+      //
       ...mdx.flat.rules,
     },
   },
@@ -51,7 +52,6 @@ const config = [
   ...compat
     .config({
       extends: [
-        "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
         "next/core-web-vitals",
       ],
@@ -62,6 +62,7 @@ const config = [
         tsconfigRootDir: __dirname,
       },
       rules: {
+        ...js.configs.recommended.rules,
         "no-unused-vars": "off",
         "@typescript-eslint/no-unused-vars": [
           "error",
