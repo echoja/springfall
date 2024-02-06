@@ -1,12 +1,12 @@
+import ArticleHeader from "@modules/article/ArticleHeader";
+import ArticleImage from "@modules/article/ArticleImage";
+import IFrame from "@modules/article/iframe";
+import { authorList, authorName } from "@modules/metadata/constants";
+import getArticleMetadata from "@modules/metadata/getArticleMetadata";
 import dayjs from "dayjs";
+import { ArticleJsonLd } from "next-seo";
 import i1 from "./i1.jpeg";
 import i2 from "./i2.jpeg";
-import ArticleImage from "@modules/article/ArticleImage";
-import { ArticleJsonLd } from "next-seo";
-import { authorName, authorList } from "@modules/metadata/constants";
-import getArticleMetadata from "@modules/metadata/getArticleMetadata";
-import ArticleHeader from "@modules/article/ArticleHeader";
-import IFrame from "@modules/article/iframe";
 
 export const title =
   "[Javascript] 스크롤에 따라 부드러운 애니메이션 구현하기 (Feat. iPhone SE)";
@@ -61,7 +61,7 @@ export const metadata = getArticleMetadata(item);
 <IFrame
   src="https://javascript-smooth-animation.vercel.app/"
   style={{ width: "90%", height: "400px" }}
-></IFrame>
+/>
 
 이 글을 쓰게 된 계기는, 이렇게 정확한 스크롤 위치에 따른 부드러운 애니메이션을 구현하는 라이브러리는 찾기가 힘들었지요.
 

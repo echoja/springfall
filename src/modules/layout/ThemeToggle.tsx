@@ -1,8 +1,7 @@
+import { useColorMode } from "@modules/color-mode/color-mode";
+import { Moon, Sun } from "lucide-react";
 import dynamic from "next/dynamic";
 import { forwardRef, useMemo } from "react";
-import { RiMoonFill, RiSunLine } from "react-icons/ri";
-
-import { useColorMode } from "@modules/color-mode/color-mode";
 
 const Icon = () => {
   const { colorMode } = useColorMode();
@@ -19,9 +18,9 @@ const Icon = () => {
   return (
     <>
       {colorMode === "light" ? (
-        <RiMoonFill className="w-4 h-4" />
+        <Moon className="w-4 h-4" />
       ) : (
-        <RiSunLine className="w-4 h-4" />
+        <Sun className="w-4 h-4" />
       )}
       {srOnly}
     </>
