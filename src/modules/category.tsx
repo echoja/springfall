@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-import { Coffee, Wand2, PenBox } from "lucide-react";
+import { Coffee, PenBox, Wand2 } from "lucide-react";
 
 export type Category = "회고" | "리뷰" | "기술" | "일상" | "기타" | "디자인";
 

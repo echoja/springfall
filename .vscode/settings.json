@@ -1,9 +1,10 @@
 {
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
-    "source.fixAll": "explicit",
+    "source.fixAll.eslint": "explicit",
     "source.organizeImports": "explicit"
   },
+  "eslint.runtime": "node",
   "eslint.validate": [
     "markdown",
     "mdx",
@@ -23,7 +24,8 @@
     "pnpm-lock.yaml": true,
     ".next": true
   },
-  "mdx.trace.server.format": "text",
-  "mdx.trace.server.verbosity": "messages",
-  "eslint.experimental.useFlatConfig": true
+  "mdx.server.enable": true,
+  "eslint.experimental.useFlatConfig": true,
+  "eslint.lintTask.options": ".",
+  "editor.defaultFormatter": "dbaeumer.vscode-eslint"
 }
