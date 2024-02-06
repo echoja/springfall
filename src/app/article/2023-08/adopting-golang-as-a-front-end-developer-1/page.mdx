@@ -1,11 +1,10 @@
 import i1 from "./i1.jpg";
 
-import dayjs from "dayjs";
-import ArticleImage from "@modules/article/ArticleImage";
-import { ArticleJsonLd } from "next-seo";
-import { authorName, authorList } from "@modules/metadata/constants";
-import getArticleMetadata from "@modules/metadata/getArticleMetadata";
 import ArticleHeader from "@modules/article/ArticleHeader";
+import { authorList, authorName } from "@modules/metadata/constants";
+import getArticleMetadata from "@modules/metadata/getArticleMetadata";
+import dayjs from "dayjs";
+import { ArticleJsonLd } from "next-seo";
 
 export const title = "프론트 개발자의 GoLang 적응기 1화";
 export const url =
@@ -162,5 +161,7 @@ func init() {
 - `var` 를 붙인다: 재대입할 수 있는 변수를 만든다. 자바스크립트의 `let` 과 유사함. 자바스크립트와 다른 점은, 자바스크립트는 타입과 관련없이 대입이 가능하지만 go에서는 안된다는거. 안되는 이유는, 뇌피셜이긴 하지만, 보통 컴파일 언어에서는 속도를 빡빡하게 하기 위해 함수 실행 시점에 그 함수가 필요로 메모리의 양을 미리 계산할 수 있어야 하고, 이는 변수의 개수와 각각의 타입이 컴파일 시점에서 미리 정해져 있어야 한다는 걸 의미하죠. 그리고 `:=` 는 이 `var` 용법을 짧게 줄인 거라 합니다.
 - `final` 를 붙인다: 재대입할 수 없는 변수를 만든다. 자바스크립트에서 `const` 와 거의 똑같습니다.
 - `const` 를 붙인다: 컴파일 시점 고정값을 만든다. const 변수는 우변에 뭔가 실행시점에 계산을 할 수 있습니다. 실제로 그 값이 메모리에 올라가고 내려갑니다.
+
+
 
 다음 시간에 계속...

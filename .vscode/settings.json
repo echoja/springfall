@@ -1,10 +1,8 @@
 {
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
-    "source.fixAll": "explicit"
-  },
-  "eslint.options": {
-    "extensions": [".js", ".jsx", ".md", ".mdx", ".ts", ".tsx"]
+    "source.fixAll": "explicit",
+    "source.organizeImports": "explicit"
   },
   "eslint.validate": [
     "markdown",
@@ -15,7 +13,6 @@
     "typescriptreact"
   ],
   "typescript.tsdk": "node_modules/typescript/lib",
-  "eslint.lintTask.enable": true,
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "search.exclude": {
     "**/node_modules": true,
@@ -26,5 +23,7 @@
     "pnpm-lock.yaml": true,
     ".next": true
   },
-  "mdx.server.enable": true
+  "mdx.trace.server.format": "text",
+  "mdx.trace.server.verbosity": "messages",
+  "eslint.experimental.useFlatConfig": true
 }

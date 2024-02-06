@@ -28,6 +28,8 @@ import { item as Dogdrip } from "@app/article/2023-10/dogdrip/metadata";
 import { item as Glassmorphism } from "@app/article/2023-10/glassmorphism/metadata";
 import { item as Time } from "@app/article/2024-01/time/metadata";
 
+const a = 10;
+
 const items = [
   PussInBoots,
   CompanyContest,

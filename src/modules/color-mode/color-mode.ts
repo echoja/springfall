@@ -14,7 +14,7 @@ const colorModeAtomWithStorage = atom(
 
     if (typeof window !== "undefined") {
       const localStorageValue = window.localStorage.getItem(
-        "colorMode"
+        "colorMode",
       ) as ColorMode | null;
       if (localStorageValue) {
         return localStorageValue;
@@ -29,7 +29,7 @@ const colorModeAtomWithStorage = atom(
   (get, set, value: ColorMode) => {
     window.localStorage.setItem("colorMode", value);
     set(colorModeAtom, value);
-  }
+  },
 );
 
 /** 단 한번만 사용되어져야 합니다. */

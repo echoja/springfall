@@ -8,8 +8,10 @@
     "next.config.mjs",
     "commitlint.config.js",
     "vitest.config.ts",
-    "postcss.config.js",
-    "tailwind.config.js"
+    "postcss.config.mjs",
+    "tailwind.config.js",
+    "eslint.config.js",
+    "next-sitemap.config.js"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", ".mdx", ".md"]
 }
