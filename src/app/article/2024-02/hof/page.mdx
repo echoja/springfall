@@ -1,38 +1,19 @@
 import ArticleHeader from "@modules/article/ArticleHeader";
 import ArticleImage from "@modules/article/ArticleImage";
-import { authorList, authorName } from "@modules/metadata/constants";
+import getArticleHeaderProps from "@modules/metadata/getArticleHeaderProps";
+import getArticleJsonLdProps from "@modules/metadata/getArticleJsonLdProps";
 import getArticleMetadata from "@modules/metadata/getArticleMetadata";
 import { ArticleJsonLd } from "next-seo";
 import cloudtype from "./cloudtype.png";
-import {
-  createdAt,
-  image,
-  item,
-  summary,
-  title,
-  updatedAt,
-  url,
-} from "./metadata";
+import { item } from "./metadata";
 import i1 from "./time.avif";
 import tsup_package from "./tsup_package.json.png";
 
 export const metadata = getArticleMetadata(item);
 
-<ArticleJsonLd
-  useAppDir
-  url={url}
-  title={title}
-  images={[image.src]}
-  authorName={authorList}
-  datePublished={createdAt}
-  dateModified={updatedAt}
-  publisherName={authorName}
-  description={summary}
-  type="BlogPosting"
-  isAccessibleForFree
-/>
+<ArticleJsonLd {...getArticleJsonLdProps(item)} />
 
-<ArticleHeader title={title} updatedAt={updatedAt} desc={summary} />
+<ArticleHeader {...getArticleHeaderProps(item)} />
 
 <ArticleImage
   img={i1}

@@ -1,54 +1,23 @@
 import ArticleHeader from "@modules/article/ArticleHeader";
 import ArticleImage from "@modules/article/ArticleImage";
 import IFrame from "@modules/article/iframe";
-import { authorList, authorName } from "@modules/metadata/constants";
+import getArticleHeaderProps from "@modules/metadata/getArticleHeaderProps";
+import getArticleJsonLdProps from "@modules/metadata/getArticleJsonLdProps";
 import getArticleMetadata from "@modules/metadata/getArticleMetadata";
-import dayjs from "dayjs";
 import { ArticleJsonLd } from "next-seo";
 import i1 from "./i1.jpeg";
 import i2 from "./i2.jpeg";
-
-export const title =
-  "[Javascript] 스크롤에 따라 부드러운 애니메이션 구현하기 (Feat. iPhone SE)";
-export const url =
-  "https://springfall.cc/article/2022-10/javascript-smooth-animation";
-export const summary =
-  "특별한 라이브러리를 사용하지 않고, javascript를 이용하여 애플 감성 느낌의 스크롤 애니메이션 효과를 구현합니다.";
-export const createdAt = dayjs("2022-10-03").toISOString();
-export const updatedAt = dayjs("2022-10-03").toISOString();
-export const image = i2;
-export const imageAlt = "4가지 구성요소";
+import { item } from "./metadata";
 
 {/* ---------------------------------------------------------- */}
 {/* ---------------------------------------------------------- */}
 {/* ---------------------------------------------------------- */}
-
-export const item = {
-  title,
-  url,
-  summary,
-  createdAt,
-  updatedAt,
-  image,
-  imageAlt,
-};
 
 export const metadata = getArticleMetadata(item);
 
-<ArticleJsonLd
-  useAppDir
-  url={url}
-  title={title}
-  images={[image.src]}
-  authorName={authorList}
-  datePublished={createdAt}
-  dateModified={updatedAt}
-  publisherName={authorName}
-  description={summary}
-  isAccessibleForFree
-/>
+<ArticleJsonLd {...getArticleJsonLdProps(item)} />
 
-<ArticleHeader title={title} updatedAt={updatedAt} />
+<ArticleHeader {...getArticleHeaderProps(item)} />
 
 {/* ---------------------------------------------------------- */}
 {/* ---------------------------------------------------------- */}

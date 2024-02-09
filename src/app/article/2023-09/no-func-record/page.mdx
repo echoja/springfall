@@ -1,51 +1,21 @@
+import ArticleHeader from "@modules/article/ArticleHeader";
+import ArticleImage from "@modules/article/ArticleImage";
+import getArticleHeaderProps from "@modules/metadata/getArticleHeaderProps";
+import getArticleJsonLdProps from "@modules/metadata/getArticleJsonLdProps";
+import getArticleMetadata from "@modules/metadata/getArticleMetadata";
+import { ArticleJsonLd } from "next-seo";
+import { item } from "./metadata";
 import i1 from "./record.jpg";
 
-import dayjs from "dayjs";
-import ArticleImage from "@modules/article/ArticleImage";
-import { ArticleJsonLd } from "next-seo";
-import { authorName, authorList } from "@modules/metadata/constants";
-import getArticleMetadata from "@modules/metadata/getArticleMetadata";
-import ArticleHeader from "@modules/article/ArticleHeader";
-
-export const title = "[TypeScript] 함수 Record 는 지옥이다";
-export const url = "https://springfall.cc/article/2023-09/no-func-record";
-export const summary =
-  "Object, Map, Record 형태에 함수를 몰아넣고 사용할 때 어려움이 있습니다. 이를 타입 좁히기가 가능한 형태로 바꿔 사용합시다.";
-export const createdAt = dayjs("2023-09-07").toISOString();
-export const updatedAt = dayjs("2023-09-07").toISOString();
-export const image = i1;
-export const imageAlt = "레코드샵";
-
 {/* ---------------------------------------------------------- */}
 {/* ---------------------------------------------------------- */}
 {/* ---------------------------------------------------------- */}
-
-export const item = {
-  title,
-  url,
-  summary,
-  createdAt,
-  updatedAt,
-  image,
-  imageAlt,
-};
 
 export const metadata = getArticleMetadata(item);
 
-<ArticleJsonLd
-  useAppDir
-  url={url}
-  title={title}
-  images={[image.src]}
-  authorName={authorList}
-  datePublished={createdAt}
-  dateModified={updatedAt}
-  publisherName={authorName}
-  description={summary}
-  isAccessibleForFree
-/>
+<ArticleJsonLd {...getArticleJsonLdProps(item)} />
 
-<ArticleHeader title={title} updatedAt={updatedAt} desc={summary} />
+<ArticleHeader {...getArticleHeaderProps(item)} />
 
 {/* ---------------------------------------------------------- */}
 {/* ---------------------------------------------------------- */}

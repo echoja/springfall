@@ -1,57 +1,27 @@
-import i1 from "./i1.jpeg";
+import ArticleHeader from "@modules/article/ArticleHeader";
+import ArticleImage from "@modules/article/ArticleImage";
+import getArticleHeaderProps from "@modules/metadata/getArticleHeaderProps";
+import getArticleJsonLdProps from "@modules/metadata/getArticleJsonLdProps";
+import getArticleMetadata from "@modules/metadata/getArticleMetadata";
+import { ArticleJsonLd } from "next-seo";
+import ExampleComponent from "./example-component";
+import i1 from "./i1.jpg";
 import i2 from "./i2.png";
 import i3 from "./i3.jpeg";
-import ik from "./ik.png";
 import ie from "./ie.jpg";
+import ik from "./ik.png";
 import ip from "./ip.jpg";
-import ExampleComponent from "./example-component";
-
-import dayjs from "dayjs";
-import ArticleImage from "@modules/article/ArticleImage";
-import { ArticleJsonLd } from "next-seo";
-import { authorName, authorList } from "@modules/metadata/constants";
-import getArticleMetadata from "@modules/metadata/getArticleMetadata";
-import ArticleHeader from "@modules/article/ArticleHeader";
-
-export const title = "중요한 건 꺾였지만 그냥 하는 마음";
-export const url = "https://springfall.cc/article/2023-06/why-writing";
-export const summary =
-  "제가 블로그에 글을 쓰고자 하는 이유, 글을 쓸 때 어떻게 쓰는지에 대해 그냥 써봤습니다.";
-export const createdAt = dayjs("2023-06-17").toISOString();
-export const updatedAt = dayjs("2023-06-17").toISOString();
-export const image = i1;
-export const imageAlt = "종이 위에서 무언가를 쓰고 있는 펜의 모습";
+import { item } from "./metadata";
 
 {/* ---------------------------------------------------------- */}
 {/* ---------------------------------------------------------- */}
 {/* ---------------------------------------------------------- */}
-
-export const item = {
-  title,
-  url,
-  summary,
-  createdAt,
-  updatedAt,
-  image,
-  imageAlt,
-};
 
 export const metadata = getArticleMetadata(item);
 
-<ArticleJsonLd
-  useAppDir
-  url={url}
-  title={title}
-  images={[image.src]}
-  authorName={authorList}
-  datePublished={createdAt}
-  dateModified={updatedAt}
-  publisherName={authorName}
-  description={summary}
-  isAccessibleForFree
-/>
+<ArticleJsonLd {...getArticleJsonLdProps(item)} />
 
-<ArticleHeader title={title} updatedAt={updatedAt} desc={summary} />
+<ArticleHeader {...getArticleHeaderProps(item)} />
 
 {/* ---------------------------------------------------------- */}
 {/* ---------------------------------------------------------- */}

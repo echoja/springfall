@@ -1,58 +1,28 @@
-import i1 from "./1.jpeg";
+import ArticleHeader from "@modules/article/ArticleHeader";
+import ArticleImage from "@modules/article/ArticleImage";
+import getArticleHeaderProps from "@modules/metadata/getArticleHeaderProps";
+import getArticleJsonLdProps from "@modules/metadata/getArticleJsonLdProps";
+import getArticleMetadata from "@modules/metadata/getArticleMetadata";
+import { ArticleJsonLd } from "next-seo";
+import i1 from "./1.jpg";
 import i3 from "./3.svg";
 import i4 from "./4.webp";
 import i5 from "./5.avif";
 import i6 from "./6.jpeg";
 import i7 from "./7.png";
 import i8 from "./d8.png";
+import { item } from "./metadata";
 import i_teams from "./teams.png";
 
-import dayjs from "dayjs";
-import ArticleImage from "@modules/article/ArticleImage";
-import { ArticleJsonLd } from "next-seo";
-import { authorName, authorList } from "@modules/metadata/constants";
-import getArticleMetadata from "@modules/metadata/getArticleMetadata";
-import ArticleHeader from "@modules/article/ArticleHeader";
-
-export const title = "사내 IT 프로젝트 공모전 후기";
-export const url = "https://springfall.cc/article/2023-06/company-contest";
-export const summary =
-  "자리배정시스템 3주 만에 만들어보기. 기술과 전략과 느낀 점들. 힘들었지만 보람찼다. 모두들 고생하셨습니다.";
-export const createdAt = dayjs("2023-06-04").toISOString();
-export const updatedAt = dayjs("2023-06-04").toISOString();
-export const image = i1;
-export const imageAlt = "멋진 사무실 모습";
-
 {/* ---------------------------------------------------------- */}
 {/* ---------------------------------------------------------- */}
 {/* ---------------------------------------------------------- */}
-
-export const item = {
-  title,
-  url,
-  summary,
-  createdAt,
-  updatedAt,
-  image,
-  imageAlt,
-};
 
 export const metadata = getArticleMetadata(item);
 
-<ArticleJsonLd
-  useAppDir
-  url={url}
-  title={title}
-  images={[image.src]}
-  authorName={authorList}
-  datePublished={createdAt}
-  dateModified={updatedAt}
-  publisherName={authorName}
-  description={summary}
-  isAccessibleForFree
-/>
+<ArticleJsonLd {...getArticleJsonLdProps(item)} />
 
-<ArticleHeader title={title} updatedAt={updatedAt} />
+<ArticleHeader {...getArticleHeaderProps(item)} />
 
 {/* ---------------------------------------------------------- */}
 {/* ---------------------------------------------------------- */}

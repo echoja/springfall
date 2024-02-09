@@ -9,7 +9,7 @@ export type ArticleItem = {
   updatedAt: string;
   image: StaticImageData;
   imageAlt: string;
-  category: Category;
+  category?: Category;
   tags?: string[];
   series?: { name: string; order: string };
 };

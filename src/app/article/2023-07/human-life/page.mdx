@@ -1,51 +1,21 @@
-import i1 from "./i1.jpeg";
-
-import dayjs from "dayjs";
-import ArticleImage from "@modules/article/ArticleImage";
-import { ArticleJsonLd } from "next-seo";
-import { authorName, authorList } from "@modules/metadata/constants";
-import getArticleMetadata from "@modules/metadata/getArticleMetadata";
 import ArticleHeader from "@modules/article/ArticleHeader";
-
-export const title = "[리뷰] 알베르 카뮈의 반항하는 인간";
-export const url = "/article/2023-07/human-life";
-export const summary =
-  "느낀 점을 적어봅니다. 이번 글은 특히 두서가 없습니다. 이해해주세요.";
-export const createdAt = dayjs("2023-07-17").toISOString();
-export const updatedAt = dayjs("2023-07-23").toISOString();
-export const image = i1;
-export const imageAlt = "반항하는 인간 표지";
+import ArticleImage from "@modules/article/ArticleImage";
+import getArticleHeaderProps from "@modules/metadata/getArticleHeaderProps";
+import getArticleJsonLdProps from "@modules/metadata/getArticleJsonLdProps";
+import getArticleMetadata from "@modules/metadata/getArticleMetadata";
+import { ArticleJsonLd } from "next-seo";
+import i1 from "./i1.jpg";
+import { item } from "./metadata";
 
 {/* ---------------------------------------------------------- */}
 {/* ---------------------------------------------------------- */}
 {/* ---------------------------------------------------------- */}
-
-export const item = {
-  title,
-  url,
-  summary,
-  createdAt,
-  updatedAt,
-  image,
-  imageAlt,
-};
 
 export const metadata = getArticleMetadata(item);
 
-<ArticleJsonLd
-  useAppDir
-  url={url}
-  title={title}
-  images={[image.src]}
-  authorName={authorList}
-  datePublished={createdAt}
-  dateModified={updatedAt}
-  publisherName={authorName}
-  description={summary}
-  isAccessibleForFree
-/>
+<ArticleJsonLd {...getArticleJsonLdProps(item)} />
 
-<ArticleHeader title={title} updatedAt={updatedAt} desc={summary} />
+<ArticleHeader {...getArticleHeaderProps(item)} />
 
 {/* ---------------------------------------------------------- */}
 {/* ---------------------------------------------------------- */}

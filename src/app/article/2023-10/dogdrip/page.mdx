@@ -1,4 +1,9 @@
-import i1 from "./b.jpg";
+import ArticleHeader from "@modules/article/ArticleHeader";
+import ArticleImage from "@modules/article/ArticleImage";
+import getArticleHeaderProps from "@modules/metadata/getArticleHeaderProps";
+import getArticleJsonLdProps from "@modules/metadata/getArticleJsonLdProps";
+import getArticleMetadata from "@modules/metadata/getArticleMetadata";
+import { ArticleJsonLd } from "next-seo";
 import m1 from "./1.jpeg";
 import m2 from "./2.jpeg";
 import m3 from "./3.jpeg";
@@ -6,26 +11,12 @@ import m4 from "./4.jpeg";
 import m5 from "./5.jpeg";
 import m6 from "./6.jpeg";
 import m7 from "./7.jpeg";
+import i1 from "./b.jpg";
 import c1 from "./c1.png";
 import c2 from "./c2.png";
 import c3 from "./c3.png";
 import c4 from "./c4.png";
-import ArticleImage from "@modules/article/ArticleImage";
-import { ArticleJsonLd } from "next-seo";
-import { authorName, authorList } from "@modules/metadata/constants";
-import getArticleMetadata from "@modules/metadata/getArticleMetadata";
-import ArticleHeader from "@modules/article/ArticleHeader";
-import {
-  title,
-  url,
-  summary,
-  createdAt,
-  updatedAt,
-  image,
-  imageAlt,
-  category,
-  item,
-} from "./metadata";
+import { item } from "./metadata";
 
 {/* ---------------------------------------------------------- */}
 {/* ---------------------------------------------------------- */}
@@ -33,21 +24,9 @@ import {
 
 export const metadata = getArticleMetadata(item);
 
-<ArticleJsonLd
-  useAppDir
-  url={url}
-  title={title}
-  images={[image.src]}
-  authorName={authorList}
-  datePublished={createdAt}
-  dateModified={updatedAt}
-  publisherName={authorName}
-  description={summary}
-  type="BlogPosting"
-  isAccessibleForFree
-/>
+<ArticleJsonLd {...getArticleJsonLdProps(item)} />
 
-<ArticleHeader title={title} updatedAt={updatedAt} desc={summary} />
+<ArticleHeader {...getArticleHeaderProps(item)} />
 
 {/* ---------------------------------------------------------- */}
 {/* ---------------------------------------------------------- */}

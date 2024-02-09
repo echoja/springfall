@@ -1,50 +1,33 @@
 import ArticleHeader from "@modules/article/ArticleHeader";
 import ArticleImage from "@modules/article/ArticleImage";
-import { authorList, authorName } from "@modules/metadata/constants";
+import getArticleHeaderProps from "@modules/metadata/getArticleHeaderProps";
+import getArticleJsonLdProps from "@modules/metadata/getArticleJsonLdProps";
 import getArticleMetadata from "@modules/metadata/getArticleMetadata";
 import { ArticleJsonLd } from "next-seo";
 import i3 from "./abouttime.webp";
 import i2 from "./jangsong.webp";
-import {
-  createdAt,
-  image,
-  item,
-  summary,
-  title,
-  updatedAt,
-  url
-} from "./metadata";
+import { item } from "./metadata";
 import i1 from "./time.avif";
-
 
 export const metadata = getArticleMetadata(item);
 
-<ArticleJsonLd
-  useAppDir
-  url={url}
-  title={title}
-  images={[image.src]}
-  authorName={authorList}
-  datePublished={createdAt}
-  dateModified={updatedAt}
-  publisherName={authorName}
-  description={summary}
-  type="BlogPosting"
-  isAccessibleForFree
-/>
+<ArticleJsonLd {...getArticleJsonLdProps(item)} />
 
-<ArticleHeader 
-  title={title} 
-  updatedAt={updatedAt}
-  desc={summary} 
-/>
+<ArticleHeader {...getArticleHeaderProps(item)} />
 
 <ArticleImage
   img={i1}
   alt="시간"
   caption={
     <>
-      시간. Photo by <a href="https://unsplash.com/@aronvisuals?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Aron Visuals</a> on <a href="https://unsplash.com/photos/selective-focus-photo-of-brown-and-blue-hourglass-on-stones-BXOXnQ26B7o?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
+      시간. Photo by{" "}
+      <a href="https://unsplash.com/@aronvisuals?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">
+        Aron Visuals
+      </a>{" "}
+      on{" "}
+      <a href="https://unsplash.com/photos/selective-focus-photo-of-brown-and-blue-hourglass-on-stones-BXOXnQ26B7o?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">
+        Unsplash
+      </a>
     </>
   }
 />
@@ -93,7 +76,7 @@ export const metadata = getArticleMetadata(item);
 
 …
 
-올해의 키워드는 정리, 재미, 건강으로 잡았다. 해왔던 걸 정리하고, 재미와 건강을 추구할 것이다. 주위 사람들에게 잘 하는 건 “정리”에 해당한다. 나를 지금 이 자리에 오기까지 도와준 모든 이들에게 고마움을 표하면서 빚을 청산하는 것이다. 이렇게 하면 좀 더 문턱을 넘을 마음이 생기지 않을까 싶다. 과연 그럴까? 
+올해의 키워드는 정리, 재미, 건강으로 잡았다. 해왔던 걸 정리하고, 재미와 건강을 추구할 것이다. 주위 사람들에게 잘 하는 건 “정리”에 해당한다. 나를 지금 이 자리에 오기까지 도와준 모든 이들에게 고마움을 표하면서 빚을 청산하는 것이다. 이렇게 하면 좀 더 문턱을 넘을 마음이 생기지 않을까 싶다. 과연 그럴까?
 
 모르겠다.
 
@@ -104,16 +87,16 @@ export const metadata = getArticleMetadata(item);
 나도 모르는 새에 문턱이 지나쳐져 있으면 좋겠다.
 
 <div className="flex flex-col gap-2 xs:flex-row">
-<ArticleImage
-  img={i2}
-  width={800}
-  alt="장송의 프리렌 1권 표지"
-  caption="장송의 프리렌 1권 표지"
-/>
-<ArticleImage
-  img={i3}
-  width={800}
-  alt="어바웃타임 한글 포스터"
-  caption="어바웃타임 한글 포스터"
-/>
+  <ArticleImage
+    img={i2}
+    width={800}
+    alt="장송의 프리렌 1권 표지"
+    caption="장송의 프리렌 1권 표지"
+  />
+  <ArticleImage
+    img={i3}
+    width={800}
+    alt="어바웃타임 한글 포스터"
+    caption="어바웃타임 한글 포스터"
+  />
 </div>

@@ -1,51 +1,21 @@
-import i1 from "./i1.jpg";
-
-import dayjs from "dayjs";
-import ArticleImage from "@modules/article/ArticleImage";
-import { ArticleJsonLd } from "next-seo";
-import { authorName, authorList } from "@modules/metadata/constants";
-import getArticleMetadata from "@modules/metadata/getArticleMetadata";
 import ArticleHeader from "@modules/article/ArticleHeader";
-
-export const title = "믿음 (feat. 물고기는 존재하지 않는다)";
-export const url = "https://springfall.cc/article/2023-09/belief";
-export const summary =
-  "여러 생각할 만한 거리를 던져주는 ≪물고기는 존재하지 않는다≫라는 책은 좋습니다. 앞으로 무엇을 믿을 것인가? 주저리주저리 했습니다.";
-export const createdAt = dayjs("2023-09-11").toISOString();
-export const updatedAt = dayjs("2023-09-11").toISOString();
-export const image = i1;
-export const imageAlt = "물고기는 존재하지 않는다 표지";
+import ArticleImage from "@modules/article/ArticleImage";
+import getArticleHeaderProps from "@modules/metadata/getArticleHeaderProps";
+import getArticleJsonLdProps from "@modules/metadata/getArticleJsonLdProps";
+import getArticleMetadata from "@modules/metadata/getArticleMetadata";
+import { ArticleJsonLd } from "next-seo";
+import i1 from "./i1.jpg";
+import { item } from "./metadata";
 
 {/* ---------------------------------------------------------- */}
 {/* ---------------------------------------------------------- */}
 {/* ---------------------------------------------------------- */}
-
-export const item = {
-  title,
-  url,
-  summary,
-  createdAt,
-  updatedAt,
-  image,
-  imageAlt,
-};
 
 export const metadata = getArticleMetadata(item);
 
-<ArticleJsonLd
-  useAppDir
-  url={url}
-  title={title}
-  images={[image.src]}
-  authorName={authorList}
-  datePublished={createdAt}
-  dateModified={updatedAt}
-  publisherName={authorName}
-  description={summary}
-  isAccessibleForFree
-/>
+<ArticleJsonLd {...getArticleJsonLdProps(item)} />
 
-<ArticleHeader title={title} updatedAt={updatedAt} desc={summary} />
+<ArticleHeader {...getArticleHeaderProps(item)} />
 
 {/* ---------------------------------------------------------- */}
 {/* ---------------------------------------------------------- */}

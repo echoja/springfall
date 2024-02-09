@@ -1,0 +1,161 @@
+import ArticleHeader from "@modules/article/ArticleHeader";
+import ArticleImage from "@modules/article/ArticleImage";
+import getArticleHeaderProps from "@modules/metadata/getArticleHeaderProps";
+import getArticleJsonLdProps from "@modules/metadata/getArticleJsonLdProps";
+import getArticleMetadata from "@modules/metadata/getArticleMetadata";
+import { ArticleJsonLd } from "next-seo";
+import { item } from "./metadata";
+import i1 from "./time.avif";
+import tsup_package from "./tsup_package.json.png";
+
+export const metadata = getArticleMetadata(item);
+
+<ArticleJsonLd {...getArticleJsonLdProps(item)} />
+
+<ArticleHeader {...getArticleHeaderProps(item)} />
+
+<ArticleImage
+  img={i1}
+  alt="시간"
+  caption={
+    <>
+      시간. Photo by{" "}
+      <a href="https://unsplash.com/@aronvisuals?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">
+        Aron Visuals
+      </a>{" "}
+      on{" "}
+      <a href="https://unsplash.com/photos/selective-focus-photo-of-brown-and-blue-hourglass-on-stones-BXOXnQ26B7o?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">
+        Unsplash
+      </a>
+    </>
+  }
+/>
+
+## 개요
+
+https://www.youtube.com/watch?v=hrdwQHoAp0M
+
+## Tsup
+
+tsup 어떻게 읽어야 하죠? 티썹? 하여튼 이걸 처음 알게 된 계기는 [Turborepo의 Examples](https://github.com/vercel/turbo/tree/main/examples/kitchen-sink)를 들여다봤을 때였습니다. Turborepo란 모노레포와 관련된 툴이라 이 글과 관련은 전혀 없습니다. 거기에서 발견한 건 타입스크립트 기반 서버를 아주 간단하게 띄우는 코드였습니다.
+
+아래는 [그 예시의 `package.json` 파일](https://github.com/vercel/turbo/blob/main/examples/kitchen-sink/apps/api/package.json)입니다.
+
+<ArticleImage
+  img={tsup_package}
+  alt="Turborepo의 Example에 있었던 어떤 간단한 서버의 package.json 파일입니다."
+  caption="Turborepo의 Example에 있었던 어떤 간단한 서버의 package.json 파일입니다."
+/>
+
+대충 `dev` , `build` , `start` 만 살펴보면 되겠습니다. `dev`란 개발 서버를 띄우기 위한 명령어이고, `build` 란 실제 production 환경에서 바로 사용할 수 있도록 타입스크립트 파일을 자바스크립트 파일로 적절하게 컴파일하는 명령어입니다. `start`란 빌드가 된 코드를 실행시키는 코드구요. 정말 간단하지 않나요? 사실상 `dev`는 `build`와 `start`를 합친 것과 같은 모양을 하고 있네요.
+
+본래 번들링이란 브라우저에서 코드가 실행될 것이 가정되죠. 상황을 다양하게 고려해야 하고 과정도 복잡해서 webpack이나 vite의 설정은 결코 쉽지 않습니다. 반면 tsup의 번들링은 브라우저와 전혀 상관이 없습니다. 코드는 Node.js 에서만 잘 돌아가면 됩니다. 타입 체크야 간간히 `tsc` 를 직접 실행시켜 주면서 체크하면 됩니다. 타입 에러는 애초에 에디터에서 미리 알 수도 있구요.
+
+아래는 Examples 에서 쓰인 tsup의 설정 파일입니다.
+
+<CH.Code>
+
+```ts tsup.config.ts
+import { defineConfig, type Options } from "tsup";
+
+export default defineConfig((options: Options) => ({
+  entryPoints: ["src/index.ts"],
+  clean: true,
+  format: ["cjs"],
+  ...options,
+}));
+```
+
+</CH.Code>
+
+그리고 아래는 실제로 쓰인 tsup 설정 파일입니다.
+
+<CH.Code>
+
+```ts tsup.config.ts
+import { defineConfig } from "tsup";
+
+export default defineConfig({
+  entry: ["src/app.ts"],
+  sourcemap: true,
+  clean: true,
+  target: "node18",
+});
+```
+
+</CH.Code>
+
+아주아주 간단해요. 너무 좋아요. 소스맵을 생성하는 것도 `sourcemap: true` 한 줄만 넣어주면 됩니다. `dev` 혹은 `start` 에서 `node` 명령어 실행할 때 중간에 `--enable-source-maps` 넣어주면 소스맵까지 읽어서 에러 메시지가 아주 읽기 편하게 된답니다. `dev` 명령어는 아래와 같습니다.
+
+<CH.Code>
+
+```
+"dev": "tsup --config tsup.config.ts --watch --onSuccess \"node --enable-source-maps dist/app.js\"",
+```
+
+</CH.Code>
+
+## prisma
+
+프리즈마 굉장히 유명하죠. 핫합니다. 저도 함 써봤습니다. prisma는 기본적으로 아래 스키마 파일을 기반으로 DB가 막 바뀝니다. 직접 DDL을 만질 필요가 없다는 것이... 큰 장점일지는 모르겠지만 생산성 측면에서는 큰 이점입니다. 스키마만 잘 작성한 다음 `npx prisma migrate dev`만 실행시켜 주면 되기 때문이죠.
+
+<CH.Code>
+
+```prisma schema.prisma
+
+/// 메뉴 테이블
+model Menu {
+  id             Int           @id @default(autoincrement())
+  /// 메뉴명
+  name           String        @db.VarChar(255)
+  /// 설명
+  description    String?
+  /// 이미지 경로(상대경로)
+  imageDir       String?
+  /// 사용 가능 여부
+  published      Boolean       @default(false)
+  /// 가격
+  price          Int           @default(0)
+  /// 재고 갯수
+  stock          Int           @default(0)
+  /// 주문
+  orders         Order[]
+  /// 메뉴 카테고리
+  MenuCategory   MenuCategory? @relation(fields: [menuCategoryId], references: [id])
+  menuCategoryId Int?
+
+  /// 판매량
+  totalSalesCount Int? @default(0)
+  /// 판매금액
+  totalSalesPrice Int? @default(0)
+}
+
+/// 기타 등등... 이하 생략
+
+```
+
+</CH.Code>
+
+DB 엔드포인트만 잘 설정한 다음에 스키마 설정하고 명령어 하나만 치면 그냥 막 테이블이 자기 알아서 잘 만들어진다는 소식을 듣고, 같이 하던 책임급 동료는 요즘 시대가 좋아졌다며 조용히 감탄하셨습니다. 나름 뿌듯?
+
+마이그레이션도 뭐 편했습니다.
+
+초반에 결정해야 할 사항들이 굉장히 많았는데
+
+이를테면 제가 혼자서 고민했던 부분들은
+
+## API 서버를 하면서 느낀 점
+
+- 왠만하면 그냥 express 씁시다. 좀 투박한 느낌이긴 하지만 커뮤니티의 도움을 쉽게 받을 수 있다는 것이 무시못할 장점입니다. 문제에 부딪쳤을 때 해법이 아주 많으니까요.
+
+아이디어는 굉장히 많았습니다. 테이블마다 URL 이 담겨있는 QR 코드를 붙여놓고, 이 쪽에서 주문하라고 하면 카운터와 주방의 화면에서 주문 목록이 갱신되며 모든 것이 맞물려 잘 돌아간다는 꿈을 그리기도 했습니다. 운영적으로 주문은 직접 받는 방향으로 결정되었습니다. 손님들이 직접 주문하는 화면 같은 건 필요가 없어졌죠.
+
+다들 연차가 좀 있는 개발자였지만 앱 개발은 별로 해본 적이 없었습니다.
+
+Flutter란 크로스 플랫폼(주로 iOS와 안드로이드) 앱을 만드는 프레임워크의 이름입니다. 구글에서 만들었죠. 이쪽 계열에서 흔히 라이벌로 React Native 가 많이 언급됩니다.
+
+둘 중 어떤 걸 골라야 할까요? 사실 크게 고민하진 않았습니다.
+
+포스기는 결제·매출 시스템인 POS(Point Of Sale System)가 설치된 터치형 PC를 말합니다.
+
+Flutter 처음 해본 플러터.

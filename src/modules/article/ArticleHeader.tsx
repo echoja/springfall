@@ -30,15 +30,17 @@ export const HeaderSeparator: React.FC<React.ComponentProps<"div">> = (
   </div>
 );
 
+export interface IArticleHeaderProps {
+  title: string;
+  updatedAt: string;
+  desc?: string;
+}
+
 export default function ArticleHeader({
   title,
   updatedAt,
   desc,
-}: {
-  title: string;
-  updatedAt: string;
-  desc?: string;
-}) {
+}: IArticleHeaderProps) {
   return (
     <header className="mb-24">
       <div className="mb-4 font-mono text-xs text-gray-500 dark:text-gray-400">
