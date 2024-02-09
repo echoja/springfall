@@ -10,7 +10,7 @@
     "build": "next build && next-sitemap --config next-sitemap.config.js",
     "start": "next start",
     "analyze": "ANALYZE=true pnpm build",
-    "lint": "next lint",
+    "lint": "eslint .",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
