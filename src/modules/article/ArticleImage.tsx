@@ -2,8 +2,8 @@ import type { StaticImageData } from "next/image";
 import Image from "next/image";
 import type { ReactElement } from "react";
 
-import style from "./style.module.css";
 import { twMerge } from "tailwind-merge";
+import style from "./style.module.css";
 
 export default function ArticleImage({
   img,
@@ -11,17 +11,23 @@ export default function ArticleImage({
   alt,
   width,
   noShadow,
+  border,
 }: {
   img: StaticImageData;
   caption?: React.ReactNode;
   width?: number;
   alt: string;
   noShadow?: boolean;
+  border?: boolean;
 }): ReactElement {
   return (
     <figure className={style["image-figure"]}>
       <Image
-        className={twMerge(style.image, noShadow && style["no-shadow"])}
+        className={twMerge(
+          style.image,
+          noShadow && style["no-shadow"],
+          border && style["image-border"],
+        )}
         width={width}
         src={img}
         alt={alt}

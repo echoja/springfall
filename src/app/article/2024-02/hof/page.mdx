@@ -60,6 +60,7 @@ export const metadata = getArticleMetadata(item);
   img={cloudtype}
   alt="cloudtype 배포 설정 화면"
   caption="cloudtype 배포 설정 화면"
+  border
 />
 
 API 서버와 DB는 cloudtype 에 띄우고 Flutter 는 그냥 로컬 빌드하여 아이패드에 설치해서 보여주는 식으로 하기로 했습니다. 배포하는 게 전혀 복잡하지 않아서 Flutter 는 무조건 배포 서버를 바라보도록 했습니다. 아, DB나 그런건 테스트용과 운영용을 나누진 않았습니다. 심지어 DB Endpoint 도 그냥 리포지토리 프라이빗하게 해서 저장소에 다 때려박았습니다.
