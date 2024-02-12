@@ -27,7 +27,6 @@ import { item as Glassmorphism } from "@app/article/2023-10/glassmorphism/metada
 import { item as Time } from "@app/article/2024-01/time/metadata";
 import { item as AsyncMutex } from "@app/article/2024-02/async-mutex/metadata";
 import { item as Hof } from "@app/article/2024-02/hof/metadata";
-import { item as IttyRouter } from "@app/article/2024-02/itty-router/metadata";
 import { item as Prisma } from "@app/article/2024-02/prisma/metadata";
 import { item as Tsup } from "@app/article/2024-02/tsup/metadata";
 import dayjs from "dayjs";
@@ -62,7 +61,6 @@ const items: ArticleItem[] = [
   Glassmorphism,
   Time,
   Hof,
-  IttyRouter,
   Prisma,
   Tsup,
   AsyncMutex,

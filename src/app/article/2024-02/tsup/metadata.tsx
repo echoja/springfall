@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 import i1 from "./time.avif";
 
 export const title =
-  "[WIP] tsup으로 간단하게 타입스크립트 기반 Node.js 서버 띄우기";
+  "[WIP] tsup으로 간단하게 타입스크립트 기반 Node.js 서버 띄우기 (feat. itty-router, logtail)";
 export const url = "https://springfall.cc/article/2024-02/tsup";
 export const summary = "...";
 export const createdAt = dayjs("2024-02-10").toISOString();

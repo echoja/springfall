@@ -30,4 +30,51 @@ export const metadata = getArticleMetadata(item);
   }
 />
 
-ho...
+## prisma
+
+프리즈마 굉장히 유명하죠. 핫합니다. 저도 함 써봤습니다. prisma는 기본적으로 아래 스키마 파일을 기반으로 DB가 막 바뀝니다. 직접 DDL을 만질 필요가 없다는 것이... 큰 장점일지는 모르겠지만 생산성 측면에서는 큰 이점입니다. 스키마만 잘 작성한 다음 `npx prisma migrate dev`만 실행시켜 주면 되기 때문이죠.
+
+<CH.Code>
+
+```prisma schema.prisma
+
+/// 메뉴 테이블
+model Menu {
+  id             Int           @id @default(autoincrement())
+  /// 메뉴명
+  name           String        @db.VarChar(255)
+  /// 설명
+  description    String?
+  /// 이미지 경로(상대경로)
+  imageDir       String?
+  /// 사용 가능 여부
+  published      Boolean       @default(false)
+  /// 가격
+  price          Int           @default(0)
+  /// 재고 갯수
+  stock          Int           @default(0)
+  /// 주문
+  orders         Order[]
+  /// 메뉴 카테고리
+  MenuCategory   MenuCategory? @relation(fields: [menuCategoryId], references: [id])
+  menuCategoryId Int?
+
+  /// 판매량
+  totalSalesCount Int? @default(0)
+  /// 판매금액
+  totalSalesPrice Int? @default(0)
+}
+
+/// 기타 등등... 이하 생략
+
+```
+
+</CH.Code>
+
+DB 엔드포인트만 잘 설정한 다음에 스키마 설정하고 명령어 하나만 치면 그냥 막 테이블이 자기 알아서 잘 만들어진다는 소식을 듣고, 같이 하던 책임급 동료는 요즘 시대가 좋아졌다며 조용히 감탄하셨습니다. 나름 뿌듯?
+
+마이그레이션도 뭐 편했습니다.
+
+초반에 결정해야 할 사항들이 굉장히 많았는데
+
+이를테면 제가 혼자서 고민했던 부분들은

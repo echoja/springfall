@@ -125,7 +125,7 @@ function handleEventGeneric<T extends Events>(e: T) {
 - `BEvent`
 - `AEvent | BEvent`
 
-엥? AEvent **또는** BEvent 가 아니냐… ㅋㅋ `AEvent | BEvent` 도 **또는** 이죠 뭐… 타입스크립트에서 “또는”이란 정말 정말 어려운 개념인 것 같습니다.
+엥? AEvent **또는** BEvent 가 아니냐… ㅋㅋ `AEvent | BEvent` 도 **또는** 이죠 뭐… 타입스크립트에서 "또는"이란 정말 정말 어려운 개념인 것 같습니다.
 
 우리의 소망은 `handlers[e.type]` 이 `(event: T) => void` 와 같은 타입으로 잡히는 것이었는데, 안됩니다, 안돼요. 이제는 그만 싸울 때입니다. 우리는 무슨 짓을 해도 타입스크립트를 이길 수 없습니다.
 

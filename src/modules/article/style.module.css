@@ -36,7 +36,7 @@
 }
 
 .link {
-  @apply underline underline-offset-2 decoration-brand-400 hover:decoration-2 decoration-1 text-black transition;
+  @apply underline underline-offset-2 decoration-brand-400 hover:decoration-2 decoration-1 text-black transition font-[450];
 }
 
 :global(.dark) .link {
@@ -187,4 +187,8 @@
 
 :global(.dark) .image-border {
   @apply border-gray-600;
+}
+
+.strong {
+  @apply font-semibold;
 }

@@ -17,7 +17,7 @@ import {
   TR,
   Table,
 } from "@modules/article/block-components";
-import { Anchor, Code } from "@modules/article/format-components";
+import { Anchor, Code, Strong } from "@modules/article/format-components";
 import {
   ListItem,
   OrderedList,
@@ -56,6 +56,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     hr: () => <hr className="my-12" />,
     details: Details,
     summary: Summary,
+    strong: Strong,
     ...components,
   };
 }

@@ -36,3 +36,7 @@ export function Anchor({
 export function Code({ children }: { children?: React.ReactNode }) {
   return <code className={style["inline-code"]}>{children}</code>;
 }
+
+export function Strong({ children }: { children?: React.ReactNode }) {
+  return <strong className={style.strong}>{children}</strong>;
+}
