@@ -50,7 +50,12 @@ const buttons: Array<{
   {
     link: "https://www.linkedin.com/in/echoja",
     Icon: (
-      <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <svg
+        role="img"
+        className="w-4 h-4"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
         <title>LinkedIn</title>
         <path
           fill="currentColor"
