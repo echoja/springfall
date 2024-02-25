@@ -29,6 +29,7 @@ import { item as AsyncMutex } from "@app/article/2024-02/async-mutex/metadata";
 import { item as Hof } from "@app/article/2024-02/hof/metadata";
 import { item as Prisma } from "@app/article/2024-02/prisma/metadata";
 import { item as Tsup } from "@app/article/2024-02/tsup/metadata";
+import { item as Unbearable } from "@app/article/2024-02/unbearable/metadata";
 import dayjs from "dayjs";
 import type { ArticleItem } from "./types";
 
@@ -64,6 +65,7 @@ const items: ArticleItem[] = [
   Prisma,
   Tsup,
   AsyncMutex,
+  Unbearable,
 ];
 
 items.sort((a, b) => dayjs(b.createdAt).diff(a.createdAt));
