@@ -4,11 +4,12 @@ import type { ArticleItem } from "@modules/article/types";
 export default function getArticleHeaderProps(
   item: ArticleItem,
 ): IArticleHeaderProps {
-  const { summary, title, updatedAt } = item;
+  const { summary, title, updatedAt, category } = item;
 
   return {
     title,
     updatedAt,
-    desc: summary,
+    summary,
+    category,
   };
 }

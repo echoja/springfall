@@ -1,9 +1,29 @@
-import { atom, useAtom } from "jotai";
-import { useCallback, useEffect } from "react";
+import { atom, createStore, useAtom, useStore } from "jotai";
+import { useCallback } from "react";
 
 export type ColorMode = "dark" | "light";
 
 const colorModeAtom = atom<ColorMode | null>(null);
+
+export const store = createStore();
+
+const getInitialColorMode = () => {
+  if (typeof window === "undefined") {
+    return "light";
+  }
+
+  const localStorageValue = window.localStorage.getItem(
+    "colorMode",
+  ) as ColorMode | null;
+
+  if (localStorageValue) {
+    return localStorageValue;
+  }
+
+  if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+    return "dark";
+  }
+};
 
 const colorModeAtomWithStorage = atom(
   (get) => {
@@ -12,48 +32,26 @@ const colorModeAtomWithStorage = atom(
       return colorMode;
     }
 
-    if (typeof window !== "undefined") {
-      const localStorageValue = window.localStorage.getItem(
-        "colorMode"
-      ) as ColorMode | null;
-      if (localStorageValue) {
-        return localStorageValue;
-      }
-      if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-        return "dark";
-      }
-    }
-    return "light";
+    return getInitialColorMode();
   },
 
   (get, set, value: ColorMode) => {
     window.localStorage.setItem("colorMode", value);
     set(colorModeAtom, value);
-  }
+  },
 );
 
-/** 단 한번만 사용되어져야 합니다. */
-export const useColorModeEffect = () => {
-  const [colorMode] = useAtom(colorModeAtomWithStorage);
-
-  useEffect(() => {
-    if (colorMode === "light") {
-      document.documentElement.classList.add("light");
-      document.documentElement.classList.remove("dark");
-    } else {
-      document.documentElement.classList.add("dark");
-      document.documentElement.classList.remove("light");
-    }
-  }, [colorMode]);
-};
-
 export const useColorMode = () => {
-  const [colorMode, setColorMode] = useAtom(colorModeAtomWithStorage);
+  const store = useStore();
+  const [colorMode] = useAtom(colorModeAtomWithStorage, { store });
 
   return {
     colorMode,
     toggle: useCallback(() => {
-      setColorMode(colorMode === "light" ? "dark" : "light");
-    }, [colorMode, setColorMode]),
+      store.set(
+        colorModeAtomWithStorage,
+        colorMode === "light" ? "dark" : "light",
+      );
+    }, [colorMode, store]),
   };
 };

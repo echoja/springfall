@@ -1,13 +1,16 @@
 // app/providers.tsx
 "use client";
 
+import { store } from "@modules/color-mode/color-mode";
 import { NextUIProvider } from "@nextui-org/react";
-import { Provider } from "jotai";
+import { Provider as JotaiProvider } from "jotai";
+import { GoogleAnalytics } from "nextjs-google-analytics";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <NextUIProvider>
-      <Provider>{children}</Provider>
+      <GoogleAnalytics trackPageViews />
+      <JotaiProvider store={store}>{children}</JotaiProvider>
     </NextUIProvider>
   );
 }

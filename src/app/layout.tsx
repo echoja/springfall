@@ -1,10 +1,9 @@
 import "@code-hike/mdx/dist/index.css";
 import "@common/globals.css";
-import type { Metadata } from "next";
-
+import ColorModeClassNameInjector from "@modules/color-mode/ColorModeClassNameInjector";
 import Footer from "@modules/layout/Footer";
-import RootClientLayout from "@modules/layout/RootClientLayout";
 import { metadataBase } from "@modules/metadata/constants";
+import type { Metadata } from "next";
 import { Providers } from "./providers";
 
 export const metadata: Metadata = {
@@ -48,9 +47,9 @@ window.CodenButter("boot", { siteId: "otoyyikrrj", auto: true });
           }}
         ></script>
       </head>
-      <RootClientLayout />
       <body>
         <Providers>
+          <ColorModeClassNameInjector />
           <div className="max-w-screen-md mx-auto">
             <div className="p-4 md:p-8 sm:p-6">
               {children}
