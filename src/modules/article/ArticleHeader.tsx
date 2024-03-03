@@ -36,6 +36,7 @@ export interface IArticleHeaderProps {
   updatedAt: string;
   summary?: string;
   category?: Category;
+  url: string;
 }
 
 export default function ArticleHeader({
@@ -43,6 +44,7 @@ export default function ArticleHeader({
   updatedAt,
   summary,
   category,
+  url,
 }: IArticleHeaderProps) {
   return (
     <header className="mb-24">
@@ -57,7 +59,7 @@ export default function ArticleHeader({
         <span className="">{dayjs(updatedAt).format("YYYY년 MM월 DD일")}</span>
         <span className="block w-px h-2 bg-gray-300 rounded-full dark:bg-gray-700" />
 
-        <ArticleCounter />
+        <ArticleCounter url={url} />
       </div>
       <h1
         className="mb-2 text-4xl font-extrabold break-keep dark:text-gray-100"

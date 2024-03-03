@@ -1,3 +1,5 @@
+"use client";
+
 import { useColorMode } from "@modules/color-mode/color-mode";
 import { Moon, Sun } from "lucide-react";
 import dynamic from "next/dynamic";
@@ -29,7 +31,7 @@ const Icon = () => {
 
 const DynamicIcon = dynamic(() => Promise.resolve(Icon), {
   ssr: false,
-  loading: () => <div style={{ width: "16px" }} />,
+  loading: () => <Moon className="w-4 h-4" />,
 });
 
 const ThemeToggle = forwardRef<HTMLButtonElement>(

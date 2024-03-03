@@ -39,7 +39,7 @@ const Home = () => {
                 <>
                   {category ? (
                     <div
-                      className="relative flex items-center justify-center flex-none w-6 h-6 mt-3 bg-gray-200 rounded-full dark:bg-gray-900 outline outline-4 outline-white"
+                      className="relative flex items-center justify-center flex-none w-6 h-6 mt-3 bg-gray-200 rounded-full dark:bg-gray-900 outline outline-4 outline-white dark:outline-gray-900 dark:grayscale-[30%] transition"
                       style={{ backgroundColor: getCategoryColor(category) }}
                     >
                       {/* <div className="w-1.5 h-1.5 rounded-full ring-1 ring-inset ring-gray-300 dark:ring-gray-600"></div> */}

@@ -53,7 +53,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     tr: TR,
     td: TD,
     th: TH,
-    hr: () => <hr className="my-12" />,
+    hr: () => <hr className="my-12 dark:border-gray-700" />,
     details: Details,
     summary: Summary,
     strong: Strong,
