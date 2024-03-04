@@ -27,5 +27,11 @@
     "pnpm-lock.yaml": true,
     ".next": true
   },
-  "mdx.server.enable": true
+  "mdx.server.enable": true,
+  "[mdx]": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit",
+      "source.organizeImports": "never"
+    }
+  }
 }

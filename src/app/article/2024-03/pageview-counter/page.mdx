@@ -1,0 +1,263 @@
+import ArticleHeader from "@modules/article/ArticleHeader";
+import ArticleImage from "@modules/article/ArticleImage";
+import getArticleHeaderProps from "@modules/metadata/getArticleHeaderProps";
+import getArticleJsonLdProps from "@modules/metadata/getArticleJsonLdProps";
+import getArticleMetadata from "@modules/metadata/getArticleMetadata";
+import { ArticleJsonLd } from "next-seo";
+import { item } from "./metadata";
+import i1 from "./time.avif";
+
+export const metadata = getArticleMetadata(item);
+
+<ArticleJsonLd {...getArticleJsonLdProps(item)} />
+
+<ArticleHeader {...getArticleHeaderProps(item)} />
+
+<ArticleImage
+  img={i1}
+  alt="시간"
+  caption={
+    <>
+      시간. Photo by{" "}
+      <a href="https://unsplash.com/@aronvisuals?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">
+        Aron Visuals
+      </a>{" "}
+      on{" "}
+      <a href="https://unsplash.com/photos/selective-focus-photo-of-brown-and-blue-hourglass-on-stones-BXOXnQ26B7o?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">
+        Unsplash
+      </a>
+    </>
+  }
+/>
+
+# 개요
+
+지금 이 글을 쓰고 있는 기준에서 제 블로그는 [springfall](http://springfall.cc)이며 Next.js 로 만들긴 했지만 [백엔드 로직은 다 들어내고](https://github.com/echoja/springfall/commit/f9921ee4b316aa6e900b98b74f17e2fe6b598df6) static 하게 운영하고 있습니다. 정적 페이지로 운영하면 구조가 단순해지고 생각할 게 별로 없어서 좋지만 사용자가 참여하는 것과 관련된 데이터를 다룰 수 없습니다. 대표적으로 댓글이요. 다른 곳에서 힘을 빌릴 수 밖에 없습니다. 저는 [utterances](https://utteranc.es/)를 사용하여 댓글 기능을 넣어놨습니다. utterances는 Github 이슈를 이용한 댓글 시스템입니다. **페이지뷰**는 어떻게 할 수 있을까요?
+
+간단한 페이지뷰를 구현한 [HITS](https://hits.seeyoufarm.com/) 라는 게 있습니다. 제 Github 프로필에도 있죠. 사용법은 적절한 querystring 으로 이루어진 SVG 파일을 img 태그로 받아서 원하는 위치에 삽입해두기만 하면 됩니다. 내부적으로 데이터를 어떻게 저장하는 진 모르지만 대충 url를 키로 하고 SVG GET 요청을 받을 때마다 count++ 해주는 식으로 하리라 예상할 수 있습니다. API 요청으로 페이지뷰 정보를 가져오는 게 아니라 일반 이미지 사용법과 똑같아서 자바스크립트도 몰라도 되고 구조가 매우 간단하다는 장점이 있습니다. 저희도 이 구조를 모방하려고 합니다.
+
+브라우저는 SVG 이미지 하나를 요청할 뿐이지만 실제 페이지뷰 데이터가 어딘가에 있기는 있어야 합니다. Cloudflare 에 간단한 KV 시스템이 있다는 것도 최근에 알아서, 이를 활용하여 공부겸 트라이겸 페이지뷰 시스템을 만들어보겠습니다.
+
+## SVG
+
+SVG는 벡터 그래픽 포맷입니다. 아이콘 같은 것들을 svg로 곧잘 만들죠. [lucide](https://lucide.dev) 같은 곳에서 아이콘을 아무거나 하나 검색하면 Copy SVG 라는 버튼이 바로 보입니다. 그 결과는 아래와 같습니다.
+
+```html
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  class="lucide lucide-bone"
+>
+  <path
+    d="M17 10c.7-.7 1.69 0 2.5 0a2.5 2.5 0 1 0 0-5 .5.5 0 0 1-.5-.5 2.5 2.5 0 1 0-5 0c0 .81.7 1.8 0 2.5l-7 7c-.7.7-1.69 0-2.5 0a2.5 2.5 0 0 0 0 5c.28 0 .5.22.5.5a2.5 2.5 0 1 0 5 0c0-.81-.7-1.8 0-2.5Z"
+  />
+</svg>
+```
+
+SVG는 얼핏 보면 HTML 의 문법을 따르지만, 그 내부에서는 SVG 전용 요소만 사용할 수 있습니다. 위에서는 path 요소가 사용되었고, 그 외에 rect, circle, text 등 사용할 수 있는 건 다양합니다.
+
+왜 HITS는 jpg, png 와 같은 더 일반적인 이미지 포맷이 아니라 SVG로 페이지뷰를 가져올까요? 아마 SVG 파일을 만들기가 더 쉬워서일 겁니다. SVG는 사실 단순한 텍스트 파일이기 때문에 HTML 문서를 만드는 것처럼 코드에서 처리하기가 어렵지 않습니다. jpg나 png는 형식에 잘 맞춰 인코딩을 해야 하죠. 좀 귀찮습니다.
+
+HITS에서 사용되는 페이지뷰 요소는 다음과 같이 생겼습니다.
+
+```html
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="117"
+  height="20"
+>
+  <linearGradient id="smooth" x2="0" y2="100%">
+    <stop offset="0" stop-color="#bbb" stop-opacity=".1" />
+    <stop offset="1" stop-opacity=".1" />
+  </linearGradient>
+
+  <mask id="round">
+    <rect width="117" height="20" rx="3" ry="3" fill="#fff" />
+  </mask>
+
+  <g mask="url(#round)">
+    <rect width="30" height="20" fill="#555" />
+    <rect x="30" width="87" height="20" fill="#79c83d" />
+    <rect width="117" height="20" fill="url(#smooth)" />
+  </g>
+
+  <g
+    fill="#fff"
+    text-anchor="middle"
+    font-family="Verdana,DejaVu Sans,Geneva,sans-serif"
+    font-size="11"
+  >
+    <text x="16" y="15" fill="#010101" fill-opacity=".3">hits</text>
+    <text x="16" y="14" fill="#fff">hits</text>
+    <text x="72.5" y="15" fill="#010101" fill-opacity=".3">76 / 568509</text>
+    <text x="72.5" y="14" fill="#fff">76 / 568509</text>
+  </g>
+</svg>
+```
+
+우리는 일단 오늘의 페이지뷰는 생각하지 말고 전체 페이지뷰만 보여줄 수 있도록 하겠습니다. 우리가 정말 필요로 하는 데이터만 남겨봅시다. `xmlns`, 배경과 관련된 요소(`linearGradient`, `mask`, `rect`) 등등은 다 없애볼게요. 위에서 같은 텍스트가 두 개 있는 이유는 그림자를 표현하기 위함으로 보입니다. 텍스트도 하나로 남기겠습니다.
+
+```html
+<svg width="117" height="20">
+   <text x="72.5" y="14" text-anchor="middle" font-family="Verdana,DejaVu Sans,Geneva,sans-serif" font-size="11" fill="#fff"> 568509 </text>
+ </g>
+</svg>
+```
+
+이쯤 되면 우리가 목표로 만들고자 하는 로직이 대충 다 나옵니다.
+
+1. 요청이 들어오면 KV에서 url를 키로 하는 count 데이터를 찾아봅니다. (KV에 대한 설명은 후술합니다) 데이터가 없다면 1로 간주합니다.
+2. count를 바탕으로 svg를 생성합니다.
+3. KV 에 count를 1 증가시킵니다.
+4. 만든 svg를 응답으로 내보냅니다.
+
+SVG로 하려다 보니 SVG의 특성을 고려해야 하는 일이 좀 귀찮아지긴 했습니다. 아래 항목들을 좀 챙겨야 합니다.
+
+- 이미지의 사이즈, 텍스트의 사이즈를 계산하여 박아넣어줘야 합니다. 브라우저 입장에서는 svg란 이미지에 불과하기 때문에 사이즈가 어떤지 모른다면 브라우저가 제대로 그려줄 수 없습니다.
+
+이미지의 사이즈를 구하기 위해서는 글자의 사이즈를 알아야 합니다. 글자의 사이즈는 폰트 종류, 크기, 스타일(굵게/기울게)에 따라 다르기 마련입니다. 이런이런... 일이 점점 더 복잡해지고 있습니다! HITS에서 사용하는 Verdana라는 폰트에 집중해봅시다. 다행히도 [위키백과](https://ko.wikipedia.org/wiki/%EB%B2%84%EB%8B%A4%EB%82%98)에 의하면 이 폰트는 윈도우에서 99% 이상, 맥에서 98% 이상 설치가 되어 있다고 합니다. 모든 사람이 이 폰트를 가지고 있다고 간주해도 무방합니다. 즉 서버 쪽에서는 Verdana 폰트로 페이지뷰를 보여준다고 가정하고 크기를 미리 계산해도 괜찮다는 뜻입니다. 실제로 HITS도 비슷한 로직을 취합니다.
+
+```go
+type fontM struct {
+	sync.Mutex
+	fontSize   int
+	extraDx    int
+	fontFamily string
+	drawer     *font.Drawer
+}
+
+// MeasureString returns width for text.
+func (fd *fontM) measureString(s string) float64 {
+	fd.Lock()
+	p := fd.drawer.MeasureString(s)
+	fd.Unlock()
+
+	// must be more than 0.
+	size := fd.fixedToPoint(p)
+	if size <= 0 {
+		return 0
+	}
+
+	// add extra margin.
+	return size + float64(fd.extraDx)
+}
+
+// 중략
+
+func init() {
+	verdanaDrawer = &fontM{
+			fontSize:   fontSize,
+			extraDx:    extraVerdanaDx,
+			fontFamily: fontFamilyVerdana,
+			drawer: &font.Drawer{
+				Face: truetype.NewFace(verdanaFont, &truetype.Options{
+					Size:    fontDPI,
+					DPI:     fontSize,
+					Hinting: font.HintingFull,
+				}),
+			},
+		}
+}
+
+// 중략
+
+func (fb *badgeWriter) RenderFlatBadge(b Badge) ([]byte, error) {
+	// 중략
+	// set right
+	rightDx := drawer.measureString(b.RightText)
+	flatBadge.Right = badge{
+		Rect: rect{Color: color(b.RightBackgroundColor), Bound: bound{
+			Dx: rightDx,
+			Dy: dy,
+			X:  leftDx,
+			Y:  0,
+		}},
+		Text: text{Msg: b.RightText, Color: color(b.RightTextColor), Bound: bound{
+			Dx: 0, // not use
+			Dy: 0, // not use
+			X:  leftDx + rightDx/2.0 - 1,
+			Y:  15,
+		}},
+	}
+
+	// 중략
+}
+```
+
+GoLang 이라서 코드를 좀 알아보긴 힘들지만, 대충 운영체제에 내장된 font.Drawer 를 이용하여 실제 폰트를 그릴 수 있는 환경을 만들어두고 [`MeasureString`](https://pkg.go.dev/golang.org/x/image/font#MeasureString)을 호출하여 실제 크기를 계산하려고 합니다. `rightDx`를 계산하기 위해 `measureString`를 호출한다는 걸 발견할 수 있습니다. 코드는 [badge.go](https://github.com/gjbae1212/go-counter-badge/blob/master/badge/badge.go), [font.go](https://github.com/gjbae1212/go-counter-badge/blob/master/badge/font.go)에서 확인하실 수 있습니다.
+
+우리도 Node.js 환경에서 SVG 사이즈를 계산하기 위해 Font Drawer 와 같은 복잡한 녀석을 사용해야 할까요? 저는 그렇게 하기 싫습니다. 폰트 렌더링과 관련하여 하나도 모르기도 하거니와 우리의 목표는 페이지뷰를 잘 만들어 보여주는 건데 이런 사소한 SVG 만들기에 힘을 많이 뺏겨서는 안됩니다.
+
+또다른 문제도 있는데요, SVG 파일을 만드는 일은 Cloudflare Workers가 담당하게 될텐데, 여기서의 로직들은 제한점이 매우매우 많습니다. Node.js의 기능도 온전히 못쓸 가능성이 높구요. 컴퓨팅 자원이 많이 드는 것들은 거의 못한다고 보면 됩니다.
+
+우리에게 딱 맞는 패키지를 하나 찾았습니다. 바로 [string-pixel-width](https://github.com/adambisek/string-pixel-width) 입니다. 우리가 필요한 Verdana 폰트에 대한 데이터도 있네요. 우리는 이것만 필요하므로 소스 파일에서 필요한 부분만 취합시다.
+
+```ts
+export const verdanaWidthMap: Record<string, [number, number, number, number]> =
+  {
+    "0": [64, 71, 64, 71],
+    "1": [64, 71, 64, 71],
+    "2": [64, 71, 64, 71],
+    "3": [64, 71, 64, 71],
+    // 중략
+  };
+
+export const getStringWidth = ({
+  size = 12,
+  str,
+  style = "normal",
+}: {
+  str: string;
+  size?: number;
+  style?: "normal" | "bold" | "italic" | "bold_italic";
+}) => {
+  let width = 0;
+  const styleIndex =
+    style === "bold"
+      ? 1
+      : style === "italic"
+        ? 2
+        : style === "bold_italic"
+          ? 3
+          : 0;
+
+  str.split("").forEach((char) => {
+    width += (verdanaWidthMap[char]?.[styleIndex] ?? 64) * (size / 100);
+  });
+
+  return width;
+};
+```
+
+각 문자 하나에 4개의 숫자가 들어가 있는 배열이 주루룩 있습니다. 배열은 앞에서부터 차례대로 "보통", "굵게", "기울기", "굵게기울기" 스타일에 따른 width 사이즈입니다. 저 크기의 기준은 폰트 사이즈가 100px 일 때의 가로 사이즈입니다. 정확하지는 않겠지만 얼추 잘 맞습니다. 아래 조건으로 `12345`라는 텍스트를 만들고,
+
+```css
+{
+    all: unset;
+    display: inline;
+    font-size: 100px;
+    font-family: Verdana;
+}
+```
+
+크기를 확인해보니 아래와 같았습니다.
+
+//TODO: 이미지 삽입
+
+실제 브라우저 렌더링 사이즈인 317.88px 는 64 \* 5 = 320px에 근접합니다. 괜찮다고 판단이 되었습니다.
+
+---
+
+SVG를 제대로 만들어내기 위해서는 가로 사이즈 뿐만 아니라 텍스트 색상도 고려해야 합니다. SVG를 HTML에 그대로 넣을 땐 [currnetColor](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value#currentcolor_keyword) 값을 사용할 수 있지만 `img` 태그의 `src`로 들어가는 svg는 여기에 접근할 수 없습니다. 이것도 query로 넣어줘서 잘 처리해줍시다.
+
+## KV
+
+[KV](https://developers.cloudflare.com/kv/)란 대충 지연시간이 낮은 간단한 key-value 데이터 스토리지입니다. 기술적으로는 ... 잘 모릅니다. ㅎㅎ. Cloudflare는 원래 CDN 서비스로 유명합니다. 세계에 퍼져있는 분산 서버와 CDN 서버를 활용하여 요즘 여러가지 서비스를 출시하고 있고, KV도 그 중 하나입니다. KV를 선택하게 된 건 큰 이유는 없고 그냥 한달에 1,000번 쓰기까지는 무료로 사용할 수 있기 때문입니다. (금방 limit가 찰 거 같긴 합니다...)
