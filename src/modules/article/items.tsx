@@ -31,6 +31,7 @@ import { item as Prisma } from "@app/article/2024-02/prisma/metadata";
 import { item as Tsup } from "@app/article/2024-02/tsup/metadata";
 import { item as Unbearable } from "@app/article/2024-02/unbearable/metadata";
 import { item as PageviewCounter } from "@app/article/2024-03/pageview-counter/metadata";
+import { item as Family } from "@app/article/2024-09/family/metadata";
 import { item as Letter } from "@app/article/2024-09/letter/metadata";
 import dayjs from "dayjs";
 import type { ArticleItem } from "./types";
@@ -70,6 +71,7 @@ const items: ArticleItem[] = [
   Unbearable,
   PageviewCounter,
   Letter,
+  Family,
 ];
 
 items.sort((a, b) => dayjs(b.createdAt).diff(a.createdAt));
