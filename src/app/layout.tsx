@@ -1,8 +1,8 @@
-import "@code-hike/mdx/dist/index.css";
 import "@common/globals.css";
 import ColorModeClassNameInjector from "@modules/color-mode/ColorModeClassNameInjector";
 import Footer from "@modules/layout/Footer";
 import { metadataBase } from "@modules/metadata/constants";
+// import "codehike/mdx/dist/index.css";
 import type { Metadata } from "next";
 import { Providers } from "./providers";
 

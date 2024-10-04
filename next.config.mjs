@@ -1,8 +1,15 @@
-import { remarkCodeHike } from "@code-hike/mdx";
 import remarkCustomContainer from "@echoja/remark-custom-container";
 import bundleAnalyzer from "@next/bundle-analyzer";
 import mdx from "@next/mdx";
+import { remarkCodeHike } from "codehike/mdx";
 import remarkGfm from "remark-gfm";
+
+/** @type {import('codehike/mdx').CodeHikeConfig} */
+const chConfig = {
+  components: {
+    code: "Code",
+  },
+};
 
 /** @type {import('next').NextConfig} */
 const config = {
@@ -98,20 +105,22 @@ const customContainerOptions = {
 
 const withMDX = mdx({
   options: {
+    jsx: true,
     remarkPlugins: [
       [remarkCustomContainer, customContainerOptions],
       remarkGfm,
       [
         remarkCodeHike,
-        {
-          lineNumbers: false,
-          showCopyButton: true,
-          theme: "nord",
-          skipLanguages: ["mermaid"],
-          staticMediaQuery: "not screen, (max-width: 768px)",
-          autoImport: true,
-          autoLink: false,
-        },
+        chConfig,
+        // {
+        //   lineNumbers: false,
+        //   showCopyButton: true,
+        //   theme: "nord",
+        //   skipLanguages: ["mermaid"],
+        //   staticMediaQuery: "not screen, (max-width: 768px)",
+        //   autoImport: true,
+        //   autoLink: false,
+        // },
       ],
     ],
   },

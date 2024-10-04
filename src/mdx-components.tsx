@@ -35,6 +35,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     // Allows customizing built-in components, e.g. to add styling.
     // h1: ({ children }) => <h1 style={{ fontSize: "100px" }}>{children}</h1>,
+    ...components,
     h2: Heading2,
     h3: Heading3,
     h4: Heading4,
@@ -43,7 +44,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     ol: OrderedList,
     ul: UnorderdList,
     blockquote: Quote,
-    code: Code,
+    Code,
     a: Anchor,
     li: ListItem,
     table: Table,
@@ -57,6 +58,5 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     details: Details,
     summary: Summary,
     strong: Strong,
-    ...components,
   };
 }
