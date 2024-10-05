@@ -1,6 +1,5 @@
 import type { Category } from "@modules/category";
 import dayjs from "dayjs";
-import Balancer from "react-wrap-balancer";
 import { twMerge } from "tailwind-merge";
 import { gray } from "tailwindcss/colors";
 import ArticleCounter from "./ArticleCounter";
@@ -67,10 +66,12 @@ export default function ArticleHeader({
           textShadow: `0 0.125rem 0.375rem rgb(0 0 0 / 0.05)`,
         }}
       >
-        <Balancer>{title}</Balancer>
+        {/* <Balancer>{title}</Balancer> */}
+        {title}
       </h1>
       <p className="text-sm break-keep">
-        <Balancer>{summary}</Balancer>
+        {/* <Balancer>{summary}</Balancer> */}
+        {summary}
       </p>
     </header>
   );
