@@ -3,12 +3,15 @@
 /* eslint-disable import/no-extraneous-dependencies */
 // const colors = require("tailwindcss/colors");
 // tailwind.config.js
-import { nextui } from "@nextui-org/react";
+import { nextui } from "@nextui-org/theme";
 import colors from "tailwindcss/colors";
 
 /** @type {import("tailwindcss").Config} */
 module.exports = {
-  content: ["./src/**/*.{ts,tsx,js,jsx,md,mdx}"],
+  content: [
+    "./src/**/*.{ts,tsx,js,jsx,md,mdx}",
+    "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
+  ],
   darkMode: "class",
   theme: {
     extend: {
@@ -57,5 +60,15 @@ module.exports = {
       },
     },
   },
-  plugins: [require("@tailwindcss/forms"), nextui()],
+  plugins: [
+    nextui({
+      layout: {
+        radius: {
+          large: "1rem",
+          medium: "0.5rem",
+          small: "0.25rem",
+        },
+      },
+    }),
+  ],
 };

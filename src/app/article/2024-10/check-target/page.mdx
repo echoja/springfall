@@ -8,6 +8,7 @@ import { item } from "./metadata";
 import p1 from "./p1.png";
 import p2 from "./p2.png";
 import i1 from "./i1.jpg";
+import { Tester } from "./tester";
 
 export const metadata = getArticleMetadata(item);
 
@@ -238,31 +239,48 @@ const checkTarget: CheckTarget = (target, env) => {
 
 ```tsx
 const checkGroup = (target: ITargetGroup, env: IEnv): Result => {
-  if (target.children.length === 0) {
+  const results = target.children
+    .map((child) => checkTarget(child, env))
+    .filter((result) => result.type !== "ignore");
+
+  if (results.length === 0) {
     return { type: "ignore" };
   }
 
+  const failures = results.filter(
+    (result): result is Extract<typeof result, { type: "failure" }> =>
+      result.type === "failure",
+  );
+
+  // And
   if (target.operator === "and") {
-    for (const child of target.children) {
-      const result = checkTarget(child, env);
-      if (result.type === "failure") {
-        return result;
-      }
+    if (failures.length === 0) {
+      return { type: "success" };
     }
-    return { type: "success" };
-  } else {
-    for (const child of target.children) {
-      const result = checkTarget(child, env);
-      if (result.type === "success") {
-        return result;
-      }
-    }
-    return { type: "failure", reason: "No child matched" };
+
+    return {
+      type: "failure",
+      reason: failures.map((failure) => failure.reason).join(", "),
+    };
   }
+
+  // Or
+  if (target.operator === "or") {
+    if (failures.length !== results.length) {
+      return { type: "success" };
+    }
+
+    return {
+      type: "failure",
+      reason: failures.map((failure) => failure.reason).join(", "),
+    };
+  }
+
+  return { type: "ignore" };
 };
 ```
 
-AND와 OR의 동작은 컴퓨터공학적으로 통용되는 논리를 **거의** 따릅니다. AND는 하나라도 실패하면 실패고 OR는 하나라도 성공하면 성공입니다. 그런데 빈 배열일 때는 어떨까요? 본래는 AND → 실패한 게 하나도 없으므로 성공, OR → 하나라도 성공한 게 없으므로 실패입니다. 그러나 우리의 프로그램은 그런 애매한 경우는 그냥 **없는 것**으로 취급합시다. 이렇게 하면 추후 로직을 간단하게 할 수 있어서 좋습니다. 유효하지 않다고 처리해버리는 부분은 가장 처음 `target.children.length === 0` 을 체크하는 부분에서 확인할 수 있습니다.
+AND와 OR의 동작은 컴퓨터공학적으로 통용되는 논리를 **거의** 따릅니다. AND는 하나라도 실패하면 실패고 OR는 하나라도 성공하면 성공입니다. 그런데 빈 배열일 때는 어떨까요? 본래는 AND → 실패한 게 하나도 없으므로 성공, OR → 하나라도 성공한 게 없으므로 실패입니다. 그러나 우리의 프로그램은 그런 애매한 경우는 그냥 **없는 것**으로 취급합시다. 이렇게 하면 추후 로직을 간단하게 할 수 있어서 좋습니다. 유효하지 않다고 처리해버리는 부분은 가장 처음 `ignore` 필터링 및 `results.length === 0` 을 체크하는 부분에서 확인할 수 있습니다.
 
 재귀적으로 처리하기 위해 중간에 `checkTarget`을 호출하는 부분을 확인할 수 있습니다.
 
@@ -315,6 +333,12 @@ const checkGender = (target: IGenderTarget, env: IEnv): Result => {
 ```
 
 코드의 길이가 길어보이지만 구조가 굉장히 간단한 함수들입니다.
+
+## 체험하기
+
+조건과 방문자 데이터의 설정에 따라 Result가 어떻게 달라지는지 체크해보세요.
+
+<Tester />
 
 ## 테스트
 
