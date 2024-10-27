@@ -115,6 +115,9 @@ export const Tester: React.FC = () => {
     <div>
       <Table
         className="mb-3"
+        classNames={{
+          wrapper: "border border-transparent dark:border-gray-600",
+        }}
         aria-label="조건 설정"
         hideHeader
         topContent={
@@ -229,7 +232,7 @@ export const Tester: React.FC = () => {
         </TableBody>
       </Table>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div className="p-4 rounded-large shadow-small">
+        <div className="p-4 border border-transparent rounded-large shadow-small dark:border-gray-600">
           <h3 className="mb-3 font-medium">조건 데이터</h3>
           <pre className="text-xs">{JSON.stringify(root, null, 2)}</pre>
         </div>
@@ -239,6 +242,9 @@ export const Tester: React.FC = () => {
             topContent={<h3 className="font-medium">방문자</h3>}
             className="mb-4"
             aria-label="방문자"
+            classNames={{
+              wrapper: "border border-transparent dark:border-gray-600",
+            }}
           >
             <TableHeader>
               <TableColumn>환경 데이터</TableColumn>
@@ -283,18 +289,18 @@ export const Tester: React.FC = () => {
             </TableBody>
           </Table>
 
-          <div className="p-4 mb-4 rounded-large shadow-small">
+          <div className="p-4 mb-4 border border-transparent rounded-large shadow-small dark:border-gray-600">
             <h3 className="mb-2 font-medium">실행</h3>
             <pre className="text-xs whitespace-pre-wrap">{`const result = checkTarget(root, { user });`}</pre>
           </div>
 
           <div
             className={twMerge(
-              "p-4 border rounded-large shadow-small transition",
+              "p-4 rounded-large shadow-small transition border ",
               result.type === "success"
-                ? "border-success-400"
+                ? "border-success-400 dark:border-success-300"
                 : result.type === "failure"
-                  ? "border-danger-400"
+                  ? "border-danger-400 dark:border-danger-300"
                   : "border-transparent",
             )}
           >
