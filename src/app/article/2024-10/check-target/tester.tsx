@@ -118,12 +118,12 @@ export const Tester: React.FC = () => {
         classNames={{
           wrapper: "border border-transparent dark:border-gray-600",
         }}
-        aria-label="조건 설정"
+        aria-label="립스틱 배너 조건 설정"
         hideHeader
         topContent={
           <div>
             <div className="flex items-center justify-between">
-              <h3 className="font-medium">조건 설정 (AND)</h3>
+              <h3 className="font-medium">립스틱 배너 조건 설정 (AND)</h3>
               <div className="flex gap-2">
                 <Button
                   variant="bordered"
