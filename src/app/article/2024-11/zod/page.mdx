@@ -1,0 +1,186 @@
+import ArticleHeader from "@modules/article/ArticleHeader";
+import ArticleImage from "@modules/article/ArticleImage";
+import getArticleHeaderProps from "@modules/metadata/getArticleHeaderProps";
+import getArticleJsonLdProps from "@modules/metadata/getArticleJsonLdProps";
+import getArticleMetadata from "@modules/metadata/getArticleMetadata";
+import { ArticleJsonLd } from "next-seo";
+import { item } from "./metadata";
+import i1 from "./u.jpg";
+import t1 from "./t1.png";
+import t2 from "./t2.png";
+import t3 from "./t3.png";
+
+export const metadata = getArticleMetadata(item);
+
+<ArticleJsonLd {...getArticleJsonLdProps(item)} />
+
+<ArticleHeader {...getArticleHeaderProps(item)} />
+
+<ArticleImage
+  img={i1}
+  width={700}
+  alt="검증하는 사진"
+  caption={
+    <>
+      Photo:{" "}
+      <a href="https://unsplash.com/ko/%EC%82%AC%EC%A7%84/person-holding-paper-near-pen-and-calculator-xoU52jUVUXA?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">
+        Unsplash
+      </a>{" "}
+      from{" "}
+      <a href="https://unsplash.com/ko/@kellysikkema?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">
+        Kelly Sikkema
+      </a>
+    </>
+  }
+/>
+
+## Zod의 인기 배경
+
+자바스크립트는 브라우저나 Node.js만 있으면 아주 잘 돌아가는 스크립트 언어입니다. 자바스크립트는 어떠한 컴파일 과정을 거쳐 바이너리 형태로 있는 것이 아니라 js 파일에 평문(Plain Text) 데이터로 들어가 있습니다. 자바스크립트 엔진은 그때그때 코드를 돌리면서 변수에 적절한 타입을 부여합니다. 타입마다 할 수 있는 행동이 정해져 있고, 올바르지 않은 행동을 하면 에러를 일으킵니다.
+
+```tsx
+const value = 10;
+value(); // Uncaught TypeError: a is not a function
+```
+
+그러나 자바스크립트 코드를 작성하는 시점에는 변수에 어떤 값이 들어가있을지 예측하기가 힘듭니다.
+
+```tsx
+function request(callback) {
+  callback();
+}
+```
+
+위에서 `callback`이 function 타입인지 아닌지 보장할 수 없습니다. 쉽게 예측할 수 없다면 프로그래머는 발생할 수 있는 오류를 계속해서 머릿속으로 떠올리고 있어야 합니다. 머리에 과부하가 옵니다. 과부하를 줄이기 위해 코드를 방어적으로 짜게 됩니다. 점차 코드의 가독성이 떨어지고 생산성도 떨어집니다.
+
+그래서 코드를 좀 더 예측할 수 있는 형태로 만들기 위해 타입스크립트가 등장했죠. 타입스크립트는 자바스크립트가 실제로 돌기 전에 이상한 것들을 잡아줍니다. 실제로 돌기 전이라 함은 개발할 때를 이야기합니다. 바로 VSCode 나 Webstorm 과 같은 에디터에서요. 브라우저나 Node.js에 코드가 실제로 실행되기 전에 우리는 미리 에러를 알고 대비할 수 있습니다.
+
+<ArticleImage
+  img={t1}
+  width={383}
+  border
+  caption="value 는 Number 타입이고, 이 타입은 호출할 수 없는 타입입니다."
+/>
+
+<ArticleImage
+  img={t2}
+  width={720}
+  border
+  caption="인자는 Function을 받으므로 Number를 넘길 수 없습니다."
+/>
+
+이러한 타입스크립트의 타입 시스템은 아주 좋아 보이지만, 명백한 한계가 있습니다. 바로 타입스크립트의 경계를 벗어나는 순간 타입 검사는 무용지물이 되어버리는 것이지요. 가장 흔한 사례라고 한다면 **네트워크 통신**입니다. 한 프로그램의 입장에서 외부로의 요청은 도무지 알 수 없는 영역입니다. 형식에 맞춰 요청을 보낸다고 한들 어떤 응답이 올지 알 수 없습니다. 브라우저에서 `fetch` 요청을 날린 후 `json()`으로 응답을 가져오려면 기본적으로 `Promise<any>`이라는 타입입니다. **응답은 무엇이든 될 수 있다**는 말이지요. 타입스크립트로만 이루어진 내부 시스템끼리의 신뢰성만 보장된다 하더라도 생산성이 크게 향상되겠지만, 여기서 만족해야 할까요?
+
+<ArticleImage img={t3} width={683} border />
+
+브라우저와 서버가 하나로 통합되어 있다면 이야기가 조금은 달라질 수 있습니다. [Next.js](https://nextjs.org/)라는 프레임워크는 브라우저에서 돌아가는 React 뿐만 아니라 서버 역할까지 수행할 수 있습니다. 그래서 컴포넌트에서 [Server Actions](https://react.dev/reference/rsc/server-actions) 와 같은 것을 사용하면서 실제로는 네트워크 요청이 이루어진다 해도 타입이 무사히 보존될 수 있도록 하죠. 물론 네트워크라는 본질적인 한계 때문에 전달되는 값들은 [제약사항](https://react.dev/reference/rsc/use-server#serializable-parameters-and-return-values)이 따르지만, 이정도만 해도 어딥니까. [tRPC](https://trpc.io/)라는 프레임워크도 통합 환경을 비슷하게 제공합니다.
+
+이런 얘기들은 서버와 클라이언트가 통합되어 있다는 특수한 상황이고, 좀 더 일반적인 해법이 필요합니다.
+
+외부 시스템으로부터의 데이터 비신뢰성은 타입스크립트 까지도 오기 전에 어떠한 프로그램이라면 숙명적으로 닥치는 본질적인 문제입니다. C++이나 Rust 등의 정적 타입 기반 컴파일 언어에서도 마찬가지라는 거죠. 자바스크립트에서도 같은 문제가 당연히 일찌감치 있었습니다. 즉, 외부로부터 온 데이터가 일정한 형식을 갖추고 있냐를 검증(Validation)하는 건 일반적인 패턴이고, 타입스크립트가 난리를 치기 전부터에도 이미 수많은 검증 라이브러리들이 있었습니다. 예를 들면 2013년 8월에 1.0.0이 릴리즈된 [Joi](https://www.npmjs.com/package/joi) 같은 라이브러리요.
+
+이러한 검증 라이브러리의 목표는 데이터가 어떤 스키마(데이터 형태)를 만족하는지 아닌지를 판별합니다. 보통은 다음처럼 두 가지 과정으로 나뉩니다.
+
+1. **정의**: 스키마를 생각합니다. 예를 들어 "`age`라는 필드에 `number` 타입이 오는 JSON 객체여야 한다"가 될 수 있습니다. 그 내용을 어떤 객체로 만듭니다. 예를 들어 Joi에서는 `const schema = Joi.object({...})` 로 정의할 수 있습니다. 스키마 뿐만 아니라 에러 메시지 등도 커스텀할 수 있습니다.
+2. **검증**: 정의한 스키마 객체를 들고 다니면서 `parse` 혹은 `validate` 와 같은 메서드를 호출합니다. 호출하면서 인자 값으로 미지의 데이터를 집어넣습니다. 결과는 True/False로 되거나 예외발생/발생안함 등으로 처리될 것입니다.
+
+예시를 들었던 Joi라는 라이브러리는 유용합니다. 실제 브라우저에서 코드가 동작할 때 네트워크 응답이 특정한 스키마를 만족하는지 판별할 수는 있습니다. 하지만 코드가 돌기 전 에디터에서 해당 변수가 어떤 데이터를 가지고 있을지는 예측할 수 없습니다. 즉 타입스크립트 상의 타입은 알 수 없습니다. Joi의 검증 결과는 자바스크립트 때처럼 해당 데이터가 어떤 값을 들고 있을지 미리 알 수 없다는 거죠.
+
+---
+
+[Zod](https://zod.dev/)라는 검증 라이브러리는 타입스크립트 지원을 아주 중요하게 생각하며, 그래서 빠르게 인기있는 라이브러리가 되었습니다. 에디터에서 보장된 타입을 제공해줄 뿐만 아니라 실제 코드가 돌아갈 때에도 데이터를 잘 검증합니다. `fetch` 응답의 `json()` 메소드의 결과는 `Promise<any>`임을 기억하시나요? 이 결과를 다루는 네 가지 방법은 아래와 같습니다.
+
+|                                   | Validation 기능 | 타입 정보 제공 |
+| --------------------------------- | --------------- | -------------- |
+| 그냥 그대로 쓰기 (`Promise<any>`) | X               | X              |
+| Type Assertion (`as`)             | X               | O              |
+| joi                               | O               | X              |
+| zod                               | O               | O              |
+
+## Zod 사용법
+
+먼저 스키마를 만듭니다.
+
+```tsx
+import { z } from "zod";
+
+const todoSchema = z.object({
+  userId: z.number(),
+  id: z.number(),
+  title: z.string(),
+  completed: z.boolean(),
+});
+```
+
+그 다음 데이터를 검증합니다.
+
+```tsx
+const res = await fetch("https://jsonplaceholder.typicode.com/todos/1");
+const rawData = await res.json();
+const todo = todoSchema.parse(rawData);
+console.log(todo);
+```
+
+아래 내용이 출력되는 걸 확인할 수 있습니다.
+
+```tsx
+{ userId: 1, id: 1, title: 'delectus aut autem', completed: false }
+```
+
+---
+
+만약 아래와 같이 스키마를 정의한다면
+
+```tsx
+const todoSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+});
+```
+
+스키마와 데이터가 일치하지 않아서 에러가 발생할 것입니다.
+
+실제로 코드를 동작시켜보면 아래와 같은 에러가 뜹니다.
+
+```tsx
+ZodError: [
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "number",
+    "path": [
+      "id"
+    ],
+    "message": "Expected string, received number"
+  }
+]
+    at get error [as error] (/Users/th.kim/Desktop/playground-joi/node_modules/zod/lib/types.js:55:31)
+    at ZodObject.parse (/Users/th.kim/Desktop/playground-joi/node_modules/zod/lib/types.js:160:22)
+    at test (/Users/th.kim/Desktop/playground-joi/test.ts:32:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5) {
+  issues: [
+    {
+      code: 'invalid_type',
+      expected: 'string',
+      received: 'number',
+      path: [Array],
+      message: 'Expected string, received number'
+    }
+  ],
+  addIssue: [Function (anonymous)],
+  addIssues: [Function (anonymous)],
+  errors: [
+    {
+      code: 'invalid_type',
+      expected: 'string',
+      received: 'number',
+      path: [Array],
+      message: 'Expected string, received number'
+    }
+  ]
+}
+```
+
+## 마치며
+
+Zod는 타입스크립트의 세계에서 “데이터를 검증”한다는 역할을 궁극적으로 잘 수행해냈습니다. 다음에는 Zod 가 어떻게 타입을 잘 지원할 수 있게 되었는지를 파악하는 시간을 가져보도록 합시다!
