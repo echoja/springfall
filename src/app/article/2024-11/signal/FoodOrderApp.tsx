@@ -93,6 +93,22 @@ const FoodOrderApp = () => {
             color: #666;
             font-size: 14px;
           }
+
+          .dark .container {
+            border-color: #555;
+          }
+
+          .dark .menu-item {
+            border-color: #666;
+          }
+
+          .dark .btn-order:disabled {
+            background-color: #666;
+          }
+
+          .dark .btn-control {
+            background-color: #333;
+          }
         `}
       </style>
 
