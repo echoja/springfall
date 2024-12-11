@@ -1,0 +1,508 @@
+import ArticleHeader from "@modules/article/ArticleHeader";
+import ArticleImage from "@modules/article/ArticleImage";
+import getArticleHeaderProps from "@modules/metadata/getArticleHeaderProps";
+import getArticleJsonLdProps from "@modules/metadata/getArticleJsonLdProps";
+import getArticleMetadata from "@modules/metadata/getArticleMetadata";
+import { ArticleJsonLd } from "next-seo";
+import { item } from "./metadata";
+import i1 from "./bird.jpg";
+import i2 from "./head.jpg";
+import FoodOrderApp from "./FoodOrderApp";
+
+export const metadata = getArticleMetadata(item);
+
+<ArticleJsonLd {...getArticleJsonLdProps(item)} />
+
+<ArticleHeader {...getArticleHeaderProps(item)} />
+
+<ArticleImage
+  img={i1}
+  width={700}
+  alt="검증하는 사진"
+  caption={
+    <>
+      상태 관리는 머리가 아프니 귀여운 새 사진을 보면서 힐링해요. Photo:{" "}
+      <a href="https://unsplash.com/ko/%EC%82%AC%EC%A7%84/%EA%B0%88%EC%83%89-%EB%82%98%EB%AD%87%EA%B0%80%EC%A7%80%EC%97%90-%EB%85%B8%EB%9E%80%EC%83%89%EA%B3%BC-%EA%B2%80%EC%9D%80%EC%83%89-%EC%83%88-U_vKaztM0Mo?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">
+        Unsplash
+      </a>{" "}
+      from{" "}
+      <a href="https://unsplash.com/ko/@saketh_upadhya?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">
+        Saketh Upadhya
+      </a>
+    </>
+  }
+/>
+
+상태란 무엇일까요? (정확한 정의 보다는 느낌적인 느낌으로 떠올려본다면) **외부 환경과 상호작용하며 변하는 내부 데이터**입니다. 예를 들어 배달의민족에서 중국집에 주문을 넣는다고 합시다. 주문을 하려면 각 메뉴를 추가하면서 최소 주문 금액을 맞춰야 합니다. 사용자가 적절히 장바구니에 넣는다면 그에 따른 로직이 잘 돌아야 하고 UI도 올바르게 갱신되어야 합니다.
+
+## 요구사항
+
+그런데 이 글에서는 특이한 요구사항이 하나 있습니다. 바로 바로 **프론트엔드 라이브러리를 사용할 수 없는 환경**이란 거죠! 이미 구축된 레거시 사이트에 기능을 직접 추가한다든지, JavaScript 용량을 최대한 줄여야 한다든지 하는 상황입니다.
+
+그럼에도 불구하고 상태를 잘 다루어야 하겠습니다. 그런데 상태를 잘 다룰 수 있다는 건 어떤 의미일까요? 상태가 어떤 모습이어야 우리가 다루기가 편리할까요?
+
+## 상태의 조건
+
+어지간한 프론트엔드 라이브러리(React, Svelte 등)는 상태 관리 메커니즘을 제공합니다. React에서는 [State Hooks](https://react.dev/reference/react/hooks)라는 특별한 함수로 상태를 정의할 수 있습니다. React에서 중국집 주문하는 부분을 한번 만들어보겠습니다.
+
+```tsx
+import React, { useState } from "react";
+
+const FoodOrderApp = () => {
+  const [jjamppong, setJjamppong] = useState(0);
+  const [jjajangmyeon, setJjajangmyeon] = useState(0);
+
+  const JJAMPPONG_PRICE = 7900;
+  const JJAJANGMYEON_PRICE = 5900;
+  const MIN_ORDER_AMOUNT = 15000;
+
+  const total = jjamppong * JJAMPPONG_PRICE + jjajangmyeon * JJAJANGMYEON_PRICE;
+  const isValidOrder = total >= MIN_ORDER_AMOUNT;
+
+  const handleOrder = () => {
+    console.log("주문 내역:", {
+      짬뽕: jjamppong,
+      짜장면: jjajangmyeon,
+      총액: total,
+    });
+  };
+
+  return (
+    <>
+      <style>{/* 중략 */}</style>
+
+      <div className="container">
+        <h1 className="title">음식 주문</h1>
+
+        <div className="menu-item">
+          <h2>짬뽕 (7,900원)</h2>
+          <div className="quantity-controller">
+            <button
+              className="btn btn-control"
+              onClick={() => setJjamppong(Math.max(0, jjamppong - 1))}
+            >
+              -
+            </button>
+            <input
+              className="quantity-input"
+              type="number"
+              value={jjamppong}
+              onChange={(e) =>
+                setJjamppong(Math.max(0, parseInt(e.target.value) || 0))
+              }
+              min="0"
+            />
+            <button
+              className="btn btn-control"
+              onClick={() => setJjamppong(jjamppong + 1)}
+            >
+              +
+            </button>
+          </div>
+        </div>
+
+        <div className="menu-item">
+          <h2>짜장면 (5,900원)</h2>
+          <div className="quantity-controller">
+            <button
+              className="btn btn-control"
+              onClick={() => setJjajangmyeon(Math.max(0, jjajangmyeon - 1))}
+            >
+              -
+            </button>
+            <input
+              className="quantity-input"
+              type="number"
+              value={jjajangmyeon}
+              onChange={(e) =>
+                setJjajangmyeon(Math.max(0, parseInt(e.target.value) || 0))
+              }
+              min="0"
+            />
+            <button
+              className="btn btn-control"
+              onClick={() => setJjajangmyeon(jjajangmyeon + 1)}
+            >
+              +
+            </button>
+          </div>
+        </div>
+
+        <p className="total-price">총 주문금액: {total.toLocaleString()}원</p>
+        <p className="min-price">최소 주문금액: 15,000원</p>
+
+        <button
+          className="btn btn-order"
+          onClick={handleOrder}
+          disabled={!isValidOrder}
+        >
+          주문하기
+        </button>
+      </div>
+    </>
+  );
+};
+
+export default FoodOrderApp;
+```
+
+<FoodOrderApp />
+
+대략적인 흐름은 아래와 같습니다.
+
+1. React가 처음에 FoodOrderApp를 렌더링하면서 모든 주문의 개수가 0입니다. `<input>` 에도 제대로 0이 들어가 있게 되고 총 주문 금액도 0원으로 표시됩니다.
+2. 사용자가 짬뽕에서 `+`버튼을 누르면 `setJjamppong(jjamppong + 1)` 이 호출됩니다.
+3. `jjamppong` 은 1로 바뀜과 동시에 **React는 이 FoodOrderApp 컴포넌트가 리렌더링 되어야** 함을 알게 됩니다.
+4. React는 적절히 리렌더링하여 바뀐 `jjamppong` 값 및 그에 따른 총액 등을 다시 잘 보여줍니다.
+
+React는 사용자에게 지속적으로 바뀐 상태를 잘 보여주기 때문에 편리합니다. 우리 개발자는 언제 어떤 컴포넌트가 리렌더링되어야 하는지 알 필요가 없습니다. 훌륭하게 캡슐화되어 있기에 우리는 사실 React가 얼마나 편리한지 인지하기도 어렵습니다!
+
+사실 이 편리함은 JSX가 지닌 표현력도 한 몫 하겠지만 일단 지금은 그게 포인트가 아닙니다. 상태 변경에 따라 그 이후에 착착 잘 진행된다 정도로 이해해주시면 되겠습니다.
+
+React의 사례를 봤을 때 상태는 다음과 같은 특징을 가지며, 우리가 필요한 수준도 동일하다고 볼 수 있겠습니다.
+
+- 로컬 상태, 혹은 개별적인 컴포넌트 단위의 상태를 **정의**할 수 있습니다. (마치 useState 처럼)
+- 상태와 로직은 언제든지 **추가/삭제**될 수 있습니다.
+- 각 상태는 변화가 잘 **추적**되어야 합니다. (리렌더링, useMemo, useEffect 처럼)
+
+## 중앙집중 상태 관리는 필요 없다
+
+[Zustand](https://zustand-demo.pmnd.rs/)와 같은 중앙 집중식 상태 관리 라이브러리는 아래와 같이 좀 더 특수한 상황에서 편리합니다.
+
+- **상태를 전달하는 데 큰 비용이 듬**: 상태를 전달하는 방법이 제한되어 있는 상황에서(주로 Props를 통해 데이터를 전달) 컴포넌트의 종류가 다양하고 트리가 깊을 때 상태가 정의된 쪽(예: 글로벌한 테마 설정)과 상태를 실제로 사용하는 쪽(예: 세부 버튼의 폰트 색깔 등)의 거리가 아주 멀어서 불편한 상황입니다. **Prop Drilling**이라고도 이야기를 하죠.
+- **상태를 한 곳에서 정의할 수 있음**: 필요한 상태를 미리 다 알 수 있다면 중앙집중식은 편합니다. 상태 간 의존성이나 상태 변경 수단을 한 곳에서 지정해둘 수 있다면, 상태를 소비하는 쪽에서는 추상화된 수단을 이용하기만 하면 됩니다.
+
+위 이야기를 다르게 말하면, 상태를 전달하는 데 비용이 별로 들지 않고 상태를 여러 곳에서 정의하며 로직도 언제든지 추가/삭제될 수 있는 혼돈의 상황이라면 중앙집중 상태관리가 썩 좋은 방법이 아니라는 겁니다.
+
+그래서 Zustand는 머릿속에서 지우시기 바랍니다ㅎㅎ
+
+## 직접 맛을 보자
+
+라이브러리의 도움 없이 만들어봅시다. 일단 짜장면은 빼고 **짬뽕만** 직접 만들어봅시다.
+
+```html
+<div class="container">
+  <h1 class="title">음식 주문</h1>
+
+  <div class="menu-item">
+    <h2>짬뽕 (7,900원)</h2>
+    <div class="quantity-controller">
+      <button class="btn btn-control" id="minus-button">-</button>
+      <input
+        class="quantity-input"
+        type="number"
+        id="quantity-input"
+        value="0"
+        min="0"
+      />
+      <button class="btn btn-control" id="plus-button">+</button>
+    </div>
+  </div>
+
+  <p class="total-price" id="total-price">총 주문금액: 0원</p>
+  <p class="min-price">최소 주문금액: 15,000원</p>
+
+  <button class="btn btn-order" id="order-button" disabled>주문하기</button>
+</div>
+
+<script>
+  // 상수
+  const JJAMPPONG_PRICE = 7900;
+  const MIN_ORDER_AMOUNT = 15000;
+
+  // 상태
+  let jjamppong = 0;
+
+  // DOM 요소 가져오기
+  const quantityInput = document.querySelector("#quantity-input");
+  const minusButton = document.querySelector("#minus-button");
+  const plusButton = document.querySelector("#plus-button");
+  const totalPrice = document.querySelector("#total-price");
+  const orderButton = document.querySelector("#order-button");
+
+  // UI 업데이트 함수
+  const updateUI = () => {
+    quantityInput.value = jjamppong;
+    const total = jjamppong * JJAMPPONG_PRICE;
+    totalPrice.innerHTML = `총 주문금액: ${total.toLocaleString()}원`;
+    orderButton.disabled = total < MIN_ORDER_AMOUNT;
+  };
+
+  // 이벤트 리스너
+  minusButton.addEventListener("click", () => {
+    jjamppong = Math.max(0, jjamppong - 1);
+    updateUI();
+  });
+
+  plusButton.addEventListener("click", () => {
+    jjamppong = jjamppong + 1;
+    updateUI();
+  });
+
+  quantityInput.addEventListener("change", (e) => {
+    jjamppong = Math.max(0, parseInt(e.target.value) || 0);
+    updateUI();
+  });
+
+  orderButton.addEventListener("click", () => {
+    const total = jjamppong * JJAMPPONG_PRICE;
+    console.log("주문 내역:", { 짬뽕: jjamppong, 총액: total });
+  });
+
+  // 초기 UI 설정
+  updateUI();
+</script>
+```
+
+큰 틀에서는 비슷해 보이지만 뚜렷한 차이가 있습니다. 이제 우리가 직접 UI를 업데이트 해줘야 합니다. 자연스레 중복 코드도 많아져서 겹치는 부분을 `updateUI` 함수로 뺐지만, 여전히 함수 호출의 책임은 이벤트 핸들러에 있고, 강제되는 것도 아니라서 누락하기도 쉬워 보입니다.
+
+상태가 일관되게 보여야 한다는 건 맞지만 그 책임을 상태 변경하는 쪽에 지운다는 건 너무하다는 생각이 듭니다. 그냥 짜장면 개수만 바꾸고 싶을 뿐인데 최소 금액 조건이 맞는지까지 체크를 해야 한다니요. 변수 값 변경에 따른 검사 로직을 다른 데에 따로 정의하고 싶지만 변수로 간단히 상태를 정의한다면 이를 추적하는 일은 어렵습니다. 변수는 단지 메모리에 존재하는 작은 값 조각일 뿐이죠.
+
+일단 이 상태에서 짜장면을 추가한다고 했을 때 어려운 점은 다음과 같습니다.
+
+- 총계 계산 수정을 주문 버튼에도 수정하고 UI 업데이트에서도 수정해야 합니다. 같은 계산인데 여러 곳에서 수정해야 한다면 → **누락되기 쉽습니다.**
+- 이벤트 핸들러들이 추가되면서 모두 updateUI 함수를 호출해야 합니다. → **누락되기 쉽습니다.**
+
+그러다 쿠폰 적용 기능도 추가된다면? 짬뽕 추가 버튼에서 쿠폰 유무까지 신경쓰면서 최종 금액을 계산해야 할 겁니다.
+
+<ArticleImage
+  img={i2}
+  width={700}
+  alt="분통 터져 머리채를 쥐어잡고 싶지만 머리가 없다"
+  caption={"머리채를 잡아뜯고 싶지만 이제 남아있는 머리카락이 없다"}
+/>
+
+결론은, 상태의 개수가 추가되면 추가될 수록, 상태를 변경시키는 수단이 많아지면 많아질 수록 코드의 복잡성이 기하급수적으로 올라갑니다. 상태에 따른 일관성을 지키는 부분만 별도로 작성할 수 있어야 합니다. 그럴려면 아래와 같은 기능이 제공되어야 합니다.
+
+- 상태가 변경될 때 호출되는 함수를 미리 **등록**(subscribe)할 수 있어야 합니다.
+- 상태가 변경될 때 등록한 함수가 **알아서 잘 실행**되어야 합니다.
+
+자 이제 직접 짜는 건 힘드니까 라이브러리의 힘을 받아봅시다.
+
+## Signal 개요
+
+저희는 **[`@preact/signals-core`](https://github.com/preactjs/signals)** 이라는 라이브러리를 사용할 것입니다. 아래 이유로 채택하였습니다.
+
+- [용량이 그렇게 크지 않](https://unpkg.com/browse/@preact/signals-core@1.6.0/dist/)습니다.(4.24kB, br 압축하면 2.3 kB)
+- 딱 필요한 기능 정도만 가지고 있습니다.
+- 안정성도 어느정도 보장되어 있다고 판단했습니다. [Preact](https://preactjs.com/)라는 라이브러리에서 사용되고 있고, GitHub Star 수는 2024년 11월 기준 3,800개이며 주간 다운로드 수는 약 24만 회로 준수한 편입니다.
+
+대충 봤는데 우리가 앞서 살펴본 요구사항을 충분히 만족해줄 수 있을 것 같아서 다른 라이브러리는 크게 찾아보지 않았습니다.
+
+언제든지 작은 단위의 상태(signal)를 만들어낼 수 있고 변경 추적을 위한 용이한 기능을 제공한다는 게 우리에겐 가장 중요합니다. Signal이 도대체 무엇이냐는 건 이 글의 주제에서 벗어나기 때문에 아래 글들을 참조하시면 좋습니다. 상태 관리라는 건 유구한 전통을 가진 주제이고, 그 역사적 흐름을 캐치하고 있다면 당신은 초고수…!
+
+- [https://junghan92.medium.com/리액트-vs-signals-10년이-지난-지금-89e5c648c2e8](https://junghan92.medium.com/%EB%A6%AC%EC%95%A1%ED%8A%B8-vs-signals-10%EB%85%84%EC%9D%B4-%EC%A7%80%EB%82%9C-%EC%A7%80%EA%B8%88-89e5c648c2e8)
+- [https://junghan92.medium.com/번역-자바스크립트-signal의-진화-4bd6a991d2f](https://junghan92.medium.com/%EB%B2%88%EC%97%AD-%EC%9E%90%EB%B0%94%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8-signal%EC%9D%98-%EC%A7%84%ED%99%94-4bd6a991d2f)
+
+## `@preact/signals-core` 기본 사용법
+
+설치는 간단합니다.
+
+```bash
+npm install @preact/signals-core
+```
+
+혹은 다음과 같이 사용해도 됩니다.
+
+```html
+<script type="module">
+  import {
+    signal,
+    computed,
+    effect,
+  } from "https://unpkg.com/@preact/signals-core@1.8.0/dist/signals-core.module.js";
+
+  // 이하 내용
+</script>
+```
+
+기본 사용법은 아래와 같습니다.
+
+```jsx
+import { signal, computed, effect } from "@preact/signals-core";
+
+// 상태(signal) 생성
+const counter = signal(0);
+const name = signal("Jane");
+const surname = signal("Doe");
+
+// 연계된 상태 생성
+const fullName = computed(() => name.value + " " + surname.value);
+
+// 상태 읽기
+console.log(counter.value);
+
+// 상태 쓰기
+counter.value = 1;
+name.value = "John";
+
+// 연계된 함수 등록 (fullName이 변경되면 함수가 호출됨)
+const dispose = effect(() => console.log("fullName", fullName.value));
+
+// 연계된 함수를 해제함
+dispose();
+```
+
+- `signal`: signal 을 생성합니다.
+- `.value` 속성으로 값을 읽을 수 있습니다.
+- `.value` 속성에 대입함으로써 쓰기를 할 수 있습니다.
+- `computed`: 다른 signal 에 의존하는 signal을 생성합니다.
+- `effect`: signal이 변경됐을 때 동작할 함수를 등록합니다. 리턴되는 함수는 등록을 해제하는 함수입니다.
+
+이것만 있어도 우리는 행복하게 코딩할 수 있습니다.
+
+내부적인 동작이 조금 신기할 순 있는데요, `computed` 함수나 `effect` 함수 내에서 어떤 signal의 value 속성에 접근하고자 한다면, 이는 의존 관계가 있다고 보고 추후 업데이트할 때 이 함수를 동작하도록 어딘가에 저장해놓습니다. 값 쓰기를 할 때에는 value에 새로운 값이 대입될 때 의존 관계에 있는 signal이나 함수들에게 알립니다. 소스 코드를 잠시 들여다보면 다음과 같습니다.
+
+```ts
+Object.defineProperty(Signal.prototype, "value", {
+  get(this: Signal) {
+    const node = addDependency(this); // 의존성 추가
+    if (node !== undefined) {
+      node._version = this._version;
+    }
+    return this._value;
+  },
+  set(this: Signal, value) {
+    if (value !== this._value) {
+      this._value = value;
+      this._version++;
+      globalVersion++;
+
+      /** 이하 연계된 상태 갱신 */
+      /**@__INLINE__*/ startBatch();
+      try {
+        for (
+          let node = this._targets;
+          node !== undefined;
+          node = node._nextTarget
+        ) {
+          node._target._notify();
+        }
+      } finally {
+        endBatch();
+      }
+    }
+  },
+});
+```
+
+## 코드를 효과적으로 작성해보기
+
+이제 이 signal을 통해서 코드를 좀 수정해보겠습니다.
+
+```jsx
+// UI는 이전과 동일합니다.
+
+import {
+  signal,
+  computed,
+  effect,
+} from "https://unpkg.com/@preact/signals-core@1.8.0/dist/signals-core.module.js";
+
+// 상수
+const JJAMPPONG_PRICE = 7900;
+const MIN_ORDER_AMOUNT = 15000;
+
+// 상태 정의
+const jjamppong = signal(0);
+const total = computed(() => jjamppong.value * JJAMPPONG_PRICE);
+const isValidOrder = computed(() => total.value >= MIN_ORDER_AMOUNT);
+
+// DOM 요소
+const quantityInput = document.querySelector("#quantity-input");
+const minusButton = document.querySelector("#minus-button");
+const plusButton = document.querySelector("#plus-button");
+const totalPrice = document.querySelector("#total-price");
+const orderButton = document.querySelector("#order-button");
+
+// Signal 효과 설정
+effect(() => {
+  quantityInput.value = jjamppong.value;
+});
+
+effect(() => {
+  totalPrice.innerHTML = `총 주문금액: ${total.value.toLocaleString()}원`;
+});
+
+effect(() => {
+  orderButton.disabled = !isValidOrder.value;
+});
+
+// 이벤트 리스너
+minusButton.addEventListener("click", () => {
+  jjamppong.value = Math.max(0, jjamppong.value - 1);
+});
+
+plusButton.addEventListener("click", () => {
+  jjamppong.value = jjamppong.value + 1;
+});
+
+quantityInput.addEventListener("change", (e) => {
+  jjamppong.value = Math.max(0, parseInt(e.target.value) || 0);
+});
+
+orderButton.addEventListener("click", () => {
+  console.log("주문 내역:", {
+    짬뽕: jjamppong.value,
+    총액: total.value,
+  });
+});
+```
+
+우선 상태 정의는 let에서 signal(…)로 변경됐습니다. 이제 updateUI 같은 건 없어졌습니다. 그 대신 `effect` 함수 안에서 독립적으로 UI를 갱신하고 있음을 볼 수 있습니다. 그리고 click/change 이벤트 리스너에서는 signal에 쓰기를 할 뿐입니다. signal은 알아서 상태가 바뀌었다는 걸 알고 `effect`로 등록해놓은 함수를 실행시킵니다. 코드가 좀 더 선언적으로 바뀌어서 동작 예측이 더 쉬워지고 코드 이해도 더 쉬워지고 중복 코드도 싹 줄어들었습니다!
+
+이제 짜장면을 추가해볼까요? 추가하거나 수정해야 할 코드는 아래와 같습니다.
+
+```jsx
+// 1. 상수 추가
+const JJAJANGMYEON_PRICE = 5900;
+
+// 2. 상태 추가
+const jjajangmyeon = signal(0);
+
+// 3. total computed 수정
+const total = computed(
+  () =>
+    jjamppong.value * JJAMPPONG_PRICE + jjajangmyeon.value * JJAJANGMYEON_PRICE,
+);
+
+// 4. DOM 요소 추가 (HTML 추가는 알아서)
+const jjajangInput = document.querySelector("#jjajang-input");
+const jjajangMinusBtn = document.querySelector("#jjajang-minus");
+const jjajangPlusBtn = document.querySelector("#jjajang-plus");
+
+// 5. Effect 추가
+effect(() => {
+  jjajangInput.value = jjajangmyeon.value;
+});
+
+// 6. 이벤트 리스너 추가 (다른 이벤트 리스너들 아래에)
+jjajangMinusBtn.addEventListener("click", () => {
+  jjajangmyeon.value = Math.max(0, jjajangmyeon.value - 1);
+});
+
+jjajangPlusBtn.addEventListener("click", () => {
+  jjajangmyeon.value = jjajangmyeon.value + 1;
+});
+
+jjajangInput.addEventListener("change", (e) => {
+  jjajangmyeon.value = Math.max(0, parseInt(e.target.value) || 0);
+});
+
+// 7. 주문 버튼의 콘솔 로그 수정
+orderButton.addEventListener("click", () => {
+  console.log("주문 내역:", {
+    짬뽕: jjamppong.value,
+    짜장면: jjajangmyeon.value,
+    총액: total.value,
+  });
+});
+```
+
+수정할 것만 수정하고 추가할 것만 추가하며 영향도가 최소화되었습니다. 각자 독립적으로 잘 동작하네요! (짬뽕을 수정했다고 짜장면의 UI 업데이트가 일어나진 않습니다)
+
+## 마치며
+
+signal과 같은 상태 라이브러리는 앞서 이야기한 문제들 뿐만 아니라 상태 관리 라이브러리가 일반적으로 겪는 (그러나 우리가 미처 생각하지 못한) 문제를 대부분 해결해줍니다. 성능적인 부분도 어느정도 커버가 되구요. 수많은 [테스트 케이스](https://github.com/preactjs/signals/blob/main/packages/core/test/signal.test.tsx)를 본다면 엣지 케이스가 얼마나 많은지 실감하게 됩니다.
+
+`@preact/signals-core` 그 자체의 쓰임새나 이점이나 다른 라이브러리와의 관계는 의도적으로 많이 이야기하지 않았습니다. 그 대신 이미 익숙한 - 혹은 익숙하다고 여겨왔던 개념들을 다시 분해하여 생각해보고, 맞닥뜨린 요구조건을 정확히 파악하고자 했습니다. 필요한 기능이 무엇인지 확실히 하고 적절한 라이브러리를 찾는 과정을 담으려고 노력했습니다. 우리는 무작정 라이브러리를 찾아나서거나 무작정 직접 구현을 하는 것 사이에서 적절한 방법을 찾아야 할 것입니다아!!

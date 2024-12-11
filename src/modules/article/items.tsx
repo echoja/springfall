@@ -33,6 +33,10 @@ import { item as Unbearable } from "@app/article/2024-02/unbearable/metadata";
 import { item as PageviewCounter } from "@app/article/2024-03/pageview-counter/metadata";
 import { item as Family } from "@app/article/2024-09/family/metadata";
 import { item as Letter } from "@app/article/2024-09/letter/metadata";
+import { item as CheckTarget } from "@app/article/2024-10/check-target/metadata";
+import { item as FarmingPaper } from "@app/article/2024-10/farming-paper/metadata";
+import { item as Signal } from "@app/article/2024-11/signal/metadata";
+import { item as Zod } from "@app/article/2024-11/zod/metadata";
 import dayjs from "dayjs";
 import type { ArticleItem } from "./types";
 
@@ -72,6 +76,10 @@ const items: ArticleItem[] = [
   PageviewCounter,
   Letter,
   Family,
+  FarmingPaper,
+  CheckTarget,
+  Zod,
+  Signal,
 ];
 
 items.sort((a, b) => dayjs(b.createdAt).diff(a.createdAt));

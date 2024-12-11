@@ -21,9 +21,9 @@
     "@next/bundle-analyzer": "14.2.14",
     "@next/env": "14.2.14",
     "@next/mdx": "14.2.14",
-    "@nextui-org/react": "^2.4.8",
-    "@tailwindcss/forms": "^0.5.9",
-    "codehike": "^1.0.2",
+    "@nextui-org/react": "^2.6.8",
+    "@nextui-org/theme": "^2.4.3",
+    "@types/mdx": "^2.0.13",
     "dayjs": "^1.11.13",
     "framer-motion": "^11.11.0",
     "jotai": "^2.10.0",
@@ -40,8 +40,8 @@
     "vite": "^5.4.8"
   },
   "devDependencies": {
-    "@types/react": "^18.3.11",
     "@types/mdx": "^2.0.13",
+    "@types/react": "^18.3.11",
     "@typescript-eslint/eslint-plugin": "^8.8.0",
     "@typescript-eslint/parser": "^8.8.0",
     "@vitejs/plugin-react": "^4.3.2",
