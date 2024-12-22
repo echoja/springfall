@@ -1,0 +1,746 @@
+import ArticleHeader from "@modules/article/ArticleHeader";
+import ArticleImage from "@modules/article/ArticleImage";
+import getArticleHeaderProps from "@modules/metadata/getArticleHeaderProps";
+import getArticleJsonLdProps from "@modules/metadata/getArticleJsonLdProps";
+import getArticleMetadata from "@modules/metadata/getArticleMetadata";
+import { ArticleJsonLd } from "next-seo";
+import { item } from "./metadata";
+import i1 from "./1.png";
+import i2 from "./2.png";
+import i3 from "./3.png";
+import i4 from "./4.png";
+import i5 from "./5.png";
+
+export const metadata = getArticleMetadata(item);
+
+<ArticleJsonLd {...getArticleJsonLdProps(item)} />
+
+<ArticleHeader {...getArticleHeaderProps(item)} />
+
+우리는 **모든** 상품 목록을 가져오고 싶습니다. 그리고 여기, 상품 목록을 가져오는 API가 있습니다. 이 API의 사용법은 다음과 같습니다.
+
+- 한 번에 최대 100개까지만 가져올 수 있습니다. (`limit=100` 으로 고정이라 가정합니다)
+- 어느 ID부터 상품을 가져올지를 뜻하는 `sinceId` 인자를 받습니다. (해당 sinceId를 제외하고 그 다음 id부터 가져옵니다)
+
+그래서 모든 상품 목록을 가져오기 위해서는 API를 여러 번 호출해야 하고, 어디서부터 다시 100개를 가져올지를 매번 계산해야겠습니다. (중간중간 삭제 된 만약 상품이 총 250개가 있다면 세 번의 API를 호출해야겠죠.
+
+1. `sinceId` 생략 → 처음부터 상품을 가져옴, 마지막 상품의 ID가 120임
+2. `sinceId=120` → 120번 이후 100개 상품을 가져옴, 마지막 상품의 ID가 400임
+3. `sinceId=400` → 400번 이후 50개의 상품을 가져옴
+
+---
+
+흠, 이것만 보면 그렇게 어렵지 않은데요? 그런데 말입니다… 우리는 더 고차원적으로 추상화하고 싶습니다. 그 이유는 다음과 같아요.
+
+1. **API 사용자 입장에서 중요한 정보에만 집중하고 싶습니다**. 모든 상품 데이터를 가져오고 싶은 사람 입장에서 `sinceId` 등의 정보는 별 쓸모가 없습니다. 원하는 건 그냥 상품 목록을 한번에 다 가져오는 것일 뿐입니다.
+2. **부차적인 동작을 쉽게 떼고 붙이고 싶습니다**. 예를 들어 특정한 오류만 `console.log` 하고 싶다든지, 실패했을 때에는 재시도를 한다든지, 특정 부분의 소요시간을 측정하고 싶다든지 말입니다.
+3. **로직을 짜는게 많이 반복적입니다**. 상품 뿐만 아니라 프로모션, 이벤트, 사용자, 카테고리 등등 수많은 Entity마다 비슷한 로직이 반복될 수 있습니다. 심지어 하나의 도메인에서도 상황에 따라 로그를 찍을지 말지 다를 수도 있습니다. 각종 상황, 도메인, 부차기능이 각 차원의 축이 되어 코드의 양이 기하급수적으로 늘고, 유지보수가 어려워질 수 있습니다.
+
+어느정도 수준까지 추상화를 해야 하는지는 정확한 답이 없지만, 이 글에서는 함수형 프로그래밍의 방법론을 빌려 조금 더 높은 차원까지 추상화할 것입니다.
+
+그리고 이는 직관적으로 이해하기 어려운 코드를 가집니다. 일단 아래 코드를 보면서 약간의 당혹스러움을 느껴봅시다.
+
+```tsx
+export type Action<T, R> = (data: R) => Promise<T>;
+
+export type CountGetter = () => Promise<{ count: number }>;
+
+export type SinceIdGetter<T> = (result: { items: T[] }) => {
+  sinceId: number;
+};
+
+export function getAllItemsFn<T, R>(
+  getCount: CountGetter,
+  getNextSinceItemId: SinceIdGetter<T>,
+) {
+  return function getAllItems(
+    fn: Action<{ items: T[] }, R>,
+  ): Action<{ items: T[] }, R> {
+    return async function getAllItems(arg) {
+      let { count: remainCount } = await getCount();
+      let sinceId = 0;
+      const result: T[] = [];
+
+      while (remainCount > 0) {
+        const response = await fn({ ...arg, sinceId });
+        result.push(...response.items);
+        sinceId = getNextSinceItemId(response).sinceId;
+        remainCount -= response.items.length;
+      }
+
+      return { items: result };
+    };
+  };
+}
+```
+
+😅 이 코드를 보고 어떤 느낌이 드시나요? 이 코드를 어떻게 사용하기나 할 수 있는 걸까요?
+
+---
+
+## 함수형!
+
+사실 무엇이 Functional Programming이고 아니고는 이 글에서는 중요하지 않습니다. 위에서 제시한 문제를 해결하려는 가장 쉬운 방법이 함수형 프로그래밍과 조금 닮아 있다는 것 정도입니다. 그래도 거창하게 제목으로 함수형을 붙여놓았으니 설명을 좀 하긴 해야겠죠. Claude에게 “함수형 프로그래밍”을 설명해 달라고 하니까, 아래처럼 설명하더랍니다.
+
+- 순수함수: 동일한 입력에는 항상 동일한 출력이 나옵니다.
+- 불변성: 한번 만들어진 데이터는 변경하지 않습니다.
+- 사이드 이펙트 없음: 함수는 자신의 역할만 수행합니다.
+- **함수 조합**: 작은 함수들을 조합해서 더 큰 기능을 만듭니다
+
+함수형 프로그래밍의 장점은, 결과물 코드가 더 예측하기 쉽고 테스트하기도 쉽고 버그도 줄여준답니다. 그런데 기능이 잘 추상화되어 있고 잘 쪼개져있으면 함수형 프로그래밍에서 뿐만 아니라 모든 코드에 해당하는 장점이므로 큰 의미는 없습니다.
+
+우리가 초점을 맞출 부분은 **함수 조합**입니다. 우리는 아래 세 개의 재료를 가지고,
+
+- 상품 리스트의 일부를 가져오는 함수
+- 상품 전체 개수를 가져오는 함수
+- 응답에서 다음 `sinceId`를 계산하는 함수
+
+**목록을 한번에 다 가져오**는 함수(동작)를 만드는 게 목표입니다.
+
+## 일단 러프하게 짜보기
+
+일단 상품을 가져오는 함수입니다.
+
+```tsx
+interface IProduct {
+  id: string;
+  name: string;
+  price: number;
+  thumbnail: string;
+}
+
+interface IArgs {
+  sinceId: string;
+}
+
+interface IGetProductsResponse {
+  items: IProduct[];
+}
+
+export async function getProducts(args: IArgs): Promise<IGetProductsResponse> {
+  const response = await fetch(
+    "https://fakestoreapi.com/products?sinceId=" + args.sinceId,
+  );
+  const products = await response.json();
+  return { items: products };
+}
+```
+
+`sinceId`는 searchParams에 넣고 `fetch` 하는 것 밖에 없습니다.
+
+이제 상품의 개수와 다음 `sinceId`를 가져오는 함수를 만들어봅시다.
+
+```tsx
+export async function getProductsCount(): Promise<{ count: number }> {
+  const response = await fetch("https://fakestoreapi.com/products/count");
+  const count = await response.json();
+  return { count };
+}
+
+export function getNextSinceProductId(response: IGetProductsResponse): {
+  sinceId: number;
+} {
+  return { sinceId: Math.max(...response.items.map((item) => item.id)) };
+}
+```
+
+API는 `id` 값이 섞여서 들어올 수 있기 때문에 `Math.max`로 최댓값을 구해줬습니다.
+
+이제 위 세 개의 함수를 조합하면 다음과 같이 될 겁니다.
+
+```tsx
+export async function getAllProducts(): Promise<IGetProductsResponse> {
+  let { count: remainCount } = await getProductsCount(); // 개수를 먼저 구한다.
+  let sinceId = 0;
+  const result: IProduct[] = [];
+
+  while (remainCount > 0) {
+    // 개수가 다 될 때까지...
+    const response = await getProducts({ sinceId }); // 상품을 가져온다
+    result.push(...response.items);
+    sinceId = getNextSinceProductId(response).sinceId; // 다음 sinceId를 갱신한다
+    remainCount -= response.items.length;
+  }
+
+  return { items: result };
+}
+```
+
+로직은 크게 어렵지 않습니다.
+
+1. 먼저 상품의 개수를 가져옵니다.
+2. 진행상황을 저장할 `remainCount` 변수와 `sinceId` 변수를 만들어 놓습니다.
+3. `while` 문을 돌면서 전부 다 완료할 때까지 뺑뺑이 돕니다.
+4. 마지막으로 `result`를 리턴합니다.
+
+그런데 이를 추상화를 어떻게 할 수 있을까요? 일단 어떠한 Entity에도 대응되어야 하니까 대충 `T`로 쌈싸먹어 봅시다. 그러면 아래와 같은 형태가 될 겁니다.
+
+```tsx
+export async function getAllItems<T>(): Promise<IGetResponse<T>> {
+  let { count: remainCount } = await getCount<T>();
+  let sinceId = 0;
+  const result: T[] = [];
+
+  while (remainCount > 0) {
+    const response = await getItems<T>({ sinceId });
+    result.push(...response.items);
+    sinceId = getNextSinceItemId<T>(response).sinceId;
+    remainCount -= response.items.length;
+  }
+
+  return { items: result };
+}
+```
+
+위 코드는 잘못된 코드입니다. 타입스크립트에서는 타입 정보만 넘기면서 분기할 순 없습니다. 실제 동작(함수)를 인자로 받아서 그걸 실행시도록 수정합시다. `getAllItems` 함수에 인자가 3개가 되었습니다.
+
+```tsx
+// 생략: 위에서 만든 함수들
+
+export type CountGetter = () => Promise<{ count: number }>;
+
+export type SinceIdGetter<T> = (result: IGetResponse<T>) => {
+  sinceId: number;
+};
+
+export interface IGetResponse<T> {
+  items: T[];
+}
+
+export async function getAllItems<T>(
+  getCount: CountGetter,
+  getItems: (arg: IArgs) => Promise<IGetResponse<T>>,
+  getNextSinceItemId: SinceIdGetter<T>,
+): Promise<IGetResponse<T>> {
+  let { count: remainCount } = await getCount();
+  let sinceId = 0;
+  const result: T[] = [];
+
+  while (remainCount > 0) {
+    const response = await getItems({ sinceId });
+    result.push(...response.items);
+    sinceId = getNextSinceItemId(response).sinceId;
+    remainCount -= response.items.length;
+  }
+
+  return { items: result };
+}
+
+export function getAllProducts() {
+  return getAllItems(getProductsCount, getProducts, getNextSinceProductId);
+}
+```
+
+그런데 여기에는 한가지 단점이 있어요. 바로 `getItems` 의 인자를 타입변수화 하기가 상당히 까다롭다는 겁니다. [상품]이라는 Entity는 `이름`을 인자로 받을 수 있고, [유저]는 `나이`로 검색할 수도 있잖아요? 그래서 `getAllItems` 함수에 타입변수를 하나 더 추가해서 해본다면…
+
+```tsx
+export async function getAllItems<T, R extends { sinceId: number }>(
+  getCount: CountGetter,
+  getItems: (arg: R) => Promise<{ items: T[] }>,
+  getNextSinceItemId: SinceIdGetter<T>
+): Promise<IGetResponse<T>> { ... }
+```
+
+쨘~ 아래처럼 에러가 납니다.
+
+<ArticleImage img={i1} alt="R에 대한 에러 메시지" border />
+
+`R` 타입은 `sinceId` 뿐만 아니라 `name`, `age` 등 다양한 필드가 들어갈 수도 있습니다. 즉 가능성이 무궁무진한 아이입니다. 그런데 거기에 `sinceId`만 있는 좁은 타입을 넣게되면 나머지 인자가 공중 분해되기 때문에 함수의 인자로 사용할 수 없습니다. 우리는 어떠한 인자가 들어와도 그대로 넘겨주면서(forwarding) `sinceId`만 끼워 넣어줘야 합니다.
+
+함수의 형태를 좀 크게 바꿀 때가 됐습니다.
+
+```tsx
+export function getAllItemsFn<T, R extends { sinceId: number }>(
+  getCount: CountGetter,
+  getItems: (arg: R) => Promise<IGetResponse<T>>,
+  getNextSinceItemId: SinceIdGetter<T>,
+) {
+  return async function getAllItems(arg: R): Promise<IGetResponse<T>> {
+    let { count: remainCount } = await getCount();
+    let sinceId = 0;
+    const result: T[] = [];
+
+    while (remainCount > 0) {
+      const response = await getItems({ ...arg, sinceId });
+      result.push(...response.items);
+      sinceId = getNextSinceItemId(response).sinceId;
+      remainCount -= response.items.length;
+    }
+
+    return { items: result };
+  };
+}
+
+export const getAllProducts = getAllItemsFn(
+  getProductsCount,
+  getProducts,
+  getNextSinceProductId,
+);
+```
+
+세 곳에 주목해주세요.
+
+- 전체를 함수로 다시 감쌌음
+- `getItems`를 호출하는 부분
+  - 이전: `const response = await getItems({ sinceId });`
+  - 이후: `const response = await getItems({ ...arg, sinceId });`
+- `getAllItemsFn`(큰 함수)는 함수를 인자로 받고 함수를 리턴하게 되었음.
+
+다시 말해 상당히 함수형스럽게 바뀌었다 이말입니다.
+
+`getAllProducts`는 우리가 함수를 직접 정의해줄 필요 없이 `getAllItemsFn`이 만들어 주는 함수 그대로 대입해줍니다. `getAllItemsFn`는 가운데 `getItems`의 타입을 유지하므로 그 어떤 API에도 대응할 수 있습니다.
+
+## 새로운 기능: 시간이 얼마나 걸리는지 측정하기
+
+벌써부터 좀 커져버린 이 함수는 한번에 API를 수십번 치게 될 수도 있어서 병목이 될 가능성이 높습니다. 그래서 실제로 시간이 얼마나 걸리는지와 관한 모니터링 정보를 미리 얻어두고 싶어요. 함수를 시작하면서 `new Date();` 로 현재 시간을 기록해뒀다가 마지막에 빼서 체크해볼까요?
+
+```tsx
+export interface IGetResponseWithDuration<T> extends IGetResponse<T> {
+  duration: number;
+}
+
+export function getAllItemsFn<T, R extends { sinceId: number }>(
+  getCount: CountGetter,
+  getItems: (arg: R) => Promise<IGetResponse<T>>,
+  getNextSinceItemId: SinceIdGetter<T>,
+) {
+  return async function getAllItems(
+    arg: R,
+  ): Promise<IGetResponseWithDuration<T>> {
+    const start = new Date();
+
+    // 중략. 기존과 똑같음.
+
+    const end = new Date();
+    const duration = end.getTime() - start.getTime();
+
+    return { items: result, duration };
+  };
+}
+```
+
+시작과 끝에 `duration`을 계산하기 위한 `start`와 `end`를 넣고 계산하여 결과로 빼줍니다. 이제 리턴 값에는 `duration`이 함께 나옵니다. 문제는, 이렇게 duration 을 측정하고 싶은 것들이 너무나도 많습니다. 그 모든 함수에다가 일일히 start, end, duration 을 써넣어 줘야 할까요?
+
+함수형은 동작을 조합할 수 있다는 점이 참 매력적인 친구입니다. 한번 그렇게 만들어봅시다. 바로 위에서 작성한 코드는 잊어버립시다.
+
+```tsx
+// getAllItemsFn는 기존 것 그대로.
+
+export type Action<T, R> = (arg: R) => Promise<T>;
+
+export type WithDuration<T> = T & { duration: number };
+
+export function durationFn<T, R>(
+  action: Action<T, R>,
+): Action<WithDuration<T>, R> {
+  return async function duration(arg: R) {
+    const start = new Date();
+    const result = await action(arg);
+    const end = new Date();
+    const duration = end.getTime() - start.getTime();
+    return { ...result, duration };
+  };
+}
+
+export const getAllProducts = durationFn(
+  getAllItemsFn(getProductsCount, getProducts, getNextSinceProductId),
+);
+```
+
+추가 및 변경점은 아래와 같습니다.
+
+- 함수를 좀 타입으로 보기 좋게 하기 위해 `Action<T, R>`을 사용했습니다. `T`가 결과이고 `R`이 인자인 것입니다.
+- `durationFn` 함수를 새로 만들었습니다. `Action<T, R>`를 인자로 받고 `Action<WithDuration<T>, R>`를 결과로 내놓습니다.
+- `getAllItemsFn`의 결과를 `durationFn` 인자로 넣었습니다.
+
+제가 함수를 내뱉는 함수의 prefix로 `Fn`을 붙였는데요, 이는 국룰 같은 건 전혀 아니고 단순히 고차함수임을 표시하기 위함입니다. `withDuration` 이런 식으로도 이름을 붙일 수 있습니다. 딱히 정해져 있는 바가 없으므로 각자 컨벤션을 정해서 일관성 있게 네이밍하면 될 듯 합니다.
+
+참고로 다음과 같은 코드는 안됩니다. 왜 안되는지는 찾아보진 않을 것입니다… 타입스크립트의 세계는 너무나 깊고 심오한 것… 그래서 타입 인자 T 자체와 합체시키기 위해 Intersection(`&`) 타입을 활용했습니다.
+
+```tsx
+export interface IWithDuration<T> extends T {
+  duration: number;
+}
+// An interface can only extend an object type
+// or intersection of object types with statically known members. ts(2312)
+```
+
+이제 `getAllProducts`를 정의하는 쪽에서는 벌써 5개의 함수가 보이는군요. `durationFn`와 같은 고차 함수를 계속해서 적용한다면 아래와 같은 모습으로 되겠죠?
+
+`test3Fn(test2Fn(test1Fn(durationFn(getAllItemsFn(getProductsCount, getProducts, getNextSinceProductId)))))`
+
+좀 보기가 힘들어집니다. `pipe` 함수로 정리해봅시다.
+
+## `pipe` 함수
+
+pipe는 프로그래밍의 세계에서 흔하게 쓰이는 용어입니다. 당장 터미널에서 `ls -l | grep ".txt"` 명령어 처럼 이전에 있었던 결과를 다음 동작의 인자로 넘기는 행위를 “파이프를 사용한다”라고 합니다. 스트림에서는 pipe 메서드는 보통 스트림의 결과물들을 다음 스트림의 입력으로 넘길 때 사용합니다.
+
+먼저 들어온 것을 다음으로 계속해서 넘기는 걸로 이해하면 충분합니다. 넘기는 결과로 나오고 인자로 다시 들어가는 것은 단순한 값일 수도 있고 함수일 수도 있습니다(함수를 값으로 취급할 수 있다면 동어반복일 뿐입니다). 다만 pipe로 동작을 정의할 때에는 최소한 함수여야 합니다. 각 요소는 **입력**과 **출력**이 있어야 하기 때문이죠.
+
+`pipe` 함수를 자바스크립트 환경에서 간단하게 정의한다면 다음과 같습니다.
+
+```tsx
+const pipe = (initialValue, ...fns) =>
+  fns.reduce((value, fn) => fn(value), initialValue);
+```
+
+이를 사용해보고 싶으면 다음과 같이 할 수 있겠죠.
+
+```tsx
+const result1 = pipe(
+  5, // 초기값
+  (x) => x + 10, // 15
+  (x) => x * 2, // 30
+  (x) => `최종값: ${x}`, // "최종값: 30"
+);
+console.log(result1);
+```
+
+그럼 이제 타입스크립트로 만들어서 한번 적용해볼까요?
+
+```tsx
+function pipe<T>(initialValue: T, ...fns: Function[]) {
+  return fns.reduce((value, fn) => fn(value), initialValue);
+}
+
+const getAllProducts = pipe(
+  getAllItemsFn(getProductsCount, getProducts, getNextSinceProductId),
+  durationFn,
+);
+```
+
+그런데 타입스크립트에서는 타입 추론과 관련한 문제가 있습니다. `reduce`의 결과는 기본적으로 `initialValue`의 타입으로 결정됩니다. 따라서 `getAllProducts`의 결과에 우리가 원하는 `duration` 정보가 남아있지 않게 됩니다. 게다가 중간중간 입력과 출력의 연결이 매끄러운지도 타입스크립트가 검사할 수 있어야 하는데, 이는 결코 단순한 작업이 아닙니다. 좀 더 깔끔하게 보이도록 하려다가 되려 더 힘들어졌습니다!
+
+다행스럽게도 타입스크립트 고수들이 해답을 이미 만들어 놨습니다. 아래는 [Effect 라는 라이브러리에서 사용하는 pipe 코드](https://github.com/Effect-TS/effect/blob/main/packages/effect/src/Function.ts)입니다. 타입스크립트의 각종 기교와 (`never`는 왜 있는거지?) 최상의 성능을 고려하여 코드가 좀 복잡해보이기는 하네요. 왜 이렇게 만들어졌는가는 이 글에서 중요하지 않으므로 패스하도록 하겠습니다.
+
+```tsx
+export function pipe<A>(a: A): A;
+export function pipe<A, B = never>(a: A, ab: (a: A) => B): B;
+export function pipe<A, B = never, C = never>(
+  a: A,
+  ab: (a: A) => B,
+  bc: (b: B) => C,
+): C;
+export function pipe<A, B = never, C = never, D = never>(
+  a: A,
+  ab: (a: A) => B,
+  bc: (b: B) => C,
+  cd: (c: C) => D,
+): D;
+
+/// ... 중략 ...
+
+export function pipe(
+  a: unknown,
+  ab?: Function,
+  bc?: Function,
+  cd?: Function,
+  // ... 중략 ...
+): unknown {
+  switch (arguments.length) {
+    case 1:
+      return a;
+    case 2:
+      return ab!(a);
+    case 3:
+      return bc!(ab!(a));
+    case 4:
+      return cd!(bc!(ab!(a)));
+    // ... 중략 ...
+    default: {
+      let ret = arguments[0];
+      for (let i = 1; i < arguments.length; i++) {
+        ret = arguments[i](ret);
+      }
+      return ret;
+    }
+  }
+}
+```
+
+자, 이제 결과의 타입이 `WithDuration<…>`로 아주 잘 잡히는 걸 확인할 수 있습니다.
+
+<ArticleImage img={i2} alt="pipe 에서 타입 잡기 1" border />
+
+중간 단계를 만들고자 할 때에도 왠지 타입이 잘 잡힙니다.
+
+<ArticleImage img={i3} alt="pipe에서 타입 잡기 2" border />
+
+## `getAllItemsFn` 마지막으로 수정하기 (함수 조합의 최종 진화 형태)
+
+`pipe` 함수를 최대한 활용하기 위해 `getAllItemsFn` 을 마지막으로 수정하도록 하겠습니다.
+
+```tsx
+export function getAllItemsFn<T, R>(
+  getCount: CountGetter,
+  getNextSinceItemId: SinceIdGetter<T>,
+) {
+  return function getAllItems(
+    fn: Action<{ items: T[] }, R & { sinceId: number }>,
+  ): Action<{ items: T[] }, R> {
+    return async function getAllItems(arg) {
+      let { count: remainCount } = await getCount();
+      let sinceId = 0;
+      const result: T[] = [];
+
+      while (remainCount > 0) {
+        const response = await fn({ ...arg, sinceId });
+        result.push(...response.items);
+        sinceId = getNextSinceItemId(response).sinceId;
+        remainCount -= response.items.length;
+      }
+
+      return { items: result };
+    };
+  };
+}
+
+export const getAllProducts = pipe(
+  getProducts,
+  getAllItemsFn(getProductsCount, getNextSinceProductId),
+  durationFn,
+);
+```
+
+끄아악! 더더욱이 더 복잡해진 것 아닌가요? 괜찮아요. 이제 이 글에서는 이보다 더 복잡해지지 않으니깐요.
+
+기존에 3개의 함수로 합쳐져있던 `getAllItemsFn`를 두 개로 분리했습니다. 이로써 `getProducts`는 독립적으로 동작할 수도 있다는 걸 확실히 보여주는 동시에 `getProductsCount`, `getNextSinceProductId`는 무조건 `getAllItemsFn`와 함께 해야 한다는 것으로 더 명확히 했습니다.
+
+그렇게 유연하게 만든 결과 함수 안에 함수 안에 함수가 있는 형태로 바뀌었네요.
+
+## 함수형 조합 일반화하기
+
+위에서 만든 최종 형태를 더 일반화해서 설명해보겠습니다.
+
+```tsx
+export type Action<T, R> = (arg: R) => Promise<T>;
+
+export function testFn<T, R>() {
+  // 부가 정보
+  return function _test(fn: Action<T & T1, R & R1>): Action<T & T2, R & R2> {
+    return async function _test(arg) {
+      // 함수 실행 이전에 할 행동들 (예: arg 변환 등)
+      const result = await fn(arg_modified); // arg_modified는 R & R2
+      // 함수 실행 이후에 할 것들 (예: result 변환 등)
+      return result_modified; // T & T2
+    };
+  };
+}
+```
+
+- `Action<T, R>`: `R`를 인자로 받고 `T`를 리턴하는 비동기 함수입니다. (꼭 비동기일 필욘 없지만 비동기 작업도 무리없이 진행하기 위함입니다)
+- `testFn`: 가장 바깥 함수입니다.
+- `function _test`: 중간 함수입니다. 실제로 pipe의 인자로 쓰이는 용도입니다.
+- `async function _test`: 실제 함수입니다. 나중에 함수 호출 시 실제로 안에 내용이 실행됩니다.
+- `T`: 공통되는 결과 타입입니다. `pipe` 전후에 어떤 함수도 올 수 있도록 제약조건을 걸지 않습니다.
+- `R`: 공통되는 인자 타입입니다. 마찬가지로 `pipe` 전후에 어떤 함수도 올 수 있도록 제약조건을 걸지 않습니다.
+- `T1`: 입력함수 결과 타입의 최소 요구조건입니다. `T1`이 만약 `{ duration: number; }` 이라면 `result.duration` 으로 접근할 수 있습니다.
+- `T2`: 출력함수 결과 타입의 최소 요구조건입니다. `result_modified` 의 타입을 강제합니다.
+- `R1`: 입력함수 인자 타입의 최소 요구조건입니다. `R1`이 만약 `{ duration: number; }` 이라면 `arg.duration` 으로 접근할 수 있습니다.
+- `R2`: 출력함수 인자 타입의 최소 요구조건입니다. `arg_modified` 의 타입을 강제합니다.
+
+특징을 살펴보면 다음과 같습니다.
+
+- `function` 키워드가 총 3개 입니다.
+- 가장 바깥쪽 함수에서 `T`, `R` 이라는 타입 매개변수를 정의합니다.
+- 중간 함수에서 함수 시그니처를 최대한 자세히 작성합니다. 이 함수는 비동기가 아닌 그냥 `function` 입니다.
+- 가장 안쪽 함수는 `async function` 이며 별도의 타입 지정이 없습니다. (중간 함수에서 정의해준 대로 따라갑니다)
+
+## 응용: 로그 출력하는 기능 붙이기
+
+우리가 만들고 있는 시스템은 복잡합니다. 그래서 상품 정보를 가져오는 함수는 아주 다양한 곳으로부터 동시에 실행될 수 있습니다. 문제 지점을 파악하기 위해 로그를 곳곳에 남겨두고 싶고, 다른 맥락끼리 로그를 분리하고 싶습니다. 그래서 다음과 같은 기능을 넣고 싶습니다.
+
+- 함수 내부에서는 인자 값으로 넘어오는 `log` 함수를 호출하여 출력합니다.
+- 함수 외부에서 (함수의 정의 단계 = pipe 수행 단계) 내부에서 사용할 `log` 함수를 주입시켜줍니다. (주입할 때 특정한 `key`값을 기준으로 로깅이 가능하도록 합니다)
+
+우선 징검다리 역할을 해줄 함수를 만들어줍니다.
+
+```tsx
+export type Log = (msg: string | object) => void;
+
+export function logWithId(msg: string | object, key: string) {
+  const current = new Date();
+  if (typeof msg === "string") {
+    console.log(JSON.stringify({ timestamp: current.toISOString(), key, msg }));
+    return;
+  }
+
+  console.log(
+    JSON.stringify({ timestamp: current.toISOString(), key, ...msg }),
+  );
+}
+
+export function createLog(key: string): Log {
+  return function log(msg) {
+    logWithId(msg, key);
+  };
+}
+
+const defaultLog = createLog("default");
+
+export function logFn<T, R>(log = defaultLog) {
+  return function _log(fn: Action<T, R & { log?: Log }>): Action<T, R> {
+    return async function _log(arg) {
+      return fn({ ...arg, log });
+    };
+  };
+}
+```
+
+`logWithId` 함수의 역할은 간단합니다. 그냥 `console.log` 해주는 게 다 입니다. 그리고 `key`를 미리 설정해둔 log 함수를 만들기 위한 `createLog`도 있습니다. `defaultLog`란 `key`가 `default`인 log 함수이며 `logFn`의 기본값은 이 `defaultLog` 입니다.
+
+`logFn`의 중간 함수를 보면, 입력함수의 인자 타입은 `R & { log?: Log }` 이지만 출력함수의 인자 타입은 `R` 입니다. 이게 의미하는 바가 무엇이냐 하면은, pipe에서 `logFn` 이전 단계에 있는 함수는 인자로 `log`를 주입해줘야 하지만 `logFn` 이후라면 더이상 `log`를 주입해줄 필요가 없다는 뜻입니다.
+
+`getAllItemsFn`를 로그 마구 찍는 형태로 수정해봅시다.
+
+```tsx
+export function getAllItemsFn<T, R>(
+  getCount: CountGetter,
+  getNextSinceItemId: SinceIdGetter<T>,
+) {
+  return function getAllItems(
+    fn: Action<{ items: T[] }, R & { log?: Log } & { sinceId: number }>,
+  ): Action<{ items: T[] }, R & { log?: Log }> {
+    return async function getAllItems(arg) {
+      let { count: remainCount } = await getCount();
+      arg.log?.("initial remainCount: " + remainCount);
+      let sinceId = 0;
+      const result: T[] = [];
+
+      while (remainCount > 0) {
+        const response = await fn({ ...arg, sinceId });
+        arg.log?.({
+          message: "success response",
+          length: response.items.length,
+          remainCount,
+          sinceId,
+        });
+        result.push(...response.items);
+        sinceId = getNextSinceItemId(response).sinceId;
+        arg.log?.(`next sinceId: ${sinceId}`);
+        remainCount -= response.items.length;
+        arg.log?.(`next remainCount: ${remainCount}`);
+      }
+
+      arg.log?.(`success get all items: ${result.length}`);
+
+      return { items: result };
+    };
+  };
+}
+```
+
+`getAllItemsFn` 의 입출력 함수에 모두 `& { log?: Log }` 를 붙여줍니다. 이렇게 하면 인자에서 log 함수를 가져올 수 있으며 그걸로 출력을 꼼꼼히 해줍니다. `logFn`을 이용해 `log`를 주입한다면 이제 `log`를 넣으라는 요구를 하지 않게 됩니다. 아래 이미지와 같이 빈 객체를 인자로 넘겨도 에러가 발생하지 않습니다.
+
+<ArticleImage img={i4} alt="인자의 요구조건을 없애는 예시" border />
+
+요구하는 인자가 없다면 아예 `arg`를 넣지 않아도 되는 방식이 더 좋아보이지만, 그렇게 구현할 간단한 방법이 보이지 않아서 포기했습니다.
+
+만약 `getAllProducts`의 함수 구성을 변경하지 않았다면, 이 함수는 아래 캡처와 같이 `log` 함수를 넣으라는 요구를 하게 됩니다. optional이긴 하지만요. 놀라운 점은 아래 코드는 전혀 수정되지 않았는데도 `pipe`는 알아서 `log`를 인자로 넣을 수 있다고 타입 추론을 해버린다는 겁니다.
+
+<ArticleImage img={i5} alt="인자의 요구조건을 굳이 없애지 않는 예시" border />
+
+로그는 각 태스크를 구분지을 수 있도록 출력하는 게 더 유용합니다. 그래서 key를 미리 지정하기 보다는 후자처럼 필요할 때마다 `createLog`를 하면 될 것 같습니다. 더 좋은 방법으로 구현할 수 있다면 댓글로 남겨주세요~!
+
+타입을 왜 `&`로 하나하나 쪼개는지는 다음 시간에 알아보도록 하겠습니다. 이론적으로 정리가 덜 되어서 아직 명확하게 설명은 못하지만, 제네릭 함수에서 타입 인자의 제약 조건을 딱 맞게 주지 않으면 타입스크립트는 가능한 수를 모두 파악하려고 하므로 타입 에러에 봉착할 확률이 높아집니다. 그 확률을 최대한 떨구는 방법이라고 이해해주시면 되겠습니다. 예를 들자면, `Omit<WithLog<T>, "log">`는 `T`와 같지 않습니다. 왜냐하면 T가 애초부터 `log` 속성을 가지고 있었다면, 결과에서는 `log`가 완전히 사라져있기 때문입니다.
+
+## 테스트
+
+테스트를 위해 간단한 mock 데이터와 그 데이터를 불러오는 함수를 만들어봅시다. 앞선 요구조건에서는 한번에 100개씩 상품을 가져왔지만 지금은 테스트를 위해 10개씩 가져오도록 하겠습니다.
+
+```tsx
+const data: IProduct[] = [
+  {
+    id: 12,
+    name: "프리미엄 무선 이어버드",
+    price: 189000,
+    thumbnail: "/api/placeholder/300/300",
+  },
+  // 각종 데이터 ... 단, id 순으로 정렬되어 있음.
+];
+
+export async function getProductsMock(args: { sinceId: number }) {
+  await new Promise((resolve) => setTimeout(resolve, 200));
+  const { sinceId } = args;
+  const count = 10;
+
+  let startIndex = 0;
+  let found = false;
+  for (startIndex = 0; startIndex < products.length; startIndex++) {
+    if (products[startIndex].id > sinceId) {
+      found = true;
+      break;
+    }
+  }
+  if (!found) {
+    return { items: [] };
+  }
+
+  return { items: products.slice(startIndex, startIndex + count) };
+}
+
+export async function getProductsCountMock(): Promise<{ count: number }> {
+  await new Promise((resolve) => setTimeout(resolve, 200));
+  return { count: products.length };
+}
+```
+
+테스트할 코드는 아래와 같습니다.
+
+```tsx
+export const getAllProductsMock = pipe(
+  getProductsMock,
+  getAllItemsFn(getProductsCountMock, getNextSinceProductId),
+  durationFn,
+);
+
+getAllProductsMock({ log: createLog("test-key") }).then((result) => {
+  console.log(`success get ${result.items.length} products`);
+});
+```
+
+그러면 아래와 같은 로그도 찍히고 상품을 차례대로 끝까지 무사히 잘 가져왔음을 확인할 수 있습니다!
+
+```json
+{"timestamp":"2024-12-21T22:42:25.739Z","key":"test-key","msg":"initial remainCount: 102"}
+{"timestamp":"2024-12-21T22:42:25.946Z","key":"test-key","message":"success response","length":10,"remainCount":102,"sinceId":0}
+{"timestamp":"2024-12-21T22:42:25.947Z","key":"test-key","msg":"next sinceId: 104"}
+{"timestamp":"2024-12-21T22:42:25.947Z","key":"test-key","msg":"next remainCount: 92"}
+{"timestamp":"2024-12-21T22:42:26.148Z","key":"test-key","message":"success response","length":10,"remainCount":92,"sinceId":104}
+{"timestamp":"2024-12-21T22:42:26.148Z","key":"test-key","msg":"next sinceId: 201"}
+{"timestamp":"2024-12-21T22:42:26.148Z","key":"test-key","msg":"next remainCount: 82"}
+... 중략
+{"timestamp":"2024-12-21T22:42:27.765Z","key":"test-key","message":"success response","length":10,"remainCount":12,"sinceId":887}
+{"timestamp":"2024-12-21T22:42:27.766Z","key":"test-key","msg":"next sinceId: 977"}
+{"timestamp":"2024-12-21T22:42:27.766Z","key":"test-key","msg":"next remainCount: 2"}
+{"timestamp":"2024-12-21T22:42:27.967Z","key":"test-key","message":"success response","length":2,"remainCount":2,"sinceId":977}
+{"timestamp":"2024-12-21T22:42:27.968Z","key":"test-key","msg":"next sinceId: 995"}
+{"timestamp":"2024-12-21T22:42:27.968Z","key":"test-key","msg":"next remainCount: 0"}
+{"timestamp":"2024-12-21T22:42:27.968Z","key":"test-key","msg":"success get all items: 102"}
+{"timestamp":"2024-12-21T22:42:27.968Z","key":"test-key","msg":"duration: 2431"}
+success get 102 products
+```
+
+## 마치며
+
+지금까지의 모든 코드는 https://github.com/echoja/functional-logic 에서 확인하실 수 있습니다.
+
+함수형으로 비즈니스 로직을 구성했을 때 그 유연성은 정말 높습니다. 그러나 그만큼 익숙하지 않은 문법이기도 합니다. 비슷하게 반복되는 로직을 추상화한다면 결국 계층이 하나 추가되는 것과 같고, 이는 난이도를 올리면서 이해하는 데 필요한 시간이 더 많을 수 있습니다. 그냥 복붙하는 게 더 효율적일 수도 있다는 거죠.
+
+그렇다면 프로그램이 얼마나 복잡해져야 이런 함수형 조합 방식을 쓰는 게 효용이 생길까요? 이 글에서 제시하는 방법으로 할 수 있는 건 상당히 다양합니다. 아래 기능들을 모두 뗐다 붙였다 모듈화가 필요하다면 충분히 고려해볼 만합니다.
+
+- 데이터 검증하고 실패하면 특정 에러 던지기
+- 특정 에러만 catch 하기
+- 에러가 발생했을 때 조기에 console.log 찍기
+- 특정 이벤트가 발생했을 때 특정 큐로 이벤트 보내주기
+- 특정 웹훅으로 요청이 들어왔을 때 요청을 조작한 다음 비즈니스 로직으로 넘기기
+- 특정 함수가 동시에 여러 개 실행되지 않도록 제어하기 (동시성 제어)
+- 간단한 사이드 이펙트 추가하기 (예: 중간 단계에서 console.log로 결과 찍어보기)
+- 동작이 실패했을 때 retry 수행하기 (delay 시간도 커스터마이징 하기)
+
+비즈니스 로직이 이보다 더더욱 복잡해진다면 더 신뢰가 가는 라이브러리를 사용하는 것도 해답일 겁니다. 비즈니스 로직을 작성하는 방법을 강제하는 라이브러리는 꽤 있습니다.
+
+- [RxJS](https://rxjs.dev/)는 Observables 라는 개념을 이용하여 비동기 로직을 쉽게 조합할 수 있도록 합니다. NestJS의 내부 시스템으로 동작하고 있습니다.
+- [Effect](https://effect.website/)는 타입스크립트로 프로그램을 만드는 방식을 통째로 제시합니다. 내부적인 개념이 워낙 많아서 새로운 언어를 배우는 느낌입니다…
+
+이 글도 사실 Effect를 저희 시스템에 도입해보려다가 그 복잡성에 혀를 내두르고, 그냥 적당히 개념만 빌려와서 시스템을 간단하게 구현해본 것입니다. 각자의 니즈에 맞는 대로 여러 라이브러리 맛을 봐도 좋다고 생각합니다. 그러면~ 즐코딩!
