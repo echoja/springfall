@@ -3,7 +3,7 @@
 import { Check, Copy } from "lucide-react";
 import { useState } from "react";
 
-export function CopyButton({ text }: { text: string }) {
+export function CodeCopyButton({ text }: { text: string }) {
   const [copied, setCopied] = useState(false);
 
   return (

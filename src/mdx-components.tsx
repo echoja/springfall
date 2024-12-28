@@ -17,7 +17,12 @@ import {
   TR,
   Table,
 } from "@modules/article/block-components";
-import { Anchor, Code, Strong } from "@modules/article/format-components";
+import {
+  Anchor,
+  Code,
+  InlineCode,
+  Strong,
+} from "@modules/article/format-components";
 import {
   ListItem,
   OrderedList,
@@ -44,6 +49,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     ol: OrderedList,
     ul: UnorderdList,
     blockquote: Quote,
+    code: InlineCode,
     Code,
     a: Anchor,
     li: ListItem,

@@ -109,19 +109,7 @@ const withMDX = mdx({
     remarkPlugins: [
       [remarkCustomContainer, customContainerOptions],
       remarkGfm,
-      [
-        remarkCodeHike,
-        chConfig,
-        // {
-        //   lineNumbers: false,
-        //   showCopyButton: true,
-        //   theme: "nord",
-        //   skipLanguages: ["mermaid"],
-        //   staticMediaQuery: "not screen, (max-width: 768px)",
-        //   autoImport: true,
-        //   autoLink: false,
-        // },
-      ],
+      [remarkCodeHike, chConfig],
     ],
   },
 });

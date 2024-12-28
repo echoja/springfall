@@ -1,43 +1,15 @@
-import Link from "next/link";
-
-import { CopyButton } from "@components/CopyButton";
+import { CodeCopyButton } from "@components/CodeCopyButton";
 import type {
   AnnotationHandler,
+  BlockAnnotation,
   InlineAnnotation,
   RawCode,
 } from "codehike/code";
-import { Pre, highlight } from "codehike/code";
+import { InnerLine, Pre, highlight } from "codehike/code";
 import { ExternalLink } from "lucide-react";
+import Link from "next/link";
+import { twMerge } from "tailwind-merge";
 import style from "./style.module.css";
-
-// eslint-disable-next-line import/prefer-default-export
-export function Anchor({
-  children,
-  href,
-}: {
-  children?: React.ReactNode;
-  href?: string;
-}) {
-  const isInternal = href?.startsWith("/article");
-
-  return (
-    <Link
-      className={style.link}
-      {...(!isInternal
-        ? {
-            target: "_blank",
-            rel: "noopener noreferrer",
-          }
-        : {})}
-      href={href || ""}
-    >
-      {children}
-      {!isInternal && (
-        <ExternalLink size="0.8em" className=" text-brand-400 ml-0.5 inline" />
-      )}
-    </Link>
-  );
-}
 
 const callout: AnnotationHandler = {
   name: "callout",
@@ -71,33 +43,124 @@ const callout: AnnotationHandler = {
   },
 };
 
+const className: AnnotationHandler = {
+  name: "className",
+  Block: ({ annotation, children }) => (
+    <div className={annotation.query}>{children}</div>
+  ),
+  Inline: ({ annotation, children }) => (
+    <span className={annotation.query}>{children}</span>
+  ),
+};
+
+const diff: AnnotationHandler = {
+  name: "diff",
+  onlyIfAnnotated: true,
+  transform: (annotation: BlockAnnotation) => {
+    const color = annotation.query == "-" ? "#f85149" : "#3fb950";
+    return [annotation, { ...annotation, name: "mark", query: color }];
+  },
+  Line: ({ annotation, ...props }) => (
+    <>
+      <div className="min-w-[1ch] box-content opacity-70 pl-2 select-none">
+        {annotation?.query}
+      </div>
+      <InnerLine
+        merge={props}
+        className={twMerge(annotation?.query == "-" && "select-none")}
+      />
+    </>
+  ),
+};
+
+const mark: AnnotationHandler = {
+  name: "mark",
+  Line: ({ annotation, ...props }) => {
+    const color = annotation?.query || "rgb(14 165 233)";
+    return (
+      <div
+        className="flex"
+        style={{
+          borderLeft: "solid 2px transparent",
+          borderLeftColor: annotation && color,
+          backgroundColor: annotation && `rgb(from ${color} r g b / 0.1)`,
+        }}
+      >
+        <InnerLine merge={props} className="flex-1 px-4" />
+      </div>
+    );
+  },
+  Inline: ({ annotation, children }) => {
+    const color = annotation?.query || "rgb(14 165 233)";
+    return (
+      <span
+        className="rounded px-0.5 py-0 -mx-0.5"
+        style={{
+          outline: `solid 1px rgb(from ${color} r g b / 0.5)`,
+          background: `rgb(from ${color} r g b / 0.13)`,
+        }}
+      >
+        {children}
+      </span>
+    );
+  },
+};
+
 export async function Code({ codeblock }: { codeblock: RawCode }) {
   const highlighted = await highlight(codeblock, "nord");
 
   return (
     <div className="relative">
-      <div className="relative px-3 py-2 rounded bg-[rgba(46,52,64,0.95)] text-sm my-10 shadow-md overflow-x-scroll">
+      <div className="relative rounded bg-[rgba(46,52,64,0.95)] text-sm my-10 shadow-md overflow-x-scroll leading-6 text-gray-300">
         {highlighted.meta ? (
-          <div className="px-3 py-2 mb-2 -mx-3 -mt-2 font-mono text-xs border-b text-zinc-400 border-zinc-600">
+          <div className="px-4 py-3 font-mono text-xs text-gray-400 border-b border-gray-600">
             {highlighted.meta}
           </div>
         ) : null}
 
         <Pre
-          className="m-0 bg-transparent"
+          className="py-3.5 m-0 text-gray-300 bg-transparent"
           code={highlighted}
-          handlers={[callout]}
+          handlers={[callout, className, mark, diff]}
         />
       </div>
-      <CopyButton text={highlighted.code} />
+      <CodeCopyButton text={highlighted.code} />
     </div>
   );
 }
 
-// export function Code({ children }: { children?: React.ReactNode }) {
-//   return <code className={style["inline-code"]}>{children}</code>;
-// }
-
 export function Strong({ children }: { children?: React.ReactNode }) {
   return <strong className={style.strong}>{children}</strong>;
+}
+
+export function Anchor({
+  children,
+  href,
+}: {
+  children?: React.ReactNode;
+  href?: string;
+}) {
+  const isInternal = href?.startsWith("/article");
+
+  return (
+    <Link
+      className={style.link}
+      {...(!isInternal
+        ? {
+            target: "_blank",
+            rel: "noopener noreferrer",
+          }
+        : {})}
+      href={href || ""}
+    >
+      {children}
+      {!isInternal && (
+        <ExternalLink size="0.8em" className=" text-brand-400 ml-0.5 inline" />
+      )}
+    </Link>
+  );
+}
+
+export function InlineCode({ children }: { children?: React.ReactNode }) {
+  return <code className={style["inline-code"]}>{children}</code>;
 }
