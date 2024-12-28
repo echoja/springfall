@@ -111,7 +111,7 @@ export async function Code({ codeblock }: { codeblock: RawCode }) {
 
   return (
     <div className="relative">
-      <div className="relative rounded bg-[rgba(46,52,64,0.95)] text-sm my-10 shadow-md overflow-x-scroll leading-6 text-gray-300">
+      <div className="relative rounded bg-[rgba(46,52,64,0.95)] text-sm my-10 shadow-md overflow-x-scroll leading-[22px] text-gray-300">
         {highlighted.meta ? (
           <div className="px-4 py-3 font-mono text-xs text-gray-400 border-b border-gray-600">
             {highlighted.meta}
