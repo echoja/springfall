@@ -44,7 +44,7 @@
 }
 
 .heading {
-  @apply font-semibold mt-[1.5em] mb-[0.5em];
+  @apply font-semibold mt-[1.5em] mb-[0.5em] relative;
 }
 
 .heading1 {

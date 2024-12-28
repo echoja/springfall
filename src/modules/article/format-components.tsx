@@ -136,15 +136,14 @@ export function Strong({ children }: { children?: React.ReactNode }) {
 export function Anchor({
   children,
   href,
-}: {
-  children?: React.ReactNode;
-  href?: string;
-}) {
+  ...restProps
+}: React.ComponentProps<"a">) {
   const isInternal = href?.startsWith("/article") || href?.startsWith("#");
 
   return (
     <Link
-      className={style.link}
+      {...restProps}
+      className={twMerge(restProps.className, style.link)}
       {...(!isInternal
         ? {
             target: "_blank",
