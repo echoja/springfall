@@ -1,4 +1,5 @@
 import remarkCustomContainer from "@echoja/remark-custom-container";
+import rehypeSectionize from "@hbsnow/rehype-sectionize";
 import bundleAnalyzer from "@next/bundle-analyzer";
 import mdx from "@next/mdx";
 import { remarkCodeHike } from "codehike/mdx";
@@ -160,6 +161,7 @@ const withMDX = mdx({
           },
         },
       ],
+      rehypeSectionize,
     ],
   },
 });

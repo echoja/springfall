@@ -19,8 +19,8 @@ export const metadata: Metadata = {
 const Home = () => {
   return (
     <>
-      <Header />
-      <main className="mt-12 mb-24">
+      <Header className="max-w-screen-md px-4 pt-4 mx-auto sm:pt-6 md:pt-8 sm:px-6 md:px-8" />
+      <main className="max-w-screen-md px-4 mt-12 mb-24 sm:px-6 md:px-8">
         <ul role="list" className="mb-20 space-y-6">
           {items.map(({ summary, title, url, createdAt, category }, idx) => {
             const href = new URL(url, metadataBase).pathname;

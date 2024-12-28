@@ -2,12 +2,18 @@
 
 import Image from "next/image";
 import Link from "next/link";
-
+import { twMerge } from "tailwind-merge";
 import ThemeToggle from "./ThemeToggle";
 
-const ArticlePageHeader = () => {
+const ArticlePageHeader = (props: React.ComponentProps<"header">) => {
   return (
-    <header className="relative flex items-center justify-center w-full mb-24">
+    <header
+      {...props}
+      className={twMerge(
+        "relative flex items-center justify-center w-full mb-24",
+        props.className,
+      )}
+    >
       <Link
         href="/"
         className="absolute left-0 p-2 transition -translate-y-1/2 border rounded shadow-sm top-1/2 hover:bg-gray-400/10 hover:opacity-90 border-gray-400/30 text-red"
