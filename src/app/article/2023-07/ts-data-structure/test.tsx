@@ -58,6 +58,7 @@ function createContent(content: Partial<Content> = {}): Content {
       return createImage(content);
     case "paragraph":
       return createParagraph(content);
+    case undefined:
     default:
       throw new Error("Invalid content type");
   }
