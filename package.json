@@ -24,6 +24,7 @@
     "@nextui-org/react": "^2.6.10",
     "@nextui-org/theme": "^2.4.4",
     "@types/mdx": "^2.0.13",
+    "codehike": "^1.0.4",
     "dayjs": "^1.11.13",
     "framer-motion": "^11.15.0",
     "jotai": "^2.11.0",
@@ -36,8 +37,8 @@
     "react-wrap-balancer": "^1.1.1",
     "remark-gfm": "4.0.0",
     "sharp": "^0.33.5",
-    "tailwind-merge": "^2.5.3",
-    "vite": "^5.4.8"
+    "tailwind-merge": "^2.6.0",
+    "vite": "^6.0.6"
   },
   "devDependencies": {
     "@types/mdx": "^2.0.13",
