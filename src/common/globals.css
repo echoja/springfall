@@ -145,3 +145,23 @@
 .ch-scrollycoding-step-content {
   @apply border-gray-200;
 }
+
+article .heading-anchor {
+  @apply absolute text-gray-300 -left-6 sm:-left-7 top-1 w-6 h-6 p-1;
+}
+
+h2:has(.heading-anchor),
+h3:has(.heading-anchor),
+h4:has(.heading-anchor),
+h5:has(.heading-anchor),
+h6:has(.heading-anchor) {
+  @apply relative ml-2 sm:ml-0;
+}
+
+article .heading-anchor:hover {
+  @apply text-inherit;
+}
+
+article .heading-anchor svg {
+  @apply w-4 h-4;
+}

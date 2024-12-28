@@ -2,7 +2,10 @@ import remarkCustomContainer from "@echoja/remark-custom-container";
 import bundleAnalyzer from "@next/bundle-analyzer";
 import mdx from "@next/mdx";
 import { remarkCodeHike } from "codehike/mdx";
+import rehypeAutolinkHeadings from "rehype-autolink-headings";
+import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
+import remarkToc from "remark-toc";
 
 /** @type {import('codehike/mdx').CodeHikeConfig} */
 const chConfig = {
@@ -106,10 +109,57 @@ const customContainerOptions = {
 const withMDX = mdx({
   options: {
     jsx: true,
+
     remarkPlugins: [
       [remarkCustomContainer, customContainerOptions],
       remarkGfm,
       [remarkCodeHike, chConfig],
+      [remarkToc, { heading: "목차" }],
+    ],
+    rehypePlugins: [
+      rehypeSlug,
+      [
+        rehypeAutolinkHeadings,
+        {
+          properties: {
+            ariaHidden: true,
+            tabIndex: -1,
+            className: "heading-anchor",
+          },
+          content: {
+            type: "element",
+            tagName: "svg",
+            properties: {
+              className: "icon-link",
+              xmlns: "http://www.w3.org/2000/svg",
+              width: "24",
+              height: "24",
+              viewBox: "0 0 24 24",
+              fill: "none",
+              stroke: "currentColor",
+              "stroke-width": "2",
+              "stroke-linecap": "round",
+              "stroke-linejoin": "round",
+            },
+            children: [
+              {
+                type: "element",
+                tagName: "path",
+                properties: {
+                  d: "M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71",
+                },
+              },
+              {
+                type: "element",
+                tagName: "path",
+                properties: {
+                  d: "M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71",
+                },
+              },
+            ],
+          },
+        },
+      ],
     ],
   },
 });
