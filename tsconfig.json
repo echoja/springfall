@@ -19,7 +19,8 @@
     "paths": {
       "@common/*": ["common/*"],
       "@modules/*": ["modules/*"],
-      "@app/*": ["app/*"]
+      "@app/*": ["app/*"],
+      "@components/*": ["components/*"]
     },
     "plugins": [
       {

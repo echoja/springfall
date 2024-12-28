@@ -1,0 +1,379 @@
+## callout
+
+```js
+const lorem = ipsum(dolor, sit);
+// !callout[/consecte/] 이것이 바로 콜아웃이라고 부르는 것이랍니다.. 크크크
+const [amet, consectetur] = [0, 0];
+lorem.adipiscing((sed, elit) => {
+  if (sed) {
+    amet += elit;
+  }
+});
+```
+
+## className
+
+```js
+function lorem(ipsum, dolor = 1) {
+  // !className line-through
+  const sit = ipsum == null ? 0 : ipsum.sit;
+  dolor = sit - amet(dolor);
+  // !className[/sit/] bg-red-700 rounded-lg px-1
+  return sit ? consectetur(ipsum) : [];
+}
+```
+
+{/* <HoverContainer>
+
+The [base case](hover:one) returns 1.
+
+```cpp
+int factorial(int n) {
+  if (n == 0) {
+    // !hover one
+    return 1;
+  } else {
+    // !hover two
+    return n * factorial(n - 1);
+  }
+}
+```
+
+The [recursive case](hover:two) multiplies something.
+
+</HoverContainer> */}
+
+## collapse
+
+```js
+// !collapse(1:4)
+function lorem(ipsum, dolor = 1) {
+  const sit = ipsum == null ? 0 : 1;
+  dolor = sit - amet(dolor);
+  return sit ? consectetur(ipsum) : [];
+}
+
+// !collapse(1:4) collapsed
+function ipsum(ipsum, dolor = 1) {
+  const sit = ipsum == null ? 0 : 1;
+  dolor = sit - amet(dolor);
+  return sit ? consectetur(ipsum) : [];
+}
+```
+
+```js
+function lorem(ipsum, dolor = 1) {
+  const sit = ipsum == null ? 0 : ipsum.sit;
+  dolor = sit - amet(dolor);
+  return sit ? consectetur(ipsum) : [];
+}
+```
+
+## diff
+
+```js
+function lorem(ipsum, dolor = 1) {
+  const sit = ipsum == null ? 0 : ipsum.sit;
+  // !diff -
+  dolor = ipsum - sit;
+  // !diff +
+  dolor = sit - amet(dolor);
+  return sit ? consectetur(ipsum) : [];
+}
+```
+
+```js index.js
+function lorem(ipsum, dolor = 1) {
+  const sit = ipsum == null ? 0 : 1;
+  dolor = sit - amet(dolor);
+  return sit ? consectetur(ipsum) : [];
+}
+```
+
+```js
+function lorem(ipsum, dolor = 1) {
+  const sit = ipsum == null ? 0 : ipsum.sit;
+  dolor = sit - amet(dolor);
+  return sit ? consectetur(ipsum) : [];
+}
+
+function ipsum(ipsum, dolor = 1) {
+  return dolor;
+}
+
+// !focus(1:5)
+function dolor(ipsum, dolor = 1) {
+  const sit = ipsum == null ? 0 : ipsum.sit;
+  dolor = sit - amet(dolor);
+  return sit ? consectetur(ipsum) : [];
+}
+```
+
+```jsx
+// !fold[/className="(.*?)"/gm]
+function Foo() {
+  return (
+    <div className="bg-red-200 opacity-50">
+      <span className="block">hey</span>
+    </div>
+  );
+}
+```
+
+```rb
+# !ref Library import
+require 'sinatra'
+
+# !ref URL mapping
+get '/hi' do
+  "Hello World!"
+end
+```
+
+{/* <CodeSwitcher>
+
+```java !!
+public class Main {
+  public static int factorial(int n) {
+    if (n == 0) {
+      return 1;
+    } else {
+      return n * factorial(n - 1);
+    }
+  }
+}
+```
+
+```cpp !!
+int factorial(int n) {
+  if (n == 0) {
+    return 1;
+  } else {
+    return n * factorial(n - 1);
+  }
+}
+```
+
+```scala !!
+object Main {
+  def factorial(n: Int): Int = {
+    if (n == 0) {
+      return 1
+    } else {
+      return n * factorial(n - 1)
+    }
+  }
+}
+```
+
+```py !!
+def factorial(n):
+  if n == 0:
+    return 1
+  else:
+    return n * factorial(n - 1)
+```
+
+```matlab !!
+function result = factorial(n)
+  if n == 0
+    result = 1;
+  else
+    result = n * factorial(n - 1);
+  end
+end
+```
+
+```js !!
+function factorial(n) {
+  if (n === 0) {
+    return 1;
+  } else {
+    return n * factorial(n - 1);
+  }
+}
+```
+
+```kotlin !!
+fun factorial(n: Int): Int {
+  return if (n == 0) {
+    1
+  } else {
+    n * factorial(n - 1)
+  }
+}
+```
+
+```go !!
+func factorial(n int) int {
+  if n == 0 {
+    return 1
+  } else {
+    return n * factorial(n - 1)
+  }
+}
+```
+
+```swift !!
+func factorial(n: Int) -> Int {
+  if n == 0 {
+    return 1
+  } else {
+    return n * factorial(n: n - 1)
+  }
+}
+```
+
+```rust !!
+fn factorial(n: i32) -> i32 {
+  if n == 0 {
+    return 1;
+  } else {
+    return n * factorial(n - 1);
+  }
+}
+```
+
+```fsharp !!
+let rec factorial n =
+  if n = 0 then
+    1
+  else
+    n * factorial (n - 1)
+```
+
+</CodeSwitcher> */}
+
+```js
+function lorem(ipsum, dolor = 1) {
+  const sit = ipsum == null ? 0 : 1;
+  dolor = sit - amet(dolor);
+  return sit ? consectetur(ipsum) : [];
+}
+```
+
+```js
+function lorem(ipsum, dolor = 1) {
+  const sit = ipsum == null ? 0 : ipsum.sit;
+  dolor = sit - amet(dolor);
+  // !link[/ipsum/] https://example.com
+  return sit ? consectetur(ipsum) : [];
+}
+```
+
+```js
+function lorem(ipsum, dolor = 1) {
+  // !mark
+  return dolor;
+}
+
+function ipsum(lorem, dolor = 1) {
+  // !mark(1:2) gold
+  const sit = lorem == null ? 0 : lorem.sit;
+  dolor = sit - amet(dolor);
+  // !mark[/sit/] pink
+  return sit ? consectetur(lorem) : [];
+}
+```
+
+{/* <CodeWithTabs>
+
+```js !!tabs main.js
+function lorem(ipsum, dolor = 1) {
+  const sit = ipsum == null ? 0 : ipsum.sit;
+  dolor = sit - amet(dolor);
+  return sit ? consectetur(ipsum) : [];
+}
+```
+
+```css !!tabs styles.css
+body {
+  margin: 0;
+  padding: 0;
+}
+```
+
+</CodeWithTabs> */}
+
+```scala
+object Main {
+  def factorial(n: Int): Int = {
+    if (n == 0) {
+      return 1
+    } else {
+      return n * factorial(n - 1)
+    }
+  }
+}
+```
+
+```python
+def factorial(n):
+    if n == 0:
+        return 1
+    else:
+        return n * factorial(n - 1)
+```
+
+{/* <CodeWithTooltips>
+
+```js !code
+// !tooltip[/lorem/] description
+function lorem(ipsum, dolor = 1) {
+  const sit = ipsum == null ? 0 : ipsum.sit;
+  dolor = sit - amet(dolor);
+  // !tooltip[/consectetur/] inspect
+  return sit ? consectetur(ipsum) : [];
+}
+```
+
+## !!tooltips description
+
+### Hello world
+
+Lorem ipsum **dolor** sit amet `consectetur`.
+
+Adipiscing elit _sed_ do eiusmod.
+
+## !!tooltips inspect
+
+```js
+function consectetur(ipsum) {
+  const { a, b } = ipsum;
+  return a + b;
+}
+```
+
+</CodeWithTooltips> */}
+
+```ts
+interface Greeter {
+  greet(): string;
+}
+
+function sayHello(greeter: Greeter) {
+  console.log(greeter.greet());
+}
+```
+
+```ts
+const hi = "Hello";
+const msg = `${hi}, world`;
+//    ^?
+
+// @errors: 2588
+msg = 123;
+```
+
+```js
+function lorem(ipsum, dolor, sit) {
+  ipsum.amet(
+    { consectetur: [0, 1] },
+    {
+      adipiscing: elit.sed,
+      eiusmod: "lorem ipsum dolor sit amet",
+      sit,
+    },
+  );
+}
+```

@@ -29,6 +29,7 @@
   },
   "mdx.server.enable": true,
   "[mdx]": {
+    "editor.formatOnSave": false,
     "editor.codeActionsOnSave": {
       "source.fixAll.eslint": "explicit",
       "source.organizeImports": "never"
