@@ -37,6 +37,7 @@ import { item as CheckTarget } from "@app/article/2024-10/check-target/metadata"
 import { item as FarmingPaper } from "@app/article/2024-10/farming-paper/metadata";
 import { item as Signal } from "@app/article/2024-11/signal/metadata";
 import { item as Zod } from "@app/article/2024-11/zod/metadata";
+import { item as Functional } from "@app/article/2024-12/functional/metadata";
 import dayjs from "dayjs";
 import type { ArticleItem } from "./types";
 
@@ -80,6 +81,7 @@ const items: ArticleItem[] = [
   CheckTarget,
   Zod,
   Signal,
+  Functional,
 ];
 
 items.sort((a, b) => dayjs(b.createdAt).diff(a.createdAt));
