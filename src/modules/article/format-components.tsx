@@ -140,7 +140,7 @@ export function Anchor({
   children?: React.ReactNode;
   href?: string;
 }) {
-  const isInternal = href?.startsWith("/article");
+  const isInternal = href?.startsWith("/article") || href?.startsWith("#");
 
   return (
     <Link

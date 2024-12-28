@@ -2,7 +2,10 @@ import remarkCustomContainer from "@echoja/remark-custom-container";
 import bundleAnalyzer from "@next/bundle-analyzer";
 import mdx from "@next/mdx";
 import { remarkCodeHike } from "codehike/mdx";
+import rehypeAutolinkHeadings from "rehype-autolink-headings";
+import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
+import remarkToc from "remark-toc";
 
 /** @type {import('codehike/mdx').CodeHikeConfig} */
 const chConfig = {
@@ -106,11 +109,14 @@ const customContainerOptions = {
 const withMDX = mdx({
   options: {
     jsx: true,
+
     remarkPlugins: [
       [remarkCustomContainer, customContainerOptions],
       remarkGfm,
       [remarkCodeHike, chConfig],
+      [remarkToc, { heading: "목차" }],
     ],
+    rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings],
   },
 });
 
