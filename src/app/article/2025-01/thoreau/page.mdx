@@ -5,6 +5,7 @@ import getArticleJsonLdProps from "@modules/metadata/getArticleJsonLdProps";
 import getArticleMetadata from "@modules/metadata/getArticleMetadata";
 import { ArticleJsonLd } from "next-seo";
 import { item } from "./metadata";
+import i1 from "./1.jpg"
 
 
 export const metadata = getArticleMetadata(item);
@@ -12,6 +13,13 @@ export const metadata = getArticleMetadata(item);
 <ArticleJsonLd {...getArticleJsonLdProps(item)} />
 
 <ArticleHeader {...getArticleHeaderProps(item)} />
+
+<ArticleImage
+  img={i1}
+  width={300}
+  alt="일터의 소로 표지"
+  caption="일터의 소로 표지"
+/>
 
 OpenAI에서 만든 ChatGPT, 구글에서 만든 Gemini(왠지 잼민이 같다), Anthropic에서 만든 Claude 등 다양한 LLM 기반 AI들이 등장했다. 이것들은 우리 일의 생산성을 멋지게 높여준다. 요즘 일에 대한 생각이 많은 나는 Perplexity라는 검색 특화된 AI에게 “일에 대한 담론”이 써져 있는 책을 물었다(Perplexity는 몇번 써보니 구글 검색을 대부분 대체할 수 있겠다는 생각이 들었다). 그래서 나온 게 *일터의 소로*이다.
 
