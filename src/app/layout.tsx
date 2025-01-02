@@ -62,12 +62,8 @@ window.CodenButter("boot", { siteId: "otoyyikrrj", auto: true });
       <body>
         <Providers>
           <ColorModeClassNameInjector />
-          <div className="max-w-screen-md mx-auto">
-            <div className="p-4 md:p-8 sm:p-6">
-              {children}
-              <Footer />
-            </div>
-          </div>
+          {children}
+          <Footer className="max-w-screen-md px-4 pb-4 mx-auto sm:pb-6 md:pb-8 sm:px-6 md:px-8" />
         </Providers>
       </body>
     </html>

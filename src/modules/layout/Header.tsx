@@ -3,11 +3,18 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { twMerge } from "tailwind-merge";
 import ThemeToggle from "./ThemeToggle";
 
-const Header = () => {
+const Header = (props: React.ComponentProps<"header">) => {
   return (
-    <header className="relative flex items-center justify-center w-full">
+    <header
+      {...props}
+      className={twMerge(
+        "relative flex items-center justify-center w-full",
+        props.className,
+      )}
+    >
       <div>
         <h1 className="font-semibold leading-none">
           <Link className="inline-flex items-center gap-1" href="/">
