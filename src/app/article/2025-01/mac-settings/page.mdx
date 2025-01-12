@@ -391,7 +391,7 @@ xcode-select: note: Command line tools are already installed. Use "Software Upda
 
 이제 Homebrew로 필요한 각종 프로그램을 설치할 수 있습니다.
 
-```
+```sh
 brew install zplug
 ```
 
@@ -485,7 +485,7 @@ Your public key has been saved in /Users/th.kim/.ssh/id_ed25519.pub
 
 아래 명령어로 Your public key has been saved in ... 뒤에 있는 파일의 내용을 복사합니다. 기본 알고리즘은 `ed25519`이 아니라 `rsa`일 수도 있습니다.
 
-```
+```sh
 cat ~/.ssh/id_ed25519.pub | pbcopy
 ```
 
@@ -513,7 +513,7 @@ Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
 
 ## Git
 
-```
+```sh
 git config --global user.email "eszqsc112@gmail.com"
 git config --global user.name "Taehoon Kim"
 git config --global core.commentchar ';'
