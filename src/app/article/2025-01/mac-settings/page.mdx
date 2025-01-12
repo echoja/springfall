@@ -1,0 +1,761 @@
+import ArticleHeader from "@modules/article/ArticleHeader";
+import ArticleImage from "@modules/article/ArticleImage";
+import getArticleHeaderProps from "@modules/metadata/getArticleHeaderProps";
+import getArticleJsonLdProps from "@modules/metadata/getArticleJsonLdProps";
+import getArticleMetadata from "@modules/metadata/getArticleMetadata";
+import { ArticleJsonLd } from "next-seo";
+import { item } from "./metadata";
+import bitwarden from "./bitwarden.png";
+import finder from "./finder.png";
+import fzf from "./fzf.png";
+import github1 from "./github1.png";
+import github2 from "./github2.png";
+import hangul from "./hangul.png";
+import init1 from "./init1.png";
+import init2 from "./init2.png";
+import init3 from "./init3.png";
+import init4 from "./init4.png";
+import init5 from "./init5.png";
+import init6 from "./init6.png";
+import iterm from "./iterm.png";
+import iterm2 from "./iterm2.png";
+import kakaotalk from "./kakaotalk.png";
+import pyo from "./pyo.jpg";
+import q from "./q.png";
+import q1 from "./q1.png";
+import q2 from "./q2.png";
+import raycast1 from "./raycast1.png";
+import raycast2 from "./raycast2.png";
+import raycast3 from "./raycast3.png";
+import setting1 from "./setting1.png";
+import setting2 from "./setting2.png";
+import setting3 from "./setting3.png";
+import setting4 from "./setting4.png";
+import setting5 from "./setting5.png";
+import setting6 from "./setting6.png";
+import software from "./software-update.png";
+import vscode from "./vscode.png";
+import keyper from "./keyper.png";
+import wmkeys from "./wmkeys.png";
+import clip from "./clip.png";
+import emoji from "./emoji.png";
+import ssh from "./ssh.png";
+
+export const metadata = getArticleMetadata(item);
+
+<ArticleJsonLd {...getArticleJsonLdProps(item)} />
+
+<ArticleHeader {...getArticleHeaderProps(item)} />
+
+## 개요
+
+자자, 아직 Intel 맥북을 개발자용으로 세팅해야 하는 상황에 처해 있는 사람들은 없으리라고 믿습니다ㅠㅠ. Intel 칩과 Apple Silicon 칩이 혼용되던 시대에서는 세팅하는 게 은근히 귀찮은 부분들이 있었는데요, 이 글에서는 Intel칩 내용 없이 무조건! Apple Silicon이 탑재된 Mac 컴퓨터 기준으로 설명합니다. 해당하는 컴퓨터는 MacBook Pro, MacBook Air, iMac, Mac mini, Mac Studio 등 굉장히 다양하지만 이 글에서는 편의상 **맥북**으로 통칭하겠습니다.
+
+이전 맥북을 한 3년 정도 썼는데, 뭔가 환경이 질려서 새 마음 새 뜻으로 세팅한다는 마음으로 임했습니다(다만 너무 귀찮은 부분들은 각 프로그램의 Sync 기능을 적극적으로 활용했어요). 또한 쓸데없는 걸 최대한 안하려고도 했습니다. 독자분들께는 쓸데없을 수 있지만 제 기준으로 쓸데있는 것입니다. 하하하
+
+기본적으로 위에서부터 차근차근 설정하면 잘 되도록 구성했습니다. 아래로 갈 수록 중요도가 떨어집니다.
+
+## 목차
+
+## 초기화
+
+<ArticleImage
+  border
+  img={init1}
+  alt="초기화 - 문자 및 음성 언어"
+  caption="초기화 - 문자 및 음성 언어"
+/>
+
+지금까지 영문 버전으로 살아왔는데요, 저는 토종 한국인이니 한글을 더 사랑하고자 하는 마음에서 이번 맥북은 한글로 하려고 합니다. 한글 때문에 뭔가 이상하게 동작한다는 이야기는 왠지 옛말 같습니다. 이제는 가끔씩 변수도 한글로 쓰는 마당에 한글, 나쁠 게 있을까요?
+
+<ArticleImage
+  border
+  img={init2}
+  alt="초기화 - 손쉬운 사용"
+  caption="초기화 - 손쉬운 사용"
+/>
+
+**손쉬운 사용**: 저는 지원이 필요없으므로 지금 안 함을 선택합니다.
+
+<ArticleImage
+  border
+  img={init3}
+  alt="초기화 - 데이터 및 개인정보 보호"
+  caption="초기화 - 데이터 및 개인정보 보호"
+/>
+
+저는 제 개인정보에 대해서 좀 둔감한 편이므로, 제 정보가 더 나은 프로그램을 만드는 데 도움이 된다면 마음껏 쓰라 하고 싶습니다. 하지만 이 세상엔 개인정보를 중요시하는 사람들도 아주 많으므로, 그런 점에서 애플의 저 문구들은 (그나마) 신뢰를 주는 것 같아서 기록으로 남겨놔야겠습니다.
+
+<ArticleImage
+  border
+  img={init4}
+  alt="초기화 - 컴퓨터 계정 생성"
+  caption="초기화 - 컴퓨터 계정 생성"
+/>
+
+컴퓨터 계정을 생성합니다. 사실 회사 맥북이라 이름을 규칙대로 지정해야 합니다. 전 제 손가락은 안 믿기 때문에 지문 인식은 안 쓸 예정입니다.
+
+<ArticleImage
+  border
+  img={init5}
+  alt="초기화 - iCloud 키체인 - 나중에 설정"
+  caption="초기화 - iCloud 키체인 - 나중에 설정"
+/>
+
+패스합니다. iCloud를 잘 사용 중이기에 키체인도 적극적으로 활용하면 좋겠지만, 그렇게 되면 애플 기기에 엄청 종속되는 기분이라 비밀번호 관련된 건 (아래에서도 잠깐 소개되겠지만) Bitwarden이라는 걸 사용할 예정입니다.
+
+<ArticleImage
+  border
+  img={init6}
+  alt="초기화 - 모든 파일을 iCloud에 저장 - 사용 안 함"
+  caption="초기화 - 모든 파일을 iCloud에 저장 - 사용 안 함"
+/>
+
+**모든 파일을 iCloud에 저장**: 이전 맥북 경험상 왠지 iCloud Drive 연동이 잘 안되는 것 같더라구요. 시간이 기본적으로 너무 오래 걸리는 기분이었고, Local 데스크톱과 iCloud 데스크톱이 지멋대로 분리되어 난리를 친 적이 있어서, 사용하지 않도록 하겠습니다. 사실 어차피 회사 컴퓨터라 보안상의 이유로 금지입니다.
+
+그 외에 시간 설정이나 네트워크 설정도 있었는데요, 언급할 건 특별히 없어서 넘어가겠습니다.
+
+## 맥북 업데이트
+
+새로 맥북 세팅하는 김에 최신 버전으로 진행합시다.
+
+<ArticleImage
+  border
+  img={software}
+  alt="시스템 설정 - 일반 - 소프트웨어 업데이트"
+  caption="시스템 설정 - 일반 - 소프트웨어 업데이트"
+/>
+
+Update Now를 클릭하세요!
+
+## 시스템 설정
+
+`cmd` + `Space` → Spotlight가 나오고 → 여기서 `시스템 설정`을 검색하여 실행하면 macOS의 각종 설정을 할 수 있습니다. 마치 Windows의 제어판 같은 녀석이죠.
+
+<ArticleImage
+  border
+  img={setting1}
+  alt="키보드 설정에서 키 반복 속도, 반복 지연 시간 최대로 올리기"
+  caption="키보드 설정에서 키 반복 속도, 반복 지연 시간 최대로 올리기"
+/>
+
+키를 꾹 누르고 있으면 왠지 모를 답답함을 싹 없애주는 녀석입니다. 대한민국은 빨리빨리의 민족이므로 키도 빨리빨리 입력되어야죠. ㅎㅎㅎㅎㅎ
+
+<ArticleImage
+  border
+  img={hangul}
+  alt="한글 버전이라 시스템 설정에서 영문 검색이 잘 안되는 문제"
+  caption="한글 버전이라 시스템 설정에서 영문 검색이 잘 안되는 문제"
+/>
+
+참고로 한글 버전이라 영문 검색이 잘 안될 수도 있어요.
+
+<ArticleImage
+  border
+  img={setting2}
+  alt="키보드 입력 소스 설정"
+  caption="키보드 입력 소스 설정"
+/>
+
+같은 키보드 설정에서 입력 소스 - 편집을 누르면 위 화면과 같이 추가적으로 설정할 수 있는 창이 뜹니다. 저는 다음을 기본값과 다르게 설정했습니다.
+
+- 메뉴 막대에서 입력 메뉴 보기 `OFF`: 메뉴 막대를 최대한 간단히 만들고 싶네요.
+- 맞춤법 자동 수정 `OFF`: 필요 없습니다.
+- 자동으로 단어를 대문자로 시작 `OFF`: 필요 없습니다.
+- 인라인 자동 완성 텍스트 보기 `OFF`: 필요 없습니다.
+- 스페이스를 두 번 눌러 마침표 추가 `OFF`: 필요 없습니다.
+- 스마트 인용 부호 및 대시 사용 `OFF`: 필요 없습니다.
+
+맥북을 써오면서 활용한 적이 없거나 오히려 불편했던 경험이 떠올라서 왕창 꺼버렸습니다.
+
+<ArticleImage
+  border
+  img={setting3}
+  alt="키보드 단축키 설정 - 입력 소스"
+  caption="키보드 단축키 설정 - 입력 소스"
+/>
+
+VSCode에서 Trigger Suggest라는 기능을 적극적으로 사용할 예정인데, 단축키가 `⌃스페이스`로 똑같기 때문에 입력 소스 단축키를 사용하지 않도록 합니다. 아래 것도 그냥 찜찜하기도 하고 어차피 쓰지 않으니 껐습니다.
+
+<ArticleImage
+  border
+  img={setting4}
+  alt="키보드 단축키 설정 - Spotlight"
+  caption="키보드 단축키 설정 - Spotlight"
+/>
+
+Raycast를 사용할 거기 때문에 Spotlight 단축키를 비활성화합니다. Raycast는 Spotlight 대체제인데 추후 다시 언급하도록 하겠습니다. Raycast 설치 전까지는 그냥 Dock에서 Launchpad로 버텨! `Finder 검색 윈도우로 보기`도 끈 김에 끕니다.
+
+<ArticleImage
+  border
+  img={setting5}
+  alt="시스템 설정 - 개인정보 보호 및 보안 - 화면 및 시스템 오디오 녹음"
+  caption="시스템 설정 - 개인정보 보호 및 보안 - 화면 및 시스템 오디오 녹음"
+/>
+
+이 설정은 일단 지금 단계에서 곧장 설정할 것은 아니지만 일단 "시스템 설정"에서 하는 거라 여기에 포함했습니다. 인터넷으로 [Google Meet](https://meet.google.com/)을 하거나 [Gather(게더타운)](https://ko.gather.town/)을 하거나 [Zoom](https://www.zoom.com/ko) 미팅을 할 때 **화면 공유**를 하게 되면 최초에 한해 저 설정을 해줘야 합니다. 그러나 바로 되는 것이 아니라 프로그램을 껐다 켜야 합니다. 사람들 다 보고 있는데 프로그램 껐다 키고 하면 좀 부끄러우니 미리 준비해놓아요.
+
+<ArticleImage
+  border
+  img={setting6}
+  alt="시스템 설정 - 데스크탑 및 Dock"
+  caption="시스템 설정 - 데스크탑 및 Dock"
+/>
+
+자동으로 Dock을 가리지 않으면 화면 아래가 좁아져서 마음이 좀 불편합니다. 자동으로 가려줍니다.
+
+## 기초 프로그램 설치
+
+### Google Chrome: 웹 브라우저
+
+[Google Chrome](https://www.google.co.kr/chrome)은 아주 많이 쓰이는 대중적인 웹 브라우저이죠. 다양한 브라우저에 관심이 많아서 [Arc](https://arc.net/)도 좀 써봤지만, 이내 [신기능을 더이상 만들지 않는다는 소식](https://yozm.wishket.com/magazine/detail/2844/)([영상](https://www.youtube.com/watch?v=E9yZ0JusME4))을 듣고 더 쓰기를 포기했습니다. 애초에 전 웹 개발자이기 때문에 대중적인 브라우저를 옆에 끼고 살아야 하는 운명입니다. 그 운명을 더이상 거스르지 않으려고 합니다...
+
+구글 계정으로 연동한다면 확장 프로그램이나 북마크가 모두 자동으로 연동되므로 크게 신경쓸 건 없습니다.
+
+연동되지 않는 북마크는 `⌥⌘B`(북마크 관리자) → 우측 상단 ... → 북마크 가져오기/내보내기로 옮길 수 있습니다.
+
+### Bitwarden: 비밀번호 관리자
+
+[Bitwarden](https://bitwarden.com/)은 오픈소스 비밀번호 관리 서비스입니다. 로그인 페이지에서 `⌘⇧L`만 누르면 input이 모두 채워지는 기적! 개인은 무료로 쓸 수도 있습니다! 저는 선심 쓰고 싶어 Premium 요금제로 이용 중입니다. Google Chrome의 Extension이 있고 프로그램도 있습니다.
+
+<ArticleImage
+  border
+  img={bitwarden}
+  alt="Bitwarden의 요금제"
+  caption="Bitwarden의 요금제"
+/>
+
+이제 비밀번호 관리자 없는 삶은 꿈도 꾸기 싫습니다. 비밀번호를 까먹어 로그인 5회 연속 실패할까봐 식은땀 흘리는 건 더이상 하고 싶지 않아요. 안그래도 온 동네방네 보안을 위해 비밀번호를 바꾸라고 아우성이잖아요... 기능이 더 풍부하고 더 편리하다고 느껴지는 [1Password](https://1password.com/)도 충분히 쓸만합니다. 이게 좀 더 비싸지만 그 가격도 마음 고생 생각하면 기꺼이 낼 수 있을 수준이라고 생각합니다.
+
+### Raycast: Spotlight 대체 + 부가기능
+
+[Raycast](https://www.raycast.com/)는 macOS의 Spotlight 기능을 대체할 수 있으며 거기에 강력한 확장 시스템을 갖추고 커스터마이징을 많이 할 수 있습니다. 속도 측면에서는 크게 체감되진 않아서, Spotlight가 느려서 Raycast를 쓴다?는 아닌 것 같아요.
+
+<ArticleImage
+  border
+  img={raycast2}
+  alt="Raycast 설정 - Account"
+  caption="Raycast 설정 - Account"
+/>
+
+설치 및 기본 세팅 이후, command 창을 띄우기 → `⌘,` → 설정 창 → Account 탭에서 계정을 연동할 수 있습니다. 사실 저는 맥북 이전을 위해 Pro 계정 2주 체험으로 가입했다가 이전 완료하고 바로 해지했습니다. 쿠쿠...
+
+Raycast에서 자주 사용하는 기능 네 가지를 소개합니다. Application 단축키 설정, Emoji 탐색기, 창 관리, 복사한 내역 저장하기 입니다.
+
+<ArticleImage
+  border
+  img={raycast3}
+  alt="Raycast 설정 - Extensions"
+  caption="Raycast 설정 - Extensions"
+/>
+
+**Application 단축키 설정**: 각종 프로그램을 언제 어디서나 즉각 실행할 수 있는 단축키로 프로그램을 실행합니다. 이것 떄문에 [Spaces](https://support.apple.com/ko-kr/guide/mac-help/mh14112/mac) 기능을 딱히 사용하지 않는 것 같기도 합니다. `⌥` 단축키는 대개 텍스트의 특수문자 입력을 위한 단축키인데, 잘 사용하지 않아서 왕창 덮어씌웠습니다.
+
+<ArticleImage
+  border
+  img={raycast1}
+  alt="Raycast - Search Emoji & Symbols 모습"
+  caption="Raycast - Search Emoji & Symbols 모습"
+/>
+
+**Emoji 탐색기**: macOS의 `⌃⌘스페이스`보다 실행 속도가 훨씬 빠릅니다. 영어긴 하지만 검색하기 더 편하기도 합니다.
+
+<ArticleImage
+  border
+  img={wmkeys}
+  alt="Raycast에서 창 관리하기"
+  caption="Raycast에서 창 관리하기"
+/>
+
+**창 관리**: Raycast에서 [Magnet](https://apps.apple.com/kr/app/magnet/id441258766?mt=12)과 같은 창 관리 및 조직화를 수행할 수 있습니다. Window Management라는 Extension을 설치하고 위 이미지처럼 단축키를 설정해놓아 잘 쓰고 있어요. 단축키로 설정할 수 있는 명령은 위 내용보다 훨씬 많습니다.
+
+<ArticleImage
+  border
+  img={clip}
+  alt="Raycast - Clipboard History 모습"
+  caption="Raycast - Clipboard History 모습"
+/>
+
+**복사한 내역 저장**: Raycast에서 [Clipy](https://github.com/Clipy/Clipy)처럼 클립보드에 복사한 데이터(텍스트, 이미지)을 저장하여 내역(history)으로 가지고 있다가 나중에 검색하여 쓸 수 있습니다. 이거 없으면 저 못살아...
+
+소개한 것 이외에 Extension도 많고 Command도 커스텀할 수 있는 게 많지만 저는 딱 저기까지 쓰는 것 같습니다.
+
+## Finder에서 모든 파일 확장자 보기
+
+파일의 정확한 확장자를 알고 싶죠? Finder를 켜고 `⌘,`를 누르면 설정 창이 뜹니다.
+
+<ArticleImage
+  border
+  img={finder}
+  alt="Finder 설정 - 고급 - '모든 파일 확장자 보기' 켜기"
+  caption="Finder 설정 - 고급 - '모든 파일 확장자 보기' 켜기"
+  width={400}
+/>
+
+## 업무용 및 개인 프로그램 설치
+
+- [Notion](https://www.notion.com/ko/desktop): 유명한 노트 앱이죠. 저는 기록을 대개 노션으로 씁니다.
+- [Notion Calendar](https://www.notion.com/product/calendar/download): 캘린더 앱입니다. 예쁘고 구글 계정들이 잘 연동됩니다. 회의 일정도 메뉴 막대에서 잘 알려줘서 편리하더라구요.
+- [todo mate](https://apps.apple.com/kr/app/%ED%88%AC%EB%91%90%EB%A9%94%EC%9D%B4%ED%8A%B8-todo-mate-for-desktop/id1567807901?mt=12): 투두 앱인데 그냥 심플하고 간단한 소셜 기능이 있어서 애용합니다.
+- [Figma](https://www.figma.com/ko-kr/downloads/): 디자인 협업 서비스입니다. 좋습니다.
+- [Slack](https://slack.com/intl/ko-kr/downloads/mac): 메신저 프로그램입니다. 회사에서도 쓰고 커뮤니티 활동에도 사용합니다.
+- [Zoom](https://zoom.us/download?os=mac): 가끔 사이드 프로젝트 할 때 사용하는 화상회의 프로그램입니다.
+- [카카오톡](https://www.kakaocorp.com/page/service/service/KakaoTalk): 두말할 필요가 있는지?
+- [Asana](https://asana.com/ko/download): 협업 플랫폼입니다. 회사에서 씁니다.
+
+## iTerm2
+
+이제 슬슬 본격적으로 개발 관련된 도구들을 설치해봅시다. 터미널을 먼저 설치할 겁니다. 맥북에서 기본적으로 주는 Terminal을 본격적으로 써본 적이 없어서 어떤 불편함이 있는지도 사실 모릅니다. iTerm2가 정말 내게 필요한 건가?라는 의문이 살짝 들었지만 iTerm2는 너무나도 많은 개발자분들이 사용하셔서 그냥 묻고 따지지 말고 설치했습니다.
+
+1. [홈페이지](https://iterm2.com/)에 갑니다.
+2. 다운로드 버튼이 떡하니 있습니다.
+3. 다운로드한 압축 파일을 풉니다.
+4. iTerm.app 파일을 `/Application` 폴더로 옮깁니다.
+
+<ArticleImage
+  border
+  img={iterm}
+  alt="iTerm 설정 - Working Directory"
+  caption="iTerm 설정 - Working Directory"
+/>
+
+`⌘,`(Settings) → Profiles → General → Working Directory에서 Reuse previous session's directory 를 설정하면 새 쉘을 띄울 때마다 같은 폴더에서 시작합니다.
+
+<ArticleImage
+  border
+  img={iterm2}
+  alt="iTerm 설정 - Color"
+  caption="iTerm 설정 - Color"
+/>
+
+처음 설치하면 눈이 부신 흰색일텐데, 테마는 무난무난한 Snazzy로 가겠습니다. https://github.com/sindresorhus/iterm2-snazzy 에서 `Snazzy.itermcolors`를 다운받습니다. 그 다음 iTerm2 설정 → Profiles → Colors → Color Presets... 에서 import 하여 사용합니다.
+
+## oh-my-zsh
+
+zsh에 편리한 부가 기능, 플러그인, 테마 등등을 쉽게 구성할 수 있는 프레임워크입니다. 쉘 관련된 세팅 중 가장 먼저 해줍니다.
+
+1. [홈페이지](https://ohmyz.sh/#install)에 접속합니다.
+2. 아래와 같은 코드가 있을 겁니다. 터미널에 붙여넣습니다.
+
+```sh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+```
+
+`.zshrc` 파일이란 zsh 쉘이 시작될 때 초기 세팅하는 내용을 담은 파일입니다. 매번 터미널 창을 열면 매번 쉘이 생기고 그때마다 실행되는 내용입니다. 보통 홈 경로 (`$HOME`)에 위치합니다. oh-my-zsh를 설치하게 되면 `~/.zshrc` 파일이 새로 세팅되고 기존 내용은 `~/.zshrc.pre-oh-my-zsh`로 백업됩니다. 지금까지 아무런 `.zshrc` 설정을 하지 않았으므로 백업된 내용을 딱히 볼 필요는 없습니다.
+
+`.zshrc` 파일은 앞으로도 많이 수정할 예정입니다. Finder에서 `⌘⇧H`로 홈 이동 → `⌘⇧.`으로 숨김 파일 보기 하여 `.zshrc` 파일을 텍스트 편집기로 수정하면 됩니다. VSCode를 설치했다면 그걸로 해도 되고, vim을 쓸 줄 안다면 그냥 터미널에서 `vim ~/.zshrc` 하셔도 됩니다.
+
+일단 파일을 열어보면 내용이 많이 있을텐데, 아래 두 줄 빼고 일단 지금은 큰 쓸모는 없습니다.
+
+```sh
+# .zshrc 파일에 넣기
+export ZSH="$HOME/.oh-my-zsh"
+source $ZSH/oh-my-zsh.sh
+```
+
+테마나 플러그인은 차차 진행합니다.
+
+## Homebrew: 패키지 매니저
+
+Homebrew는 각종 프로그램을 손쉽게 설치하는 프로그램입니다.
+
+1. [홈페이지](https://brew.sh/)로 들어갑니다.
+2. Install Homebrew의 내용을 복사하여 쉘에 붙여넣습니다. (아래 내용입니다)
+
+```sh
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+설치한 이후 아래 내용을 `.zshrc` 파일에 해줘야 합니다. (공식 안내는 .zprofile 파일에 하라고는 하지만 큰 차이는 없습니다. [차이점을 설명하는 글(영문)](https://mac.install.guide/terminal/zshrc-zprofile)을 참조해주세요.)
+
+```sh
+# .zshrc 파일에 넣기
+eval "$(/opt/homebrew/bin/brew shellenv)"
+```
+
+### Xcode Command line tools
+
+Homebrew를 설치하는 단계에서 Xcode Command Line Tools도 함께 설치될 텐데요, 만약 설치가 안된 거 같으면 아래 명령어를 실행해주세요.
+
+```sh
+xcode-select --install
+```
+
+이미 설치가 되었다면 아래와 같이 뜹니다.
+
+```
+xcode-select: note: Command line tools are already installed. Use "Software Update" in System Settings or the softwareupdate command line interface to install updates
+```
+
+## zplug: zsh 플러그인 설치
+
+이제 Homebrew로 필요한 각종 프로그램을 설치할 수 있습니다.
+
+```
+brew install zplug
+```
+
+이후 아래 내용을 .zshrc 파일에 추가해주세요.
+
+```sh
+# .zshrc 파일에 넣기
+export ZPLUG_HOME=$(brew --prefix zplug)
+source $ZPLUG_HOME/init.zsh
+
+zplug "plugins/git",   from:oh-my-zsh
+zplug "plugins/yarn", from:oh-my-zsh
+
+# Install plugins if there are plugins that have not been installed
+if ! zplug check --verbose; then
+    printf "Install? [y/N]: "
+    if read -q; then
+        echo; zplug install
+    fi
+fi
+
+zplug load
+
+```
+
+## Amazon Q: 터미널 자동완성 프로그램
+
+<ArticleImage
+  border
+  img={q}
+  alt="Amazon Q 예시"
+  caption="Amazon Q 예시"
+  width={400}
+/>
+
+Amazon Q는 터미널에서 자동완성 해주는 편리한 툴입니다. 본래 [Fig](https://fig.io/)라는 이름으로 프로그램이 있었지만 아마존에 흡수됐습니다.
+
+<ArticleImage
+  border
+  img={q1}
+  alt="Fig → Amazon"
+  caption="Fig → Amazon"
+/>
+
+[Amazon Q 설치 안내 페이지](https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/what-is.html)에서 `Amazon Q for the macOS command line`를 찾아 설치합니다. `.zshrc` 파일 등에 자동으로 세팅됩니다. 설치할 때 [AWS Builder ID](https://docs.aws.amazon.com/signin/latest/userguide/sign-in-aws_builder_id.html)가 필요합니다. 회원가입 하면서 진행합니다.
+
+inline 자동완성 기능은 한글이 왠지 지원이 잘 안 됩니다. 거슬리므로 기능을 꺼줍니다.
+
+```sh
+q inline disable
+```
+
+뭔가 자동완성 창이 잘 안뜬다면 아래 명령어를 막 수행해줍니다.
+
+```sh
+q doctor # 현재 문제를 파악하고 자동으로 고쳐줌
+q restart # 재시작
+```
+
+
+## Powerlevel10k: 터미널 테마
+
+[Powerlevel10k](https://github.com/romkatv/powerlevel10k)란 zsh 테마입니다. 테마를 사용하는 이유는 예쁜 것도 있지만 추가 기능이 유용하기 때문입니다.
+
+- **전체 경로**: 기본 터미널은 현재 폴더만 보여줄 뿐 전체 경로를 보여주지 않습니다. 테마로 이를 극복!
+- **Git 상태**: 현재 pull 할 내용이 있는지, push 해야 하는지 등을 아이콘으로 표시해줍니다.
+- **이전 명령어 Return 값**: `echo $?`를 하게 되면 직전에 실행했던 프로그램의 리턴 값을 알 수 있는데요, 이게 `0`이면 성공이고 `0`이 아니면 실패(에러 코드)입니다. 그걸 터미널 상에서 색상으로 즉시 알 수 있게 합니다.
+
+`.zshrc` 파일에서 zplug가 모여 있는 곳을 찾아 `zplug romkatv/powerlevel10k, as:theme, depth:1`를 추가해줍니다.
+
+쉘을 다시 실행하게 되면 configure 단계가 시작됩니다. 시키는 대로 합니다. 세팅을 좀 바꾸고 싶다면 아래 명령어로 다시 세팅합니다.
+
+```sh
+p10k configure
+```
+
+## GitHub
+
+이 컴퓨터가 본인이 사용하는 컴퓨터가 맞는지를 인증해야 하는데요, 그래서 `ssh-keygen`을 이용해 키를 만든 다음 public 키를 GitHub에 등록합니다. 터미널에서 `ssh-keygen`를 실행시켜서 기본 값대로 쭉쭉 진행합니다. passphrase는 입력하지 않아도 됩니다.
+
+```sh
+% ssh-keygen
+Generating public/private ed25519 key pair.
+Enter file in which to save the key (/Users/th.kim/.ssh/id_ed25519):
+Created directory '/Users/th.kim/.ssh'.
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /Users/th.kim/.ssh/id_ed25519
+Your public key has been saved in /Users/th.kim/.ssh/id_ed25519.pub
+```
+
+아래 명령어로 Your public key has been saved in ... 뒤에 있는 파일의 내용을 복사합니다. 기본 알고리즘은 `ed25519`이 아니라 `rsa`일 수도 있습니다.
+
+```
+cat ~/.ssh/id_ed25519.pub | pbcopy
+```
+
+<ArticleImage
+  border
+  img={ssh}
+  alt="GitHub SSH 키 설정"
+  caption="GitHub SSH 키 설정"
+  width={400}
+/>
+
+Github 로그인 → [SSH and GPG Keys](https://github.com/settings/keys) → SSH keys → New SSH key 에 들어가서 복사한 내용을 Key에 넣습니다.
+
+이제 `git clone`을 하게 되면 최초에는 GitHub를 의심합니다. `yes`를 해줍니다.
+
+```sh
+% git clone git@github.com:echoja/some-repository.git
+Cloning into 'some-repository'...
+The authenticity of host 'github.com (20.200.245.247)' can't be established.
+ED25519 key fingerprint is SHA256:+xxxxxx/yyyyyy.
+This key is not known by any other names.
+# !mark(1:1)
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+```
+
+## Git
+
+```
+git config --global user.email "eszqsc112@gmail.com"
+git config --global user.name "Taehoon Kim"
+git config --global core.commentchar ';'
+```
+
+`core.commentchar`는 주석 문자를 뭐로 쓸거냐 입니다. 기본 값은 `#`인데 GitHub Issue 등과 연결하기 위해 커밋 메시지에 `#`을 써야하는 경우가 종종 있어서 `;`로 변경해줬습니다.
+
+## asdf: The Multiple Runtime Version Manager
+
+[asdf](https://asdf-vm.com/guide/getting-started.html)란 Node.js와 같은 개발에 필요한 프로그램을 버전 관리해주는 프로그램입니다. 프로젝트마다 버전을 명시하여 따로따로 버전을 사용할 수 있도록 해줍니다.
+
+1. [Getting Started](https://asdf-vm.com/guide/getting-started.html)에 들어갑니다.
+1. Official 다운로드 설치를 실행해줍니다. (아래 내용입니다)
+
+```sh
+git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.15.0
+```
+
+사전에 설치하라는 coreutils, curl, git는 이미 설치되어 있으므로 스킵해도 됩니다.
+
+이후 사용법은 아래와 같습니다.
+
+```sh
+asdf plugin add nodejs # 프로그램 목록에 Node.js 추가
+asdf install nodejs 20.18.1 # 특정 버전 설치
+asdf global nodejs 20.18.1 # 전역 버전으로 설정
+node --version # v20.18.1 출력
+```
+
+## fzf: general-purpose command-line fuzzy finder
+
+<ArticleImage border img={fzf} alt="fzf로 최근 명령어 history를 검색하는 모습" caption="fzf로 최근 명령어 history를 검색하는 모습" width={500} />
+
+파일 내 검색이나 폴더 검색 등 각종 검색에 유용하게 쓸 수 있는 [fzf](https://github.com/junegunn/fzf)이지만, 제가 쓰는 이유는 사실 `⌃R`로 최근 명령어를 검색하기 위한 용도 밖에 없습니다.
+
+brew로 설치해줍니다.
+
+```sh
+brew install fzf
+```
+
+아래 내용을 `.zshrc` 파일에 넣습니다.
+
+```sh
+source <(fzf --zsh)
+```
+
+## direnv: 폴더 기반 환경변수 설정 (옵션)
+
+[direnv](https://direnv.net/)는 폴더 기반으로 터미널 상에서 환경 변수를 자동으로 설정하고 unset 해주는 녀석입니다. 대부분의 프로젝트는 환경변수를 알아서 적절하게 세팅하므로 필요 없는 경우가 많습니다.
+
+```sh
+brew install direnv
+```
+
+아래 내용을 `.zshrc` 파일에 넣습니다.
+
+```sh
+# .zshrc
+eval "$(direnv hook zsh)"
+```
+
+## Visual Studio Code
+
+<ArticleImage border img={vscode} alt="Visual Studio Code" caption="Visual Studio Code" />
+
+이제서야 [Visual Studio Code](https://code.visualstudio.com/)를 설치하네요. Applications에 설치한 후 `/Applications/Visual Studio Code.app/Contents/Resources/app/bin`를 `$PATH`에 추가해주면 `code` 명령어를 사용할 수 있답니다!
+
+## `.zshrc` 파일 중간 점검 및 커스텀 명령어 추가
+
+지금까지 진행했다면 `.zshrc` 파일이 아래와 같이 보일 겁니다.
+
+```sh
+# Powerlevel10k
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+# Amazon Q pre block. Keep at the top of this file.
+[[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.pre.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.pre.zsh"
+
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+# Path to your Oh My Zsh installation.
+export ZSH="$HOME/.oh-my-zsh"
+source $ZSH/oh-my-zsh.sh
+
+# Plugins
+export ZPLUG_HOME=$(brew --prefix zplug)
+source $ZPLUG_HOME/init.zsh
+
+zplug romkatv/powerlevel10k, as:theme, depth:1
+zplug "plugins/git",   from:oh-my-zsh
+zplug "plugins/yarn", from:oh-my-zsh
+
+# Install plugins if there are plugins that have not been installed
+if ! zplug check --verbose; then
+    printf "Install? [y/N]: "
+    if read -q; then
+        echo; zplug install
+    fi
+fi
+
+zplug load
+
+# asdf
+. "$HOME/.asdf/asdf.sh"
+
+# fzf
+# brew install fzf
+source <(fzf --zsh)
+
+
+# direnv
+# brew install direnv
+eval "$(direnv hook zsh)"
+
+# ##############################################################################
+# ######## 사용자정의 alias 또는 function 추가 #################################
+# ##############################################################################
+
+
+# Amazon Q post block. Keep at the bottom of this file.
+[[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh"
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+```
+
+`$PATH` 값을 막 수정해도 되고 편한 alias 등을 마음껏 추가하여 사용합시다. 아래는 제가 실제로 사용하는 것들입니다.
+
+```sh
+# PATH
+export PATH="$PATH:/opt/homebrew/opt/ruby/bin:$HOME/bin:$HOME/.yarn/bin:$HOME/.local/bin:$HOME/Library/Android/sdk/platform-tools:/Applications/Visual Studio Code.app/Contents/Resources/app/bin:/Applications"
+
+alias e="exit"
+
+# pnpm
+# asdf로 설치
+alias p="pnpm"
+
+# curl 대안
+# brew install curlie
+alias c="curlie"
+
+# source
+alias s="source ~/.zshrc"
+
+# .zshrc vim으로 열기
+alias vz="vim ~/.zshrc"
+
+# .zshrc Visual Studio Code로 열기
+alias cz="code ~/.zshrc"
+
+# nvim
+# brew install neovim
+export LC_MESSAGES="en_US.UTF-8"
+alias vim="nvim"
+alias vi="nvim"
+
+# zoxide: cd 더 나은 버전
+# brew install zoxide
+eval "$(zoxide init zsh)"
+
+### git
+# git origin 에 있는 main을 그대로 가져오기
+function gfm() {
+  git fetch origin $(git_main_branch):$(git_main_branch)
+}
+
+# git origin 에 있는 최신 deploy 브랜치를 그대로 가져오기
+function gfdp() {
+  local target_branch=$(git branch --sort=-committerdate | grep '^  deploy' | head -n 1 | sed 's/^  //')
+  echo "$target_branch 를 가져옵니다."
+  git fetch origin $target_branch:$target_branch
+}
+
+# git pull
+function glm() {
+  echo 'git pull origin $(git_main_branch) --no-rebase --no-edit' && git pull origin $(git_main_branch) --no-rebase --no-edit
+}
+
+function glr() {
+  echo 'git pull origin $(git_main_branch) --rebase --no-edit' && git pull origin $(git_main_branch) --rebase --no-edit
+}
+
+alias glone="git pull origin --no-rebase --no-edit"
+
+function gcne() {
+  echo 'git commit -v --amend --no-edit' && git commit -v --amend --no-edit
+}
+
+# 특정 포트 프로세스 종료. killport 4000
+function killport {
+    readonly port=${1:?"The port must be specified."}
+    readonly head=$(lsof -i tcp:"$port" | head -n 1)
+    readonly gl=$(lsof -i tcp:"$port" | grep LISTEN)
+    echo $head
+    echo $gl
+    echo $gl | awk '{print $2}' | xargs kill -9
+}
+
+```
+
+## 폰트 설치
+
+[D2Coding](https://github.com/naver/d2codingfont)을 씁니다. 엄청 예쁘다고 할 순 없지만 한글까지 고정폭이 원활히 지원되어 여러모로 편리합니다. 설치 이후 아래와 같이 vscode에서 설정할 수 있습니다.
+
+```json vscode Preferences: Open User Settings (JSON)
+{
+  ...
+  "editor.fontFamily": "D2Coding, Menlo, Monaco, 'Courier New', monospace",
+}
+```
+
+어떤 코딩 폰트가 있는지 모르겠다면 https://www.codingfont.com/ 도 참조해주세요. 코딩 폰트 월드컵입니다.
+
+
+
+## 기타 프로그램
+
+- **[RunCat](https://kyome.io/runcat/index.html?lang=en)**: 현재 컴퓨터 CPU가 빨리 돌아가는 만큼 메뉴 막대의 고양이가 열심히 뜁니다. 기타 성능 정보도 제공합니다. 달리는 고양이가 귀엽습니다.
+- [zoxide](https://github.com/ajeetdsouza/zoxide): 스마트한 cd. 일부 값으로만 cd 가능함!! 원조는 [`z`](https://github.com/agkozak/zsh-z)
+- [Docker Desktop](https://docs.docker.com/desktop/setup/install/mac-install/): Docker 구동 환경 마련하기
+- [neovim](https://neovim.io/): vim 업그레이드 버전. `brew install neovim`로 설치
+- [saml2aws](https://github.com/Versent/saml2aws): saml 인증 방식으로 AWS 자격증명 얻기. `~/.saml2aws` 파일 설정
+- [tailscale](https://tailscale.com/): VPN 서비스
+
+
+
+## 번외
+
+macOS에서 한글 키보드는 백틱(\`)을 치려고 하면 원화(₩)가 입력되는 이슈가 있습니다. 왜 그런지는 잘 모르겠네요. 하여튼 이걸 고치는 방법은 있습니다([Mac 한글 키보드에서 항상 원화(₩)대신 백틱(`) 입력되게 하기
+](https://www.korecmblog.com/blog/backtick-fix))
+
+그런데 이게 너무 귀찮아서 Perplexity에 물어보니까...
+
+<ArticleImage
+  border
+  img={keyper}
+  alt="초기화 - 손쉬운 사용"
+  caption="초기화 - 손쉬운 사용"
+/>
+
+그냥 한/영 바꾼 다음에 백틱 입력하라고 하네요. 그렇게 살겠습니다.
