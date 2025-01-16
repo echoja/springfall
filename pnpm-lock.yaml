@@ -86,6 +86,9 @@ importers:
         specifier: ^6.0.7
         version: 6.0.7(@types/node@22.10.7)(jiti@2.4.2)(terser@5.37.0)(yaml@2.6.1)
     devDependencies:
+      "@hbsnow/rehype-sectionize":
+        specifier: ^1.0.7
+        version: 1.0.7
       "@types/mdx":
         specifier: ^2.0.13
         version: 2.0.13
@@ -821,6 +824,13 @@ packages:
       {
         integrity: sha512-af3qATX+m4Rnd9+wHcjJ4w2ijq+rAVP3CCinJQvFv1kgSu1W6jypUmvleJxcewdxmutM8dmIRZFxO/IQBZmP2Q==,
       }
+
+  "@hbsnow/rehype-sectionize@1.0.7":
+    resolution:
+      {
+        integrity: sha512-twbVxCFf4YwgTm6FIdGtHfJ14vvIHedk2fqZTpE3X6+vszEeZlMTy7tOyI9KaP/6S2DN2Jnk7zZGtZANTD+vEg==,
+      }
+    engines: { node: ">=16.0.0" }
 
   "@humanwhocodes/config-array@0.11.14":
     resolution:
@@ -5369,6 +5379,13 @@ packages:
       }
     engines: { node: ">= 0.4" }
 
+  is-buffer@2.0.5:
+    resolution:
+      {
+        integrity: sha512-i2R6zNFDwgEHJyQUtJEk0XFi1i0dPFn/oqjK3/vPCcDeJvW5NQ83V8QbicfF1SupOaB0h8ntgBC2YiE7dfyctQ==,
+      }
+    engines: { node: ">=4" }
+
   is-bun-module@1.3.0:
     resolution:
       {
@@ -6554,6 +6571,12 @@ packages:
         integrity: sha512-TXfryirbmq34y8QBwgqCVLi+8oA3oWx2eAnSn62ITyEhEYaWRlVZ2DvMM9eZbMs/RfxPu/PK/aBLyGj4IrqMHw==,
       }
     engines: { node: ">=18" }
+
+  parse5@6.0.1:
+    resolution:
+      {
+        integrity: sha512-Ofn/CTFzRGTTxwpNEs9PP93gXShHcTq255nzRYSKe8AkVpZY7e1fpmTfOyoIvjP5HG7Z2ZM7VS9PPhQGW2pOpw==,
+      }
 
   path-exists@4.0.0:
     resolution:
@@ -8035,6 +8058,12 @@ packages:
         integrity: sha512-XHPEwS0q6TaxcvG85+8EYkbiCux2XtWG2mkc47Ng2A77BQu9+DqIOJldST4HgPkuea7dvKSj5VgX3P1d4rW8Tg==,
       }
 
+  web-namespaces@2.0.1:
+    resolution:
+      {
+        integrity: sha512-bKr1DkiNa2krS7qxNtdrtHAmzuYGFQLiQ13TsorsdT6ULTkPLKuu5+GsFpDlg6JFjUTwX2DyhMPG2be8uPrqsQ==,
+      }
+
   webidl-conversions@7.0.0:
     resolution:
       {
@@ -8534,6 +8563,12 @@ snapshots:
   "@formatjs/intl-localematcher@0.5.10":
     dependencies:
       tslib: 2.8.1
+
+  "@hbsnow/rehype-sectionize@1.0.7":
+    dependencies:
+      hast-util-heading: 2.0.1
+      hast-util-heading-rank: 2.1.1
+      rehype: 12.0.1
 
   "@humanwhocodes/config-array@0.11.14":
     dependencies:
@@ -12620,6 +12655,8 @@ snapshots:
       call-bound: 1.0.3
       has-tostringtag: 1.0.2
 
+  is-buffer@2.0.5: {}
+
   is-bun-module@1.3.0:
     dependencies:
       semver: 7.6.3
@@ -13559,6 +13596,8 @@ snapshots:
       type-fest: 3.13.1
 
   parse-ms@4.0.0: {}
+
+  parse5@6.0.1: {}
 
   path-exists@4.0.0: {}
 
@@ -14645,6 +14684,8 @@ snapshots:
     dependencies:
       defaults: 1.0.4
     optional: true
+
+  web-namespaces@2.0.1: {}
 
   webidl-conversions@7.0.0: {}
 
