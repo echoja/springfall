@@ -150,6 +150,10 @@ article .heading-anchor {
   @apply absolute text-gray-300 -left-6 sm:-left-7 top-1 w-6 h-6 p-1;
 }
 
+.dark article .heading-anchor {
+  @apply text-gray-700;
+}
+
 h2:has(.heading-anchor),
 h3:has(.heading-anchor),
 h4:has(.heading-anchor),

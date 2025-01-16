@@ -1,0 +1,121 @@
+- [GitHub - Settings](https://github.com/settings/keys) - SSH and GPG keys - New SSH key
+- Title: 아무거나 넣습니다
+- Key type: Authentication Key 그대로
+- Key: 위에서 복사한 것 넣기
+- Add SSH key
+
+https://docs.github.com/ko/authentication/managing-commit-signature-verification
+
+https://www.gnupg.org/download/
+
+https://sourceforge.net/p/gpgosx/docu/Download/
+
+실패했습니다.
+
+```jsx
+brew install gnupg
+```
+
+https://docs.github.com/ko/authentication/managing-commit-signature-verification/generating-a-new-gpg-key
+
+시키는 대로 합시다.
+
+```jsx
+th.kim@taehoon-kim2ui-MacBookPro ~ % gpg --full-generate-key
+gpg (GnuPG) 2.4.7; Copyright (C) 2024 g10 Code GmbH
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+Please select what kind of key you want:
+   (1) RSA and RSA
+   (2) DSA and Elgamal
+   (3) DSA (sign only)
+   (4) RSA (sign only)
+   (9) ECC (sign and encrypt) *default*
+  (10) ECC (sign only)
+  (14) Existing key from card
+Your selection?
+Please select which elliptic curve you want:
+   (1) Curve 25519 *default*
+   (4) NIST P-384
+   (6) Brainpool P-256
+Your selection?
+Please specify how long the key should be valid.
+         0 = key does not expire
+      <n>  = key expires in n days
+      <n>w = key expires in n weeks
+      <n>m = key expires in n months
+      <n>y = key expires in n years
+Key is valid for? (0)
+Key does not expire at all
+Is this correct? (y/N) y
+
+GnuPG needs to construct a user ID to identify your key.
+
+Real name: Taehoon Kim
+Email address: eszqsc112@gmail.com
+Comment:
+You selected this USER-ID:
+    "Taehoon Kim <eszqsc112@gmail.com>"
+
+Change (N)ame, (C)omment, (E)mail or (O)kay/(Q)uit? O
+We need to generate a lot of random bytes. It is a good idea to perform
+some other action (type on the keyboard, move the mouse, utilize the
+disks) during the prime generation; this gives the random number
+generator a better chance to gain enough entropy.
+We need to generate a lot of random bytes. It is a good idea to perform
+some other action (type on the keyboard, move the mouse, utilize the
+disks) during the prime generation; this gives the random number
+generator a better chance to gain enough entropy.
+gpg: directory '/Users/th.kim/.gnupg/openpgp-revocs.d' created
+gpg: revocation certificate stored as '/Users/th.kim/.gnupg/openpgp-revocs.d/D999252DCC979E950DF62BD2BE61DA6ACD24468B.rev'
+public and secret key created and signed.
+
+pub   ed25519 2025-01-06 [SC]
+      D999252DCC979E950DF62BD2BE61DA6ACD24468B
+uid                      Taehoon Kim <eszqsc112@gmail.com>
+sub   cv25519 2025-01-06 [E]
+```
+
+```jsx
+th.kim@taehoon-kim2ui-MacBookPro ~ % gpg --list-secret-keys --keyid-format=long
+
+gpg: checking the trustdb
+gpg: marginals needed: 3  completes needed: 1  trust model: pgp
+gpg: depth: 0  valid:   1  signed:   0  trust: 0-, 0q, 0n, 0m, 0f, 1u
+[keyboxd]
+---------
+sec   ed25519/BE61DA6ACD24468B 2025-01-06 [SC]
+      D999252DCC979E950DF62BD2BE61DA6ACD24468B
+uid                 [ultimate] Taehoon Kim <eszqsc112@gmail.com>
+ssb   cv25519/8960D630A6FC7B0A 2025-01-06 [E]
+
+th.kim@taehoon-kim2ui-MacBookPro ~ % gpg --armor --export BE61DA6ACD24468B
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+mDMEZ3vdzRYJKwYBBAHaRw8BAQdAep4bZoShucH55EZW7aoxr4G8+8sPyqyWe+vQ
+e7VDxyS0IVRhZWhvb24gS2ltIDxlc3pxc2MxMTJAZ21haWwuY29tPoiTBBMWCgA7
+FiEE2ZklLcyXnpUN9ivSvmHaas0kRosFAmd73c0CGwMFCwkIBwICIgIGFQoJCAsC
+BBYCAwECHgcCF4AACgkQvmHaas0kRovmowEAmow4b4+MXajc7Xs+8VA5ZiqXOrpF
+FTZthQ+F2kEk/uMA/3huNCNu4B3oliDLdinjSI66vqVZlO4tJRq2gO+lW0QDuDgE
+Z3vdzRIKKwYBBAGXVQEFAQEHQBOrZ834aKD7z6vqpT2FXfsW0rL8Ve0UtZnh28Sv
+gN9jAwEIB4h4BBgWCgAgFiEE2ZklLcyXnpUN9ivSvmHaas0kRosFAmd73c0CGwwA
+CgkQvmHaas0kRosGBwEAnXqHVSfPHJJZIb7qQXQLZw0/5+JbIHhRDNpR3AjCT0MB
+AKoKfBZ7yb/SlTjlfZhiTesfZLjrV4oOOBOLswCUZfwK
+=ME5j
+-----END PGP PUBLIC KEY BLOCK-----
+th.kim@taehoon-kim2ui-MacBookPro ~ %
+```
+
+그냥 기본 값으로 최대한 엔터 친다.
+
+gpgconf --kill gpg-agent
+brew install pinentry-mac
+
+## DataGrip 옮기기
+
+https://stackoverflow.com/questions/37931260/how-to-export-import-a-data-source-from-datagrip
+
+datagrip
+
+[datagrip.zip](https://prod-files-secure.s3.us-west-2.amazonaws.com/cc43c877-0904-45d6-bc20-13cc3775f4ec/726fc5f6-0398-4257-b84b-25e8437f7504/datagrip.zip)
