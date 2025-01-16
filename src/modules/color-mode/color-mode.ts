@@ -1,7 +1,7 @@
 import { atom, createStore, useAtom, useStore } from "jotai";
 import { useCallback } from "react";
 
-export type ColorMode = "dark" | "light";
+type ColorMode = "dark" | "light";
 
 const colorModeAtom = atom<ColorMode | null>(null);
 
