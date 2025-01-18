@@ -60,7 +60,7 @@ window.CodenButter("boot", { siteId: "otoyyikrrj", auto: true });
         ></script>
       </head>
       <body>
-        <Providers>
+        <Providers className="flex flex-col items-center justify-center">
           <ColorModeClassNameInjector />
           {children}
           <Footer className="max-w-screen-md px-4 pb-4 mx-auto sm:pb-6 md:pb-8 sm:px-6 md:px-8" />

@@ -5,8 +5,8 @@ import Utterances from "@modules/utterances";
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <ArticlePageHeader className="max-w-screen-md px-4 mx-auto mt-4 sm:mt-6 md:mt-8 sm:px-6 md:px-8" />
-      <div className="flex max-w-screen-md px-4 mx-auto sm:px-6 md:px-8">
+      <ArticlePageHeader className="max-w-[1200px] pl-4 pr-40 mt-4" />
+      <div className="flex max-w-[1200px] px-4 ">
         <div className="w-full">
           <article className="mb-20">{children}</article>
           <Utterances />

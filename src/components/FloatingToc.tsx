@@ -14,17 +14,32 @@ type Item = {
 
 const TocLi: React.FC<{ item: Item }> = ({ item }) => {
   const [active, setActive] = useState(false);
+  // const [ratio, setRatio] = useState(0);
 
   useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.intersectionRatio > 0) {
-          setActive(true);
-        } else {
-          setActive(false);
-        }
-      });
-    });
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActive(true);
+          } else {
+            setActive(false);
+          }
+          // if (entry.intersectionRatio > 0) {
+          //   setActive(true);
+          // } else {
+          //   setActive(false);
+          // }
+          // setRatio(entry.intersectionRatio);
+        });
+      },
+      {
+        rootMargin: "-50% 0px -50% 0px",
+      },
+      // {
+      //   threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1],
+      // },
+    );
 
     observer.observe(item.section);
     return () => observer.disconnect();
@@ -34,6 +49,17 @@ const TocLi: React.FC<{ item: Item }> = ({ item }) => {
     <li className={twMerge("mb-0.5")}>
       <a
         href={`#${item.id}`}
+        onClick={(e) => {
+          e.preventDefault();
+
+          const offset = 100;
+          const elementPosition = item.section.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.scrollY - offset;
+
+          window.scrollTo({
+            top: offsetPosition,
+          });
+        }}
         className={twMerge(
           "leading-3 transition",
           style.link,
