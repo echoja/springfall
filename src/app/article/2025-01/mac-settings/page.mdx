@@ -506,11 +506,11 @@ Github 로그인 → [SSH and GPG Keys](https://github.com/settings/keys) → SS
 이제 `git clone`을 하게 되면 최초에는 GitHub를 의심합니다. `yes`를 해줍니다.
 
 ```sh
-% git clone git@github.com:echoja/some-repository.git
-Cloning into 'some-repository'...
-The authenticity of host 'github.com (20.200.245.247)' can't be established.
-ED25519 key fingerprint is SHA256:+xxxxxx/yyyyyy.
-This key is not known by any other names.
+git clone git@github.com:echoja/some-repository.git
+# Cloning into 'some-repository'...
+# The authenticity of host 'github.com (20.200.245.247)' can't be established.
+# ED25519 key fingerprint is SHA256:+xxxxxx/yyyyyy.
+# This key is not known by any other names.
 # !mark(1:1)
 Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
 ```
@@ -527,7 +527,9 @@ git config --global core.commentchar ';'
 
 ## asdf: The Multiple Runtime Version Manager
 
-[asdf](https://asdf-vm.com/guide/getting-started.html)란 Node.js와 같은 개발에 필요한 프로그램을 버전 관리해주는 프로그램입니다. 프로젝트마다 버전을 명시하여 따로따로 버전을 사용할 수 있도록 해줍니다.
+[asdf](https://asdf-vm.com/guide/getting-started.html)란 Node.js와 같은 개발에 필요한 프로그램의 버전을 관리해주는 프로그램입니다. 프로젝트마다 버전을 명시하여 따로따로 버전을 사용할 수 있도록 해줍니다. 버전 관리라고 한다면 [nvm](https://github.com/nvm-sh/nvm)같은 프로그램이 떠오를텐데요, asdf이 그 역할을 대신한다고 보면 됩니다. asdf는 nodejs 뿐만 아니라 python등 다양한 버전 크리티컬한 환경을 제어하는 데 좋습니다.
+
+만약 상황상 nvm을 꼭 사용해야 한다면 asdf로는 nodejs를 설치하지 마세요. 꼬일 확률이 높아집니다.
 
 1. [Getting Started](https://asdf-vm.com/guide/getting-started.html)에 들어갑니다.
 1. Official 다운로드 설치를 실행해줍니다. (아래 내용입니다)
@@ -576,7 +578,7 @@ brew install fzf
 source <(fzf --zsh)
 ```
 
-## direnv: 폴더 기반 환경변수 설정 (옵션)
+## direnv: 폴더 기반 환경변수 설정 (필수 아님)
 
 [direnv](https://direnv.net/)는 폴더 기반으로 터미널 상에서 환경 변수를 자동으로 설정하고 unset 해주는 녀석입니다. 대부분의 프로젝트는 환경변수를 알아서 적절하게 세팅하므로 필요 없는 경우가 많습니다.
 
@@ -590,6 +592,40 @@ brew install direnv
 # .zshrc
 eval "$(direnv hook zsh)"
 ```
+
+그리고 원하는 프로젝트 파일에 `.env`와 `.envrc` 파일을 넣습니다.
+
+```sh .env
+TEST=123
+```
+
+```sh .envrc
+dotenv .env
+```
+
+이렇게 하고 폴더에 쉘을 띄우면 아래와 같은 에러가 뜰텐데요,
+
+```sh
+direnv: error /Users/th.kim/Desktop/test/.envrc is blocked. Run `direnv allow` to approve its content
+```
+
+시키는 대로 `direnv allow`를 해줍니다.
+
+```sh
+% direnv allow
+direnv: loading ~/Desktop/test/.envrc          
+direnv: export +TEST
+```
+
+그러면 `TEST` 환경 변수를 direnv가 로딩했다고 뜹니다.
+
+```sh
+% cd ..
+direnv: unloading
+```
+
+폴더를 나가면 환경변수가 해제됩니다.
+
 
 ## Visual Studio Code
 
