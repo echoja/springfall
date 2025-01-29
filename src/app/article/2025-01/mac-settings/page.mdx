@@ -33,6 +33,7 @@ import setting3 from "./setting3.png";
 import setting4 from "./setting4.png";
 import setting5 from "./setting5.png";
 import setting6 from "./setting6.png";
+import setting7 from "./setting7.png";
 import software from "./software-update.png";
 import vscode from "./vscode.png";
 import keyper from "./keyper.png";
@@ -175,7 +176,7 @@ Update Now를 클릭하세요!
   caption="키보드 단축키 설정 - 입력 소스"
 />
 
-VSCode에서 Trigger Suggest라는 기능을 적극적으로 사용할 예정인데, 단축키가 `⌃스페이스`로 똑같기 때문에 입력 소스 단축키를 사용하지 않도록 합니다. 아래 것도 그냥 찜찜하기도 하고 어차피 쓰지 않으니 껐습니다.
+VSCode에서 Trigger Suggest라는 기능을 적극적으로 사용할 예정인데, 단축키가 `⌃스페이스`로 똑같기 때문에 입력 소스 단축키를 사용하지 않도록 합니다. Caps Lock 위치에 있는 한/영 버튼을 주로 사용하기도 하구요. 그 바로 아래 것도 어차피 쓰지 않으니 옵션을 껐습니다.
 
 <ArticleImage
   border
@@ -188,12 +189,21 @@ Raycast를 사용할 거기 때문에 Spotlight 단축키를 비활성화합니�
 
 <ArticleImage
   border
+  img={setting7}
+  alt="손쉬운 사용 - 포인터 제어 - 트랙패드 옵션... - 드래그에 트랙패드 사용"
+  caption="손쉬운 사용 - 포인터 제어 - 트랙패드 옵션... - 드래그에 트랙패드 사용"
+/>
+
+저는 마우스도 키보드도 안쓰고 맥북 하나만 쓰는데요, 그래서 트랙패드에서 드래그를 세 손가락으로 쉽게 하려고 설정했습니다.
+
+<ArticleImage
+  border
   img={setting5}
   alt="시스템 설정 - 개인정보 보호 및 보안 - 화면 및 시스템 오디오 녹음"
   caption="시스템 설정 - 개인정보 보호 및 보안 - 화면 및 시스템 오디오 녹음"
 />
 
-이 설정은 일단 지금 단계에서 곧장 설정할 것은 아니지만 일단 "시스템 설정"에서 하는 거라 여기에 포함했습니다. 인터넷으로 [Google Meet](https://meet.google.com/)을 하거나 [Gather(게더타운)](https://ko.gather.town/)을 하거나 [Zoom](https://www.zoom.com/ko) 미팅을 할 때 **화면 공유**를 하게 되면 최초에 한해 저 설정을 해줘야 합니다. 그러나 바로 되는 것이 아니라 프로그램을 껐다 켜야 합니다. 사람들 다 보고 있는데 프로그램 껐다 키고 하면 좀 부끄러우니 미리 준비해놓아요.
+이 설정은 일단 지금 단계에서 곧장 설정할 것은 아니지만 일단 "시스템 설정"에서 하는 거라 여기에 포함했습니다. 인터넷으로 [Google Meet](https://meet.google.com/)을 하거나 [Gather(게더타운)](https://ko.gather.town/)을 하거나 [Zoom](https://www.zoom.com/ko) 미팅을 할 때 **화면 공유**를 하게 되면 최초에 한해 저 설정을 해줘야 합니다. 그러나 바로 되는 것이 아니라 프로그램을 껐다 켜야 합니다. 회의 진행에 지장이 있을 수도 있으니 미리 준비해놓아요.
 
 <ArticleImage
   border
@@ -383,7 +393,7 @@ xcode-select --install
 
 이미 설치가 되었다면 아래와 같이 뜹니다.
 
-```
+```plaintext
 xcode-select: note: Command line tools are already installed. Use "Software Update" in System Settings or the softwareupdate command line interface to install updates
 ```
 
@@ -429,12 +439,7 @@ zplug load
 
 Amazon Q는 터미널에서 자동완성 해주는 편리한 툴입니다. 본래 [Fig](https://fig.io/)라는 이름으로 프로그램이 있었지만 아마존에 흡수됐습니다.
 
-<ArticleImage
-  border
-  img={q1}
-  alt="Fig → Amazon"
-  caption="Fig → Amazon"
-/>
+<ArticleImage border img={q1} alt="Fig → Amazon" caption="Fig → Amazon" />
 
 [Amazon Q 설치 안내 페이지](https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/what-is.html)에서 `Amazon Q for the macOS command line`를 찾아 설치합니다. `.zshrc` 파일 등에 자동으로 세팅됩니다. 설치할 때 [AWS Builder ID](https://docs.aws.amazon.com/signin/latest/userguide/sign-in-aws_builder_id.html)가 필요합니다. 회원가입 하면서 진행합니다.
 
@@ -450,7 +455,6 @@ q inline disable
 q doctor # 현재 문제를 파악하고 자동으로 고쳐줌
 q restart # 재시작
 ```
-
 
 ## Powerlevel10k: 터미널 테마
 
@@ -502,11 +506,11 @@ Github 로그인 → [SSH and GPG Keys](https://github.com/settings/keys) → SS
 이제 `git clone`을 하게 되면 최초에는 GitHub를 의심합니다. `yes`를 해줍니다.
 
 ```sh
-% git clone git@github.com:echoja/some-repository.git
-Cloning into 'some-repository'...
-The authenticity of host 'github.com (20.200.245.247)' can't be established.
-ED25519 key fingerprint is SHA256:+xxxxxx/yyyyyy.
-This key is not known by any other names.
+git clone git@github.com:echoja/some-repository.git
+# Cloning into 'some-repository'...
+# The authenticity of host 'github.com (20.200.245.247)' can't be established.
+# ED25519 key fingerprint is SHA256:+xxxxxx/yyyyyy.
+# This key is not known by any other names.
 # !mark(1:1)
 Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
 ```
@@ -523,7 +527,9 @@ git config --global core.commentchar ';'
 
 ## asdf: The Multiple Runtime Version Manager
 
-[asdf](https://asdf-vm.com/guide/getting-started.html)란 Node.js와 같은 개발에 필요한 프로그램을 버전 관리해주는 프로그램입니다. 프로젝트마다 버전을 명시하여 따로따로 버전을 사용할 수 있도록 해줍니다.
+[asdf](https://asdf-vm.com/guide/getting-started.html)란 Node.js와 같은 개발에 필요한 프로그램의 버전을 관리해주는 프로그램입니다. 프로젝트마다 버전을 명시하여 따로따로 버전을 사용할 수 있도록 해줍니다. 버전 관리라고 한다면 [nvm](https://github.com/nvm-sh/nvm)같은 프로그램이 떠오를텐데요, asdf이 그 역할을 대신한다고 보면 됩니다. asdf는 nodejs 뿐만 아니라 python등 다양한 버전 크리티컬한 환경을 제어하는 데 좋습니다.
+
+만약 상황상 nvm을 꼭 사용해야 한다면 asdf로는 nodejs를 설치하지 마세요. 꼬일 확률이 높아집니다.
 
 1. [Getting Started](https://asdf-vm.com/guide/getting-started.html)에 들어갑니다.
 1. Official 다운로드 설치를 실행해줍니다. (아래 내용입니다)
@@ -550,7 +556,13 @@ node --version # v20.18.1 출력
 
 ## fzf: general-purpose command-line fuzzy finder
 
-<ArticleImage border img={fzf} alt="fzf로 최근 명령어 history를 검색하는 모습" caption="fzf로 최근 명령어 history를 검색하는 모습" width={500} />
+<ArticleImage
+  border
+  img={fzf}
+  alt="fzf로 최근 명령어 history를 검색하는 모습"
+  caption="fzf로 최근 명령어 history를 검색하는 모습"
+  width={500}
+/>
 
 파일 내 검색이나 폴더 검색 등 각종 검색에 유용하게 쓸 수 있는 [fzf](https://github.com/junegunn/fzf)이지만, 제가 쓰는 이유는 사실 `⌃R`로 최근 명령어를 검색하기 위한 용도 밖에 없습니다.
 
@@ -566,7 +578,7 @@ brew install fzf
 source <(fzf --zsh)
 ```
 
-## direnv: 폴더 기반 환경변수 설정 (옵션)
+## direnv: 폴더 기반 환경변수 설정 (필수 아님)
 
 [direnv](https://direnv.net/)는 폴더 기반으로 터미널 상에서 환경 변수를 자동으로 설정하고 unset 해주는 녀석입니다. 대부분의 프로젝트는 환경변수를 알아서 적절하게 세팅하므로 필요 없는 경우가 많습니다.
 
@@ -581,9 +593,48 @@ brew install direnv
 eval "$(direnv hook zsh)"
 ```
 
+그리고 원하는 프로젝트 파일에 `.env`와 `.envrc` 파일을 넣습니다.
+
+```sh .env
+TEST=123
+```
+
+```sh .envrc
+dotenv .env
+```
+
+이렇게 하고 폴더에 쉘을 띄우면 아래와 같은 에러가 뜰텐데요,
+
+```sh
+direnv: error /Users/th.kim/Desktop/test/.envrc is blocked. Run `direnv allow` to approve its content
+```
+
+시키는 대로 `direnv allow`를 해줍니다.
+
+```sh
+% direnv allow
+direnv: loading ~/Desktop/test/.envrc          
+direnv: export +TEST
+```
+
+그러면 `TEST` 환경 변수를 direnv가 로딩했다고 뜹니다.
+
+```sh
+% cd ..
+direnv: unloading
+```
+
+폴더를 나가면 환경변수가 해제됩니다.
+
+
 ## Visual Studio Code
 
-<ArticleImage border img={vscode} alt="Visual Studio Code" caption="Visual Studio Code" />
+<ArticleImage
+  border
+  img={vscode}
+  alt="Visual Studio Code"
+  caption="Visual Studio Code"
+/>
 
 이제서야 [Visual Studio Code](https://code.visualstudio.com/)를 설치하네요. Applications에 설치한 후 `/Applications/Visual Studio Code.app/Contents/Resources/app/bin`를 `$PATH`에 추가해주면 `code` 명령어를 사용할 수 있답니다!
 
@@ -736,8 +787,6 @@ function killport {
 
 어떤 코딩 폰트가 있는지 모르겠다면 https://www.codingfont.com/ 도 참조해주세요. 코딩 폰트 월드컵입니다.
 
-
-
 ## 기타 프로그램
 
 - **[RunCat](https://kyome.io/runcat/index.html?lang=en)**: 현재 컴퓨터 CPU가 빨리 돌아가는 만큼 메뉴 막대의 고양이가 열심히 뜁니다. 기타 성능 정보도 제공합니다. 달리는 고양이가 귀엽습니다.
@@ -746,8 +795,6 @@ function killport {
 - [neovim](https://neovim.io/): vim 업그레이드 버전. `brew install neovim`로 설치
 - [saml2aws](https://github.com/Versent/saml2aws): saml 인증 방식으로 AWS 자격증명 얻기. `~/.saml2aws` 파일 설정
 - [tailscale](https://tailscale.com/): VPN 서비스
-
-
 
 ## 번외
 
