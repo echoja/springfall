@@ -30,7 +30,6 @@
     "lucide-react": "^0.471.1",
     "next": "15.1.4",
     "next-seo": "^6.6.0",
-    "nextjs-google-analytics": "^2.3.7",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-wrap-balancer": "^1.1.1",
