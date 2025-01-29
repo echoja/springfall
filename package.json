@@ -42,6 +42,7 @@
     "vite": "^6.0.7"
   },
   "devDependencies": {
+    "@hbsnow/rehype-sectionize": "^1.0.7",
     "@types/mdx": "^2.0.13",
     "@types/node": "^22.10.7",
     "@types/react": "19.0.7",

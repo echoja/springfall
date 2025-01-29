@@ -6,9 +6,10 @@ import { NextUIProvider } from "@nextui-org/react";
 import { Provider as JotaiProvider } from "jotai";
 import { useRouter } from "next/navigation";
 import { GoogleAnalytics } from "nextjs-google-analytics";
+import type { ComponentProps } from "react";
 import { useCallback } from "react";
 
-export function Providers({ children }: { children: React.ReactNode }) {
+export function Providers({ children, ...props }: { children: React.ReactNode } & ComponentProps<"div">) {
   const router = useRouter();
 
   const navigate = useCallback(
@@ -19,7 +20,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
   );
 
   return (
-    <NextUIProvider navigate={navigate} locale="ko-KR">
+    <NextUIProvider {...props} navigate={navigate} locale="ko-KR"  >
       <GoogleAnalytics trackPageViews />
       <JotaiProvider store={store}>{children}</JotaiProvider>
     </NextUIProvider>
