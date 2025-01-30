@@ -38,6 +38,7 @@ import { item as FarmingPaper } from "@app/article/2024-10/farming-paper/metadat
 import { item as Signal } from "@app/article/2024-11/signal/metadata";
 import { item as Zod } from "@app/article/2024-11/zod/metadata";
 import { item as Functional } from "@app/article/2024-12/functional/metadata";
+import { item as GA } from "@app/article/2025-01/ga/metadata";
 import { item as MacSettings } from "@app/article/2025-01/mac-settings/metadata";
 import { item as Thoreau } from "@app/article/2025-01/thoreau/metadata";
 import dayjs from "dayjs";
@@ -86,6 +87,7 @@ const items: ArticleItem[] = [
   Functional,
   Thoreau,
   MacSettings,
+  GA,
 ];
 
 items.sort((a, b) => dayjs(b.createdAt).diff(a.createdAt));
