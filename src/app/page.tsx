@@ -14,6 +14,9 @@ import { twMerge } from "tailwind-merge";
 
 export const metadata: Metadata = {
   title: "홈 | 봄가을",
+  other: {
+    "page-type": "home",
+  },
 };
 
 const Home = () => {
@@ -50,7 +53,10 @@ const Home = () => {
                       <div className="w-1.5 h-1.5 rounded-full ring-1 ring-inset ring-gray-300 dark:ring-gray-600"></div>
                     </div>
                   )}
-                  <div className="relative flex-auto p-3 ">
+                  <div
+                    className="relative flex-auto p-3"
+                    data-gtm-id={`${href}_link`}
+                  >
                     <div className="flex justify-between gap-x-4 mb-0.5">
                       <div className="py-0.5 text-sm leading-5 font-medium text-gray-900 break-keep">
                         <Link href={href}>
