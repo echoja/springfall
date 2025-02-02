@@ -91,7 +91,7 @@ export default function UI() {
               </text>
             </svg>
           </mask>
-          <filter id="blur">
+          <filter id="blur-sm">
             <feGaussianBlur in="SourceGraphic" stdDeviation="10" />
           </filter>
         </defs>
@@ -102,7 +102,7 @@ export default function UI() {
           height="220"
           fill="#fff"
           mask="url(#text-mask-1)"
-          filter="url(#blur)"
+          filter="url(#blur-sm)"
           opacity={opacity}
         >
           sdfsdf
@@ -115,7 +115,7 @@ export default function UI() {
           // textShadow: "0 8px 32px 0 rgba( 31, 38, 135, 0.37 )",
           // box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 ),
           // borderRadius: 10px,
-          backdropFilter: `blur( ${blur}px )`,
+          backdropFilter: `blur( ${blur-sm}px )`,
           // border: 1px solid rgba( 255, 255, 255, 0.18 ),
         }}
       >
@@ -126,7 +126,7 @@ export default function UI() {
           className="text-4xl font-bold shadow-lg"
           style={
             {
-              // backdropFilter: `blur( ${blur}px )`,
+              // backdropFilter: `blur( ${blur-sm}px )`,
             }
           }
         >
@@ -150,7 +150,7 @@ export default function UI() {
       <div className="absolute bottom-0">
         <svg width="550" height="300">
           <defs>
-            <filter id="blur">
+            <filter id="blur-sm">
               <feGaussianBlur in="SourceGraphic" stdDeviation="5" />
             </filter>
             <mask id="text-mask">
@@ -188,7 +188,7 @@ export default function UI() {
             // fill="url(#bg)"
             fill="white"
             mask="url(#text-mask)"
-            filter="url(#blur)"
+            filter="url(#blur-sm)"
           ></rect>
         </svg>
       </div>

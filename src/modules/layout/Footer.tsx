@@ -77,7 +77,7 @@ const Footer = () => {
             href={link}
             target={newWindow ? "_blank" : "_self"}
             rel="noopener noreferrer"
-            className="p-2 transition -translate-y-1/2 border border-transparent rounded hover:shadow-sm top-1/2 hover:bg-gray-400/5 hover:opacity-90 "
+            className="p-2 transition -translate-y-1/2 border border-transparent rounded-sm hover:shadow-xs top-1/2 hover:bg-gray-400/5 hover:opacity-90 "
           >
             {icon}
             {srOnly ? <span className="sr-only">{srOnly}</span> : null}

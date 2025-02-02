@@ -2,7 +2,7 @@
 "use client";
 
 import { store } from "@modules/color-mode/color-mode";
-import { NextUIProvider } from "@nextui-org/react";
+import { HeroUIProvider } from "@heroui/react";
 import { Provider as JotaiProvider } from "jotai";
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
@@ -18,8 +18,8 @@ export function Providers({ children }: { children: React.ReactNode }) {
   );
 
   return (
-    <NextUIProvider navigate={navigate} locale="ko-KR">
+    <HeroUIProvider navigate={navigate} locale="ko-KR">
       <JotaiProvider store={store}>{children}</JotaiProvider>
-    </NextUIProvider>
+    </HeroUIProvider>
   );
 }

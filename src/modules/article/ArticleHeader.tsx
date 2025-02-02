@@ -1,13 +1,12 @@
 import type { Category } from "@modules/category";
 import dayjs from "dayjs";
 import { twMerge } from "tailwind-merge";
-import { gray } from "tailwindcss/colors";
 import ArticleCounter from "./ArticleCounter";
 import style from "./ArticleHeader.module.css";
 
 const customColor = {
-  "--bgColor": `${gray[300]} 83.3333%`,
-  "--darkBgColor": `${gray[700]} 83.3333%`,
+  "--bgColor": `--color-gray-500 83.3333%`,
+  "--darkBgColor": `--color-gray-700 83.3333%`,
 };
 
 export const HeaderSeparator: React.FC<React.ComponentProps<"div">> = (
