@@ -7,7 +7,7 @@ import { nextui } from "@nextui-org/theme";
 import colors from "tailwindcss/colors";
 
 /** @type {import("tailwindcss").Config} */
-module.exports = {
+const config = {
   content: [
     "./src/**/*.{ts,tsx,js,jsx,md,mdx}",
     "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
@@ -72,3 +72,5 @@ module.exports = {
     }),
   ],
 };
+
+export default config;

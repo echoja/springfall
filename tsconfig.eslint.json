@@ -9,7 +9,7 @@
     "commitlint.config.js",
     "vitest.config.ts",
     "postcss.config.js",
-    "tailwind.config.js",
+    "tailwind.config.mjs",
     "next-seo.config.js"
   ],
   "exclude": ["node_modules"]
