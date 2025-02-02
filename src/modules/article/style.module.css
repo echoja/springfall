@@ -1,5 +1,7 @@
+@reference "../../common/globals.css";
+
 .image-figure {
-  @apply my-10 max-w-fit mx-auto;
+  @apply mx-auto my-10 max-w-fit;
 }
 
 .image {
@@ -11,7 +13,7 @@
 }
 
 .image-caption {
-  @apply p-2 text-sm font-sans text-gray-500;
+  @apply p-2 font-sans text-sm text-gray-500;
 }
 
 :global(.dark) .image-caption {
@@ -43,32 +45,28 @@
   @apply text-white;
 }
 
-.heading {
-  @apply font-semibold mt-[1.5em] mb-[0.5em] relative;
-}
-
 .heading1 {
-  @apply heading text-4xl;
+  @apply text-4xl article-heading;
 }
 
 .heading2 {
-  @apply heading text-2xl;
+  @apply text-2xl article-heading;
 }
 
 .heading3 {
-  @apply heading text-xl;
+  @apply text-xl article-heading;
 }
 
 .heading4 {
-  @apply heading text-lg;
+  @apply text-lg article-heading;
 }
 
 .heading5 {
-  @apply heading;
+  @apply article-heading;
 }
 
 .heading6 {
-  @apply heading text-sm;
+  @apply text-sm article-heading;
 }
 
 .inline-code {
@@ -96,7 +94,7 @@
 }
 
 .table-wrapper-3 {
-  @apply overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg;
+  @apply overflow-hidden shadow ring-1 ring-black/5 md:rounded-lg;
 }
 
 .table {
@@ -132,7 +130,7 @@
 }
 
 .tbody {
-  @apply divide-y divide-gray-200 bg-white;
+  @apply bg-white divide-y divide-gray-200;
 }
 
 :global(.dark) .tbody {
@@ -140,11 +138,11 @@
 }
 
 .iframe-wrapper {
-  @apply bg-gray-400/5 rounded-lg py-10;
+  @apply py-10 rounded-lg bg-gray-400/5;
 }
 
 .details {
-  @apply dark:bg-slate-900 my-10 md:rounded-sm overflow-hidden md:border px-4 md:mx-0 -mx-4;
+  @apply px-4 my-10 -mx-4 overflow-hidden dark:bg-slate-900 md:rounded-sm md:border md:mx-0;
 }
 
 :global(.dark) .details {
@@ -152,7 +150,7 @@
 }
 
 .summary {
-  @apply py-2 px-4 cursor-pointer block relative text-sm font-semibold;
+  @apply relative block px-4 py-2 text-sm font-semibold cursor-pointer;
 }
 
 .summary:before {

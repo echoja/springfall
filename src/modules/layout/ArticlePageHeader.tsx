@@ -10,7 +10,7 @@ const ArticlePageHeader = () => {
     <header className="relative flex items-center justify-center w-full mb-24">
       <Link
         href="/"
-        className="absolute left-0 p-2 transition -translate-y-1/2 border rounded shadow-sm top-1/2 hover:bg-gray-400/10 hover:opacity-90 border-gray-400/30 text-red"
+        className="absolute left-0 p-2 transition -translate-y-1/2 border rounded-sm shadow-xs top-1/2 hover:bg-gray-400/10 hover:opacity-90 border-gray-400/30 text-red"
       >
         <span className="sr-only">글 목록으로 이동</span>
         <svg

@@ -86,7 +86,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         <Providers>
           <ColorModeClassNameInjector />
-          <div className="max-w-screen-md mx-auto">
+          <div className="max-w-(--breakpoint-md) mx-auto">
             <div className="p-4 md:p-8 sm:p-6">
               {children}
               <Footer />

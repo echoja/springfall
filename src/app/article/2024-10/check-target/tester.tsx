@@ -11,7 +11,7 @@ import {
   TableColumn,
   TableHeader,
   TableRow,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { Trash2 } from "lucide-react";
 import { useState } from "react";
 import { twMerge } from "tailwind-merge";
@@ -127,7 +127,7 @@ export const Tester: React.FC = () => {
               <div className="flex gap-2">
                 <Button
                   variant="bordered"
-                  onClick={() => {
+                  onPress={() => {
                     const newTargets = [...targets];
                     newTargets.push({ type: "age", operator: ">=", value: 20 });
                     setTargets(newTargets);
@@ -138,7 +138,7 @@ export const Tester: React.FC = () => {
 
                 <Button
                   variant="bordered"
-                  onClick={() => {
+                  onPress={() => {
                     const newTargets = [...targets];
                     newTargets.push({ type: "gender", value: "female" });
                     setTargets(newTargets);
@@ -212,7 +212,7 @@ export const Tester: React.FC = () => {
                 </TableCell>
                 <TableCell>
                   <Button
-                    onClick={() => {
+                    onPress={() => {
                       const newTargets = [...targets];
                       newTargets.splice(index, 1);
                       setTargets(newTargets);
@@ -300,8 +300,8 @@ export const Tester: React.FC = () => {
               result.type === "success"
                 ? "border-success-400 dark:border-success-300"
                 : result.type === "failure"
-                  ? "border-danger-400 dark:border-danger-300"
-                  : "border-transparent",
+                ? "border-danger-400 dark:border-danger-300"
+                : "border-transparent",
             )}
           >
             <h3 className="mb-2 font-medium">결과</h3>
