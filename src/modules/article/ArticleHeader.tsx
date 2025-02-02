@@ -5,7 +5,7 @@ import ArticleCounter from "./ArticleCounter";
 import style from "./ArticleHeader.module.css";
 
 const customColor = {
-  "--bgColor": `--color-gray-500 83.3333%`,
+  "--bgColor": `--color-gray-300 83.3333%`,
   "--darkBgColor": `--color-gray-700 83.3333%`,
 };
 
