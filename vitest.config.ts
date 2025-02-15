@@ -13,7 +13,6 @@ export default defineConfig({
       "@modules": path.resolve(__dirname, "./src/modules"),
     },
   },
-  // @ts-expect-error - Vite doesn't have a type for this yet
   test: {
     globals: true,
     environment: "happy-dom",
