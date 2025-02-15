@@ -41,6 +41,7 @@ import { item as Functional } from "@app/article/2024-12/functional/metadata";
 import { item as GA } from "@app/article/2025-01/ga/metadata";
 import { item as MacSettings } from "@app/article/2025-01/mac-settings/metadata";
 import { item as Thoreau } from "@app/article/2025-01/thoreau/metadata";
+import { item as ReactExpandableText } from "@app/article/2025-02/react-expandable-text/metadata";
 import dayjs from "dayjs";
 import type { ArticleItem } from "./types";
 
@@ -88,6 +89,7 @@ const items: ArticleItem[] = [
   Thoreau,
   MacSettings,
   GA,
+  ReactExpandableText,
 ];
 
 items.sort((a, b) => dayjs(b.createdAt).diff(a.createdAt));

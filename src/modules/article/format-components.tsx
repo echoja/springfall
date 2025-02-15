@@ -84,7 +84,7 @@ const mark: AnnotationHandler = {
         style={{
           borderLeft: "solid 2px transparent",
           borderLeftColor: annotation && color,
-          backgroundColor: annotation && `rgb(from ${color} r g b / 0.1)`,
+          backgroundColor: annotation && `rgb(from ${color} r g b / 0.25)`,
         }}
       >
         <InnerLine merge={props} className="flex-1 px-4" />

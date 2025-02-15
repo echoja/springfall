@@ -1,0 +1,45 @@
+import ArticleHeader from "@modules/article/ArticleHeader";
+import ArticleImage from "@modules/article/ArticleImage";
+import getArticleHeaderProps from "@modules/metadata/getArticleHeaderProps";
+import getArticleJsonLdProps from "@modules/metadata/getArticleJsonLdProps";
+import getArticleMetadata from "@modules/metadata/getArticleMetadata";
+import { ArticleJsonLd } from "next-seo";
+import { item } from "./metadata";
+import example from "./example.png";
+
+
+export const metadata = getArticleMetadata(item);
+
+<ArticleJsonLd {...getArticleJsonLdProps(item)} />
+
+<ArticleHeader {...getArticleHeaderProps(item)} />
+
+<ArticleImage
+  img={example}
+  width={700}
+  alt="검증하는 사진"
+  caption={
+    <>
+      상태 관리는 머리가 아프니 귀여운 새 사진을 보면서 힐링해요. Photo:{" "}
+      <a href="https://unsplash.com/ko/%EC%82%AC%EC%A7%84/%EA%B0%88%EC%83%89-%EB%82%98%EB%AD%87%EA%B0%80%EC%A7%80%EC%97%90-%EB%85%B8%EB%9E%80%EC%83%89%EA%B3%BC-%EA%B2%80%EC%9D%80%EC%83%89-%EC%83%88-U_vKaztM0Mo?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">
+        Unsplash
+      </a>{" "}
+      from{" "}
+      <a href="https://unsplash.com/ko/@saketh_upadhya?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">
+        Saketh Upadhya
+      </a>
+    </>
+  }
+/>
+
+모노레포...
+
+`pnpm -riL`
+
+
+
+
+
+```sh
+npx degit github:morewings/react-library-template#tailwind react-expandable-text
+```
