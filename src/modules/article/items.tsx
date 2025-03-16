@@ -42,6 +42,7 @@ import { item as GA } from "@app/article/2025-01/ga/metadata";
 import { item as MacSettings } from "@app/article/2025-01/mac-settings/metadata";
 import { item as Thoreau } from "@app/article/2025-01/thoreau/metadata";
 import { item as ReactExpandableText } from "@app/article/2025-02/react-expandable-text/metadata";
+import { item as InstallRedash } from "@app/article/2025-03/install-redash/metadata";
 import dayjs from "dayjs";
 import type { ArticleItem } from "./types";
 
@@ -90,6 +91,7 @@ const items: ArticleItem[] = [
   MacSettings,
   GA,
   ReactExpandableText,
+  InstallRedash,
 ];
 
 items.sort((a, b) => dayjs(b.createdAt).diff(a.createdAt));
