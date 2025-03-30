@@ -9,7 +9,6 @@ import { InnerLine, Pre, highlight } from "codehike/code";
 import { ExternalLink } from "lucide-react";
 import Link from "next/link";
 import { twMerge } from "tailwind-merge";
-import gitHubDark from "./github-dark";
 import style from "./style.module.css";
 
 const callout: AnnotationHandler = {
@@ -115,7 +114,7 @@ export async function Code({ codeblock }: { codeblock: RawCode }) {
     <div className="relative">
       <div
         className="relative rounded-sm text-sm my-10 shadow-md overflow-x-scroll leading-[22px] text-gray-300"
-        style={{ backgroundColor: gitHubDark.colors["editor.background"] }}
+        style={{ backgroundColor: "#1c222b" }}
       >
         {highlighted.meta ? (
           <div className="px-4 py-3 font-mono text-xs text-gray-400 border-b border-gray-600">

@@ -1,0 +1,419 @@
+import ArticleHeader from "@modules/article/ArticleHeader";
+import ArticleImage from "@modules/article/ArticleImage";
+import getArticleHeaderProps from "@modules/metadata/getArticleHeaderProps";
+import getArticleJsonLdProps from "@modules/metadata/getArticleJsonLdProps";
+import getArticleMetadata from "@modules/metadata/getArticleMetadata";
+import { ArticleJsonLd } from "next-seo";
+import { item } from "./metadata";
+import danawa from "./danawa.png";
+import skysome from "./skysome.png";
+import skysome2 from "./skysome2.png";
+import aws from "./aws.png";
+import vs from "./vs.png";
+import githubrun from "./githubrun.png";
+import workspace from "./workspace.png";
+import tfv from "./tfv.png";
+import tfw from "./tfw.png";
+import tfx from "./tfx.png";
+import bill from "./bill.png";
+
+export const metadata = getArticleMetadata(item);
+
+<ArticleJsonLd {...getArticleJsonLdProps(item)} />
+
+<ArticleHeader {...getArticleHeaderProps(item)} />
+
+## 목차
+
+## 서론: 질질 끌다
+
+웹에서 돌아가는 게임을 만들고 싶었어요. 야심찬 마음을 가졌습니다. 뭔가 일상 속에서 즐길 수 있는 힐링 게임... 그 이름은 Skysome(하늘섬). 계속해서 이것저것 많이 만들테니, 배포를 하기 쉬운 환경을 만들어놓자 싶었습니다. [Terraform](https://www.terraform.io/)(이하 **tf**)을 실제로 써본 적은 없지만 그 기대 효과를 기대했던 바가 있어서 건드려보고 싶었습니다. 인프라는 나름 저렴하게 구성하고 싶어서 [DigitalOcean](https://www.digitalocean.com/)(이하 **DO**)에 이것저것 널부러뜨려 봤습니다. DO는 AWS보다 저렴하다는 평가를 봤습니다.
+
+이런 생각들은 [내가 생각하는 스타트업 미니멀 인프라 스택 by Outsider](https://blog.outsider.ne.kr/1666)에서 큰 영감을 받았습니다. 이 글을 쓰는 시점에서도 2년 전 글인데, 지금도 유효한 인사이트들이 많은 것 같아 먼저 공유드립니다.
+
+<ArticleImage
+  img={skysome}
+  alt="하늘섬 소개 글"
+  caption="하늘섬 소개 글"
+  border
+/>
+
+그런데 말입니다. 정작 세팅해놓고 아무것도 안하고 있지 뭐예요! 그래서 일단 접기로 했습니다. 지금 당장 제게 닥친 일들을 처리하는 것도 버겁기 때문이죠. 게다가 숨만 쉬는데 한 달에 **7만원** 가량이 빠져나가는 게 좀 마음이 아팠습니다. 제가 아무리 돈에 무지하다지만 7만원이면 치킨이 몇 개야...
+
+<ArticleImage
+  img={bill}
+  alt="48.57 USD는 25/03/30 기준 71,418 원 😭"
+  caption="48.57 USD는 25/03/30 기준 71,418 원 😭"
+  border
+/>
+
+세팅만 했지만, 그것만으로도 사실 만족스러운 성과였습니다. 왜냐하면 **단 이틀 만에** 세팅했기 때문이죠. 저도 놀랐습니다, tf의 이지피지함에. 그래서 그 여정을 기록한 다음 인프라를 정리하고 싶었습니다. 글 쓰는 걸 미뤄서 또 문제죠. 왜 항상 일을 미룰까요? 하여간 생각들이 머릿속에서 엎치락뒤치락하며 서로 싸우다 6개월이 지난 지금에서야 정리를 시작\~\~\~ 하겠습니다.
+
+⚠️ Docker나 k8s에 대한 기초적인 지식이 있으면 글을 더 잘 이해하실 수 있을 거예요. 빈약한 설명에 대해 미리 양해를 구합니다.
+
+> **서론 한 줄 요약**: 뭐 프로젝트 하려고 DigitalOcean에 Terraform 활용해서 세팅해둠. 그러나 짬이 안나기도 하고 월 지출비가 아까워서 정리하고자 함.
+
+## 목표
+
+아래와 같이 편안한 CI/CD 환경을 만들고 싶었습니다.
+
+- **편하게 빌드**: GitHub의 **Actions**에서 앱을 빌드하고 이미지를 **GitHub Container Registry**(이하 **ghcr**)에 푸시한다. (이미지 태그는 증가하는 숫자로 자동으로 설정됨)
+- **편하게 배포**: GitHub에서 variables.tf 파일에 앱 이미지 태그를 명시적으로 수정하여 Git push 한다(GitOps 흉내내기). 이후 HCP Terraform에서 해당 변경사항을 자동으로 감지하고, 적용(Apply) 버튼을 눌러 손쉽게 배포한다.
+- **확장성**: 추후 확장을 쉽게 하기 위해 최소한의 **쿠버네티스** 세팅으로 한다.
+- **무중단 배포**: 앱은 DigitalOcean Kubernetes (이하 **DOKS**) 에서 잘 세팅된 채로 돌아가기 때문에 무중단 배포가 잘 이루어진다!
+
+[HCP Terraform](https://developer.hashicorp.com/terraform/cloud-docs)이란 tf가 클라우드 상에서 돌아갈 수 있도록 HashiCorp에서 운영하는 서비스입니다. 마치 Git을 쓰기 위해 GitHub를 이용하는 것처럼요.
+
+## Terraform
+
+Terraform을 쓰는 이유는 인프라 구성을 코드로 관리할 수 있기 때문입니다.
+
+<ArticleImage
+  img={aws}
+  alt="초보자 입장에서 숨이 턱 막히는 AWS Console의 첫 화면"
+  caption="초보자 입장에서 숨이 턱 막히는 AWS Console의 첫 화면"
+  border
+/>
+
+이렇게 처음 봤을 때 무엇을 어떻게 해야 하는지 난감한데요, 일단 인프라 공부는 한다 치고, 저 웹 콘솔에서 인프라가 어떻게 구성되어 있는지 파악하려면 각 리소스에 들어가서 현황을 살펴봐야 할 겁니다. 불편하기도 하고 누락이 생기기도 쉽구요. 예전에 만들었던 리소스를 똑같이 가져오고 싶어도 일일히 설정하는 게 불편할 거예요. 코드로 관리하면 그런 단점이 싹 사라집니다!
+
+보통 코드라고 하면 프로그래밍을 떠올리기 쉽지만 그런 건 아닙니다. 뭔가 동작하는 코드(**명령형**)라기 보다는 결과적으로 어떤 인프라가 딱! 세팅되어 있어야 하는지 고정된 상태를 표시(**선언형**)하도록 되어 있습니다.
+
+::: details "선언형"과 "명령형"의 차이 👀 (by ChatGPT)  
+
+|  | **선언형 (Declarative)** | **명령형 (Imperative)** |
+|--|-------------------------|-------------------------|
+| **중점** | _무엇을 할 것인가_ | _어떻게 할 것인가_ |
+| **관심사** | 결과 | 절차 |
+| **예시** | SQL, HTML, React (JSX), CSS, **Terraform** 등 | C, JavaScript 루프, Python의 for/while 등 |
+| **장점** | 코드 간결, 추상화 높음, 유지보수 쉬움 | 세세한 제어 가능, 로직이 명확 |
+| **단점** | 동작 방식이 숨겨져 있어서 디버깅 어려울 수 있음 | 코드가 장황해지고 에러 가능성 증가 |
+
+:::
+
+인프라를 코드로 관리할 수 있다는 말은 Git과 같은 버전 관리 시스템에 태울 수 있다는 것과 같고 그에 따르는 여러 장점을 취할 수 있습니다.
+
+- 언제, 누가, 왜 인프라를 바꿨는지 추적이 가능해집니다.
+- 버전(커밋) 하나하나가 완전한 스냅샷처럼 동작하기 때문에, 이해하기도 쉽고 Rollback도 쉽습니다.
+- 인프라 추가/변경/삭제를 위한 동작이 **추상화**되어 있어 편리합니다. `depends_on`에 따라서 tf가 알아서 적용될 뿐 실제로 어떤 행동을 해야 하는지 우리는 신경을 쓸 필요가 없습니다.
+- GitHub의 PR기능 등으로 승인을 받는 등 다양한 운영 주체와 협업할 수 있습니다.
+
+일단 당장 생각나는 이점은 이정도네요. `depends_on`가 뭐냐구요? 아래에서 계속됩니다.
+
+## Terraform 문법의 기초
+
+tf를 사용하려면 `tf` 파일이 필요합니다. 아래와 같이 생긴 텍스트 파일이에요. 이 파일에 모든 것들을 설정합니다. 이 파일은 tf cli, HCP Terraform 등이 읽을 수 있습니다. 어떻게 생겼는지 대략 살펴봅시다.
+
+```hcl terraform/main.tf
+resource "kubernetes_deployment" "skysome_web" {
+  metadata {
+    name      = "skysome-web"
+    namespace = kubernetes_namespace.skysome.metadata[0].name
+  }
+
+  spec {
+    replicas = 1
+
+    selector {
+      match_labels = {
+        app = "skysome-web"
+      }
+    }
+
+    template {
+
+      spec {
+        /* 기타 등등 */
+      }
+    }
+  }
+  depends_on = [digitalocean_kubernetes_cluster.skysome_cluster]
+}
+```
+
+이 파일에 대해 간략하게 설명하자면 다음과 같습니다. 쿠버네티스와 관한 설명은 슉슉 생략하겠습니다.
+
+- kubernetes_deployment 리소스를 생성합니다. 이름은 `skysome_web`.
+- 파드는 1개만 실행됩니다. (`spec.replicas = 1`)
+- 실제 파드가 어떤 식으로 구성되는지 정의합니다. (`spec.template.spec`)
+- **depends_on**: `digitalocean_kubernetes_cluster.skysome_cluster` 리소스가 먼저 만들어진 다음 이 kubernetes_deployment 리소스를 생성한다는 뜻입니다. (`depends_on = [digitalocean_kubernetes_cluster.skysome_cluster]`) 어떤 리소스를 먼저 만들고 어떤 걸 나중에 만들어야 하는지 명시적으로 표현할 수 있습니다.
+
+이어서 문법을 간단하게 소개하자면,
+
+- **문자열**: 기본적으로 `"abc"`와 같이 쌍따옴표로 나타냅니다.
+- **블록**: `{}` 로 묶입니다. 블록은 다른 블록을 포함할 수도 있습니다.
+
+블록이 시작되기 전 어떤 용도의 블록인지 나타내는 키워드가 있습니다. 아래 이외에도 다양한 블록이 있을 수 있어요.
+
+- **provider**: 클라우드 서비스 제공자 설정 (AWS, GCP, Azure 등)
+- **resource**: 실제로 생성되는 인프라 자원 정의
+- **variable**: 입력 변수 설정
+- **output**: Terraform 실행 후 출력할 값
+
+resource 블록일 경우 `resource "resource_type" "name" { ... }` 식으로 정의합니다. 
+
+Visual Studio Code를 사용한다면 tf 익스텐션을 사용할 수 있어 파일 작성에 도움을 받을 수 있어요.
+
+<ArticleImage
+  img={vs}
+  alt="Visual Studio Code에도 Extension이 있어 문법이 맞는지 체크할 수 있다"
+  caption="Visual Studio Code에도 Extension이 있어 문법이 맞는지 체크할 수 있다"
+  border
+/>
+
+---
+
+## HCP Terraform 관련 용어
+
+대략적인 개념과 용어를 살펴보겠습니다.
+
+- **Plan**: 현재 코드가 인프라에 어떤 변화를 일으킬지를 미리 보여줍니다. 이 단계에서 실패하면 Apply도 할 수 없습니다. 실패하는 이유는 다양합니다. 문법 오류가 있을 수도 있고 환경변수를 잘 설정해놓지 않았을 수도 있고 의존관계에 있는 리소스가 이미 배포되어 있어야 하는 특수한 상황일 수도 있습니다.
+- **Cost estimation**: 인프라 변경됐을 때 비용을 추정합니다. 어떤 인프라(AWS, DO 등)와 연결되었는지가 중요하겠죠?
+- **Apply**: `Plan` 결과를 바탕으로 실제 인프라를 변경합니다.
+- **Run**: HCP Terraform에서 위 세 가지 행동을 묶어주는 역할을 합니다. 일반적으로 코드 push → Run 생성됨 → Plan & Cost estimation 자동 실행 → 승인 시 Apply 순으로 진행됩니다.
+
+<ArticleImage
+  img={tfx}
+  alt="Run 하나의 상세 모습. 변경점과 각 단계의 성공 여부를 볼 수 있다."
+  caption="Run 하나의 상세 모습. 변경점과 각 단계의 성공 여부를 볼 수 있다."
+  border
+/>
+
+---
+
+## 초기화와 세팅
+
+이제 구체적으로 해야 할 작업들을 좀 생각해봅시다.
+
+### 각 서비스 가입 및 최초 설정
+
+[GitHub](https://github.com/) 회원가입, 레포 만들기(일단 앱과 배포 모두 하나의 레포에서 진행하고자 합니다), DO 회원가입, 프로젝트 만들기를 진행합시다.
+
+HCP Terraform에서는 워크스페이스를 새로 만들어주고, Version Control Workflow를 선택해줍니다. 레포에 연결해서 Git으로 관리하겠다는 뜻입니다.
+
+<ArticleImage
+  img={tfw}
+  alt="HCP Terraform - Create a new Workspace: GitHub의 계정을 연결하고 원하는 레포를 선택합니다"
+  caption="HCP Terraform - Create a new Workspace: GitHub의 계정을 연결하고 원하는 레포를 선택합니다"
+  border
+/>
+
+---
+
+### GitHub 키 설정
+
+k8s에서 이미지를 가져오기 위해 필요합니다. ghcr는 리포지토리 접근 권한은 아니고 개인 계정이나 조직에서 관리되기 때문에 https://github.com/settings/tokens 에서 Personal access token을 만들어줘야 합니다. 
+
+<ArticleImage
+  img={tfv}
+  alt="GitHub에서 만든 키를 워크스페이스의 variables 탭에서 설정합니다. DO 관련 변수들도 추후 설정합니다."
+  caption="GitHub에서 만든 키를 워크스페이스의 variables 탭에서 설정합니다. DO 관련 변수들도 추후 설정합니다."
+  border
+/>
+
+저는 `github_token` 으로 넣어줬습니다.
+
+---
+
+### DigitalOcean 키 설정
+
+HCP Terraform이 DigitalOcean 인프라 구성을 추가/변경/삭제하기 위해 필요합니다. 
+
+1. [DigialOcean - Applications & API](https://cloud.digitalocean.com/account/api/tokens)에 접속
+2. 모든 읽기/쓰기 권한이 있는 토큰을 만들어줍니다.
+3. HCP Terraform에 `do_token` 이라는 이름으로 넣어줍니다.
+
+이외, 앱에서 DO Spaces(AWS의 S3에 해당하는 파일 저장소)에 접근할 수 있도록 [Access Key](https://cloud.digitalocean.com/spaces/access_keys)를 만들어도 좋습니다.
+
+---
+
+### `variables.tf`, `main.tf` 파일 만들기
+
+1. 레포에 `terraform` 폴더를 만듭니다.
+2. 해당 폴더에서 `variables.tf`, `main.tf` 파일을 만듭니다.
+3. https://github.com/echoja/skysome/tree/main/terraform 를 참조하여 본인의 필요에 맞게 설정합니다.
+4. HCP Terraform에서 Workspace Settings - General - Terraform Working Directory 로 들어가 폴더 이름(`terraform`)을 적어줍니다.
+
+본 파일은 꽤나 복잡😣합니다. 대략 아래와 같이 구성되어 있습니다.
+
+1. **DO 관련 리소스**
+   - `digitalocean_kubernetes_cluster.skysome_cluster`: 도커 이미지가 올라갈 쿠버네티스 클러스터.
+   - `digitalocean_database_cluster.skysome_db`: PostgreSQL 데이터베이스 클러스터.
+   - `digitalocean_spaces_bucket.skysome_storage`: Spaces 객체 스토리지 버킷.
+   - `digitalocean_domain.skysome_domain`: 도메인 등록.
+   - `digitalocean_record.www`: DNS 레코드(A 레코드).
+2. **쿠버네티스 관련 리소스**
+   - `kubernetes_namespace.skysome`: "skysome"라는 네임스페이스 생성.
+   - `kubernetes_secret.ghcr_auth`: GitHub Container Registry에 접근하기 위한 Docker Secret.
+   - `kubernetes_deployment.skysome_web`: 웹 어플리케이션 deployment.
+   - `kubernetes_service.skysome_web`: deployment에 대한 Service(ClusterIP).
+   - `kubernetes_ingress_v1.skysome_ingress`: 실제 트래픽이 들어올 Ingress 설정.
+   - `kubernetes_manifest.cluster_issuer`: cert-manager용 ClusterIssuer(SSL 인증서 자동 발급).
+3. **Helm 관련 리소스**
+   - `helm_release.nginx_ingress`: Ingress 컨트롤러(ingress-nginx) Helm 차트.
+   - `helm_release.cert_manager`: cert-manager Helm 차트.
+
+여기서 주목해야 할 점은 **DO에서 제공하는 Load Balancer나 SSL 인증서를 사용하지 않았다는 점**입니다. 관련 리소스끼리 서로 잘 상호작용하기 위해 쿠버네티스에 둘 수 있는 리소스들은 안에다가 두는 게 세팅이 훨씬 간편했습니다. 다만 쿠버네티스나 인프라에 대해서 깊게 알지 못하는 상태에서의 인사이트라고 봐주세요. 정확한 건 아닙니다.
+
+쿠버네티스에서 nginx_ingress와 cert_manager를 간편하게 띄우기 위해 **Helm** 차트를 사용하도록 했는데요, Helm 차트는 쿠버네티스 설정에 대한 템플릿이라고 보시면 될 것 같습니다. 뭔가 tf와 미묘한 차이가 있는 것 같습니다. 쿠버네티스는 그 자체로도 워낙 내용이 방대하여 여기서도 추상화가 필요하다는 것이 좀 인상적입니다.
+
+- **Helm** → 쿠버네티스 구성 재사용(추상화)
+- **Terraform** → 인프라 구성 재사용(추상화)
+
+다만 쿠버네티스에서도 인프라에 대한 접근을 할 수 있어야 할텐데(예를 들어 오토스케일링) 이런 부분들이 **어떻게 서로의 영역을 침범하지 않고 잘 맞물릴지**는 저 또한 공부가 더 필요한 상황입니다요 헿.
+
+그리고 또 중요한 점은, 어떤 리소스는 쿠버네티스 클러스터가 만들어져 있지 않으면 Plan 단계에서 실패하므로 Apply를 할 수 없습니다. `kubernetes_manifest`와 같은 리소스가 그렇습니다. 그래서 **순차적으로 리소스를 배포하는 과정이 필요**합니다. cli가 아닌 VCS로 관리한다면 리소스를 특정해서 Apply할 수도 없습니다. [커밋을 나누고](https://github.com/echoja/skysome/commit/54088a3c2d6bd5fbea90e4ccd18e9ba97ab2b535) 적절하게 차근차근 적용해야 합니다.
+
+## 빌드 및 배포하는 Action 만들기
+
+자 그럼 이제 빌드를 해봅시다. 저희의 앱은 [Remix](https://remix.run/) 앱입니다. 이미지를 빌드하려면 `Dockerfile`이 필요합니다. [Remix indie-stack Dockerfile](https://github.com/remix-run/indie-stack/blob/main/Dockerfile)을 참조하여 간단하게 만들어봅시다. [실제 파일](https://github.com/echoja/skysome/blob/main/web/Dockerfile)을 참조해주셔도 좋습니다.
+
+```dockerfile Dockerfile
+# base node image
+FROM node:22-bullseye-slim AS base
+
+# set for base and all layer that inherit from it
+ENV NODE_ENV=production
+
+# Install openssl for Prisma
+RUN apt-get update && apt-get install -y openssl
+
+# Install all node_modules, including dev dependencies
+FROM base AS deps
+
+WORKDIR /app
+
+ADD package.json .npmrc ./
+RUN npm install --include=dev
+
+# Setup production node_modules
+FROM base AS production-deps
+
+WORKDIR /app
+
+COPY --from=deps /app/node_modules /app/node_modules
+ADD package.json .npmrc ./
+RUN npm prune --omit=dev
+
+# Build the app
+FROM base AS build
+
+WORKDIR /app
+
+COPY --from=deps /app/node_modules /app/node_modules
+
+# ADD prisma .
+# RUN npx prisma generate
+
+ADD . .
+RUN npm run build
+
+# Finally, build the production image with minimal footprint
+FROM base
+
+WORKDIR /app
+
+COPY --from=production-deps /app/node_modules /app/node_modules
+# COPY --from=build /app/node_modules/.prisma /app/node_modules/.prisma
+
+COPY --from=build /app/build/server /app/build/server
+COPY --from=build /app/build/client /app/build/client
+
+ADD . .
+
+CMD ["npm", "start"]
+```
+
+특별한 점은 크게 없습니다. Prisma는 일단 안쓰기 때문에 주석 처리 해놨구요. 단계를 나누어 구성하면 최종 출력 이미지 파일의 크기가 많이 줄어들어서 좋습니다.
+
+이제 [이미지를 빌드하는 GitHub Actions](https://github.com/echoja/skysome/blob/main/.github/workflows/deploy.yml)를 만들어줍니다.
+
+```yml .github/workflows/deploy.yml
+name: build-and-push
+
+run-name: '[BUILD] "${{ github.event.head_commit.message || github.event.inputs.message }}" by ${{ github.event.head_commit.author.name }} (${{ github.repository }}:${{ github.run_number }})'
+
+on:
+  workflow_dispatch:
+    inputs:
+      message:
+        description: "빌드 메시지"
+        required: true
+  push:
+    branches:
+      - main
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+  IMAGE_TAG: ${{ github.run_number }}
+
+jobs:
+  build-and-push:
+    name: "Build and Push ${{ github.repository }}:${{ github.run_number }}"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./web
+          file: ./web/Dockerfile
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+
+      - name: Print image tag
+        run: echo "Image tag - ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}"
+```
+
+주목할 점은 이미지 태그를 `${{ github.run_number }}`로 활용한다는 점입니다. 이 숫자 값은 워크플로우가 실행될 때마다 알아서 1 증가하는 (우리가 관리해줄 필요가 없는) 숫자입니다. 그래서 이미지 태그로 넣기 딱 좋습니다. `run-name`과 `jobs.build-and-push.name` 에 `github.run_number`를 넣어서 어떤 이미지가 빌드됐는지 손쉽게 볼 수 있도록 설정했습니다.
+
+<ArticleImage
+  img={githubrun}
+  alt="GitHub에서 자동으로 이미지 Build와 Push가 된다"
+  caption="GitHub에서 자동으로 이미지 Build와 Push가 된다"
+  border
+/>
+
+<ArticleImage
+  img={skysome2}
+  alt="성공적으로 배포한 모습"
+  caption="성공적으로 배포한 모습"
+  border
+/>
+
+모든 것이 잘 완료되었다면 생성된 리소스를 HCP Terraform에서 아래와 같이 모두 확인할 수 있습니다.
+
+<ArticleImage
+  img={workspace}
+  alt="HCP Terraform 웹 콘솔에서 다양한 정보를 확인할 수 있다"
+  caption="HCP Terraform 웹 콘솔에서 다양한 정보를 확인할 수 있다"
+  border
+/>
+
+## 마치며
+
+본 글에서는 다음 내용을 살펴보았죠.
+
+- Terraform이 무엇인가, 왜 쓰는가, HCP Terraform으로 실제로 적용해보기
+- GitHub Container Registry와 DigitalOcean에 연결하여 부드러운 CI/CD 만들기
+
+인프라에 대해서 잘 모르는 저조차도 빠르게 실제 인프라를 적용해봤다는 점에서 괜찮은 성과라고 생각했고, 시스템들이 어떻게 맞물려서 돌아가는지 조금이나마 공부가 된 기분이었습니다. 
+
+이제 가동을 멈추러 가야겠습니다. 돈을 아껴 씁시다.

@@ -43,6 +43,7 @@ import { item as MacSettings } from "@app/article/2025-01/mac-settings/metadata"
 import { item as Thoreau } from "@app/article/2025-01/thoreau/metadata";
 import { item as ReactExpandableText } from "@app/article/2025-02/react-expandable-text/metadata";
 import { item as InstallRedash } from "@app/article/2025-03/install-redash/metadata";
+import { item as TerraformDigitalOcean } from "@app/article/2025-03/terraform-digital-ocean/metadata";
 import dayjs from "dayjs";
 import type { ArticleItem } from "./types";
 
@@ -92,6 +93,7 @@ const items: ArticleItem[] = [
   GA,
   ReactExpandableText,
   InstallRedash,
+  TerraformDigitalOcean,
 ];
 
 items.sort((a, b) => dayjs(b.createdAt).diff(a.createdAt));
