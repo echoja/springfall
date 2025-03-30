@@ -391,6 +391,14 @@ jobs:
   border
 />
 
+이제 `variables.tf` 파일을 수정하고 push하여 Plan, Cost estimation을 기다리고 최종적으로 Apply를 눌러주면 변경사항이 잘 반영됩니다! (단, 지금의 문제는 tf파일 수정 커밋도 변경사항으로 간주되어 GitHub Actions에서 빌드해버린다는 점인데... `on.push`를 조정해줘야 할 것 같네요.) 
+
+```tf variables.tf
+variable "web_image_tag" {
+  default = "14"
+}
+```
+
 <ArticleImage
   img={skysome2}
   alt="성공적으로 배포한 모습"
@@ -414,6 +422,6 @@ jobs:
 - Terraform이 무엇인가, 왜 쓰는가, HCP Terraform으로 실제로 적용해보기
 - GitHub Container Registry와 DigitalOcean에 연결하여 부드러운 CI/CD 만들기
 
-인프라에 대해서 잘 모르는 저조차도 빠르게 실제 인프라를 적용해봤다는 점에서 괜찮은 성과라고 생각했고, 시스템들이 어떻게 맞물려서 돌아가는지 조금이나마 공부가 된 기분이었습니다. 
+인프라에 대해서 얕은 지식만 있는 저조차도 빠르게 실제 인프라를 적용해봤다는 점에서 괜찮은 성과라고 생각했고, 시스템들이 어떻게 맞물려서 돌아가는지 조금이나마 공부가 된 기분이었습니다. 
 
 이제 가동을 멈추러 가야겠습니다. 돈을 아껴 씁시다.
