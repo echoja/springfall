@@ -6,7 +6,7 @@ import {
   useSpring,
   useTransform,
   useVelocity,
-} from "framer-motion";
+} from "motion/react";
 import { useRef } from "react";
 import { twMerge } from "tailwind-merge";
 
