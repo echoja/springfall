@@ -1,7 +1,6 @@
 import type { Category } from "@modules/category";
 import dayjs from "dayjs";
 import { twMerge } from "tailwind-merge";
-import ArticleCounter from "./ArticleCounter";
 import style from "./ArticleHeader.module.css";
 
 const customColor = {
@@ -32,6 +31,7 @@ export const HeaderSeparator: React.FC<React.ComponentProps<"div">> = (
 export interface IArticleHeaderProps {
   title: string;
   updatedAt: string;
+  createdAt: string;
   summary?: string;
   category?: Category;
   url: string;
@@ -39,32 +39,22 @@ export interface IArticleHeaderProps {
 
 export default function ArticleHeader({
   title,
-  updatedAt,
+  createdAt,
   summary,
   category,
-  url,
 }: IArticleHeaderProps) {
   return (
     <header className="mb-24">
-      <div className="flex items-center gap-2 mb-3 text-xs font-medium text-gray-500 dark:text-gray-400">
+      <div className="mb-3 text-xs font-medium text-gray-500 dark:text-gray-400">
+        <time dateTime={createdAt}>{dayjs(createdAt).format("YYYY.MM")}</time>
         {category && (
           <>
-            <span className="">{category}</span>
-            <span className="block w-px h-2 bg-gray-300 rounded-full dark:bg-gray-700" />
+            <span className="opacity-50"> | </span>
+            <span>{category}</span>
           </>
         )}
-
-        <span className="">{dayjs(updatedAt).format("YYYY년 MM월 DD일")}</span>
-        <span className="block w-px h-2 bg-gray-300 rounded-full dark:bg-gray-700" />
-
-        <ArticleCounter url={url} />
       </div>
-      <h1
-        className="mb-2 text-4xl font-extrabold break-keep dark:text-gray-100"
-        style={{
-          textShadow: `0 0.125rem 0.375rem rgb(0 0 0 / 0.05)`,
-        }}
-      >
+      <h1 className="mb-2 text-4xl font-extrabold break-keep dark:text-gray-100">
         {/* <Balancer>{title}</Balancer> */}
         {title}
       </h1>
