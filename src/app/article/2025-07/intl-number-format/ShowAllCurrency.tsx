@@ -1,3 +1,6 @@
+"use client";
+import { useState } from "react";
+
 const a = "a".codePointAt(0)!;
 const A = "A".codePointAt(0)!;
 const Z = "0".codePointAt(0)!;
@@ -90,44 +93,213 @@ export const configs = {
   ),
 };
 
-export const ShowAllCurrency: React.FC = () => {
+function Option({ id, name }: { id: string; name: string | undefined }) {
   return (
-    <div className="flex flex-col gap-2">
-      <h2 className="text-lg font-semibold">All Currencies</h2>
-      <ul className="list-disc pl-5">
-        {Object.entries(configs.currency).map(([code, name]) => (
-          <li key={code}>
-            {code} - {name}
-          </li>
-        ))}
-      </ul>
-
-      <h2 className="text-lg font-semibold mt-4">All Languages</h2>
-      <ul className="list-disc pl-5">
-        {Object.entries(configs.language).map(([code, name]) => (
-          <li key={code}>
-            {code} - {name}
-          </li>
-        ))}
-      </ul>
-
-      <h2 className="text-lg font-semibold mt-4">All Scripts</h2>
-      <ul className="list-disc pl-5">
-        {Object.entries(configs.script).map(([code, name]) => (
-          <li key={code}>
-            {code} - {name}
-          </li>
-        ))}
-      </ul>
-
-      <h2 className="text-lg font-semibold mt-4">All Regions</h2>
-      <ul className="list-disc pl-5">
-        {Object.entries(configs.region).map(([code, name]) => (
-          <li key={code}>
-            {code} - {name}
-          </li>
-        ))}
-      </ul>
-    </div>
+    <option key={id} value={id}>
+      {id ? `${id} ${name}` : name}
+    </option>
   );
+}
+
+function formatArgs(args: unknown[]) {
+  return JSON.stringify(args, null, 2).slice(1, -1).trim();
+}
+
+type Args = {
+  number: string;
+  currency: string;
+  language: string;
+  region: string;
+  script: string;
+  currencyDisplay?: keyof Intl.NumberFormatOptionsCurrencyDisplayRegistry | "";
 };
+
+export function ShowAllCurrency() {
+  const [formData, setFormData] = useState<Args>({
+    number: "3257000",
+    currency: "KRW",
+    language: "ko",
+    region: "KR",
+    script: "",
+    currencyDisplay: "",
+  });
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>,
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const { number, currency, language, region, script } = formData;
+
+  const locale: Intl.LocalesArgument = [language || "und", script, region]
+    .filter(Boolean)
+    .join("-");
+  const options: Intl.NumberFormatOptions | undefined = currency
+    ? {
+        style: "currency",
+        currency,
+        currencyDisplay: formData.currencyDisplay || undefined,
+      }
+    : undefined;
+
+  const n = parseFloat(number || "0");
+  const codeStr = `new Intl.NumberFormat(${formatArgs([locale, options])}).format(${n})`;
+  const output = new Intl.NumberFormat(locale, options).format(n);
+
+  return (
+    <main>
+      <form className="rounded border p-4 flex flex-col gap-4">
+        <div className="flex gap-2">
+          <button
+            type="button"
+            className="border rounded py-0.5 px-2 bg-background hover:bg-background-muted transition font-medium"
+            onClick={() =>
+              setFormData((prev) => ({
+                ...prev,
+                number: "3257000",
+                currency: "KRW",
+                language: "ko",
+                region: "KR",
+                script: "",
+              }))
+            }
+          >
+            KRW 설정
+          </button>
+
+          <button
+            type="button"
+            className="border rounded py-0.5 px-2 bg-background hover:bg-background-muted transition font-medium"
+            onClick={() =>
+              setFormData((prev) => ({
+                ...prev,
+                number: "12345.67",
+                currency: "USD",
+                language: "en",
+                region: "US",
+                script: "",
+              }))
+            }
+          >
+            USD 설정
+          </button>
+
+          <button
+            type="button"
+            className="border rounded py-0.5 px-2 bg-background hover:bg-background-muted transition font-medium"
+            onClick={() =>
+              setFormData((prev) => ({
+                ...prev,
+                number: "12345.67",
+                currency: "JPY",
+                language: "ja",
+                region: "JP",
+                script: "",
+              }))
+            }
+          >
+            JPY 설정
+          </button>
+        </div>
+        <label>
+          <p className="m-0 text-foreground-muted">언어 (Language)</p>
+          <select
+            name="language"
+            value={formData.language}
+            onChange={handleChange}
+            className="border rounded p-1"
+          >
+            <Option id="" name="--" />
+            {Object.entries(configs.language).map(([id, name]) => (
+              <Option key={id} id={id} name={name} />
+            ))}
+          </select>
+        </label>
+
+        {/* <label>
+          <p className="m-0 text-foreground-muted">문자 체계 (Script)</p>
+          <select
+            name="script"
+            value={formData.script}
+            onChange={handleChange}
+            className="border rounded p-1"
+          >
+            <Option id="" name="--" />
+            {Object.entries(configs.script).map(([id, name]) => (
+              <Option key={id} id={id} name={name} />
+            ))}
+          </select>
+        </label> */}
+
+        <label>
+          <p className="m-0 text-foreground-muted">지역 (Region)</p>
+          <select
+            name="region"
+            value={formData.region}
+            onChange={handleChange}
+            className="border rounded p-1"
+          >
+            <Option id="" name="--" />
+            {Object.entries(configs.region).map(([id, name]) => (
+              <Option key={id} id={id} name={name} />
+            ))}
+          </select>
+        </label>
+
+        <label>
+          <p className="m-0 text-foreground-muted">수를 입력하세용</p>
+          <input
+            type="number"
+            name="number"
+            className="border border-solid rounded p-1"
+            step="0.01"
+            value={formData.number}
+            onChange={handleChange}
+          />
+        </label>
+
+        <label>
+          Currency{" "}
+          <select
+            name="currency"
+            value={formData.currency}
+            onChange={handleChange}
+            className="border rounded p-1"
+          >
+            <Option id="" name="--" />
+            {Object.entries(configs.currency).map(([id, name]) => (
+              <Option key={id} id={id} name={name} />
+            ))}
+          </select>
+        </label>
+
+        <label>
+          Currency Display{" "}
+          <select
+            name="currencyDisplay"
+            value={formData.currencyDisplay || ""}
+            onChange={handleChange}
+            className="border rounded p-1"
+          >
+            <Option id="" name="--" />
+            {["symbol", "narrowSymbol", "code", "name"].map((id) => (
+              <Option key={id} id={id} name="" />
+            ))}
+          </select>
+        </label>
+      </form>
+
+      <div className="bg-background-muted leading-4 p-2 rounded my-4">
+        <pre className="text-sm leading-4 ">{codeStr}</pre>
+      </div>
+      <div className="font-bold text-2xl mb-4">
+        <output>{output}</output>
+      </div>
+      <div>
+        <pre>{JSON.stringify(configs, null, "\t")}</pre>
+      </div>
+    </main>
+  );
+}
