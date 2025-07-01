@@ -113,7 +113,7 @@ export async function Code({ codeblock }: { codeblock: RawCode }) {
     <div className="relative">
       <div
         className="relative rounded-sm text-sm my-10 shadow-md overflow-x-scroll leading-[22px] text-gray-300"
-        style={{ backgroundColor: "#1c222b" }}
+        style={{ backgroundColor: "#272A30" }}
       >
         {highlighted.meta ? (
           <div className="px-4 py-3 font-mono text-xs text-gray-400 border-b border-gray-600">
