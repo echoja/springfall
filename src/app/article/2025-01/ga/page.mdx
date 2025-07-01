@@ -73,7 +73,7 @@ GA는 앱에서 활동하는 사용자의 데이터도 수집할 수 있지만 �
 
 다음 용어는 앞으로 진행하면서 등장하는 개념입니다.
 
-- **이벤트(Events)**: 웹사이트에 방문한 사용자가 일으키는 일을 뜻하며 GA에서 분석할 때 가장 기본이 되는 단위입니다. 간단하게는 페이지뷰, 클릭, 스크롤 등이 있습니다. [자동으로 수집되는 이벤트](https://support.google.com/analytics/answer/9234069?hl=en)도 있고 우리가 직접 이벤트를 만들어 보내줄 수도 있습니다. 형식에 맞게 보내주면 우리가 좀 보기 좋게 분석해줄게~ 하는 [추천 이벤트](https://developers.google.com/analytics/devguides/collection/ga4/reference/events?hl=en&client_type=gtm)도 있습니다. 
+- **이벤트(Events)**: 웹사이트에 방문한 사용자가 일으키는 일을 뜻하며 GA에서 분석할 때 가장 기본이 되는 단위입니다. 간단하게는 페이지뷰, 클릭, 스크롤 등이 있습니다. [자동으로 수집되는 이벤트](https://support.google.com/analytics/answer/9234069?hl=en)도 있고 우리가 직접 이벤트를 만들어 보내줄 수도 있습니다. 형식에 맞게 보내주면 우리가 좀 보기 좋게 분석해줄게~ 하는 [추천 이벤트](https://developers.google.com/analytics/devguides/collection/ga4/reference/events?hl=en&client_type=gtm)도 있습니다.
 - **사용자(Users)**: 웹사이트에 방문한 사람입니다.
 - **매개변수(Parameters)**: 이벤트에 붙는 부가 정보입니다. 마찬가지로 사용자가 임의로 추가할 수도 있고 자동으로 수집되는 매개변수도 있습니다. 이벤트가 수집하는 시점에서 자주 사용되는 용어입니다. (분석할 때는 측정기준 혹은 측정항목으로 구분됩니다)
 
@@ -92,7 +92,7 @@ GA는 앱에서 활동하는 사용자의 데이터도 수집할 수 있지만 �
 
 ## GA 만들기
 
-[GA 콘솔](https://analytics.google.com/analytics/web)에서 계정을 만드세요. 
+[GA 콘솔](https://analytics.google.com/analytics/web)에서 계정을 만드세요.
 
 계정을 만들었다면 이어서 속성을 만듭시다.
 
@@ -131,7 +131,12 @@ GA는 앱에서 활동하는 사용자의 데이터도 수집할 수 있지만 �
 
 [Tag Manager 콘솔](https://tagmanager.google.com/#/home)에 접속하여 계정과 컨테이너를 만듭니다. 그럼 아래처럼 설치 안내가 나옵니다.
 
-<ArticleImage img={gtm2} alt="Google 태그 관리자 설치 안내" border caption="Google 태그 관리자 설치 안내" />
+<ArticleImage
+  img={gtm2}
+  alt="Google 태그 관리자 설치 안내"
+  border
+  caption="Google 태그 관리자 설치 안내"
+/>
 
 저는 Next.js라서 대충 아래와 같이 넣어줬습니다. 배포 후 웹사이트 테스트를 진행하니까 위 이미지처럼 체크 표시가 잘 떴습니다.
 
@@ -445,19 +450,35 @@ export const metadata: Metadata = {
 
 자 이제 GTM 미리보기로 들어가서 테스트를 진행해봅시다.
 
-<ArticleImage img={t5} alt="실행된 태그의 자세한 내용" border caption="실행된 태그의 자세한 내용" />
+<ArticleImage
+  img={t5}
+  alt="실행된 태그의 자세한 내용"
+  border
+  caption="실행된 태그의 자세한 내용"
+/>
 
 `data-gtm-id` 속성이 있는 요소를 클릭한 다음 Tag Assistant를 봅시다. `실행된 태그`의 항목을 클릭하면 위 이미지와 같이 자세한 내역이 뜹니다. 우측 상단에 `변수를 다른 이름으로 표시: 값`로 설정한다면 실제 수집된 값을 볼 수 있습니다. 이벤트 이름과 Event Settings Variable이 잘 보이고 있네요.
 
 그런데 말입니다, 이게 정말로 GA4로 무사히 전달되고 있는 걸까요? 당장 GA4 DebugView로 가서 확인해봅니다.
 
-<ArticleImage img={t6} alt="DebugView 에서 page_type 값이 넘어오고 있는 모습" border caption="DebugView 에서 page_type 값이 넘어오고 있는 모습" width={450} />
+<ArticleImage
+  img={t6}
+  alt="DebugView 에서 page_type 값이 넘어오고 있는 모습"
+  border
+  caption="DebugView 에서 page_type 값이 넘어오고 있는 모습"
+  width={450}
+/>
 
 제대로 넘어오고 있습니다!
 
 하지만 방심은 금물... DebugView는 정말 디버그 용도일 뿐이고 실제로 데이터가 쌓이려면 별도의 GA4 세팅이 필요합니다. 측정기준을 새로 만드려면 관리 - 맞춤 측정항목에서 `page_type`을 직접 추가해줍시다.
 
-<ArticleImage img={t7} alt="GA4 새 맞춤 측정기준" border caption="GA4 새 맞춤 측정기준" />
+<ArticleImage
+  img={t7}
+  alt="GA4 새 맞춤 측정기준"
+  border
+  caption="GA4 새 맞춤 측정기준"
+/>
 
 실제 보고서에서 확인할 수 있는 데이터는 그 전날까지 쌓인 데이터이므로, 하루 기다려서 데이터를 살펴보세요.
 
@@ -475,7 +496,7 @@ export const metadata: Metadata = {
 2. **기능 추가 및 개선**: 개발자가 개발을 열심히 합니다.
 3. **`data-gtm-id` 및 `page_type`의 값 설정**: 개발자가 추가/개선한 사항에 대해 GA에 데이터가 쌓일 수 있도록 설정해놓습니다.
 4. **배포 및 문서 갱신**: 개발 내용이 운영에 반영됩니다. 마케터/기획자가 데이터를 확인할 수 있도록 개발자가 문서를 잘 최신화 해놓습니다.
-5. **시간 경과**: 실제 고객이 추가/개선된 기능을  사용하면서 데이터가 수집됩니다.
+5. **시간 경과**: 실제 고객이 추가/개선된 기능을 사용하면서 데이터가 수집됩니다.
 6. **분석**: 마케터/기획자가 GA에서 자동 생성된 이벤트 기반으로 데이터를 분석하고 성과를 평가합니다.
 
 여기서의 포인트는 GTM에서 GA로 전송하는 내용이 이미 자동화되어 있어서 **기능이 변경된다 하더라도 GTM을 건드릴 필요가 없다**는 점입니다. **변수**를 적극적으로 활용한 이점이 있는 거죠. 그렇지 않았다면 매번 트리거와 태그를 추가/변경해줘야 하는 불편함이 있었을 겁니다.

@@ -42,9 +42,7 @@ const AgeOperatorSelect: React.FC<{
       aria-label="나이 연산자"
     >
       {ageList.map((item) => (
-        <SelectItem key={item.value} value={item.value}>
-          {item.label}
-        </SelectItem>
+        <SelectItem key={item.value}>{item.label}</SelectItem>
       ))}
     </Select>
   );
@@ -62,15 +60,9 @@ const GenderSelect: React.FC<{
       selectedKeys={[value]}
       aria-label="성별"
     >
-      <SelectItem key="" value="">
-        선택
-      </SelectItem>
-      <SelectItem key="male" value="male">
-        남성
-      </SelectItem>
-      <SelectItem key="female" value="female">
-        여성
-      </SelectItem>
+      <SelectItem key="">선택</SelectItem>
+      <SelectItem key="male">남성</SelectItem>
+      <SelectItem key="female">여성</SelectItem>
     </Select>
   );
 };
@@ -300,8 +292,8 @@ export const Tester: React.FC = () => {
               result.type === "success"
                 ? "border-success-400 dark:border-success-300"
                 : result.type === "failure"
-                ? "border-danger-400 dark:border-danger-300"
-                : "border-transparent",
+                  ? "border-danger-400 dark:border-danger-300"
+                  : "border-transparent",
             )}
           >
             <h3 className="mb-2 font-medium">결과</h3>

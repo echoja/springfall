@@ -1,8 +1,7 @@
-// app/providers.tsx
 "use client";
 
-import { store } from "@modules/color-mode/color-mode";
 import { HeroUIProvider } from "@heroui/react";
+import { store } from "@modules/color-mode/color-mode";
 import { Provider as JotaiProvider } from "jotai";
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";

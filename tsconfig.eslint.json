@@ -10,7 +10,8 @@
     "vitest.config.ts",
     "postcss.config.js",
     "tailwind.config.mjs",
-    "next-seo.config.js"
+    "next-seo.config.js",
+    "eslint.config.mjs"
   ],
   "exclude": ["node_modules"]
 }

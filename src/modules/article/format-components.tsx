@@ -107,7 +107,6 @@ const mark: AnnotationHandler = {
 };
 
 export async function Code({ codeblock }: { codeblock: RawCode }) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const highlighted = await highlight(codeblock, "github-dark");
 
   return (

@@ -95,7 +95,7 @@ const items: ArticleItem[] = [
   ReactExpandableText,
   InstallRedash,
   TerraformDigitalOcean,
-  Geultto
+  Geultto,
 ];
 
 items.sort((a, b) => dayjs(b.createdAt).diff(a.createdAt));

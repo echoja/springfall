@@ -12,7 +12,7 @@ import i3 from "./i3.png";
 import i4 from "./i4.png";
 import i5 from "./i5.png";
 import i6 from "./i6.png";
-import redash from "./redash.png"
+import redash from "./redash.png";
 
 export const metadata = getArticleMetadata(item);
 
@@ -20,11 +20,7 @@ export const metadata = getArticleMetadata(item);
 
 <ArticleHeader {...getArticleHeaderProps(item)} />
 
-<ArticleImage
-  img={redash}
-  alt="Redash"
-  noShadow
-/>
+<ArticleImage img={redash} alt="Redash" noShadow />
 
 ## 목차
 
@@ -42,7 +38,7 @@ AWS는 아마존에서 만든 웹 관련 리소스의 총 집합입니다. Micro
 
 - **EC2**: 컴퓨터입니다. 컴퓨터에는 뭐가 있죠? CPU와 메모리가 있습니다. 기본 운영체제도 설정할 수 있습니다. 이번 글에서는 Ubuntu를 사용할 겁니다. 그리고 여기에 Redash를 설치하여 사용할 것입니다.
 - **VPC**: 대륙입니다. 컴퓨터는 공중에 붕붕 뜬 채로 누구도 접근 불가능한 상태에 있으면 아무런 쓸모가 없습니다. EC2도 마찬가지로 사람이 됐든 웹 요청이 됐든 뭔가와 상호작용할 수 있는 공간이 필요합니다. 그게 VPC입니다.
-- **서브넷**: VPC 안에 있는 영역입니다. 사실 EC2는 직접적으로 VPC 안에 있는게 아니라 이 서브넷 안에 있습니다. 서브넷 안에 없는 EC2는 없습니다. 어느 주소가 어디로 향할지가 적혀있는 라우트 테이블 등을 구성요소로 가지고 있습니다. 
+- **서브넷**: VPC 안에 있는 영역입니다. 사실 EC2는 직접적으로 VPC 안에 있는게 아니라 이 서브넷 안에 있습니다. 서브넷 안에 없는 EC2는 없습니다. 어느 주소가 어디로 향할지가 적혀있는 라우트 테이블 등을 구성요소로 가지고 있습니다.
 - **Internet Gateway**: 외부 인터넷 세계와의 통로입니다. 서브넷의 라우트 테이블에서 붙였다 뗐다 할 수 있습니다. 즉 EC2와 외부와 소통하려면 Internet Gateway 와 연결되어 있는 서브넷에 이 EC2가 속해있어야 한다는 뜻입니다.
 - **RDS**: 데이터베이스입니다. EC2와 비슷하게 VPC에 속해있어야 합니다. 단 이 녀석은 여러 서브넷에 걸쳐 있을 수 있습니다.
 
@@ -91,7 +87,7 @@ VPC
 
 ## Redash를 켜보기
 
-위 용어를 익혔다는 가정하에 실행으로 옮겨봅시다. 세팅은 [_알파카 [AWS] EC2 인스턴스 위에 Redash 설치하기](https://yeonnys.tistory.com/entry/AWS-EC2-%EC%9D%B8%EC%8A%A4%ED%84%B4%EC%8A%A4-%EC%9C%84%EC%97%90-Redash-%EC%84%A4%EC%B9%98%ED%95%98%EA%B8%B0)를 많이 참조했습니다.
+위 용어를 익혔다는 가정하에 실행으로 옮겨봅시다. 세팅은 [\_알파카 [AWS] EC2 인스턴스 위에 Redash 설치하기](https://yeonnys.tistory.com/entry/AWS-EC2-%EC%9D%B8%EC%8A%A4%ED%84%B4%EC%8A%A4-%EC%9C%84%EC%97%90-Redash-%EC%84%A4%EC%B9%98%ED%95%98%EA%B8%B0)를 많이 참조했습니다.
 
 EC2 생성 내용은 다음과 같습니다.
 
@@ -146,7 +142,7 @@ ENI (eth0, ...에 붙음 — 프라이빗 IP + 퍼블릭 IP 담당)
 EC2 / Fargate Task / 기타 네트워크 리소스
 ```
 
-고정 공인 IP가 필요한 이유는 이 IP로 도메인 레코드 설정을 할 것이기 때문입니다. Route53은 AWS의 수많은 제품 중 하나로, DNS를 관리하는 서비스입니다. 
+고정 공인 IP가 필요한 이유는 이 IP로 도메인 레코드 설정을 할 것이기 때문입니다. Route53은 AWS의 수많은 제품 중 하나로, DNS를 관리하는 서비스입니다.
 
 <ArticleImage
   img={i2}
@@ -155,7 +151,7 @@ EC2 / Fargate Task / 기타 네트워크 리소스
   border
 />
 
-1년에 15.4딸라면 보자... 1달에 1,800원 수준입니다. 메가커피 값도 안나오네요. 굿. 도메인을 사들고 허겁지겁 **호스팅 영역** 설정으로 가서 레코드를 생성합니다. 
+1년에 15.4딸라면 보자... 1달에 1,800원 수준입니다. 메가커피 값도 안나오네요. 굿. 도메인을 사들고 허겁지겁 **호스팅 영역** 설정으로 가서 레코드를 생성합니다.
 
 <ArticleImage
   img={i3}
@@ -223,15 +219,10 @@ RDS를 Data Source로서 추가해봅시다.
 
 ## 마치며
 
-처음에 EC2를 t2.micro, t2.small로 진행하면서 자꾸 터지길래 시간이 오래 걸렸습니다. 그리고 VPC나 서브넷 등등의 개념을 잘 모르니까 계속해서 헤맸습니다. 빠르게 학습하면서 빠르게 진행하여 나름 하루만에 잘 세팅한 것 같습니다. 앞으로  Business Intelligence를 극대화하여 더 효과적으로 임팩트를 내는 제품이 되면 좋을 거 같아요. 야호!
+처음에 EC2를 t2.micro, t2.small로 진행하면서 자꾸 터지길래 시간이 오래 걸렸습니다. 그리고 VPC나 서브넷 등등의 개념을 잘 모르니까 계속해서 헤맸습니다. 빠르게 학습하면서 빠르게 진행하여 나름 하루만에 잘 세팅한 것 같습니다. 앞으로 Business Intelligence를 극대화하여 더 효과적으로 임팩트를 내는 제품이 되면 좋을 거 같아요. 야호!
 
 ## 레퍼런스
 
 - ChatGPT와의 수많은 대화...
-- [_알파카 [AWS] EC2 인스턴스 위에 Redash 설치하기](https://yeonnys.tistory.com/entry/AWS-EC2-%EC%9D%B8%EC%8A%A4%ED%84%B4%EC%8A%A4-%EC%9C%84%EC%97%90-Redash-%EC%84%A4%EC%B9%98%ED%95%98%EA%B8%B0)
+- [알파카 [AWS] EC2 인스턴스 위에 Redash 설치하기](https://yeonnys.tistory.com/entry/AWS-EC2-%EC%9D%B8%EC%8A%A4%ED%84%B4%EC%8A%A4-%EC%9C%84%EC%97%90-Redash-%EC%84%A4%EC%B9%98%ED%95%98%EA%B8%B0)
 - [Setting up HTTPS with LetsEncrypt for Redash Docker Deployment](https://gist.github.com/arikfr/64c9ff8d2f2b703d4e44fe9e45a7730e)
-
-
-
-
-

@@ -23,7 +23,7 @@ const Utterances = () => {
       script.setAttribute("issue-term", "pathname");
       script.setAttribute(
         "theme",
-        colorMode === "dark" ? "github-dark" : "github-light"
+        colorMode === "dark" ? "github-dark" : "github-light",
       );
       ref.appendChild(script);
       return () => {

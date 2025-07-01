@@ -1,22 +1,9 @@
 {
-  "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit",
     "source.organizeImports": "explicit"
   },
-  "eslint.options": {
-    "extensions": [".js", ".jsx", ".md", ".mdx", ".ts", ".tsx"]
-  },
-  "eslint.validate": [
-    "markdown",
-    "mdx",
-    "javascript",
-    "javascriptreact",
-    "typescript",
-    "typescriptreact"
-  ],
   "typescript.tsdk": "node_modules/typescript/lib",
-  "eslint.lintTask.enable": true,
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "search.exclude": {
     "**/node_modules": true,
