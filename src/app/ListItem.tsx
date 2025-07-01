@@ -43,10 +43,11 @@ export function ListItem({ item }: { item: ArticleItem }) {
   return (
     <motion.li
       key={title}
-      className="relative rounded-md py-6 px-4 sm:p-8"
+      data-slot="home-list-item"
+      className="relative rounded-md py-6 px-4 sm:p-8 bg-background/0"
       data-gtm-id={`${href}_link`}
-      whileTap={{ scale: 0.99, backgroundColor: "rgba(127, 127, 127, 0.05)" }}
-      whileHover={{ backgroundColor: "rgba(127, 127, 127, 0.05)" }}
+      whileTap={{ scale: 0.99 }}
+      // whileHover={{ backgroundColor: "var(--color-background)" }}
       variants={itemVariants}
     >
       <div className="mb-2 text-xs font-medium text-gray-500 dark:text-gray-400">
