@@ -250,6 +250,7 @@ export function ShowAllCurrency() {
 
         <label>
           <p className="m-0 text-foreground-muted">수를 입력하세용</p>
+          <p className="not-md:first:xx"></p>
           <input
             type="number"
             name="number"
