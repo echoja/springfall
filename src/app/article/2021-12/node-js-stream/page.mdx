@@ -76,7 +76,7 @@ process.stdout.write("Hello, world! 2\\n");
 
 아래는 그 결과입니다.
 
-```
+```txt
 Hello, world!
 Hello, world! 2
 ```
@@ -113,7 +113,7 @@ process.stdout.write("ho");
 
 위 코드를 실행시키면 아래와 같은 결과가 나옵니다.
 
-```
+```txt
 Hello, world!
 events.js:377
       throw er; // Unhandled 'error' event
@@ -146,7 +146,7 @@ Emitted 'error' event on WriteStream instance at:
 
 우선 아래 내용으로 `input.txt` 파일을 만들어봅시다. 파일 위치는 코드 파일과 똑같은 폴더에 넣습니다.
 
-```
+```txt
 123456789
 ```
 
@@ -163,7 +163,7 @@ stream.on("data", (chunk) => {
 
 이제 이 코드를 실행시키면?
 
-```
+```txt
 chunk: 123456789
 ```
 
@@ -208,7 +208,7 @@ oneToNine.pipe(process.stdout);
 
 아래는 실행 결과입니다.
 
-```
+```txt
 123456789
 ```
 
