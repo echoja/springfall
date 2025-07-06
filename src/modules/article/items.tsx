@@ -46,6 +46,7 @@ import { item as InstallRedash } from "@app/article/2025-03/install-redash/metad
 import { item as TerraformDigitalOcean } from "@app/article/2025-03/terraform-digital-ocean/metadata";
 import { item as Geultto } from "@app/article/2025-04/geultto/metadata";
 import { item as ESLintForbidClassName } from "@app/article/2025-07/eslint-forbid-classname/metadata";
+import { item as Fighting } from "@app/article/2025-07/fighting/metadata";
 import dayjs from "dayjs";
 import type { ArticleItem } from "./types";
 
@@ -98,6 +99,7 @@ const items: ArticleItem[] = [
   TerraformDigitalOcean,
   Geultto,
   ESLintForbidClassName,
+  Fighting,
 ];
 
 items.sort((a, b) => dayjs(b.createdAt).diff(a.createdAt));
