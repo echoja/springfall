@@ -7,7 +7,7 @@
 ## 개발환경
 
 - vscode - 개발 에디터
-- [direnv](https://direnv.net/)로 환경 변수를 관리합니다.
+- [direnv](https://direnv.net/)로 환경변수를 관리합니다.
 - **Node.js** 와 **pnpm** 은 [asdf](https://asdf-vm.com/)로 설치합니다. (`.tool-versions` 파일 참고)
 - 개발 서버를 실행시키려면 다음 명령을 실행합니다.
   ```bash
