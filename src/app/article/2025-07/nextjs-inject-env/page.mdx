@@ -1,0 +1,308 @@
+import ArticleHeader from "@modules/article/ArticleHeader";
+import ArticleImage from "@modules/article/ArticleImage";
+import getArticleHeaderProps from "@modules/metadata/getArticleHeaderProps";
+import getArticleJsonLdProps from "@modules/metadata/getArticleJsonLdProps";
+import getArticleMetadata from "@modules/metadata/getArticleMetadata";
+import { ArticleJsonLd } from "next-seo";
+import { item } from "./metadata";
+import i1 from "./inject.png";
+import p1 from "./p1.png";
+import p2 from "./p2.png";
+
+export const metadata = getArticleMetadata(item);
+
+<ArticleJsonLd {...getArticleJsonLdProps(item)} />
+
+<ArticleHeader {...getArticleHeaderProps(item)} />
+
+<ArticleImage img={i1} border alt="" caption={<>일러스트 by ChatGPT</>} />
+
+## 목차
+
+## 요약
+
+- 환경변수로 Next.js 앱의 동작을 설정할 수 있다. 그 중 `NEXT_PUBLIC_XXX` 는 빌드 시점에 결정되는 환경변수다.
+- `NEXT_PUBLIC_XXX`가 꼭 필요한 상황은 그리 많지 않다. 그러니 사용하지 말자.
+- 브라우저에서 필요한 데이터는 직접 주입하자. (가장 빠르게 로딩되는 `env.js` 파일)
+
+## 환경변수와 Next.js
+
+환경변수(Environment Variables)란 무엇일까요? 간단하게 말하면 프로그램(프로세스)이 시작하는 시점에 읽을 수 있는 운영체제 차원의 전역 변수입니다. 보통 우리가 원하는 방향으로 프로그램을 실행하려면 인자값(Arguments)이나 옵션 등을 적절히 줍니다(`ls` vs `ls -al` 처럼). 환경변수로도 할 수 있는 것들이 많습니다. 예를 들어 `TZ=America/New_York ls -al` 로 한다면 뉴욕 시간 기준으로 시간이 나옵니다. 환경변수는 명령어나 프로그램이 시작하기 전이라면 언제든지 **미리** 설정할 수 있지만 프로그램이 일단 시작하면 환경변수를 수정하는 건 의미가 없습니다.
+
+그렇다면 웹서비스와 환경변수의 관계는 어떻게 될까요? 전통적인 웹은 HTML, CSS, JavaScript 파일만 잘 전달해주면 됐습니다. 사이트의 동작을 바꾸려면 이 파일을 수정해서 새로 업로드하면 됐고 환경변수와는 큰 연관이 없었습니다. React도 3개 종류의 파일을 생성(**빌드**)하고 어딘가에 업로드하는 식으로 배포가 진행됩니다. 다만 개발할 때와 실제 배포 환경에서 사용하는 값들이 달라(예: API 서버 주소) 빌드 시점에 적절한 값으로 파일들이 생성되어야 했고, 이 때 환경변수가 사용되는 거죠.
+
+[CRA(Create React App)](https://create-react-app.dev/)에 있던 webpack은 온갖 잡다구리한 것들을 잘 처리할 수 있습니다. 소스코드에서 `process.env.REACT_APP_XXX` 토큰을 찾아 빌드 시점에 고정된 값으로 치환하는 건 일도 아니었죠. **빌드 시점에 환경변수를 다르게 설정**하여 결과물을 적절하게 만들어내는 방식이 흔해졌습니다. Next.js에는 같은 방식으로 동작하는 `NEXT_PUBLIC_` 으로 시작하는 특수한 환경변수 기능이 [2020년 5월, Next.js `9.4` 버전](https://nextjs.org/blog/next-9-4#new-environment-variables-support)에 릴리즈 되었습니다. 이 기능을 소개하면서 fully backward-compatible features 라고 하는 걸로 보아 CRA 시절부터 있었던 기능을 잘 지원해준다는 느낌인 것 같아요.
+
+- 쓸데없는 지식: 사실 `5.1` 버전에서부터 일찌감치 [Runtime Config](https://nextjs.org/blog/next-5-1#environment-configuration)라는 기능으로 configuration을 통합하려는 시도가 있었지만 결국 deprecated 되었습니다. 환경변수란게 워낙에 개발자 사이에서 익숙해서 였을까요?
+
+그런데 Next.js와 간단한 React 앱은 다릅니다. React에는 서버란 없습니다. 단지 정적 파일을 잘 생성해주는 역할을 열심히 할 뿐입니다. 그러나 Next.js는 Node.js 기반으로 돌아가는 서버입니다. 서버는 실행 시작! 종료! 하는 프로그램입니다. 서버도 환경변수를 읽을 수 있습니다. 이제 헷갈립니다. 빌드 시점에 치환되는 환경변수와 서버 실행 시점에 읽어들이는 런타임 환경변수 두 가지를 생각해야 합니다.
+
+## 불편한 점이 한두 가지가 아니다!
+
+빌드 시점에 결정되는 `NEXT_PUBLIC_` 계열의 함수는 여러모로 불편한데요,
+
+- 환경변수를 수정하려면 빌드를 새로 해야 합니다. 빌드는 오래 걸립니다.
+- 배포 환경에 따라 이 환경변수가 달라진다면 배포 환경마다 다르게 빌드해야 합니다.
+- Docker 이미지로 빌드본을 관리하고 있다면 그만큼 이미지의 개수도 많아집니다.
+- 이미지를 빌드하는 job도 n개가 될 수 있습니다.
+- 이 환경변수를 런타임에 세팅할 필요가 없다는 사실을 곧바로 인지하기 힘듭니다. (환경변수라는 용어를 쓰지 말아야 한다는 생각도 듭니다)
+
+## 환경변수를 끼워넣을 수 있다는 희망
+
+저는 그런 생각이 들었습니다. 어차피 우리의 Next.js 서버는 `HTML` 파일을 만들어서 클라이언트로 전달할 운명일 텐데, 거기에 내가 원하는 환경 변수만 어떻게든 **끼워넣을** 수 있다면, `NEXT_PUBLIC_` 환경변수를 사용할 필요는 없지 않을까?
+
+그래서 이 환경변수가 가장 흔하게 사용되는 사례를 생각해봤습니다.
+
+- GA4, Sentry, Meta Pixel, Sentry 등 브라우저에서 동작하는 SDK 초기화에 필요한 값
+- API Endpoint
+- 소셜 로그인 관련 Client ID (특히 redirct url 만들 때)
+- 피쳐 플래그
+- SSG 페이지 만들 때
+
+각각은 끼워넣기로 어지간해선 해결이 될 것 같고, 피쳐플래그 같은 경우 다시 빌드하는 것보다 환경변수 바꿔서 재시작하는 게 훨씬 운영에 부담이 없을 것 같아요.
+
+SSG 페이지는 빌드 시점에 뭔가 결정하려고 한다는 뜻이기 때문에 `NEXT_PUBLIC_` 함수를 적극적으로 쓰는게 어색하지 않습니다. 그리고 빠른 페이지 로딩 등의 이득을 보기 위한 거라 목적도 뚜렷합니다. 런타임 때 행동을 다양하게 바꾸겠다라는 목적과 모순됩니다. 서버를 시작할 때 생성되는 정적 페이지(일종의 ISR)를 상상해볼 수도 있겠지만, 그것도 너무 특이한 케이스일 거 같아서 이 글에서는 다루지 않겠습니다.
+
+끼워넣기를 했다 칩시다. 그런데 SSR에서도 지원되어야 하지 않냐고요? 래핑 함수를 만들면 되지 않을까요?
+
+```ts lib/config.ts
+export const getAPIEndpoint = () =>
+  typeof window === "undefined"
+    ? process.env.API_ENDPOINT
+    : window.API_ENDPOINT; // 어디선가 끼워넣어졌다고 가정
+```
+
+제 결론은 **끼워넣기가 가능하다면 `NEXT_PUBLIC_` 환경변수를 둘 이유는 없다**입니다. 그리고 실제로 끼워넣기를 해본 결과 최신 Next.js 15에서도 잘 되는 것 같습니다. Pages, App Router 상관없이요!
+
+## 끼워넣기 Next.js 15 Pages Router
+
+우선 소스코드. https://github.com/echoja/inject-env-nextjs-pages-router
+실습에서는 `API_ENDPOINT` 환경변수를 다르게 넣어주는 걸로 하겠습니다.
+
+`_document.tsx` 파일에서 환경변수를 넣어줍시다. [문서에 따르면 이 파일은 서버에서만 렌더링](https://nextjs.org/docs/pages/building-your-application/routing/custom-document)된다고 합니다. 하지만, 즉 `process.env`에 접근할 수 있다는 이야기지요. `script` 태그에 `dangerouslySetInnerHTML`로 직접 넣어주면 될 것 같지만 빌드 타임에 대체되는 것처럼 보이더라구요. 그래서 `env.js`라는 파일을 서버 시작 시점에 만들어서 `public` 폴더에 넣도록 하겠습니다.
+
+일단 `env.js` 파일을 즉시 가져올 수 있도록 `_document.tsx` 파일을 수정해줍니다.
+
+```tsx pages/_document.tsx
+import { Html, Head, Main, NextScript } from "next/document";
+
+export default function Document() {
+  return (
+    <Html lang="en">
+      <Head>
+        {/* !mark(1) */}
+        <script src="/env.js" />
+      </Head>
+      <body>
+        <Main />
+        <NextScript />
+      </body>
+    </Html>
+  );
+}
+```
+
+`env.js` 파일은 다른 파일보다 먼저 로딩되어야 하므로 `async`나 `defer`를 붙여주지 않습니다.
+
+이제 Next.js 앱이 시작할 때 `env.js` 파일이 생성될 수 있도록 코드를 짜줍니다. `next.config.ts` 파일을 수정해줍니다.
+
+```ts next.config.ts
+import type { NextConfig } from "next";
+
+// !mark(1:11)
+import { getAPIEndpoint } from "./lib/config";
+import { writeFileSync } from "node:fs";
+import { join } from "node:path";
+
+const envFilePath = join(process.cwd(), "public", "env.js");
+writeFileSync(
+  envFilePath,
+  `window.API_ENDPOINT = "${getAPIEndpoint()}";\n`,
+  "utf8",
+);
+console.log("Environment file created at:", envFilePath);
+
+const nextConfig: NextConfig = {
+  /* config options here */
+  reactStrictMode: true,
+};
+
+export default nextConfig;
+```
+
+`env.js` 파일의 내용은 `window.API_ENDPOINT = "${getAPIEndpoint()}";\n` 이게 끝입니다. `NEXT_PUBLIC_` 여부를 떠나서 우리가 원하는 환경변수를 브라우저에서 바로 접근할 수 있도록 `window`에 전역변수로 넣어줍니다.
+
+서버 시작 전 무조건 `next.config.ts` 파일을 읽기 때문에 여기에 `env.js` 파일 생성 코드를 썼는데요, 매끄러운 코드는 아닙니다. `next start` 를 하기 직전에 다른 스크립트로 구현해도 괜찮습니다. 저 `public` 폴더 안에 있는 다양한 에셋 파일은 보통 빌드 과정에 채위지긴 하지만 꼭 그때에만 채워질 필요는 없습니다.
+
+위 코드를 Docker 환경에서 잘 실행되도록 하려면 Docker Image 안에 `config.ts` 파일도 최종적으로 포함되어 있어야 합니다. 포함되어 있지 않으면 `next.config.ts` 파일을 읽을 때 `config` 파일 없다고 에러가 뜹니다.
+
+```dockerfile Dockerfile
+# 빌드된 결과물만 복사
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/next.config.ts ./next.config.ts
+# !mark(1)
+COPY --from=builder /app/lib/config.ts ./lib/config.ts
+
+EXPOSE 3000
+CMD ["npm", "start"]
+```
+
+예제 컴포넌트를 만들어봤습니다.
+
+```tsx components/Todo.tsx
+"use client";
+
+import { getAPIEndpoint } from "@/lib/config";
+import useSWR from "swr";
+
+const fetcher = (...args: Parameters<typeof fetch>) =>
+  fetch(...args).then((res) => res.json());
+
+export function Todo({ id }: { id: string }) {
+  const { data, error, isLoading } = useSWR(
+    // !mark(1)
+    `${getAPIEndpoint()}/todos/${id}`,
+    fetcher,
+  );
+
+  if (error) {
+    return <div>failed to load</div>;
+  }
+  if (isLoading) {
+    return <div>loading...</div>;
+  }
+
+  return <div>title: {data.title ?? "NO_DATA"}</div>;
+}
+```
+
+`getAPIEndpoint()` 함수를 호출해서 API 경로를 가져오는 걸 확인할 수 있습니다. 이제 빌드 후 실행해봅시다. Next.js에서는 개발 서버와 production 빌드 서버 사이의 동작이 다른 경우가 있으므로 확실히 확인하기 위해서는 `npm run build` 및 `npm run start`를 하도록 합니다.
+
+```sh
+npm run build
+API_ENDPOINT=https://jsonplaceholder.typicode.com npm run start
+```
+
+실행하면 아래와 같이 출력되는 걸 확인할 수 있습니다.
+
+```txt
+> inject-env-page-router@0.1.0 start
+> next start
+
+   ▲ Next.js 15.4.2
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.45.73:3000
+
+ ✓ Starting...
+Environment file created at: /Users/th.kim/Desktop/inject-env-nextjs-pages-router/public/env.js
+Environment file created at: /Users/th.kim/Desktop/inject-env-nextjs-pages-router/public/env.js
+ ✓ Ready in 359ms
+```
+
+실제 동작을 확인해볼까요?
+
+<ArticleImage
+  img={p2}
+  border
+  alt=""
+  caption={
+    <>
+      브라우저에서 <code>API_ENDPOINT</code> 환경변수를 잘 가져다 쓰고 있는 모습
+    </>
+  }
+/>
+
+훌륭합니다. 이로써 우리는 하나로 빌드 해놓고 환경변수를 다양하게 줘서 브라우저쪽 행동도 다르게 할 수 있음을 보였습니다.
+
+이제 docker에서도 잘 동작하는지 확인해볼까요?
+
+```sh
+docker build --force-rm=true -t inject-env .
+docker run -p 3000:3000 --rm -it -e API_ENDPOINT=https://jsonplaceholder.typicode.com inject-env
+```
+
+로컬 빌드 + 실행과 똑같이 잘 된다는 걸 확인할 수 있습니다!
+
+## 끼워넣기 Next.js 15 App Router
+
+소스코드: https://github.com/echoja/inject-env-nextjs-app-router
+
+Pages Router와 흐름은 똑같습니다. 시작할 때마다 `env.js` 파일을 만들어주고, 이 파일을 가장 먼저 로딩하도록 공통 레이아웃 코드를 수정해줍니다. App Router에서는 최상위의 layout.tsx 파일입니다. App Router는 Pages와 달리 `env.js`가 `head`의 뒷부분에 있어서 약간 불안한 느낌은 있습니다. 혹시나 해서 `console.log`도 추가해봤습니다.
+
+```tsx app/layout.tsx
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en">
+      <head>
+        {/* !mark(1:5) */}
+        <script src="/env.js" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `console.log("API Endpoint:", window.API_ENDPOINT);`,
+          }}
+        />
+      </head>
+      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+        {children}
+      </body>
+    </html>
+  );
+}
+```
+
+그 외에 `env.js` 파일을 생성하는 부분, 환경변수를 설정하는 부분 등은 모두 똑같아서 패스하겠습니다. 빌드와 실행도 똑같습니다.
+
+```sh
+# 로컬 빌드 및 실행
+npm run build
+API_ENDPOINT=https://jsonplaceholder.typicode.com npm run start
+
+# 로컬에서 도커 빌드 및 실행
+docker build --force-rm=true -t inject-env .
+docker run -p 3000:3000 --rm -it -e API_ENDPOINT=https://jsonplaceholder.typicode.com inject-env
+```
+
+## 실패한 시도
+
+🥲 아래 방법은 실패했습니다.
+
+```tsx pages/_document.tsx
+<Head>
+  <script
+    dangerouslySetInnerHTML={{
+      __html: `
+console.log('This script runs on the server side and is injected into the head of the document.');
+window.API_ENDPOINT = "${process.env.API_ENDPOINT}";`,
+    }}
+  />
+</Head>
+```
+
+처음에는 위처럼 직접 `script`와 `dangerouslySetInnerHTML`를 이용하여 환경변수를 넣어줬지만 빌드 시점 환경변수로 고정되어서 영영 사용할 수 없었습니다. Static Site Generation 페이지인지 아닌지 판단하는 기준을 정확히 알 순 없지만, 일단 SSG로 빌드됐다면 그 페이지는 실행 시점에 변경할 수 없으므로 환경변수로 제어할 수 없습니다.
+
+## 한계
+
+Next.js 가 추천하는 패턴도 아니고 빌드의 상세한 과정이나 로직이 문서에 명시되어 있는 것도 아니라서 좀 불안합니다. 우리가 임의로 삽입한 스크립트가 Next.js 내부 빌드 로직 변화에 의해 언제든지 영향받을 수 있습니다.
+
+조금 더 검증된 방법이 필요하다면 [next-runtime-env](https://www.npmjs.com/package/next-runtime-env) 라이브러리를 뜯어보시는 것도 좋을 것 같아요. 저도 여기 소스코드를 크게 참조하여 이 글의 아이디어를 얻었습니다. 어떻게 동작하는지 유심히 살펴보시려면 [next-runtime-env 원리 파헤치기(by 개발자 류준열)](https://www.wnsdufdl.com/post/eCulLQxzTrSoL7asxyqUNA) 글도 참조해주시면 좋습니다.
+
+Next.js가 공식적으로 추천하는 방법은 [getServerSideProps](https://nextjs.org/docs/pages/guides/environment-variables#runtime-environment-variables)를 쓰거나 App Router의 서버 컴포넌트로 하라 하네요. 그렇게 해서 해결할 수 있다면 굿.
+
+## 번외
+
+`env.js` 파일을 생성할 때 [instrumentation.ts 파일](https://nextjs.org/docs/pages/guides/instrumentation)([App Router](https://nextjs.org/docs/app/guides/instrumentation))을 사용하면 좋을 수도 있겠습니다. 한번 시도 해주세요...
+
+## 레퍼런스
+
+- [next-runtme-env - npm](https://www.npmjs.com/package/next-runtime-env)
+- [Adding Custom Environment Variables | Create React App](https://create-react-app.dev/docs/adding-custom-environment-variables/)
+- [Routing: Custom Document | Next.js](https://nextjs.org/docs/pages/building-your-application/routing/custom-document)
+- [NEXT*PUBLIC* 환경변수를 빌드 이후에 수정할 순 없나? 함께 알아보자.(by Jihan)](https://velog.io/@bbbjihan/NEXTPUBLIC-%ED%99%98%EA%B2%BD%EB%B3%80%EC%88%98%EB%A5%BC-%EB%B9%8C%EB%93%9C-%EC%9D%B4%ED%9B%84%EC%97%90-%EC%88%98%EC%A0%95%ED%95%A0-%EC%88%9C-%EC%97%86%EB%82%98-%ED%95%A8%EA%BB%98-%EC%95%8C%EC%95%84%EB%B3%B4%EC%9E%90)
+- [next-runtime-env 원리 파헤치기(by 개발자 류준열)](https://www.wnsdufdl.com/post/eCulLQxzTrSoL7asxyqUNA)
