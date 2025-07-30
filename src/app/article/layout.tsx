@@ -1,3 +1,4 @@
+import { TaehoonGptButton } from "@components/TaehoonGptButton";
 import ArticlePageHeader from "@modules/layout/ArticlePageHeader";
 import Utterances from "@modules/utterances";
 import type { Metadata } from "next";
@@ -13,6 +14,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <>
       <ArticlePageHeader />
       <article className="mb-20">{children}</article>
+      <TaehoonGptButton />
       <Utterances />
     </>
   );
