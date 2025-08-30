@@ -33,8 +33,27 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ko">
+    <html lang="ko" suppressHydrationWarning>
       <head>
+        {/* Prevent theme flash: set class before hydration */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+;(() => {
+  try {
+    const key = 'colorMode';
+    const stored = localStorage.getItem(key);
+    const sysDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const mode = stored === 'light' || stored === 'dark' || stored === 'system' ? stored : 'system';
+    const resolved = mode === 'system' ? (sysDark ? 'dark' : 'light') : mode;
+    const root = document.documentElement;
+    if (resolved === 'dark') { root.classList.add('dark'); root.classList.remove('light'); }
+    else { root.classList.add('light'); root.classList.remove('dark'); }
+  } catch {}
+})();
+`,
+          }}
+        />
         <script
           dangerouslySetInnerHTML={{
             __html: `

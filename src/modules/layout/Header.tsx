@@ -3,11 +3,10 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import ThemeToggle from "./ThemeToggle";
 
 const Header = () => {
   return (
-    <header className="relative flex items-center justify-center w-full">
+    <header className="relative z-50 flex items-center justify-center w-full">
       <div>
         <h1 className="font-semibold leading-none">
           <Link className="inline-flex items-center gap-1" href="/">
@@ -24,9 +23,7 @@ const Header = () => {
         </h1>
       </div>
 
-      <div className="absolute right-0 -translate-y-1/2 top-1/2">
-        <ThemeToggle />
-      </div>
+      {/* Theme toggle moved to Footer */}
     </header>
   );
 };
