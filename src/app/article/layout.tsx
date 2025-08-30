@@ -1,6 +1,7 @@
 import { TaehoonGptButton } from "@components/TaehoonGptButton";
 import ArticlePageHeader from "@modules/layout/ArticlePageHeader";
 import Utterances from "@modules/utterances";
+import ArticleFadeIn from "@modules/article/ArticleFadeIn";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -13,7 +14,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <ArticlePageHeader />
-      <article className="mb-20">{children}</article>
+      <ArticleFadeIn className="mb-20">{children}</ArticleFadeIn>
       <TaehoonGptButton />
       <Utterances />
     </>
