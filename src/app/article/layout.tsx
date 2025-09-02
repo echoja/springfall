@@ -1,4 +1,3 @@
-import { TaehoonGptButton } from "@components/TaehoonGptButton";
 import ArticlePageHeader from "@modules/layout/ArticlePageHeader";
 import Utterances from "@modules/utterances";
 import ArticleFadeIn from "@modules/article/ArticleFadeIn";
@@ -15,7 +14,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <>
       <ArticlePageHeader />
       <ArticleFadeIn className="mb-20">{children}</ArticleFadeIn>
-      <TaehoonGptButton />
       <Utterances />
     </>
   );
