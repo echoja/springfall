@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/next-script-for-ga */
 import "@common/globals.css";
+import "../../public/pretendard-variable-gov/pretendardvariable-gov-dynamic-subset.css";
 import ColorModeClassNameInjector from "@modules/color-mode/ColorModeClassNameInjector";
 import Footer from "@modules/layout/Footer";
 import { metadataBase } from "@modules/metadata/constants";
