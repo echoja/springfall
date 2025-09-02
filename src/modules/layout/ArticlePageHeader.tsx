@@ -30,7 +30,12 @@ const ArticlePageHeader = () => {
         </h1>
       </div>
 
-      {/* Theme toggle is now in the footer */}
+      {/* <Link
+        href="/portfolio"
+        className="absolute right-0 hover:no-underline py-2 px-3 text-sm transition rounded-sm hover:bg-gray-400/10 hover:opacity-90"
+      >
+        Portfolio
+      </Link> */}
     </header>
   );
 };

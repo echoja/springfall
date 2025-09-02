@@ -16,5 +16,12 @@ export default defineConfig({
   test: {
     globals: true,
     environment: "happy-dom",
+    pool: "threads",
+    poolOptions: {
+      threads: {
+        maxThreads: 1,
+        minThreads: 1,
+      },
+    },
   },
 });
