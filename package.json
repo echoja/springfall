@@ -17,7 +17,7 @@
   "dependencies": {
     "@echoja/remark-custom-container": "^1.4.0",
     "@heroui/react": "2.7.11",
-    "@heroui/theme": "2.4.17",
+    "@heroui/theme": "2.4.21",
     "@mdx-js/loader": "^3.1.0",
     "@mdx-js/react": "^3.1.0",
     "@next/bundle-analyzer": "15.5.2",
