@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 import i4 from "./i4.jpeg";
 
 export const title = "개발자로서 회사에 들어와서 만 1년이 되기 직전 느낀 점";
-export const url = "https://springfall.cc/article/2022-09/company";
+const slug = "article/2022-09/company";
 export const summary =
   "기록을 남겨두지 않으면 현재의 모습이 어디로부터 기원했는지를 알 방도가 없어집니다.";
 export const createdAt = dayjs("2022-09-01").toISOString();
@@ -18,6 +18,6 @@ export const item: ArticleItem = {
   imageAlt,
   summary,
   title,
-  url,
+  slug,
   tags: [],
 };

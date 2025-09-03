@@ -1,9 +1,10 @@
+import type { Locale } from "@common/config";
 import type { Category } from "@modules/category";
 import type { StaticImageData } from "next/image";
 
 export type ArticleItem = {
   title: string;
-  url: string;
+  slug: string;
   summary: string;
   createdAt: string;
   updatedAt: string;
@@ -12,4 +13,5 @@ export type ArticleItem = {
   category?: Category;
   tags?: string[];
   series?: { name: string; order: string };
+  locale?: Locale;
 };

@@ -5,7 +5,7 @@ import i1 from "./u.jpg";
 
 export const title =
   "타입스크립트 국룰 Validation 라이브러리 Zod에 대해 알아보자";
-export const url = "https://springfall.cc/article/2024-11/zod";
+const slug = "article/2024-11/zod";
 export const summary =
   "TypeScript에서 자주 사용되는 검증 라이브러리인 Zod가 인기를 얻게 된 배경을 알아보고, 간단한 사용법도 알아봅니다.";
 export const createdAt = dayjs("2024-11-10").toISOString();
@@ -21,7 +21,7 @@ export const item: ArticleItem = {
   imageAlt,
   summary,
   title,
-  url,
+  slug,
   category,
   tags: [],
 };

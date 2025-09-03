@@ -13,7 +13,7 @@ This project is a Next.js 15 + TypeScript blog/site. Use the conventions below t
 ## Build, Test, and Development Commands
 - `pnpm i`: Install dependencies.
 - `pnpm dev`: Run Next dev server.
-- `pnpm build`: Production build + generate sitemap (`next-sitemap`).
+- `pnpm build`: Production build. Sitemap/robots via Next routes.
 - `pnpm start`: Start the built app.
 - `pnpm test` / `pnpm test:ci`: Run Vitest (happy‑dom env).
 - `pnpm lint` / `pnpm type-check`: Lint with ESLint and check types with `tsc`.
@@ -38,4 +38,3 @@ This project is a Next.js 15 + TypeScript blog/site. Use the conventions below t
 ## Security & Configuration
 - Copy `.env.example` → `.env` (managed with `direnv`). Never commit secrets.
 - Client‑exposed values must use `NEXT_PUBLIC_*` (e.g., `NEXT_PUBLIC_SITE_URL=https://example.com`).
-

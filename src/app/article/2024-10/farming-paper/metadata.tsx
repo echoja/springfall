@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 import i1 from "./farm.png";
 
 export const title = "필요한 물건을 직접 만들어 갖다 쓰기";
-export const url = "https://springfall.cc/article/2024-10/farming-paper";
+const slug = "article/2024-10/farming-paper";
 export const summary =
   "방송통신대를 무사히 조기졸업하게 해준 내쓸내만 서비스, Farming Paper에 대한 이야기입니다.";
 export const createdAt = dayjs("2024-10-05").toISOString();
@@ -20,7 +20,7 @@ export const item: ArticleItem = {
   imageAlt,
   summary,
   title,
-  url,
+  slug,
   category,
   tags: [],
 };

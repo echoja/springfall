@@ -4,8 +4,7 @@ import dayjs from "dayjs";
 import i1 from "./e.jpg";
 
 export const title = "[책 짧은리뷰] 효과 빠른 번아웃 처방전";
-export const url =
-  "https://springfall.cc/article/2025-08/effective-burn-out-tips";
+export const slug = "article/2025-08/effective-burn-out-tips";
 export const summary = "쬼... 아쉽네예";
 
 export const createdAt = dayjs("2025-08-30").toISOString();
@@ -21,7 +20,7 @@ export const item: ArticleItem = {
   imageAlt,
   summary,
   title,
-  url,
+  slug,
   category,
   tags: [],
 };

@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 import i1 from "./boxing.jpg";
 
 export const title = "회사에 싸움 걸기 다짐 중";
-export const url = "https://springfall.cc/article/2025-07/fighting";
+const slug = "article/2025-07/fighting";
 export const summary =
   "사업을 더 번창시키기 위해서 내가 할 수 있는 일은 무엇일까요";
 export const createdAt = dayjs("2025-07-06").toISOString();
@@ -20,7 +20,7 @@ export const item: ArticleItem = {
   imageAlt,
   summary,
   title,
-  url,
+  slug,
   category,
   tags: [],
 };

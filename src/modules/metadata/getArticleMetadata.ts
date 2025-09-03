@@ -1,4 +1,5 @@
 import type { ArticleItem } from "@modules/article/types";
+import { articleLocales } from "@modules/i18n/available";
 
 import type { Metadata } from "next";
 
@@ -11,7 +12,7 @@ export default function getArticleMetadata(item: ArticleItem): Metadata {
     summary,
     title,
     updatedAt,
-    url,
+    slug,
   } = item;
 
   return {
@@ -21,7 +22,7 @@ export default function getArticleMetadata(item: ArticleItem): Metadata {
     openGraph: {
       title,
       description: summary,
-      url,
+      url: new URL(slug, process.env.BASE_URL).toString(),
       type: "article",
       publishedTime: createdAt,
       modifiedTime: updatedAt,
@@ -34,8 +35,17 @@ export default function getArticleMetadata(item: ArticleItem): Metadata {
         },
       ],
     },
-    alternates: {
-      canonical: url,
-    },
+    alternates: (() => {
+      const url = new URL(slug, process.env.BASE_URL).toString();
+      try {
+        const locales = articleLocales[slug];
+        const languages = locales
+          ? Object.fromEntries(locales.map((l) => [l, `/${l}/${slug}`]))
+          : undefined;
+        return { canonical: url, languages };
+      } catch {
+        return { canonical: url };
+      }
+    })(),
   };
 }

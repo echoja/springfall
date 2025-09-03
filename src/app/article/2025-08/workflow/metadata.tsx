@@ -5,7 +5,7 @@ import i1 from "./w.jpg";
 
 export const title =
   "[TypeScript] 복구(롤백) 로직이 있는 경량 워크플로우 시스템 적용하기";
-export const url = "https://springfall.cc/article/2025-08/workflow";
+const slug = "article/2025-08/workflow";
 export const summary =
   "일련의 작업들이 모두 다 잘 진행되어야 비로소 성공하는, 하지만 각 단계에서 실패를 적절히 처리해야 하는 워크플로우 시스템을 간단히 만들어봅시다";
 
@@ -22,7 +22,7 @@ export const item: ArticleItem = {
   imageAlt,
   summary,
   title,
-  url,
+  slug,
   category,
   tags: [],
 };

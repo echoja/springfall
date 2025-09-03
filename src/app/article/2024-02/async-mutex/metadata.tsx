@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 import i1 from "./time.avif";
 
 export const title = "[WIP] async-mutex로 요청에 대한 동시성 제어하기";
-export const url = "https://springfall.cc/article/2024-02/async-mutex";
+const slug = "article/2024-02/async-mutex";
 export const summary = "...";
 export const createdAt = dayjs("2024-02-10").toISOString();
 export const updatedAt = dayjs("2024-02-10").toISOString();
@@ -19,7 +19,7 @@ export const item: ArticleItem = {
   imageAlt,
   summary,
   title,
-  url,
+  slug,
   category,
   tags: [],
 };

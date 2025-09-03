@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 import i1 from "./1.jpg";
 
 export const title = "2025년으로 넘어가는 문턱에서, 일터의 소로.";
-export const url = "https://springfall.cc/article/2025-01/thoreau";
+const slug = "article/2025-01/thoreau";
 export const summary =
   "2024년 짧은 회고, 일터의 소로가 주는 메시지, 바람직한 삶의 태도, 2025년 짧은 목표.";
 export const createdAt = dayjs("2025-01-01").toISOString();
@@ -20,7 +20,7 @@ export const item: ArticleItem = {
   imageAlt,
   summary,
   title,
-  url,
+  slug,
   category,
   tags: [],
 };

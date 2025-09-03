@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 import i1 from "./time.avif";
 
 export const title = "시간. 장송의 프리렌. 어바웃 타임.";
-export const url = "https://springfall.cc/article/2024-01/time";
+const slug = "article/2024-01/time";
 export const summary =
   "전혀 다른 듯 보이는 두 작품의 공통점을 찾아보며 시간과 인생에 대해 생각해보자";
 export const createdAt = dayjs("2024-01-21").toISOString();
@@ -20,7 +20,7 @@ export const item: ArticleItem = {
   imageAlt,
   summary,
   title,
-  url,
+  slug,
   category,
   tags: [],
 };

@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 import i1 from "./i.png";
 
 export const title = "Node.js 스트림(stream) 개념을 익혀보자";
-export const url = "https://springfall.cc/article/2021-12/node-js-stream";
+const slug = "article/2021-12/node-js-stream";
 export const summary =
   "Stream 자료구조를 간단하게 익히고 Readable 클래스를 직접 확장하여 구현해봅니다";
 export const createdAt = dayjs("2021-12-07").toISOString();
@@ -20,7 +20,7 @@ export const item: ArticleItem = {
   imageAlt,
   summary,
   title,
-  url,
+  slug,
   category,
   tags: [],
 };

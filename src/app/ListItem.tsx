@@ -1,18 +1,16 @@
 "use client";
 
 import type { ArticleItem } from "@modules/article/types";
-import { metadataBase } from "@modules/metadata/constants";
+import { getCategoryLabel } from "@modules/category";
 import dayjs from "dayjs";
 import { motion } from "motion/react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const listVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    // transition: {
-    //   staggerChildren: 0.03,
-    // },
   },
 };
 
@@ -35,10 +33,20 @@ export function List({ children }: { children: React.ReactNode }) {
   );
 }
 
-export function ListItem({ item }: { item: ArticleItem }) {
-  const { createdAt, summary, title, url, category } = item;
+export function ListItem({
+  item,
+  basePathname,
+}: {
+  item: ArticleItem;
+  basePathname: string;
+}) {
+  const { createdAt, summary, title, slug, category } = item;
 
-  const href = new URL(url, metadataBase).pathname;
+  const href = new URL(slug, basePathname).pathname;
+  const pathname = usePathname();
+  const firstSeg = (pathname.split("/")[1] ?? "") as "ko" | "en" | "";
+  const locale: "ko" | "en" =
+    firstSeg === "ko" || firstSeg === "en" ? firstSeg : "ko";
 
   return (
     <motion.li
@@ -55,7 +63,7 @@ export function ListItem({ item }: { item: ArticleItem }) {
         {category && (
           <>
             <span className="opacity-50"> | </span>
-            <span>{category}</span>
+            <span>{getCategoryLabel(category, locale)}</span>
           </>
         )}
       </div>

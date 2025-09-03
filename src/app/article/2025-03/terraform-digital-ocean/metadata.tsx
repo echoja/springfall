@@ -5,8 +5,7 @@ import terraform from "./terraform.png";
 
 export const title =
   "Terraform Cloud + DigitalOcean으로 웹앱 배포하기 (빈약한 k8s 지식과 월 7만 원으로)";
-export const url =
-  "https://springfall.cc/article/2025-03/terraform-digital-ocean";
+export const slug = "article/2025-03/terraform-digital-ocean";
 export const summary =
   "인프라 지식이 빈약한 Frontend 개발자. Terraform Cloud로 멋있는 것들을 DigitalOcean에 성공적으로 배포하다.";
 export const createdAt = dayjs("2025-03-26").toISOString();
@@ -23,7 +22,7 @@ export const item: ArticleItem = {
   imageAlt,
   summary,
   title,
-  url,
+  slug,
   category,
   tags: [],
 };

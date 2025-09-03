@@ -3,8 +3,7 @@ import dayjs from "dayjs";
 import i1 from "./i1.jpg";
 
 export const title = "어떤 개발자가 되어야 할까? - 서문";
-export const url =
-  "https://springfall.cc/article/2023-08/self-thinking-preface";
+export const slug = "article/2023-08/self-thinking-preface";
 export const summary = "자아탐구 타임… 의 서문";
 export const createdAt = dayjs("2023-08-07").toISOString();
 export const updatedAt = dayjs("2023-08-07").toISOString();
@@ -18,6 +17,6 @@ export const item: ArticleItem = {
   imageAlt,
   summary,
   title,
-  url,
+  slug,
   tags: [],
 };

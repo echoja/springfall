@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 import i1 from "./i1.jpg";
 
 export const title = "방송통신대학교 후기 + 간단 설명 + 꿀팁";
-export const url = "https://springfall.cc/article/2023-02/knou-tips";
+const slug = "article/2023-02/knou-tips";
 export const summary =
   "방송통신대학교 2학년 재학생이 알려주는 간단한 후기와 설명. 필자만의 꿀팁도 조금 소개합니다.";
 export const createdAt = dayjs("2023-02-19").toISOString();
@@ -18,6 +18,6 @@ export const item: ArticleItem = {
   imageAlt,
   summary,
   title,
-  url,
+  slug,
   tags: [],
 };

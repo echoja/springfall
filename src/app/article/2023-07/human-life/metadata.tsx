@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 import i1 from "./i1.jpg";
 
 export const title = "[리뷰] 알베르 카뮈의 반항하는 인간";
-export const url = "/article/2023-07/human-life";
+export const slug = "article/2023-07/human-life";
 export const summary =
   "느낀 점을 적어봅니다. 이번 글은 특히 두서가 없습니다. 이해해주세요.";
 export const createdAt = dayjs("2023-07-17").toISOString();
@@ -20,7 +20,7 @@ export const item: ArticleItem = {
   imageAlt,
   summary,
   title,
-  url,
+  slug,
   category,
   tags: [],
 };

@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 import i1 from "./1.jpg";
 
 export const title = "사내 IT 프로젝트 공모전 후기";
-export const url = "https://springfall.cc/article/2023-06/company-contest";
+const slug = "article/2023-06/company-contest";
 export const summary =
   "자리배정시스템 3주 만에 만들어보기. 기술과 전략과 느낀 점들. 힘들었지만 보람찼다. 모두들 고생하셨습니다.";
 export const createdAt = dayjs("2023-06-04").toISOString();
@@ -20,7 +20,7 @@ export const item: ArticleItem = {
   imageAlt,
   summary,
   title,
-  url,
+  slug,
   category,
   tags: [],
 };
