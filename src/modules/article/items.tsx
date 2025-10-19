@@ -49,6 +49,7 @@ import { item as ESLintForbidClassName } from "@app/article/2025-07/eslint-forbi
 import { item as Fighting } from "@app/article/2025-07/fighting/metadata";
 import { item as NextjsInjectEnv } from "@app/article/2025-07/nextjs-inject-env/metadata";
 import { item as EffectiveBurnOutTips } from "@app/article/2025-08/effective-burn-out-tips/metadata";
+// import { item as LiveEditor } from "@app/ko/article/2025-10/live-editor/metadata";
 import dayjs from "dayjs";
 import type { ArticleItem } from "./types";
 
@@ -105,6 +106,7 @@ const items: ArticleItem[] = [
   NextjsInjectEnv,
   // SmHiddenPortal,
   EffectiveBurnOutTips,
+  // LiveEditor,
 ];
 
 items.sort((a, b) => dayjs(b.createdAt).diff(a.createdAt));

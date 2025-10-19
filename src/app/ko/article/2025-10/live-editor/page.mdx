@@ -1,0 +1,132 @@
+import ArticleHeader from "@modules/article/ArticleHeader";
+import ArticleImage from "@modules/article/ArticleImage";
+import getArticleHeaderProps from "@modules/metadata/getArticleHeaderProps";
+import getArticleJsonLdProps from "@modules/metadata/getArticleJsonLdProps";
+import getArticleMetadata from "@modules/metadata/getArticleMetadata";
+import { ArticleJsonLd } from "next-seo";
+import { item } from "./metadata";
+import i0 from "./i0.png";
+import i1 from "./i1.jpg";
+import i2 from "./i2.png";
+import i3 from "./i3.png";
+import i99 from "./i99.png";
+
+export const metadata = getArticleMetadata(item);
+
+<ArticleJsonLd {...getArticleJsonLdProps(item)} />
+
+<ArticleHeader {...getArticleHeaderProps(item)} />
+
+<ArticleImage img={i1} alt="포스트잇 사진" caption={<>
+
+어떻게 생겼는지도 예측하기 힘든 고객의 사이트에서 뭔가가 잘 동작하게끔 하기란, 마치 어디에나 잘 붙는 포스트잇을 개발하는 것과 다를 바가 없다. 사진: <a href="https://unsplash.com/ko/%EC%82%AC%EC%A7%84/%EC%9D%B8%EC%87%84%EB%90%9C-%EC%8A%A4%ED%8B%B0%EC%BB%A4-%EB%A9%94%EB%AA%A8%EA%B0%80-%EB%B3%B4%EB%93%9C%EC%97%90-%EC%A0%91%EC%B0%A9%EB%90%98%EC%96%B4-%EC%9E%88%EC%8A%B5%EB%8B%88%EB%8B%A4-zoCDWPuiRuA?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a> by <a href="https://unsplash.com/ko/@epicantus?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Daria Nepriakhina 🇺🇦</a>
+
+</>} />
+
+동적으로 배너를 삽입하는
+
+어떻게 보면 Chrome 이랑 비슷한 면이 있습니다.
+
+당신의 요구사항은 아래와 같습니다.
+
+모노레포 방식으로 패키지들을 구성해줘. 가장 간단하게 할 수 있는 패키지와 모노레포 툴을 네가 알아서 선택해줘. 기본적으로 전부 vite를 사용하고자 해.
+
+고객: 사이트 운영자. 우리는 배너를 손쉽게 삽입할 수 있는 도구를 제공한다. 고객이 할 일은 main 패키지의 결과물로 나오는 main.js 파일을 사이트에 삽입하는 것. 단, 특수한 searchParams가 오면 live-editor 스크립트가 추가 로딩되며 동작한다. 사이트는 빠르게 동작해야 하기 때문에 사이트 관리자에게만 live-editor 스크립트가 로드되어야 하며 사이트 방문자는 live-editor 스크립트가 로드되지 않아야 한다.
+
+1. main 패키지: 메인 특정 경로로 json 파일을 호출하여 배너를 삽입하는 역할.
+
+- 페이지 최초 로드 시, main 스크립트는 우선 위치정보가 담겨 있는 json 파일을 로드한다.(json 파일은 단순히 \{locations: \{selector: string}[]} 이다. 모킹된 파일로 그냥 고정임. 배너 내용도 하드코딩되어 있음)
+- 해당 위치를 현재 페이지에서 찾는다.
+- 찾으면 그 다음 위치에 하드코딩된 배너를 삽입한다. (내용 고정))
+
+1. live-deitor 패키지: 라이브 에디터 모드가 된다. UI가 상단, 하단 등이 뜨며 HTML element 들을 선택할 수 있는 상태가 된다. React 컴포넌트로 개발이 가능함.
+
+빌드는 일단 기본적으로 모두 한꺼번에 빌드되도록 해줘 (마이크로서비스로 만들지는 않음.) 일치하는 버전으로 로드되도록 해줘.버전은 커밋해시를 이용해줘
+
+빌드 결과물은 어떤 s3에 올린다고 가정해줘.
+
+빌드 결과물도 잘 동작해야 하고 dev hot reload 기능도 잘 동작해야 해. (개발 환경에서 live editor 가 활성화되어 있을 때 본래의 React 개발처럼 수월하게 잘 되어야 해.)
+
+# 이지캔버스 코드 스플리팅! vite 여러 개 돌리기
+
+우리는 이 글에서, **너희(You)**, 즉 고객의 사이트에서 동작하는 Front 앱을 만들 겁니다. 무슨 말이죠? 그게 왜 필요할까요? 아래와 같은 제품을 개발한다고 가정합시다.
+
+## 요구사항
+
+우리가 파는 물건은 **웹사이트 광고 배너 렌더링 시스템**이며 우리의 주 고객은 **사이트 운영자**입니다. 고객이 해줄 것은 `main` 스크립트를 자신의 사이트에 삽입해놓는 것입니다. 아마 아래와 같을 것입니다.
+
+```html
+<script
+  src="https://cdn.banner.com/main.js?site_id=mysite"
+  type="module"
+></script>
+```
+
+동시에 `live-locator` 라는 기능도 제공합니다. 이는 광고 배너를 어느 위치에 삽입할 건지를 지정해주는 도구입니다. 고객 사이트와 상호작용하면서도 복잡한 UI가 고객 사이트에 Floating 되어 동작합니다. `main` 스크립트와 `live-locator` 스크립트는 분리되어 있고, 상황에 따라 **동적으로 로딩**되어 사이트 성능을 해치지 않으면서도 운영자만 에디터를 사용할 수 있도록 설계합니다.
+
+모든 빌드는 Vite 기반으로 합니다. 결과물은 S3(+CloudFront) 에 업로드하는 것을 전제로 합니다.
+
+## 요구사항 분석
+
+### 스크립트란 무엇일까
+
+스크립트란 무엇이고, 어떤 스크립트가 필요한지 봅시다.
+
+우리는 우리의 도메인 주소가 온전히 있는 우리만의 서비스에서 개발하는 게 아닙니다. **다른 이의 사이트에서 잘 동작하는 기능**을 만들어야 합니다. 그렇다면 고객 회사로 파견을 나가서 그 쪽의 코드를 수정해야 할까요? 그런 방법만 있는 건 아닙니다. **스크립트**라는 최소한의 연결점만 만들면, 우리가 작성한 코드를 그 쪽의 사이트에서 동작시키게 할 수 있습니다. 스크립트는 말 그대로 `<script src="...">`를 뜻합니다.
+
+전지현이 광고하는 [Andar](https://andar.co.kr/)라는 브랜드의 쇼핑몰 사이트에서 온갖 써드파티 스크립트가 동작하는 걸 확인할 수 있습니다.
+
+<ArticleImage
+  img={i0}
+  alt=""
+  border
+  caption="Andar 사이트의 코드를 까보면 온갖 스크립트가 로드되고 있다."
+/>
+
+위 이미지만 봤을 때 눈에 띄는 서비스들이 있네요.
+
+- [Beusable](https://www.beusable.net/): 사용자 행동 분석 도구
+- [크리마(CREMA)](https://www.cre.ma/): 리뷰 데이터를 기반 마케팅 플랫폼
+- [Google Tag Manager](https://tagmanager.google.com/): 웹/앱 코드 수정 없이 다양한 마케팅·측정 태그를 한 대시보드에서 배포·관리하는 태그 관리 시스템.
+
+그런 스크립트는 고객이 직접 설치까지는 해야 합니다. 그 이후에는 우리의 차례입니다.
+
+## 비슷한 사례
+
+**Vercel Toolbar** 기능을 아시나요? Vercel은 Next.js 등의 웹앱을 편하게 배포해주는 서비스인데요, `main` 브랜치가 아니라 작업 중인 브랜치를 따고 PR을 만들고 하면은 해당 버전으로 테스트(Preview)할 수 있는 빌드가 생깁니다.
+
+아래는 `test` 브랜치에서 작업한 내용이 `zip-up-git-…vercel.app`으로 배포되는 모습입니다.
+
+<ArticleImage img={i2} border caption="" />
+
+저 주소로 들어가면 우측에 조그마한 버튼이 떠있는 걸 볼 수 있고, 그걸 누르면 아주 복잡한 기능이 내 사이트에서 뜨는 걸 확인할 수 있습니다. 라는 기능입니다.
+
+<ArticleImage img={i3} border caption="" />
+
+이게 어디서 어떻게 렌더링되는 걸까요?
+
+1. 먼저 Vercel에서 만든 ..
+
+아래와 같은 코드 스니펫이 삽입되어 있음을 확인할 수 있습니다.
+
+```jsx
+(function () {
+  if (typeof document === "undefined") return;
+  var s = document.createElement("script");
+  s.src = "https://vercel.live/_next-live/feedback/feedback.js";
+  s.setAttribute("data-deployment-id", "dpl_xxxxx");
+  (document.head || document.documentElement).appendChild(s);
+})();
+```
+
+```html
+<vercel-live-feedback
+  style="position: absolute; top: 0px; left: 0px; z-index: 2147483647;"
+></vercel-live-feedback>
+```
+
+번외: Add Extension 하는 데는 이유가 다 있다~
+
+![image.png](attachment:70bcfb7c-99b1-43ab-b04a-d24e8f987048:image.png)
+
+bannerLocator
