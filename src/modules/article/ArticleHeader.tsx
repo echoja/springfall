@@ -6,6 +6,7 @@ import style from "./ArticleHeader.module.css";
 import { i18n, type Locale } from "@common/config";
 import { getLocalesForSlug } from "@modules/i18n/available";
 import { isLocale } from "@modules/i18n/util";
+import Link from "next/link";
 
 const customColor = {
   "--bgColor": `--color-gray-300 83.3333%`,
@@ -105,13 +106,13 @@ export default function ArticleHeader({
                 {l.locale}
               </span>
             ) : (
-              <a
+              <Link
                 key={l.locale}
                 href={l.href}
                 className="underline decoration-dotted hover:opacity-80"
               >
                 {l.locale}
-              </a>
+              </Link>
             ),
           )}
         </div>
