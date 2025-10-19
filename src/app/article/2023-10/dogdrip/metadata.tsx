@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 import i1 from "./b.jpg";
 
 export const title = "<개드립 분석하는 만화>를 회고하며";
-export const url = "https://springfall.cc/article/2023-10/dogdrip";
+const slug = "article/2023-10/dogdrip";
 export const summary =
   "오로지 재미만을 위한 낭만의 프로젝트. 그때의 기분과 에너지를 다시금 되새겨보는 시간을 가져봅니다.";
 export const createdAt = dayjs("2023-10-07").toISOString();
@@ -20,7 +20,7 @@ export const item: ArticleItem = {
   imageAlt,
   summary,
   title,
-  url,
+  slug,
   category,
   tags: [],
 };

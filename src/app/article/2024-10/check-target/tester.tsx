@@ -11,7 +11,7 @@ import {
   TableColumn,
   TableHeader,
   TableRow,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { Trash2 } from "lucide-react";
 import { useState } from "react";
 import { twMerge } from "tailwind-merge";
@@ -42,9 +42,7 @@ const AgeOperatorSelect: React.FC<{
       aria-label="나이 연산자"
     >
       {ageList.map((item) => (
-        <SelectItem key={item.value} value={item.value}>
-          {item.label}
-        </SelectItem>
+        <SelectItem key={item.value}>{item.label}</SelectItem>
       ))}
     </Select>
   );
@@ -62,15 +60,9 @@ const GenderSelect: React.FC<{
       selectedKeys={[value]}
       aria-label="성별"
     >
-      <SelectItem key="" value="">
-        선택
-      </SelectItem>
-      <SelectItem key="male" value="male">
-        남성
-      </SelectItem>
-      <SelectItem key="female" value="female">
-        여성
-      </SelectItem>
+      <SelectItem key="">선택</SelectItem>
+      <SelectItem key="male">남성</SelectItem>
+      <SelectItem key="female">여성</SelectItem>
     </Select>
   );
 };
@@ -127,7 +119,7 @@ export const Tester: React.FC = () => {
               <div className="flex gap-2">
                 <Button
                   variant="bordered"
-                  onClick={() => {
+                  onPress={() => {
                     const newTargets = [...targets];
                     newTargets.push({ type: "age", operator: ">=", value: 20 });
                     setTargets(newTargets);
@@ -138,7 +130,7 @@ export const Tester: React.FC = () => {
 
                 <Button
                   variant="bordered"
-                  onClick={() => {
+                  onPress={() => {
                     const newTargets = [...targets];
                     newTargets.push({ type: "gender", value: "female" });
                     setTargets(newTargets);
@@ -212,7 +204,7 @@ export const Tester: React.FC = () => {
                 </TableCell>
                 <TableCell>
                   <Button
-                    onClick={() => {
+                    onPress={() => {
                       const newTargets = [...targets];
                       newTargets.splice(index, 1);
                       setTargets(newTargets);

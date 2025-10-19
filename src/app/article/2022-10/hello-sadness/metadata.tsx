@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 import i1 from "./i1.jpeg";
 
 export const title = "[리뷰] 슬픔이여 안녕";
-export const url = "https://springfall.cc/article/2022-10/hello-sadness";
+const slug = "article/2022-10/hello-sadness";
 export const summary =
   "세상엔 다양한 세계가 있고, 화해할 수도 있지만 양립하지 못할 수도 있다. 그런 사실에 직면하는 것이 슬픔인 것 같다.";
 export const createdAt = dayjs("2022-10-02").toISOString();
@@ -20,7 +20,7 @@ export const item: ArticleItem = {
   imageAlt,
   summary,
   title,
-  url,
+  slug,
   category,
   tags: [],
 };

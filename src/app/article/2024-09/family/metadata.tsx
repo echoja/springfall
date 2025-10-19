@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 import i1 from "./ii.jpg";
 
 export const title = "나와 가족";
-export const url = "https://springfall.cc/article/2024-09/family";
+const slug = "article/2024-09/family";
 export const summary = "가족이라는 렌즈로 나를 들여다보기";
 export const createdAt = dayjs("2024-09-17").toISOString();
 export const updatedAt = dayjs("2024-09-17").toISOString();
@@ -18,7 +18,7 @@ export const item: ArticleItem = {
   imageAlt,
   summary,
   title,
-  url,
+  slug,
   // category,
   tags: [],
 };

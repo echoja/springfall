@@ -1,4 +1,6 @@
+/* eslint-disable @next/next/next-script-for-ga */
 import "@common/globals.css";
+import "../../public/pretendard-variable-gov/pretendardvariable-gov-dynamic-subset.css";
 import ColorModeClassNameInjector from "@modules/color-mode/ColorModeClassNameInjector";
 import Footer from "@modules/layout/Footer";
 import { metadataBase } from "@modules/metadata/constants";
@@ -32,8 +34,27 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ko">
+    <html lang="ko" suppressHydrationWarning>
       <head>
+        {/* Prevent theme flash: set class before hydration */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+;(() => {
+  try {
+    const key = 'colorMode';
+    const stored = localStorage.getItem(key);
+    const sysDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const mode = stored === 'light' || stored === 'dark' || stored === 'system' ? stored : 'system';
+    const resolved = mode === 'system' ? (sysDark ? 'dark' : 'light') : mode;
+    const root = document.documentElement;
+    if (resolved === 'dark') { root.classList.add('dark'); root.classList.remove('light'); }
+    else { root.classList.add('light'); root.classList.remove('dark'); }
+  } catch {}
+})();
+`,
+          }}
+        />
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -46,6 +67,18 @@ window.CodenButter("boot", { siteId: "otoyyikrrj", auto: true });
 `,
           }}
         ></script>
+        {/* GTM */}
+        {process.env.NEXT_PUBLIC_GTM_ID ? (
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','${process.env.NEXT_PUBLIC_GTM_ID}');`,
+            }}
+          ></script>
+        ) : null}
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -60,10 +93,25 @@ window.CodenButter("boot", { siteId: "otoyyikrrj", auto: true });
         ></script>
       </head>
       <body>
-        <Providers className="flex flex-col items-center justify-center">
+        {process.env.NEXT_PUBLIC_GTM_ID ? (
+          <noscript>
+            <iframe
+              src={`https://www.googletagmanager.com/ns.html?id=${process.env.NEXT_PUBLIC_GTM_ID}`}
+              height="0"
+              width="0"
+              style={{ display: "none", visibility: "hidden" }}
+            ></iframe>
+          </noscript>
+        ) : null}
+
+        <Providers>
           <ColorModeClassNameInjector />
-          {children}
-          <Footer className="max-w-screen-md px-4 pb-4 mx-auto sm:pb-6 md:pb-8 sm:px-6 md:px-8" />
+          <div className="max-w-(--breakpoint-md) mx-auto">
+            <div className="p-4 md:p-8 sm:p-6">
+              {children}
+              <Footer />
+            </div>
+          </div>
         </Providers>
       </body>
     </html>

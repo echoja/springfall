@@ -140,7 +140,7 @@ const gitHubDark = {
     "diffEditor.insertedTextBackground": "#2386364d",
     "diffEditor.removedLineBackground": "#da363333",
     "diffEditor.removedTextBackground": "#da36334d",
-    "scrollbar.shadow": "#484f5833",
+    "scrollbar.shadow-sm": "#484f5833",
     "scrollbarSlider.background": "#6e768133",
     "scrollbarSlider.hoverBackground": "#6e768145",
     "scrollbarSlider.activeBackground": "#6e768187",

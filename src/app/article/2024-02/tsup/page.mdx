@@ -53,8 +53,6 @@ tsup 어떻게 읽어야 하죠? 티썹? 하여튼 이걸 처음 알게 된 계�
 
 아래는 Examples 에서 쓰인 tsup의 설정 파일입니다.
 
-
-
 ```ts tsup.config.ts
 import { defineConfig, type Options } from "tsup";
 
@@ -66,11 +64,7 @@ export default defineConfig((options: Options) => ({
 }));
 ```
 
-
-
 그리고 아래는 실제로 쓰인 tsup 설정 파일입니다.
-
-
 
 ```ts tsup.config.ts
 import { defineConfig } from "tsup";
@@ -83,23 +77,15 @@ export default defineConfig({
 });
 ```
 
-
-
 아주아주 간단해요. 너무 좋아요. 소스맵을 생성하는 것도 `sourcemap: true` 한 줄만 넣어주면 됩니다. `dev` 혹은 `start` 에서 `node` 명령어 실행할 때 중간에 `--enable-source-maps` 넣어주면 소스맵까지 읽어서 에러 메시지가 아주 읽기 편하게 된답니다. `dev` 명령어는 아래와 같습니다.
 
-
-
-```
+```txt
 "dev": "tsup --config tsup.config.ts --watch --onSuccess \"node --enable-source-maps dist/app.js\"",
 ```
-
-
 
 ## prisma
 
 프리즈마 굉장히 유명하죠. 핫합니다. 저도 함 써봤습니다. prisma는 기본적으로 아래 스키마 파일을 기반으로 DB가 막 바뀝니다. 직접 DDL을 만질 필요가 없다는 것이... 큰 장점일지는 모르겠지만 생산성 측면에서는 큰 이점입니다. 스키마만 잘 작성한 다음 `npx prisma migrate dev`만 실행시켜 주면 되기 때문이죠.
-
-
 
 ```prisma schema.prisma
 
@@ -133,8 +119,6 @@ model Menu {
 /// 기타 등등... 이하 생략
 
 ```
-
-
 
 DB 엔드포인트만 잘 설정한 다음에 스키마 설정하고 명령어 하나만 치면 그냥 막 테이블이 자기 알아서 잘 만들어진다는 소식을 듣고, 같이 하던 책임급 동료는 요즘 시대가 좋아졌다며 조용히 감탄하셨습니다. 나름 뿌듯?
 

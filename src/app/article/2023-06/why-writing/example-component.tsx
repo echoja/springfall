@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 
 const ExampleComponent = () => (
   <div className="flex items-center justify-center py-20 bg-orange-200 rounded-lg shadow-lg">

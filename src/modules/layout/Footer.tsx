@@ -1,9 +1,9 @@
 "use client";
 
-import { Smile } from "lucide-react";
 import Link from "next/link";
 import { memo } from "react";
 import { twMerge } from "tailwind-merge";
+import ThemeToggle from "./ThemeToggle";
 
 const buttons: Array<{
   Icon: React.ReactNode;
@@ -78,18 +78,16 @@ const Footer = (props: React.ComponentProps<"footer">) => {
             href={link}
             target={newWindow ? "_blank" : "_self"}
             rel="noopener noreferrer"
-            className="p-2 transition -translate-y-1/2 border border-transparent rounded hover:shadow-sm top-1/2 hover:bg-gray-400/5 hover:opacity-90 "
+            className="p-2 transition border border-transparent rounded-sm hover:shadow-xs  hover:bg-gray-400/5 hover:opacity-90 "
           >
             {icon}
             {srOnly ? <span className="sr-only">{srOnly}</span> : null}
           </Link>
         ))}
       </div>
-      <p className="flex items-center justify-center gap-2 mb-4 text-sm leading-none">
-        <span>오늘도 행복한 하루 되세요.</span>
-        <Smile className="w-4 h-4" />
-        <span>{new Date().getFullYear()}</span>
-      </p>
+      <div>
+        <ThemeToggle />
+      </div>
     </footer>
   );
 };

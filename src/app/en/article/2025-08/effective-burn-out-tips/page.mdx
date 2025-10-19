@@ -1,0 +1,70 @@
+import ArticleHeader from "@modules/article/ArticleHeader";
+import ArticleImage from "@modules/article/ArticleImage";
+import getArticleHeaderProps from "@modules/metadata/getArticleHeaderProps";
+import getArticleJsonLdProps from "@modules/metadata/getArticleJsonLdProps";
+import getArticleMetadata from "@modules/metadata/getArticleMetadata";
+import { ArticleJsonLd } from "next-seo";
+import { item } from "./metadata";
+import i1 from "../../../../article/2025-08/effective-burn-out-tips/e.jpg";
+
+export const metadata = getArticleMetadata(item);
+
+<ArticleJsonLd {...getArticleJsonLdProps(item)} />
+
+<ArticleHeader {...getArticleHeaderProps(item)} />
+
+<ArticleImage img={i1} alt="" />
+
+## TL;DR
+
+Reads like a series of blog posts by a professor hiding behind “science”, with shallow insights.
+
+## Details
+
+By “shallow insights” I mean: statements anyone could write. I expected either a clear, reader-friendly explanation of the author’s own research, or sharp synthesis across existing studies. It was neither. Honestly, you could draft something similar with ChatGPT.
+
+The book leans on “science” without showing much of the work. It’s not really a science book anyway; it’s a list of tips. Short and easy to skim, yes, but it could’ve been shorter if the non-scientific and non-insightful parts were trimmed. You can skim and finish it in 1–2 hours.
+
+There are hardly any concrete cases. Authority comes mostly from the names of universities behind cited papers—which, personally, I don’t care about.
+
+Worth the money? (~15,000 KRW) Not really. My money… If there’s a similar book out there, I wouldn’t pick it up.
+
+## Quotes
+
+Some examples I didn’t resonate with (there are more):
+
+---
+
+> Keep your back straight at all times. People will see you differently, you’ll feel positive energy, and you’ll be less exposed to crimes while traveling abroad. `p.37`
+
+→ Ah, it even reduces crime abroad.
+
+---
+
+> When people know they can overcome obstacles toward a goal, they feel energized; when they know they can’t, they feel drained. `p.76`
+
+→ When people are hungry and eat food, they feel full!
+
+---
+
+> Everyone has a desire for recognition. Praise makes people grow. No one hates praise. `p.103`
+
+→ Everyone has a desire to survive. No one likes being hungry!
+
+---
+
+> (On soccer player Kazuyoshi Miura) His attitude surely energizes himself and people around him. `p.107`
+
+→ Sounds like the author is a big fan.
+
+---
+
+> Using the right brain leads to positive thinking and health benefits. `p.113`
+
+→ So left-handers are all positive and healthy?
+
+---
+
+> Women are known to secrete less serotonin than men. Perhaps that’s why they do more same-sex skinship; maybe they instinctively know they need more serotonin. `p.174`
+
+→ Something I’d expect to hear at a late-night drinking table.

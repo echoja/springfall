@@ -1,0 +1,498 @@
+import ArticleHeader from "@modules/article/ArticleHeader";
+import ArticleImage from "@modules/article/ArticleImage";
+import getArticleHeaderProps from "@modules/metadata/getArticleHeaderProps";
+import getArticleJsonLdProps from "@modules/metadata/getArticleJsonLdProps";
+import getArticleMetadata from "@modules/metadata/getArticleMetadata";
+import { ArticleJsonLd } from "next-seo";
+import { item } from "./metadata";
+import i1 from "./eslint.png";
+import ie from "./errors.png";
+import so from "./so.png";
+import so2 from "./so2.png";
+import fix1 from "./fix1.png";
+import fix2 from "./fix2.png";
+
+export const metadata = getArticleMetadata(item);
+
+<ArticleJsonLd {...getArticleJsonLdProps(item)} />
+
+<ArticleHeader {...getArticleHeaderProps(item)} />
+
+## 목차
+
+## 개요
+
+왜 className을 금지하는 [ESLint](https://eslint.org/) 규칙이 필요할까요? 이는 **AI 기반 코딩**과 상관이 있습니다.
+
+ChatGPT나 Google Gemini와 같은 LLM 동반자와 함께 코딩하는 시대가 열렸습니다. LLM을 잘 활용하려면 맥락을 잘 제공하고, 모델을 적절하게 쓰고 등등 여러가지가 필요하겠지만 그 중 **피드백**에 주목해봅시다. LLM이 원하는 방식으로 동작하도록 하려면, 우리가 그 결과물에 대해 명확하고 일관된 피드백을 제공해야 합니다.
+
+프로젝트에서 [TailwindCSS](https://tailwindcss.com/)와 같은 도구로 스타일링을 하고, 자체적인 디자인 시스템을 구축하여 기존과 완전히 다른 새로운 사이즈를 사용한다고 가정합시다. 예를 들어 `text-sm` 은 안쓰고 `text-button` 과 같이 다소 semantic 한 디자인 토큰을 사용하는 프로젝트인 것입니다. 그런데 LLM이 학습했던 거대한 자료는 이미 `text-sm`과 같은 아주 흔한 활용에 절여졌습니다. 그래서 `text-sm` 대신 `text-button`를 쓰라고 수차례 맥락을 주입해도 AI는 정신 못차리고 `text-sm`을 작성하는 불상사가 벌어집니다.
+
+이런 경우에는 **ESLint 에러**가 가장 직관적이고 효과적인 피드백 수단이 될 수 있습니다.
+
+본 글의 소스 코드는 https://github.com/echoja/forbid-classname 에서 확인하실 수 있습니다.
+
+## 개요 요약
+
+- AI 도구와 협업하는 시대에는 LLM이 코드 스타일을 정확히 따르도록 명확한 **피드백**이 필요합니다.
+- TailwindCSS 기반의 커스텀 디자인 시스템에서는 기존 class 대신 **새로운 토큰**을 강제해야 할 수 있습니다.
+- 이럴 때 **ESLint 규칙**을 통해 LLM에게 일관된 피드백을 줘봅시다.
+
+<ArticleImage img={i1} alt="ESLint" />
+
+## 요구 조건
+
+- **ESLint**: 많이들 쓰는 lint 도구입니다. [Biome](https://biomejs.dev/)과 같은 새로운 생태계는 아닙니다. 요즘 기준이므로 [Flat Config](https://eslint.org/docs/latest/use/configure/migration-guide)로 가겠습니다.
+- **Typescript**: `@typescript-eslint/utils` 에서 제공하는 `ESLintUtils` 를 사용할 예정입니다. Javascript 에서 사용하는 AST는 다를 수 있습니다.
+- **프로젝트 내에서만 활용**: 라이브러리화를 하거나 유연한 관리는 하지 않습니다. 개발자 입장에서 단순한 소스코드 수정을 통해 규칙을 관리합니다.
+- **에러 이유 명시**: LLM이 활용할 수 있어야 하므로 금지된 className마다 적절한 이유가 함께 제공되어야 합니다.
+- **Auto Fix**: 어떤 className에 대하여 대체할 className이 명확하다면 `eslint --fix` 로 자동 수정될 수 있도록 합니다. (대안이 없다면 계속 에러 상태로 남아있음)
+- **[React](https://react.dev/)**: 특별한 이유는 없고 React가 흔히 쓰이는 프론트엔드 프레임워크라서 React에서 잘 돌아가는 수준 정도로 잡았습니다.
+- **className 감지**: HTML과 React에서 className은 사실 문자열입니다. 그래서 lint 적용 대상을 지정하기 까다로울 수 있습니다. 본 글에서는 아래 세 가지 케이스에 대해 lint를 적용하겠습니다.
+  - JSX `className` 속성의 문자열
+  - `cn`, `twMerge` 등 인자로 className이 들어가는 함수 (단순 이름 기반 매칭)
+  - `/* className */`이 앞에 붙은 문자열 리터럴
+
+## 기타 사전 지식
+
+- **TailwindCSS**: TailwindCSS를 쓰는 프로젝트에서는 className으로 디자인하므로 어떤 className을 써야 하는지 항상 고민해야 합니다. [Bootstrap](https://getbootstrap.com/)이 아닌 이상 className을 심사숙고하게 잘 써야 하는 상황은 잘 없고, TailwindCSS를 사용하지 않는 프로젝트는 본 ESLint 규칙이 필요없을 거 같습니다.
+
+## Rule 이해
+
+사실 Rule을 직접 만들어본 적은 이전에 없고 ChatGPT의 도움을 받았습니다. 대략적으로 아래 흐름만 이해하면 될 것 같습니다.
+
+```ts
+createRule(...) ──▶ {
+  create(context): {
+    JSXAttribute(node)  ─┐
+    Literal(node)        ├─▶ context.report({ messageId, fix, ... })
+    CallExpression(node) ┘
+  }
+}
+```
+
+- `RuleCreator(...).createRule(...)`: ESLint 커스텀 룰을 타입 안전하게 생성하기 위한 함수.
+- `create(context)`: 검사할 AST 노드들을 정의하고, 검사 로직을 구현하는 메인 함수.
+- `context.report({...})`: 특정 노드에 문제가 있을 때 ESLint 오류를 발생시키는 함수.
+- `fixer.replaceText(...)`: `--fix` 옵션 시 코드의 특정 부분을 자동으로 수정하는 함수.
+
+ESLint는 입력을 **소스코드**로 받고 출력이 **에러+위치**인 단순한 프로그램입니다. 프로그램이란 누군가 실행해줘야 합니다. 어떤 파일에서 수정이 일어날 때마다 VSCode는 수시로 ESLint라는 프로그램을 실행시킵니다. 그러고는 그 결과로 만약 에러가 있다면 에러에 포함되어 있는 위치 정보를 이용하여 적절하게 에러를 표시하죠. 또한 이 에러는 Cline이나 Cursor 등의 AI 도구도 읽을 수 있습니다.
+
+ESLint `context`에는 프로그램이 실행될 때마다 정의되는 정보가 포함되어 있습니다. 그리고 우리가 에러를 판별한 후 `context`에게 그 결과를 전달해야 합니다. `context.sourceCode` 소스코드에 접근할 수 있으며, `create` 의 리턴 값으로 전달하는 함수로 AST의 각 노드를 손쉽게 방문할 수 있도록 합니다. 어떤 방식으로 노드를 순회하는지 등은 우리가 알 필요가 없습니다.
+
+## 만들어보기
+
+우선 필요한 패키지를 대충 받아봅시다. 필요에 따라 다른 eslint 관련 패키지가 다량 추가될 수 있습니다.
+
+```sh
+pnpm add -D @typescript-eslint/utils typescript typescript-eslint jiti eslint
+```
+
+[`jiti`](https://www.npmjs.com/package/jiti)는 저도 처음 봤는데요, `eslint.config.ts` 처럼 JavaScript로 되어 있지 않을 경우에 ESLint 에서 ts 파일을 바로 실행시킬 수 있는 도구처럼 보였습니다. (`jiti`를 설치하라는 에러가 떠서 설치함.)
+
+이제 아래처럼 rule 파일을 만들어줍니다.
+
+```ts eslint-rule-forbid-classname.ts
+import { TSESTree, ESLintUtils } from "@typescript-eslint/utils";
+
+type MessageIds = "forbiddenClass";
+
+const createRule = ESLintUtils.RuleCreator(
+  () => "https://example.com/forbid-classname",
+);
+
+/**
+ * 금지된 클래스 이름을 교체합니다.
+ * @param token - 클래스 이름 토큰
+ * @returns 교체된 클래스 이름 토큰
+ */
+function replaceForbiddenClassInToken(token: string): string {
+  const parts = token.split(":");
+  const base = parts[parts.length - 1];
+  const replacement = classNameReplacements.get(base);
+  if (!replacement) return token;
+
+  parts[parts.length - 1] = replacement;
+  return parts.join(":");
+}
+
+/**
+ * 주어진 클래스 이름에서 기본 클래스 이름을 추출합니다. (예: "sm:text-red-500" -> "text-red-500")
+ */
+function getBaseClassName(className: string): string {
+  const parts = className.split(":");
+  return parts[parts.length - 1];
+}
+
+/** 금지 클래스 목록 (fix 불가능 포함)  */
+const forbiddenClasses: { classNames: string[]; reason: string }[] = [
+  {
+    classNames: ["do-not-use-this", "legacy-ui", "forbidden-class"],
+    reason: "디자인 시스템 가이드 위반",
+  },
+  {
+    classNames: ["text-pink-600"],
+    reason: "직접 색상 사용 금지 – 테마 색상 사용 필요",
+  },
+];
+
+/** fix 가능한 클래스는 Map으로 관리  */
+const classNameReplacements = new Map<string, string>([
+  ["forbidden-class", "recommended-class"],
+  ["text-red-500", "text-error"],
+]);
+
+/**
+ * 주어진 클래스 이름에 대한 금지 정보와 교체 정보를 반환합니다.
+ * @param cls - 확인할 클래스 이름
+ * @returns 금지 이유와 교체 클래스 이름 (있는 경우)
+ */
+function getForbiddenClassInfo(cls: string): {
+  reason?: string;
+  replacement?: string;
+} {
+  let reason: string | undefined;
+  for (const group of forbiddenClasses) {
+    if (group.classNames.includes(cls)) {
+      reason = group.reason;
+      break;
+    }
+  }
+  const replacement = classNameReplacements.get(cls);
+  return { reason, replacement };
+}
+
+/**
+ * 리터럴 노드에서 클래스 이름을 추출합니다.
+ * @param node - 리터럴 AST 노드
+ * @returns 추출된 클래스 이름 목록
+ */
+function extractFromLiteral(node: TSESTree.Literal): string[] {
+  if (typeof node.value === "string") {
+    return node.value.split(/\s+/).filter(Boolean);
+  }
+  return [];
+}
+
+/**
+ * 배열 표현식 노드에서 클래스 이름을 추출합니다.
+ * @param node - 배열 표현식 AST 노드
+ * @returns 추출된 클래스 이름 목록
+ */
+function extractFromArrayExpression(node: TSESTree.ArrayExpression): string[] {
+  const names: string[] = [];
+  for (const elem of node.elements) {
+    if (elem && elem.type === "Literal" && typeof elem.value === "string") {
+      names.push(...elem.value.split(/\s+/).filter(Boolean));
+    }
+  }
+  return names;
+}
+
+/**
+ * 객체 표현식 노드에서 클래스 이름을 추출합니다.
+ * @param node - 객체 표현식 AST 노드
+ * @returns 추출된 클래스 이름 목록
+ */
+function extractFromObjectExpression(
+  node: TSESTree.ObjectExpression,
+): string[] {
+  const names: string[] = [];
+  for (const prop of node.properties) {
+    if (prop.type === "Property") {
+      if (
+        !prop.computed &&
+        prop.key.type === "Literal" &&
+        typeof prop.key.value === "string"
+      ) {
+        names.push(...prop.key.value.split(/\s+/).filter(Boolean));
+      } else if (prop.key.type === "Identifier") {
+        names.push(prop.key.name);
+      }
+    }
+  }
+  return names;
+}
+
+/**
+ * AST 노드에서 클래스 이름을 추출합니다.
+ * @param arg - 클래스 이름을 포함할 수 있는 AST 표현식 노드
+ * @returns 추출된 클래스 이름 목록
+ */
+function extractClassNamesFromArg(arg: TSESTree.Expression): string[] {
+  const classNames: string[] = [];
+
+  if (arg.type === "Literal") {
+    classNames.push(...extractFromLiteral(arg));
+  } else if (arg.type === "ArrayExpression") {
+    classNames.push(...extractFromArrayExpression(arg));
+  } else if (arg.type === "ObjectExpression") {
+    classNames.push(...extractFromObjectExpression(arg));
+  }
+
+  return classNames;
+}
+
+export default createRule<[], MessageIds>({
+  name: "forbid-classname",
+  meta: {
+    type: "problem",
+    docs: {
+      description: "Disallow and optionally fix forbidden class names",
+    },
+    schema: [],
+    fixable: "code",
+    messages: {
+      forbiddenClass: 'Class "{{className}}" is forbidden: {{reason}}',
+    },
+  },
+  defaultOptions: [],
+  create(context) {
+    const { sourceCode } = context;
+
+    /**
+     * 금지된 클래스에 대해 ESLint 보고서를 생성합니다.
+     * @param className - 금지된 클래스 이름
+     * @param node - 보고할 AST 노드
+     * @param fixerTarget - 자동 수정을 적용할 리터럴 노드 (선택 사항)
+     */
+    function report(
+      className: string,
+      node: TSESTree.Node,
+      fixerTarget: TSESTree.Literal | null,
+    ) {
+      const base = getBaseClassName(className);
+      const { reason, replacement } = getForbiddenClassInfo(base);
+
+      if (!reason) return;
+
+      context.report({
+        node,
+        messageId: "forbiddenClass",
+        data: { className, reason },
+        fix:
+          replacement && fixerTarget
+            ? (fixer) => {
+                const original = fixerTarget.value as string;
+                const fixed = original
+                  .split(/\s+/)
+                  .map((token) => {
+                    const tokenBase = getBaseClassName(token);
+                    return tokenBase === base
+                      ? replaceForbiddenClassInToken(token)
+                      : token;
+                  })
+                  .join(" ");
+                return fixer.replaceText(fixerTarget, `"${fixed}"`);
+              }
+            : undefined,
+      });
+    }
+
+    /**
+     * 주어진 클래스 목록을 순회하며 금지된 클래스를 보고합니다.
+     * @param classList - 검사할 클래스 이름 목록
+     * @param node - 보고할 AST 노드
+     * @param fixerTarget - 자동 수정을 적용할 리터럴 노드 (선택 사항)
+     */
+    function checkAndReportClassNames(
+      classList: string[],
+      node: TSESTree.Node,
+      fixerTarget: TSESTree.Literal | null,
+    ) {
+      for (const className of classList) {
+        const base = getBaseClassName(className);
+        const { reason, replacement } = getForbiddenClassInfo(base);
+        if (reason || replacement) {
+          report(className, node, fixerTarget);
+        }
+      }
+    }
+    return {
+      /**
+       * JSXAttribute 노드를 방문하여 className 속성을 검사합니다.
+       * @param node - JSXAttribute AST 노드
+       */
+      JSXAttribute(node) {
+        if (
+          node.name.name === "className" &&
+          node.value?.type === "Literal" &&
+          typeof node.value.value === "string"
+        ) {
+          const classList = node.value.value.split(/\s+/).filter(Boolean);
+          checkAndReportClassNames(classList, node, node.value);
+        }
+      },
+
+      /**
+       * 리터럴 노드를 방문하여 'className' 주석이 있는 문자열을 검사합니다.
+       * @param node - 리터럴 AST 노드
+       */
+      Literal(node: TSESTree.Literal) {
+        if (
+          typeof node.value === "string" &&
+          node.parent?.type !== "JSXAttribute" // JSXAttribute의 값은 이미 위에서 처리됨
+        ) {
+          const comments = sourceCode.getCommentsBefore(node);
+          const hasClassComment = comments.some(
+            (c) => c.value.trim() === "className",
+          );
+
+          if (hasClassComment) {
+            const classList = node.value.split(/\s+/).filter(Boolean);
+            checkAndReportClassNames(classList, node, node);
+          }
+        }
+      },
+
+      /**
+       * CallExpression 노드를 방문하여 특정 함수 호출의 인자를 검사합니다.
+       * @param node - CallExpression AST 노드
+       */
+      CallExpression(node) {
+        if (
+          node.callee.type === "Identifier" &&
+          ["cn", "twMerge"].includes(node.callee.name)
+        ) {
+          for (const arg of node.arguments) {
+            if (arg.type === "Literal" && typeof arg.value === "string") {
+              const classList = arg.value.split(/\s+/).filter(Boolean);
+              checkAndReportClassNames(classList, arg, arg);
+            } else {
+              // Literal이 아닌 다른 타입의 인자 (예: ArrayExpression, ObjectExpression)
+              const classList = extractClassNamesFromArg(
+                arg as TSESTree.Expression,
+              );
+              checkAndReportClassNames(classList, arg, null); // fix 불가
+            }
+          }
+        }
+      },
+    };
+  },
+});
+```
+
+특히 아래 부분은 프로젝트 특성에 따라 적절하게 변경하시면 됩니다.
+
+```ts
+/** 금지 클래스 목록 (fix 불가능 포함)  */
+const forbiddenClasses: { classNames: string[]; reason: string }[] = [
+  {
+    classNames: ["do-not-use-this", "legacy-ui", "forbidden-class"],
+    reason: "디자인 시스템 가이드 위반",
+  },
+  {
+    classNames: ["text-pink-600"],
+    reason: "직접 색상 사용 금지 – 테마 색상 사용 필요",
+  },
+];
+
+/** fix 가능한 클래스는 Map으로 관리  */
+const classNameReplacements = new Map<string, string>([
+  ["forbidden-class", "recommended-class"],
+  ["text-red-500", "text-error"],
+]);
+```
+
+이후 `eslint.config.ts` 파일에서 아래와 같이 설정해줍니다.
+
+```ts eslint.config.ts
+import forbidClassnameRule from "./eslint-rule-forbid-classname";
+
+export default tseslint.config([
+  // 기타 다른 설정들
+  {
+    files: ["**/*.{ts,tsx,js,jsx}"],
+    plugins: {
+      echoja: {
+        rules: {
+          "forbid-classname": forbidClassnameRule,
+        },
+      },
+    },
+    rules: {
+      "echoja/forbid-classname": "error",
+    },
+  },
+]);
+```
+
+## 결과 확인
+
+자 이제 실제 파일을 만들어서 에러가 잘 뜨는지 확인해보자구요.
+
+<ArticleImage
+  img={ie}
+  alt="금지된 className을 써서 에러가 나는 상황"
+  caption="금지된 className을 써서 에러가 나는 상황"
+  border
+/>
+
+이미 에러가 왕창 나고 있는 걸 확인할 수 있죠. ESLint 명령을 직접 실행시켜서도 확인해봅시다.
+
+```sh
+pnpm lint
+```
+
+```txt result
+> forbid-classname@0.0.0 lint /Users/th.kim/Desktop/forbid-classname
+> eslint .
+
+
+/Users/th.kim/Desktop/forbid-classname/src/App.tsx
+   8:31  error  Class "do-not-use-this" is forbidden: 디자인 시스템 가이드 위반     echoja/forbid-classname
+   8:31  error  Class "forbidden-class" is forbidden: 디자인 시스템 가이드 위반     echoja/forbid-classname
+  11:5   error  Class "do-not-use-this" is forbidden: 디자인 시스템 가이드 위반     echoja/forbid-classname
+  15:5   error  Class "forbidden-class" is forbidden: 디자인 시스템 가이드 위반     echoja/forbid-classname
+  20:12  error  Class "do-not-use-this" is forbidden: 디자인 시스템 가이드 위반     echoja/forbid-classname
+  21:12  error  Class "forbidden-class" is forbidden: 디자인 시스템 가이드 위반     echoja/forbid-classname
+  22:26  error  Class "sm:forbidden-class" is forbidden: 디자인 시스템 가이드 위반  echoja/forbid-classname
+
+✖ 7 problems (7 errors, 0 warnings)
+  4 errors and 0 warnings potentially fixable with the `--fix` option.
+
+ ELIFECYCLE  Command failed with exit code 1.
+```
+
+이제 Auto Fix가 잘 동작하는지 확인해봅시다.
+
+<ArticleImage
+  img={fix1}
+  alt="Auto Fix 실행하기 전"
+  caption="Auto Fix 실행하기 전"
+/>
+
+<ArticleImage
+  img={fix2}
+  alt="Auto Fix 실행한 후"
+  caption="Auto Fix 실행한 후"
+/>
+
+굿이네요!!!
+
+## Trouble Shooting
+
+만약 VSCode 에서 잘 동작하지 않는다면 `ESLint: Show Output Channel`로 결과를 계속 확인해봅시다. `eslint.config.ts` 파일을 새로 설정하거나 패키지를 새로 설치했다면 `Developer: Reload Window` 명령을 실행시켜 재시작하면서 다시 에러가 발생하지 않는지 확인합니다.
+
+<ArticleImage
+  img={so}
+  alt="VSCode에서 ESLint: Show Output Channel 명령 실행하기"
+  caption="VSCode에서 ESLint: Show Output Channel 명령 실행하기"
+/>
+
+<ArticleImage
+  img={so2}
+  alt="ESLint: Show Output Channel 확인"
+  caption="rule에서 `console.log`를 찍어 디버깅할 수도 있습니다."
+/>
+
+## 마치며
+
+이번에 만든 `forbid-classname` 룰은 특정 className을 금지하고, 대체 가능한 경우 자동으로 수정되도록 합니다. 사람의 관습적 코딩 컨벤션을 넘어서서 명시적인 규칙이 되었습니다. 이는 AI가 이 규칙을 직접적으로 맞닥뜨리며 적절한 피드백을 받을 수 있게 되었음을 의미합니다. 특히 **에러 메시지에 사전에 정의된 규칙 이름을 명시**함으로써, 나중에 AI가 해당 메시지를 기반으로 내부 문서나 규칙을 레퍼런싱하게 만들 수도 있습니다.
+
+ESLint는 더 이상 사람만을 위한 도구가 아닙니다. AI와 협업하는 환경에서, LLM이 이해할 수 있는 언어로 피드백을 제공하는 역할을 하게 됩니다. 이 룰이 그 출발점이 되기를 바랍니다!
+
+## 레퍼런스
+
+- 소스코드: https://github.com/echoja/forbid-classname

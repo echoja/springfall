@@ -4,8 +4,8 @@ import dayjs from "dayjs";
 import i1 from "./i1.jpg";
 
 export const title = "프론트 개발자의 Flutter 적응기 1화";
-export const url =
-  "https://springfall.cc/article/2023-08/adopting-flutter-as-a-front-end-developer-1";
+export const slug =
+  "article/2023-08/adopting-flutter-as-a-front-end-developer-1";
 export const summary = "";
 export const createdAt = dayjs("2023-08-20").toISOString();
 export const updatedAt = dayjs("2023-08-20").toISOString();
@@ -20,7 +20,7 @@ export const item: ArticleItem = {
   imageAlt,
   summary,
   title,
-  url,
+  slug,
   category,
   tags: [],
 };

@@ -1,0 +1,94 @@
+import ArticleHeader from "@modules/article/ArticleHeader";
+import ArticleImage from "@modules/article/ArticleImage";
+import getArticleHeaderProps from "@modules/metadata/getArticleHeaderProps";
+import getArticleJsonLdProps from "@modules/metadata/getArticleJsonLdProps";
+import getArticleMetadata from "@modules/metadata/getArticleMetadata";
+import { ArticleJsonLd } from "next-seo";
+import { item } from "./metadata";
+import i1 from "./inject.png";
+
+export const metadata = getArticleMetadata(item);
+
+<ArticleJsonLd {...getArticleJsonLdProps(item)} />
+
+<ArticleHeader {...getArticleHeaderProps(item)} />
+
+<ArticleImage
+  img={i1}
+  border
+  alt=""
+  caption={<>일러스트 by ChatGPT TODO: 이미지 수정</>}
+/>
+
+## 목차
+
+## 요약
+
+TailwindCSS에서 sm:hidden 클래스를 사용할 때
+
+```tsx
+function TooltipContent({
+  className,
+  sideOffset = 0,
+  children,
+  arrowClassName,
+  ...props
+}: React.ComponentProps<typeof TooltipPrimitive.Content> & {
+  arrowClassName?: string;
+}) {
+  // !mark(1:2)
+  const anchorId = React.useId();
+  const contentId = React.useId();
+
+  return (
+    // !mark(1)
+    <>
+      <TooltipPrimitive.Portal>
+        <TooltipPrimitive.Content
+          data-slot="tooltip-content"
+          sideOffset={sideOffset}
+          className={cn(
+            "bg-brand-primary-700 animate-in fade-in-0 zoom-in-95 text-text-1 text-white",
+            "data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95",
+            "data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2",
+            "data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+            "z-50 w-fit origin-(--radix-tooltip-content-transform-origin) px-3 py-1.5",
+            "text-balance",
+            className,
+          )}
+          {...props}
+          id={contentId}
+        >
+          {children}
+          <TooltipPrimitive.Arrow
+            className={cn(
+              "border-r-brand-primary-700 z-50 size-0 translate-y-[calc(-50%)] rotate-45 border-r-[10px] border-b-[10px] border-b-transparent",
+              arrowClassName,
+            )}
+          />
+          {/* !mark(1:17) */}
+          <style>
+            {`
+            body:has([data-show-desktop] #${anchorId}) #${contentId} {
+              display: none;
+            }
+
+            @media (min-width: 640px) {
+              body:has([data-show-mobile] #${anchorId}) #${contentId} {
+                display: none;
+              }
+              
+              body:has([data-show-desktop] #${anchorId}) #${contentId} {
+                display: block;
+              }
+            }
+          `}
+          </style>
+        </TooltipPrimitive.Content>
+      </TooltipPrimitive.Portal>
+      {/* !mark(1:2) */}
+      <div id={anchorId} className="hidden"></div>
+    </>
+  );
+}
+```

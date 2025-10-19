@@ -35,7 +35,6 @@ import {
 // other libraries.
 
 // This file is required to use MDX in `app` directory.
-// eslint-disable-next-line import/prefer-default-export
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     // Allows customizing built-in components, e.g. to add styling.

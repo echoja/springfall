@@ -8,7 +8,7 @@ export function CodeCopyButton({ text }: { text: string }) {
 
   return (
     <button
-      className="absolute block p-1 rounded hover:bg-gray-400/20 top-1 right-1 text-zinc-200 bg-[rgba(46,52,64,0.5)]"
+      className="absolute block p-1 rounded-sm hover:bg-gray-400/20 top-1 right-1 text-zinc-200 bg-[rgba(46,52,64,0.5)] cursor-pointer"
       aria-label="Copy to clipboard"
       onClick={() => {
         navigator.clipboard.writeText(text);

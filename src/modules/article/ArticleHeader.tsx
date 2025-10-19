@@ -1,13 +1,15 @@
 import type { Category } from "@modules/category";
+import { getCategoryLabel } from "@modules/category";
 import dayjs from "dayjs";
 import { twMerge } from "tailwind-merge";
-import { gray } from "tailwindcss/colors";
-import ArticleCounter from "./ArticleCounter";
 import style from "./ArticleHeader.module.css";
+import { i18n, type Locale } from "@common/config";
+import { getLocalesForSlug } from "@modules/i18n/available";
+import { isLocale } from "@modules/i18n/util";
 
 const customColor = {
-  "--bgColor": `${gray[300]} 83.3333%`,
-  "--darkBgColor": `${gray[700]} 83.3333%`,
+  "--bgColor": `--color-gray-300 83.3333%`,
+  "--darkBgColor": `--color-gray-700 83.3333%`,
 };
 
 export const HeaderSeparator: React.FC<React.ComponentProps<"div">> = (
@@ -33,6 +35,7 @@ export const HeaderSeparator: React.FC<React.ComponentProps<"div">> = (
 export interface IArticleHeaderProps {
   title: string;
   updatedAt: string;
+  createdAt: string;
   summary?: string;
   category?: Category;
   url: string;
@@ -40,32 +43,48 @@ export interface IArticleHeaderProps {
 
 export default function ArticleHeader({
   title,
-  updatedAt,
+  createdAt,
   summary,
   category,
   url,
 }: IArticleHeaderProps) {
+  // Build language switch candidates from explicit manifest
+  // Only show when at least two locales exist for this slug.
+  let languageLinks: Array<{ locale: string; href: string }> = [];
+  let currentLocale: Locale = i18n.defaultLocale;
+  try {
+    const u = new URL(url, "http://x");
+    // pathname may be "/article/..." or "/<locale>/article/..."
+    const parts = u.pathname.split("/").filter(Boolean);
+    const first = parts[0];
+    const isPrefixed = isLocale(first ?? "");
+    const slugParts = isPrefixed ? parts.slice(1) : parts;
+    const slug = slugParts.join("/"); // e.g., "article/2025-08/effective-burn-out-tips"
+    currentLocale = isPrefixed ? (first as Locale) : i18n.defaultLocale;
+
+    const available = getLocalesForSlug(slug);
+    if (available.length >= 2) {
+      languageLinks = available.map((l) => ({
+        locale: l,
+        href: `/set-locale?locale=${l}&to=/${l}/${slug}`,
+      }));
+    }
+  } catch {
+    // ignore URL parse errors
+  }
+
   return (
     <header className="mb-24">
-      <div className="flex items-center gap-2 mb-3 text-xs font-medium text-gray-500 dark:text-gray-400">
+      <div className="mb-3 text-xs font-medium text-gray-500 dark:text-gray-400">
+        <time dateTime={createdAt}>{dayjs(createdAt).format("YYYY.MM")}</time>
         {category && (
           <>
-            <span className="">{category}</span>
-            <span className="block w-px h-2 bg-gray-300 rounded-full dark:bg-gray-700" />
+            <span className="opacity-50"> | </span>
+            <span>{getCategoryLabel(category, currentLocale)}</span>
           </>
         )}
-
-        <span className="">{dayjs(updatedAt).format("YYYY년 MM월 DD일")}</span>
-        <span className="block w-px h-2 bg-gray-300 rounded-full dark:bg-gray-700" />
-
-        <ArticleCounter url={url} />
       </div>
-      <h1
-        className="mb-2 text-4xl font-extrabold break-keep dark:text-gray-100"
-        style={{
-          textShadow: `0 0.125rem 0.375rem rgb(0 0 0 / 0.05)`,
-        }}
-      >
+      <h1 className="mb-2 text-4xl font-extrabold break-keep dark:text-gray-100">
         {/* <Balancer>{title}</Balancer> */}
         {title}
       </h1>
@@ -73,6 +92,30 @@ export default function ArticleHeader({
         {/* <Balancer>{summary}</Balancer> */}
         {summary}
       </p>
+      {languageLinks.length >= 2 ? (
+        <div className="mt-3 text-xs text-gray-600 dark:text-gray-400 flex gap-2 flex-wrap items-center">
+          <span className="opacity-70">Available:</span>
+          {languageLinks.map((l) =>
+            l.locale === currentLocale ? (
+              <span
+                key={l.locale}
+                aria-current="true"
+                className="font-semibold text-gray-900 dark:text-gray-100"
+              >
+                {l.locale}
+              </span>
+            ) : (
+              <a
+                key={l.locale}
+                href={l.href}
+                className="underline decoration-dotted hover:opacity-80"
+              >
+                {l.locale}
+              </a>
+            ),
+          )}
+        </div>
+      ) : null}
     </header>
   );
 }

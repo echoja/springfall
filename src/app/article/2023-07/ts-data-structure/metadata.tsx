@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 import i1 from "./i1.jpg";
 
 export const title = "타입스트립트 데이터 핸들링 마스터하기 (작성중)";
-export const url = "https://springfall.cc/article/2023-07/ts-data-structure";
+const slug = "article/2023-07/ts-data-structure";
 export const summary = "";
 export const createdAt = dayjs("2023-07-16").toISOString();
 export const updatedAt = dayjs("2023-07-23").toISOString();
@@ -19,7 +19,7 @@ export const item: ArticleItem = {
   imageAlt,
   summary,
   title,
-  url,
+  slug,
   category,
   tags: [],
 };

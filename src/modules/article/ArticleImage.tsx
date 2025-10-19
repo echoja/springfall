@@ -1,6 +1,6 @@
 import type { StaticImageData } from "next/image";
 import Image from "next/image";
-import type { ReactElement } from "react";
+import type { JSX } from "react";
 import { twMerge } from "tailwind-merge";
 import style from "./style.module.css";
 
@@ -18,8 +18,7 @@ export default function ArticleImage({
   alt: string;
   noShadow?: boolean;
   border?: boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-}): ReactElement<any> {
+}): JSX.Element {
   return (
     <figure className={style["image-figure"]}>
       <Image

@@ -1,0 +1,228 @@
+import ArticleHeader from "@modules/article/ArticleHeader";
+import ArticleImage from "@modules/article/ArticleImage";
+import getArticleHeaderProps from "@modules/metadata/getArticleHeaderProps";
+import getArticleJsonLdProps from "@modules/metadata/getArticleJsonLdProps";
+import getArticleMetadata from "@modules/metadata/getArticleMetadata";
+import { ArticleJsonLd } from "next-seo";
+import { item } from "./metadata";
+import i1 from "./i1.png";
+import ri from "./ri.png";
+import i2 from "./i2.png";
+import i3 from "./i3.png";
+import i4 from "./i4.png";
+import i5 from "./i5.png";
+import i6 from "./i6.png";
+import redash from "./redash.png";
+
+export const metadata = getArticleMetadata(item);
+
+<ArticleJsonLd {...getArticleJsonLdProps(item)} />
+
+<ArticleHeader {...getArticleHeaderProps(item)} />
+
+<ArticleImage img={redash} alt="Redash" noShadow />
+
+## 목차
+
+## 개요
+
+자자, 시간이 없습니다. 조금만 있으면 글또(TODO: 후기 추가 예정) 글 마감 시간이라 빨리빨리 글을 써야 합니다. 그래서 이 글의 주제이기도 한 Redash 세팅 일을 오늘 빨리빨리 진행했습니다. [렛츠커리어](https://www.letscareer.co.kr/) 운영 팀에서 가장 필요로 했던 도구였죠. 데이터 분석까지도 바라지도 않고, 기초적인 수준에서 데이터를 보는 도구가 필요했습니다. 그냥 DB 쿼리 치면 되지 않으냐? 그런데 말입니다, 보안 조치를 좀 했어서, 쉽사리 운영 DB를 직접 접근하지 못했습니다. 도와줄 수 있는 개발자들의 시간도 별로 없었고요. 미루고 미루다가 오늘에서야 드디어 Redash를 안정적으로 도입했습니다. 안정적이라는 말은 돈을 썼다는 이야기이기도 하겠습니다.
+
+## Redash란?
+
+[**Redash**](https://redash.io/)는 간단한 오픈소스 데이터 분석 도구입니다. 대체제로는 [Tableau](https://www.tableau.com/), [Metabase](https://www.metabase.com/), [Apache Superset](https://superset.apache.org/) 등이 있습니다. Tableau나 Metabase는 확실히 돈을 버는 회사와 붙어 있어서 좀 정갈한 느낌이고, Superset은 약간 개발자스럽게 디테일한 제품입니다. Redash는 다른 도구들에 비해 투박해 보이지만 적당히 쉽게 추상화되어 있습니다. 도입하는 것, 사용하는 것 모두 가장 쉽다는 생각이 들었습니다. 실제로 제가 써본 경험도 있구요. 쉬운 도구를 빠르게 도입하는 게 목표였기 때문에 Redash로 진행했습니다.
+
+## 간단하게 짚고 넘어가는 AWS 사전 지식
+
+AWS는 아마존에서 만든 웹 관련 리소스의 총 집합입니다. Microsoft의 Azure, 구글의 Google Cloud와 같은 역할입니다. AWS 내에는 제품의 종류가 아주 다양하며, 생소한 개념도 많습니다. 중간중간 필요한 용어 정리를 하면서 진행하겠습니다. 정확하지는 않지만 최대한 그림이 그려지도록 하고 싶네요.
+
+- **EC2**: 컴퓨터입니다. 컴퓨터에는 뭐가 있죠? CPU와 메모리가 있습니다. 기본 운영체제도 설정할 수 있습니다. 이번 글에서는 Ubuntu를 사용할 겁니다. 그리고 여기에 Redash를 설치하여 사용할 것입니다.
+- **VPC**: 대륙입니다. 컴퓨터는 공중에 붕붕 뜬 채로 누구도 접근 불가능한 상태에 있으면 아무런 쓸모가 없습니다. EC2도 마찬가지로 사람이 됐든 웹 요청이 됐든 뭔가와 상호작용할 수 있는 공간이 필요합니다. 그게 VPC입니다.
+- **서브넷**: VPC 안에 있는 영역입니다. 사실 EC2는 직접적으로 VPC 안에 있는게 아니라 이 서브넷 안에 있습니다. 서브넷 안에 없는 EC2는 없습니다. 어느 주소가 어디로 향할지가 적혀있는 라우트 테이블 등을 구성요소로 가지고 있습니다.
+- **Internet Gateway**: 외부 인터넷 세계와의 통로입니다. 서브넷의 라우트 테이블에서 붙였다 뗐다 할 수 있습니다. 즉 EC2와 외부와 소통하려면 Internet Gateway 와 연결되어 있는 서브넷에 이 EC2가 속해있어야 한다는 뜻입니다.
+- **RDS**: 데이터베이스입니다. EC2와 비슷하게 VPC에 속해있어야 합니다. 단 이 녀석은 여러 서브넷에 걸쳐 있을 수 있습니다.
+
+"VPC 여러 개 만들어서 EC2 하나는 A VPC, RDS는 B VPC에 놓고, 서로 통신하게 만들 수 있어요?" → 기본적으로는 안된답니다. VPC Peering, Transit Gateway, PrivateLink 와 같은 기술로 어떻게든 가능하게끔 할 수는 있다는데, ... 패스하겠습니다.
+
+---
+
+우리의 현재 상태를 간단히 짚고 넘어갑시다. 우리는 **이미 DB가 만들어져 있는 상태**에서 Redash를 도입하는 겁니다. 앞서 얘기한 것처럼 DB는 어떤 VPC에 이미 속해있을 겁니다. 그러니 우리가 만들 EC2도 같은 VPC에 만들어야 합니다. 앗, 그런데 VPC를 잘못 지정해서 EC2를 만들었네요. VPC와 서브넷을 수정해줘야겠습니다. 으앗? 놀랍게도 EC2를 만들고 나서 이것들을 수정할 수는 없다고 합니다. 왜? 왠지 몰라서 ChatGPT에게도 물어봤지만 납득할 수 없는 대답이었네요.
+
+> EC2 인스턴스를 만들 때 VPC와 서브넷을 지정하면, 이후에 수정(변경)할 수 없는 이유는
+> AWS의 네트워크 구조 설계상 "네트워크는 태어날 때 결정되고, 중간에 바꿀 수 없도록" 되어 있기 때문이야.
+
+바꿀 수 없도록 설계되었으니 바꿀 수 없다! 라고 하니 만약 VPC와 서브넷을 잘못 지정해줬다면 EC2를 새로 만들어줍시다.
+
+---
+
+### 보안그룹
+
+우리의 RDS는 보안그룹으로 접근을 제어합니다. 보니 `rds-sg`라는 이름으로 있네요. 그런데 보안그룹은 또 무엇이냐? 누가 이 리소스로 접근할 수 있는지를 정의하는 방화벽이라고 합니다.
+
+그으러니까. 같은 VPC라고 해서 서로서로 가족마냥 바로바로 접근할 수 있는 게 아니고 **RDS의 보안그룹에서 EC2의 접근을 허용**해줘야 한다는 겁니다. OK.
+
+---
+
+### ENI
+
+아니잇! 중간중간에 자꾸 ENI라는 용어가 나와서 한번 정리하고 넘어갈게요...
+
+ENI는 네트워크 랜카드라고 보면 됩니다. ENI 하나당 고유한 MAC 주소가 있습니다. ENI는 물리적으로 EC2에 달라 붙어있다고 합니다. 그래서 예를 들어 장애를 대응할 때 - EC2 A가 고장 났는데 외부 시스템은 A의 Private IP나 MAC 주소로 연결하고 있음, 이때 ENI를 EC2 B에 붙이면 네트워크 정보가 그대로 유지되니까 무중단 전환이 가능하다고 합니다.
+
+ENI는 반드시 하나의 서브넷에 속해야 합니다. 즉 순서로 치면 다음과 같은 것이죠.
+
+```txt
+VPC
+ └── Subnet
+      └── ENI (eth0)
+            ├── Private IP, MAC 주소
+            ├── 붙은 보안 그룹 (여러 개 가능)
+            └── EC2 / Fargate / RDS 등에 연결됨
+```
+
+- EC2는 여러 ENI를 가질 수 있습니다. (Private IP가 여러 개 있을 수 있습니다)
+- 리소스에 보안 그룹 지정 = ENI에 지정
+- ENI 떼서 옮기면 보안 그룹도 같이 따라감
+- 정리된 한 문장: 보안 그룹은 ENI에 붙는 가상 방화벽이고, ENI는 EC2 등의 리소스가 네트워크(VPC/서브넷)에 연결되는 실질적인 접점이다.
+
+## Redash를 켜보기
+
+위 용어를 익혔다는 가정하에 실행으로 옮겨봅시다. 세팅은 [\_알파카 [AWS] EC2 인스턴스 위에 Redash 설치하기](https://yeonnys.tistory.com/entry/AWS-EC2-%EC%9D%B8%EC%8A%A4%ED%84%B4%EC%8A%A4-%EC%9C%84%EC%97%90-Redash-%EC%84%A4%EC%B9%98%ED%95%98%EA%B8%B0)를 많이 참조했습니다.
+
+EC2 생성 내용은 다음과 같습니다.
+
+- 사양: t3.medium (공식 문서에는 t2.small 도 잘된다고 쓰여있으나 메모리 부족으로 인해 계에속 응답 없음 ㅠㅠ)
+- VPC: RDS와 같은 VPC
+- 서브넷: Internet Gateway 와 붙어 있는 (Public) 서브넷
+- 보안그룹: 새로 만든다(`redash-sg`). 인바운드 규칙으로 다음 포트를 열어둔다: 3306, 80, 5000, 443, 22
+- OS: Ubuntu 최신 버전
+- EBS: 불안하니 좀 넉넉하게 20GB
+- Public IP: 일단 켜.
+
+> 공식 문서에는 AMI를 활용하라고 했으나 왠지 잘 안됐어서 패스하겠습니다.
+
+SSH 연결로 해당 EC2로 접속합니다. 사용자 이름은 `ubuntu` 입니다.
+
+```sh
+sudo apt update # 업뎃
+sudo apt install git # Git 설치
+git clone https://github.com/getredash/setup.git
+cd setup
+sudo chmod +x setup.sh # setup.sh 파일을 실행파일로 만들기
+sudo su # 관리자 권한으로 쉘 ㄱㄱ
+./setup.sh # 설치
+```
+
+setup.sh 를 설치하면 무슨 도커도 설치하고 이미지 땡겨오고 막 난리를 부립니다. 이 과정이 딱 끝나면 Redash 설치 완료 + 자동 실행 완료 + 재부팅될 시 자동 실행 세팅까지 됩니다. 만약 EC2 사양이 딸리면 여기서부터 쉘이 먹통이 되며 아무런 반응이 없어집니다ㅋㅋ
+
+`<퍼블릭IP>:5000`에 브라우저로 접속하여 아래 이미지처럼 초기 페이지가 잘 보이는지 체크합니다. 앞서 살펴본 것처럼 리소스에 붙어있는 보안그룹이 **방화벽** 역할을 하므로 공개 IP로 들어간다 하더라도 이 보안그룹의 벽을 뚫어야 접근할 수 있습니다. 보안그룹 인바운드 5000 포트가 열려있는지 확인해봅시다.
+
+<ArticleImage
+  img={ri}
+  alt="Redash Initial Setup 페이지"
+  caption="Redash Initial Setup 페이지"
+  border
+/>
+
+오오 접근이 됩니다.
+
+## https 적용하기
+
+비개발자도 쉽게 사용할 수 있도록 주소로 접근할 수 있는 방법을 마련함과 동시에 보안도 좀 신경쓰기 위해 커스텀도메인 + Let's Encrypt SSL 인증서로 https를 세팅해보도록 하겠습니다.
+
+일단 EIP를 만들어봅시다. 그런데 또 EIP는 무엇이더냐!!! 한줄 요약: Elastic IP(이하 EIP)는 고정 공인 IP이다. ENI에 붙는다. ENI는 EC2에 붙는다. 그래서 EIP는 간접적으로 EC2와 연결된다.
+
+```txt
+Elastic IP (고정 공인 IP)
+        │
+        ▼
+ENI (eth0, ...에 붙음 — 프라이빗 IP + 퍼블릭 IP 담당)
+        │
+        ▼
+EC2 / Fargate Task / 기타 네트워크 리소스
+```
+
+고정 공인 IP가 필요한 이유는 이 IP로 도메인 레코드 설정을 할 것이기 때문입니다. Route53은 AWS의 수많은 제품 중 하나로, DNS를 관리하는 서비스입니다.
+
+<ArticleImage
+  img={i2}
+  alt="Route 53에서 도메인 구매하기"
+  caption="Route 53에서 도메인 구매하기"
+  border
+/>
+
+1년에 15.4딸라면 보자... 1달에 1,800원 수준입니다. 메가커피 값도 안나오네요. 굿. 도메인을 사들고 허겁지겁 **호스팅 영역** 설정으로 가서 레코드를 생성합니다.
+
+<ArticleImage
+  img={i3}
+  alt="Route 53 - 호스팅 영역에서 도메인 레코드 추가하기"
+  caption="Route 53 - 호스팅 영역에서 도메인 레코드 추가하기"
+  border
+/>
+
+유형은 A 레코드이고, 적당한 하위도메인을 만들고, 값에다가 EIP 주소를 넣어주면 됩니다. (이미지 생략)
+
+자자, 이제 인증서를 만들고 Redash 웹서버(내부적으로는 nginx로 돌아갑니다)에 이 인증서를 붙여주면 입니다.
+
+[**Setting up HTTPS with LetsEncrypt for Redash Docker Deployment**](https://gist.github.com/arikfr/64c9ff8d2f2b703d4e44fe9e45a7730e)
+
+위 문서를 참조하면서 `example.redashapp.com`를 모조리 본인이 원하는 도메인 이름으로 수정하면 됩니다. 단, 옛날 docker라서 명령어가 사알짝 다릅니다.
+
+- `docker-compose` 명령어 대신 `docker compose` 실행
+- `docker-compose.yaml` 파일 수정 대신 `compose.yaml` 파일 수정 (이미 생성되어 있음)
+
+단계가 좀 길기 때문에 하나하나 복붙을 조심히 해가도록 합니다. 특히 `certbot`을 이용하여 새로운 Let's Encrypt 인증서를 만들 때에는 이메일 등의 정보를 입력하고 이것저것 물어오는 게 많은데, 당황하지 않고 차근차근 진행하도록 합니다. (Let's Encrypt로 인증서를 발급받는 방법은 자료가 많으니 찾아보셔도 좋을 것 같습니다) 모든 과정을 완료하면 자동 갱신 + EC2 재기동시 자동갱신 자동시작하는 것까지 다 자동 세팅됩니다. 해당 주소로 접근이 잘 되는지 확인해봅니다!
+
+## 세팅하지 않는 것
+
+이메일 관련 세팅은 하지 않습니다. "굳이" 입니다. 설정에서 사용자를 추가한 다음 초대 링크를 직접 DM으로 보내주면 됩니다.
+
+OAuth 관련된 세팅도 하지 않습니다. 분석 도구의 로그인/회원가입을 위해 들일 시간이 없단 말입니다!!
+
+## 사용해보기
+
+RDS를 Data Source로서 추가해봅시다.
+
+<ArticleImage
+  img={i4}
+  alt="Redash에서 데이터 소스 추가하기"
+  caption="Redash에서 데이터 소스 추가하기"
+  border
+/>
+
+앞서 이야기했듯 다음 조건이 선행되어야 합니다.
+
+- Redash가 돌아가는 EC2가 RDS와 같은 VPC에 속해있어야 한다.
+- RDS의 보안그룹에서 EC2로부터의 접근을 허용해야 한다.
+
+그 다음 Test Connection을 하게 되면 (기도를 하며) 잘 된다고 합시다.
+
+<ArticleImage
+  img={i5}
+  alt="Test Connection 하기"
+  caption="Test Connection 성공했을 때의 쾌감이란~"
+  border
+/>
+
+---
+
+이제 사용자를 추가합니다. 사용자 추가는 쉽습니다.
+
+<ArticleImage
+  img={i6}
+  alt="Settings - Users에서 사용자 추가하기"
+  caption="Settings - Users에서 사용자 추가하기"
+  border
+/>
+
+사용자는 `이름`과 `이메일`만으로 추가합니다. Redash에서 이메일 세팅을 안해놨기 때문에 그냥 화면에서 바로 **초대 링크**를 복사할 수 있게 됩니다. 이 링크를 해당 사람에게 전달하면 그 사람이 비밀번호를 초기화시키며 계정이 활성화됩니다.
+
+## 마치며
+
+처음에 EC2를 t2.micro, t2.small로 진행하면서 자꾸 터지길래 시간이 오래 걸렸습니다. 그리고 VPC나 서브넷 등등의 개념을 잘 모르니까 계속해서 헤맸습니다. 빠르게 학습하면서 빠르게 진행하여 나름 하루만에 잘 세팅한 것 같습니다. 앞으로 Business Intelligence를 극대화하여 더 효과적으로 임팩트를 내는 제품이 되면 좋을 거 같아요. 야호!
+
+## 레퍼런스
+
+- ChatGPT와의 수많은 대화...
+- [알파카 [AWS] EC2 인스턴스 위에 Redash 설치하기](https://yeonnys.tistory.com/entry/AWS-EC2-%EC%9D%B8%EC%8A%A4%ED%84%B4%EC%8A%A4-%EC%9C%84%EC%97%90-Redash-%EC%84%A4%EC%B9%98%ED%95%98%EA%B8%B0)
+- [Setting up HTTPS with LetsEncrypt for Redash Docker Deployment](https://gist.github.com/arikfr/64c9ff8d2f2b703d4e44fe9e45a7730e)

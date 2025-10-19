@@ -1,0 +1,46 @@
+import ArticleHeader from "@modules/article/ArticleHeader";
+import ArticleImage from "@modules/article/ArticleImage";
+import getArticleHeaderProps from "@modules/metadata/getArticleHeaderProps";
+import getArticleJsonLdProps from "@modules/metadata/getArticleJsonLdProps";
+import getArticleMetadata from "@modules/metadata/getArticleMetadata";
+import { ArticleJsonLd } from "next-seo";
+import { ShowAllCurrency } from "./ShowAllCurrency";
+import { item } from "./metadata";
+
+export const metadata = getArticleMetadata(item);
+
+<ArticleJsonLd {...getArticleJsonLdProps(item)} />
+
+<ArticleHeader {...getArticleHeaderProps(item)} />
+
+## 목차
+
+## 호우맨
+
+ㅁㄴㅇㄹ
+
+```ts
+import { formatKoreanCurrency } from "../../utils/number";
+
+describe("formatKoreanCurrency", () => {
+  test.each([
+    [999, "999"],
+    [5000, "5,000"],
+    [9999, "9,999"],
+    [10000, "1.0만"],
+    [76870448, "7687.0만"],
+    [100000000, "1.0억"],
+    [532000000, "5.3억"],
+    [10000000000, "100.0억"],
+    [12343232000, "123.4억"],
+    [1000000000000, "1.0조"],
+    [2500000000000, "2.5조"],
+  ])("formats %s to %s", (input, expected) => {
+    expect(formatKoreanCurrency(input)).toBe(expected);
+  });
+});
+```
+
+https://stackoverflow.com/a/79548458
+
+<ShowAllCurrency />

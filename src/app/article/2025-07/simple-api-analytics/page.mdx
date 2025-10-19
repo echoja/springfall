@@ -1,0 +1,77 @@
+import ArticleHeader from "@modules/article/ArticleHeader";
+import ArticleImage from "@modules/article/ArticleImage";
+import getArticleHeaderProps from "@modules/metadata/getArticleHeaderProps";
+import getArticleJsonLdProps from "@modules/metadata/getArticleJsonLdProps";
+import getArticleMetadata from "@modules/metadata/getArticleMetadata";
+import { ArticleJsonLd } from "next-seo";
+import { item } from "./metadata";
+import i1 from "./boxing.jpg";
+
+export const metadata = getArticleMetadata(item);
+
+<ArticleJsonLd {...getArticleJsonLdProps(item)} />
+
+<ArticleHeader {...getArticleHeaderProps(item)} />
+
+<ArticleImage
+  img={i1}
+  alt="금지된 className을 써서 에러가 나는 상황"
+  caption={
+    <>
+      사진:{" "}
+      <a href="https://unsplash.com/ko/%EC%82%AC%EC%A7%84/man-in-black-and-white-striped-long-sleeve-shirt-Clv9DfJLwac?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">
+        Unsplash
+      </a>
+      by{" "}
+      <a href="https://unsplash.com/ko/@1walter2?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">
+        Johann Walter Bantz
+      </a>
+    </>
+  }
+/>
+
+## 목차
+
+## 호우
+
+```sql
+
+SELECT name, default_version
+FROM pg_available_extensions
+WHERE name = 'timescaledb';
+
+CREATE EXTENSION IF NOT EXISTS timescaledb CASCADE;
+
+
+```
+
+```sql
+
+-- 1) 테이블 생성 (created_at, id 복합 PK)
+CREATE TABLE api_requests
+(
+    id               BIGSERIAL    NOT NULL,
+    app_env          TEXT         NOT NULL,
+    service          TEXT         NOT NULL,
+    status_code      TEXT         NOT NULL,
+    response_time_ms INT          NOT NULL,
+    request_payload  JSONB        NOT NULL,
+    created_at       TIMESTAMPTZ  NOT NULL,
+    PRIMARY KEY (created_at, id)
+);
+
+comment on table api_requests is 'API 요청 기록 테이블';
+
+comment on column api_requests.app_env is '애플리케이션 환경 (예: prd, beta, dev 등)';
+comment on column api_requests.service is '서비스 이름 (액션일 경우 함수명, API 요청일 경우 {method} {endpoint})';
+comment on column api_requests.status_code is '응답 상태 코드';
+comment on column api_requests.response_time_ms is '응답 시간 (밀리초 단위)';
+comment on column api_requests.request_payload is '요청 페이로드 (JSON 형식)';
+
+-- 2) 하이퍼테이블로 변환
+SELECT create_hypertable(
+  'api_requests',   -- 테이블 이름
+  'created_at'      -- 파티셔닝 기준 시간 컬럼
+);
+
+```

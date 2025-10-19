@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 import i1 from "./i1.jpg";
 
 export const title = "중요한 건 꺾였지만 그냥 하는 마음";
-export const url = "https://springfall.cc/article/2023-06/why-writing";
+const slug = "article/2023-06/why-writing";
 export const summary =
   "제가 블로그에 글을 쓰고자 하는 이유, 글을 쓸 때 어떻게 쓰는지에 대해 그냥 써봤습니다.";
 export const createdAt = dayjs("2023-06-17").toISOString();
@@ -18,7 +18,7 @@ export const item: ArticleItem = {
   imageAlt,
   summary,
   title,
-  url,
+  slug,
 
   tags: [],
 };

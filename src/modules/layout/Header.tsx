@@ -2,19 +2,16 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { ArrowLeft } from "lucide-react";
 
-import { twMerge } from "tailwind-merge";
-import ThemeToggle from "./ThemeToggle";
+const Header = () => {
+  const pathname = usePathname();
 
-const Header = (props: React.ComponentProps<"header">) => {
+  const isPortfolioPage = pathname === "/portfolio";
+
   return (
-    <header
-      {...props}
-      className={twMerge(
-        "relative flex items-center justify-center w-full",
-        props.className,
-      )}
-    >
+    <header className="relative flex items-center justify-center w-full mb-24">
       <div>
         <h1 className="font-semibold leading-none">
           <Link className="inline-flex items-center gap-1" href="/">
@@ -31,9 +28,23 @@ const Header = (props: React.ComponentProps<"header">) => {
         </h1>
       </div>
 
-      <div className="absolute right-0 -translate-y-1/2 top-1/2">
-        <ThemeToggle />
-      </div>
+      {isPortfolioPage ? (
+        <Link
+          href="/"
+          className="absolute left-0 p-2 transition -translate-y-1/2 rounded-sm top-1/2 hover:bg-gray-400/10 hover:opacity-90"
+          aria-label="글 목록으로 이동"
+        >
+          <ArrowLeft className="w-4 h-4" />
+        </Link>
+      ) : (
+        <></>
+        // <Link
+        //   href="/portfolio"
+        //   className="absolute right-0 hover:no-underline py-2 px-3 text-sm transition rounded-sm hover:bg-gray-400/10 hover:opacity-90"
+        // >
+        //   Portfolio
+        // </Link>
+      )}
     </header>
   );
 };

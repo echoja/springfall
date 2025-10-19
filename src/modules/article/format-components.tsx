@@ -9,7 +9,6 @@ import { InnerLine, Pre, highlight } from "codehike/code";
 import { ExternalLink } from "lucide-react";
 import Link from "next/link";
 import { twMerge } from "tailwind-merge";
-import gitHubDark from "./github-dark";
 import style from "./style.module.css";
 
 const callout: AnnotationHandler = {
@@ -31,7 +30,7 @@ const callout: AnnotationHandler = {
         {children}
         <div
           style={{ minWidth: `${column + 4}ch` }}
-          className="relative px-2 py-1 my-1 font-sans border rounded select-none w-fit bg-black/30 border-zinc-500 whitespace-break-spaces text-zinc-200"
+          className="relative px-2 py-1 my-1 font-sans border rounded-sm select-none w-fit bg-black/30 border-zinc-500 whitespace-break-spaces text-zinc-200"
         >
           <div
             style={{ left: `${column - 1}ch` }}
@@ -84,7 +83,7 @@ const mark: AnnotationHandler = {
         style={{
           borderLeft: "solid 2px transparent",
           borderLeftColor: annotation && color,
-          backgroundColor: annotation && `rgb(from ${color} r g b / 0.1)`,
+          backgroundColor: annotation && `rgb(from ${color} r g b / 0.25)`,
         }}
       >
         <InnerLine merge={props} className="flex-1 px-4" />
@@ -95,7 +94,7 @@ const mark: AnnotationHandler = {
     const color = annotation?.query || "rgb(14 165 233)";
     return (
       <span
-        className="rounded px-0.5 py-0 -mx-0.5"
+        className="rounded-sm px-0.5 py-0 -mx-0.5"
         style={{
           outline: `solid 1px rgb(from ${color} r g b / 0.5)`,
           background: `rgb(from ${color} r g b / 0.13)`,
@@ -108,14 +107,13 @@ const mark: AnnotationHandler = {
 };
 
 export async function Code({ codeblock }: { codeblock: RawCode }) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const highlighted = await highlight(codeblock, "github-dark");
 
   return (
     <div className="relative">
       <div
-        className="relative rounded text-sm my-10 shadow-md overflow-x-scroll leading-[22px] text-gray-300"
-        style={{ backgroundColor: gitHubDark.colors["editor.background"] }}
+        className="relative rounded-sm text-sm my-10 shadow-md overflow-x-scroll leading-[22px] text-gray-300"
+        style={{ backgroundColor: "#272A30" }}
       >
         {highlighted.meta ? (
           <div className="px-4 py-3 font-mono text-xs text-gray-400 border-b border-gray-600">
@@ -144,6 +142,18 @@ export function Anchor({
   ...restProps
 }: React.ComponentProps<"a">) {
   const isInternal = href?.startsWith("/article") || href?.startsWith("#");
+  const isHeadingAnchor = (restProps.className || "").split(" ").includes(
+    "heading-anchor",
+  );
+
+  if (isHeadingAnchor) {
+    // Preserve exact classes and attributes for heading anchors to keep styles working
+    return (
+      <a {...restProps} href={href || ""}>
+        {children}
+      </a>
+    );
+  }
 
   return (
     <Link

@@ -24,7 +24,7 @@ const config = {
 
   reactStrictMode: true,
   eslint: {
-    dirs: ["src"],
+    ignoreDuringBuilds: true,
   },
   images: {
     remotePatterns: [

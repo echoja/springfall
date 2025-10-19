@@ -5,7 +5,7 @@ import i1 from "./time.avif";
 
 export const title =
   "[WIP] prisma로 DB를 관리하고 테스트까지 자동화해보기 (feat. vitest)";
-export const url = "https://springfall.cc/article/2024-02/prisma";
+const slug = "article/2024-02/prisma";
 export const summary = "...";
 export const createdAt = dayjs("2024-02-10").toISOString();
 export const updatedAt = dayjs("2024-02-10").toISOString();
@@ -20,7 +20,7 @@ export const item: ArticleItem = {
   imageAlt,
   summary,
   title,
-  url,
+  slug,
   category,
   tags: [],
 };

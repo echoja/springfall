@@ -1,56 +1,78 @@
 "use client";
 
-import { useColorMode } from "@modules/color-mode/color-mode";
-import { Moon, Sun } from "lucide-react";
-import dynamic from "next/dynamic";
-import { forwardRef, useMemo } from "react";
+import {
+  useColorMode,
+  type ColorModeSetting,
+} from "@modules/color-mode/color-mode";
+import { useCallback, useEffect, useRef, useState } from "react";
 
-const Icon = () => {
-  const { colorMode } = useColorMode();
+function ThemeToggle(props: React.HTMLAttributes<HTMLDivElement>) {
+  const { setting, setMode } = useColorMode();
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const [mounted, setMounted] = useState(false);
 
-  const srOnly = useMemo(
-    () => (
-      <span className="sr-only">
-        {colorMode === "dark" ? "라이트 모드로 전환" : "다크 모드로 전환"}
-      </span>
-    ),
-    [colorMode],
+  useEffect(() => setMounted(true), []);
+
+  const select = useCallback(
+    (value: ColorModeSetting) => () => setMode(value),
+    [setMode],
   );
+
+  const selected = (value: ColorModeSetting) =>
+    mounted ? setting === value : false;
 
   return (
-    <>
-      {colorMode === "light" ? (
-        <Moon className="w-4 h-4" />
-      ) : (
-        <Sun className="w-4 h-4" />
-      )}
-      {srOnly}
-    </>
-  );
-};
-
-const DynamicIcon = dynamic(() => Promise.resolve(Icon), {
-  ssr: false,
-  loading: () => <Moon className="w-4 h-4" />,
-});
-
-const ThemeToggle = forwardRef<HTMLButtonElement>(
-  function ThemeToggle(props, propRef) {
-    const { toggle } = useColorMode();
-
-    return (
-      <button
-        type="button"
-        className="p-2 transition border rounded shadow-sm hover:bg-gray-400/10 hover:opacity-90 border-gray-400/30"
-        aria-label="theme toggle"
-        onClick={toggle}
-        ref={propRef}
-        {...props}
+    <div className="relative" ref={rootRef} {...props}>
+      <div
+        role="radiogroup"
+        aria-label="테마"
+        className="inline-flex items-center rounded-sm border border-gray-400/30 overflow-hidden text-xs"
       >
-        <DynamicIcon />
-      </button>
-    );
-  },
-);
+        <SegButton
+          label="시스템"
+          checked={selected("system")}
+          onClick={select("system")}
+        />
+        <SegButton
+          label="라이트"
+          checked={selected("light")}
+          onClick={select("light")}
+        />
+        <SegButton
+          label="다크"
+          checked={selected("dark")}
+          onClick={select("dark")}
+        />
+      </div>
+    </div>
+  );
+}
+
+function SegButton({
+  label,
+  checked,
+  onClick,
+}: {
+  label: string;
+  checked?: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      role="radio"
+      aria-checked={!!checked}
+      onClick={onClick}
+      className={
+        "px-2.5 py-1 transition whitespace-nowrap " +
+        (checked
+          ? "bg-gray-900 text-white dark:bg-gray-100 dark:text-gray-900"
+          : "hover:bg-gray-400/10")
+      }
+    >
+      {label}
+    </button>
+  );
+}
 
 export default ThemeToggle;

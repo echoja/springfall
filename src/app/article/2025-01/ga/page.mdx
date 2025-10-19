@@ -1,0 +1,504 @@
+import ArticleHeader from "@modules/article/ArticleHeader";
+import ArticleImage from "@modules/article/ArticleImage";
+import getArticleHeaderProps from "@modules/metadata/getArticleHeaderProps";
+import getArticleJsonLdProps from "@modules/metadata/getArticleJsonLdProps";
+import getArticleMetadata from "@modules/metadata/getArticleMetadata";
+import { ArticleJsonLd } from "next-seo";
+import { item } from "./metadata";
+import ga1 from "./ga1.png";
+import ga2 from "./ga2.png";
+import ga3 from "./ga3.png";
+import ga4 from "./ga4.png";
+import ga5 from "./ga5.png";
+import gtm1 from "./gtm1.png";
+import gtm2 from "./gtm2.png";
+import gtm3 from "./gtm3.png";
+import gtm4 from "./gtm4.png";
+import gtm5 from "./gtm5.png";
+import gtm6 from "./gtm6.png";
+import s1 from "./s1.png";
+import s2 from "./s2.png";
+import s3 from "./s3.png";
+import s4 from "./s4.png";
+import s5 from "./s5.png";
+import s6 from "./s6.png";
+import s7 from "./s7.png";
+import t1 from "./t1.png";
+import t2 from "./t2.png";
+import t3 from "./t3.png";
+import t4 from "./t4.png";
+import t5 from "./t5.png";
+import t6 from "./t6.png";
+import t7 from "./t7.png";
+
+export const metadata = getArticleMetadata(item);
+
+<ArticleJsonLd {...getArticleJsonLdProps(item)} />
+
+<ArticleHeader {...getArticleHeaderProps(item)} />
+
+## 목차
+
+## GTM과 GA는 무엇이고 왜 쓸까요
+
+Google Analytics, 이하 GA는 구글에서 만든 데이터 분석 도구입니다. 분석 대상은 웹사이트에 접속한 사용자들의 행동입니다. 특정 경로로 들어온 사용자들이 무엇을 어떻게 행동하는지 분석하여 개발 및 마케팅 방향을 잡는데 인사이트를 제공합니다. 지금 유효한 버전이 `4`라서 GA4라고도 합니다. 예전 버전(GA Universal)들은 거의 사라졌고 GA4만 남았습니다.
+
+GA는 공짜라는 큰 장점이 있습니다. 사람들이 많이 쓰다 보니 업계 표준 같은 느낌도 있구요. 하지만 공식 문서는 대체로 불친절하고 전문가들의 활용 방법도 파편화되어 있습니다. (마치 C++ 안에서도 사투리가 존재하는 것처럼요) 결국 제대로 사용하려면 자기 자신만의 방법을 찾아나서는 수 밖에 없습니다.
+
+GA에서 데이터를 분석하려면 웹사이트에서 사용자의 정보와 행위 정보를 GA로 보내줘야 합니다. 어떻게요? 자바스크립트로요. 네. GA에서 설치하라고 가이드하는 스크립트가 있습니다. `<script>` 태그를 head 어딘가에 직접 넣어줘야 하지만, 우리는 그렇게 하지 않을 것입니다. 우린 GTM을 쓸 거니깐요.
+
+[Google Tag Manager](https://tagmanager.google.com/#/home), 이하 GTM은 웹사이트의 기능을 **비개발자**도 손쉽게 추가/삭제/관리할 수 있도록 하는 도구입니다. 보통 웹사이트의 기능을 수정하려면 개발자가 코드를 수정하여 배포하는 과정이 필요한데, GTM이 있다면 그런 과정이 필요 없습니다. GTM으로 GA 스크립트 뿐만 아니라 메타 픽셀 등 다양한 스크립트를 설치할 수도 있고 `사용자가 구매 버튼을 클릭했을 때 Alert창 띄우기`와 같은 희한한 행동을 집어넣을 수도 있습니다. 사이트의 부가적인 행동을 개발과 독립적으로 진행할 수 있다는 건 꽤 좋은 장점입니다.
+
+GTM은 태그, 트리거, 변수를 아주 다양하게 즉시 사용할 수 있어서 **개발 공수가 적다**는 점도 큰 장점입니다. 예를 들어 [요소 공개 상태](https://support.google.com/tagmanager/answer/7679410?hl=en)라는 트리거가 있는데, 사실 이는 [Intersection Observer](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API)의 동작을 모방한 것에 지나지 않지만 코드를 건드리지 않고 UI로 뚝딱 설정할 수 있으니 완전 편리하게 세팅할 수 있습니다. 변수를 계속해서 확장해나갈 수 있고 정규 표현식이나 CSS Selector도 사용할 수 있어서 활용성이 높습니다.
+
+GTM이 웹사이트에서 동작하기 위해서는 GTM 스크립트가 웹사이트에 설치되어 있어야 합니다. 결국 스크립트를 하나 설치하긴 해야 하네요. 아래에서 설치 과정을 스쳐 지나가볼 거예요.
+
+## 사전 지식과 이 글에서 다루지 않는 것들
+
+어느정도 웹 개발을 알고, GTM이나 GA를 들어본 적은 있는 분들을 독자로 상정하여 글을 작성했습니다. 개발자 분들은 서비스 가입 등은 쉽게 척척 하시리라 믿습니다. 설명이 자세하지 않은 부분은 최대한 링크로 대체하려고 합니다.
+
+GA Universal은 옛날 유물이므로 취급하지 않습니다.
+
+구체적인 설치 방법은 [구글 검색 링크](https://www.google.com/search?q=ga4+setup+in+tag+manager)로 대체하겠습니다. 본 글에서 설치 과정은 굉장히 대충 전달드립니다.
+
+GA는 앱에서 활동하는 사용자의 데이터도 수집할 수 있지만 일단 **웹서비스**라고 간주하고 설명하도록 하겠습니다.
+
+## GA 용어와 친숙해지기
+
+- **계정**: 팀이나 조직 같은 개념입니다. 하나의 계정에는 한 명의 관리자가 있을 수도 있고 여러 관리자가 있을 수 있습니다. 계정이 하나도 없다면 하나 새로 만들어야겠죠?
+- **속성**: 제품 같은 개념이며 수치들을 묶는 하나의 단위입니다. 예를 들어 보고서를 만들 때 여러 속성에 걸친 데이터로 보고서를 만들 순 없습니다. 하나의 속성이 가장 넓은 범위이고, 그 안에서 세부적으로 데이터를 분석할 수 있습니다.
+- **데이터 스트림**: 이벤트 소스를 정의합니다. 속성과 데이터 스트림은 1:n 입니다. 수집 코드, 측정 ID, 데이터 스트림은 모두 같은 개념을 다르게 풀어서 표현한 용어라고 생각하시면 됩니다.
+
+저희는 웹사이트 하나를 진행할 것이니 1계정 1속성 1데이터 스트림으로 진행하면 됩니다. [GA 콘솔](https://analytics.google.com/analytics/web)에 접속하여 만들어봅시다.
+
+다음 용어는 앞으로 진행하면서 등장하는 개념입니다.
+
+- **이벤트(Events)**: 웹사이트에 방문한 사용자가 일으키는 일을 뜻하며 GA에서 분석할 때 가장 기본이 되는 단위입니다. 간단하게는 페이지뷰, 클릭, 스크롤 등이 있습니다. [자동으로 수집되는 이벤트](https://support.google.com/analytics/answer/9234069?hl=en)도 있고 우리가 직접 이벤트를 만들어 보내줄 수도 있습니다. 형식에 맞게 보내주면 우리가 좀 보기 좋게 분석해줄게~ 하는 [추천 이벤트](https://developers.google.com/analytics/devguides/collection/ga4/reference/events?hl=en&client_type=gtm)도 있습니다.
+- **사용자(Users)**: 웹사이트에 방문한 사람입니다.
+- **매개변수(Parameters)**: 이벤트에 붙는 부가 정보입니다. 마찬가지로 사용자가 임의로 추가할 수도 있고 자동으로 수집되는 매개변수도 있습니다. 이벤트가 수집하는 시점에서 자주 사용되는 용어입니다. (분석할 때는 측정기준 혹은 측정항목으로 구분됩니다)
+
+아래 세 개 용어는 특히 **보고서**(Easy한 버전)나 **탐색**(극한의 커스텀 버전)을 만들 때 사용되는 용어입니다.
+
+- **세그먼트(Segment)**: 분석할 대상 사용자를 좁히기 위해 사용합니다. 예를 들어 "인스타그램으로 첫 방문한 사용자"를 세그먼트로 정할 수 있습니다. 세그먼트에 포함되지 않는 사용자/이벤트는 아예 분석 대상에서 제외되므로, 만약 이렇게 설정한다면 네이버 검색으로 방문한 사용자의 데이터는 볼 수 없습니다.
+- **측정기준(Dimension)**: 성별, 국가, 기기/카테고리, 첫 사용자 매체 등 몇 가지 분류로 나눌 수 있는 이벤트의 연관된 특성입니다. 표에서 행/열에 넣을 수 있습니다.
+- **측정항목(Metrics)**: 숫자로 나타낼 수 있는 요소입니다. 사전 세팅된 집계 함수로 간주하면 됩니다. 예를 들어 "첫 구매자 수" 세션수 측정항목은 세션 총 세션의 수를 나타냅니다. 표에서 값으로 넣을 수 있습니다.
+
+세그먼트, 측정기준, 측정항목은 각자의 논리대로 알아서 동작하기 때문에 우리의 뇌로는 잘 이해할 수 없는 조합도 가능한 경우가 많습니다. 아래 예를 봅시다.
+
+- 세그먼트: 인스타그램으로 첫 방문한 사용자
+- 측정기준: 첫 사용자 소스
+
+만약 탐색 보고서를 만드는데 이렇게 해놓으면 측정 기준으로는 "인스타그램"밖에 나오지 않습니다. 왜냐하면 이미 세그먼트가 그렇게 좁혀져있기 때문입니다. 첫 사용자 매체에 따라 데이터를 나눠서 보고 싶다면 세그먼트를 "모든 사용자"로 설정하거나 중첩되지 않는 다른 조건으로 설정해야 할 것입니다.
+
+## GA 만들기
+
+[GA 콘솔](https://analytics.google.com/analytics/web)에서 계정을 만드세요.
+
+계정을 만들었다면 이어서 속성을 만듭시다.
+
+<ArticleImage img={ga1} alt="GA 속성 만들기" border caption="GA 속성 만들기" />
+
+비즈니스 세부정보와 비즈니스 목표는 대충 만들어주세요.
+
+마지막 단계로 데이터 스트림을 만들어줍니다. `웹 스트림`으로 하고 향상된 측정 등은 켜고 진행합니다.
+
+<ArticleImage
+  img={ga2}
+  alt="GA 데이터 스트림 설정"
+  border
+  caption="GA 데이터 스트림 설정"
+/>
+
+태그는 수동으로 (GTM을 통해) 설치할 것입니다. 아래 이미지처럼 측정 ID를 잘 복사해놓고 있읍시다.
+
+<ArticleImage img={ga3} alt="" border caption="" />
+
+## GTM 용어 친숙해지기
+
+- **태그(Tag)**: **동작**을 의미합니다. GA4 등에 이벤트를 보내거나, 직접 적은 자바스크립트를 실행시키는 것과 연관이 있습니다.
+- **트리거(Trigger)**: 태그를 활성화(Fire)시키는 조건입니다. 기본적으로 사용자의 행동과 연관이 있습니다. 페이지뷰, 스크롤 높이, 아무거나 클릭 등이 있습니다. `dataLayer.push` 로 넘어오는 커스텀 이벤트도 감지할 수 있습니다.
+- **변수(Variables)**: 재사용 가능한 값입니다. 평가(Evaluate)되는 시점은 트리거와 깊이 관련있습니다. 예를 들어 Global Javascript 변수를 참조하도록 만들 수 있는데, _클릭_ 트리거와 연계된다면 클릭하는 시점에 그 변수를 읽어서 진행합니다(GTM이 초기화되는 시점이 아닙니다).
+- 작업공간(Workspace): 실제로 배포되기 전 변경사항들을 묶어두는 단위입니다. Git으로 치면 브랜치입니다. 한 워크스페이스에서 작업을 하면 작업 내용은 저장되지만 실제로는 적용되지 않습니다. **미리보기**를 통해 트리거/태그가 어떻게 발동할 지 미리 확인할 수 있습니다. **게시**하게 되면 작업 내용이 실제로 반영됩니다.
+
+## GTM 만들기
+
+<ArticleImage
+  img={gtm1}
+  alt="태그 관리자 새 계정 추가"
+  border
+  caption="태그 관리자 새 계정 추가"
+/>
+
+[Tag Manager 콘솔](https://tagmanager.google.com/#/home)에 접속하여 계정과 컨테이너를 만듭니다. 그럼 아래처럼 설치 안내가 나옵니다.
+
+<ArticleImage
+  img={gtm2}
+  alt="Google 태그 관리자 설치 안내"
+  border
+  caption="Google 태그 관리자 설치 안내"
+/>
+
+저는 Next.js라서 대충 아래와 같이 넣어줬습니다. 배포 후 웹사이트 테스트를 진행하니까 위 이미지처럼 체크 표시가 잘 떴습니다.
+
+```tsx layout.tsx
+<head>
+  {process.env.NEXT_PUBLIC_GTM_ID ? (
+    <script
+      dangerouslySetInnerHTML={{
+        __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','${process.env.NEXT_PUBLIC_GTM_ID}');`,
+      }}
+    ></script>
+  ) : null}
+  {/* 중략 */}
+</head>
+```
+
+자 이제 GTM의 `태그`에서 하나 추가해줍니다.
+
+<ArticleImage
+  img={gtm3}
+  alt="GTM에서 GA 태그 넣기"
+  border
+  caption="GTM에서 GA 태그 넣기"
+/>
+
+- 태그 유형: Google 태그
+- 태그 ID: 아까 복사해둔 측정 ID.
+- 트리거(자동 설정됨): Initialization - All Pages
+
+완료하면 아래 이미지처럼 리스트에서 추가된 하나를 보실 수 있습니다.
+
+<ArticleImage
+  img={gtm4}
+  alt="GTM에서 GA 태그 넣기 완료된 화면"
+  border
+  caption="GTM에서 GA 태그 넣기 완료된 화면"
+/>
+
+우측 `미리보기`와 `제출`이 보이시나요? 먼저 `미리보기`를 눌러서 테스트를 해봅시다.
+
+<ArticleImage
+  img={gtm5}
+  alt="내 사이트에 Tag Assistant 연결"
+  border
+  caption="내 사이트에 Tag Assistant 연결"
+/>
+
+Tag Assistant는 또 뭐하는 녀석일까요? 일단 Tag Manager를 테스트하기 위한 도구라고 생각하시면 됩니다. 여기에 설치한 웹사이트 주소를 넣습니다.
+
+<ArticleImage
+  img={gtm6}
+  alt="Tag Assistant 화면"
+  border
+  caption="Tag Assistant 화면"
+/>
+
+테스트용 새 창이 하나 더 뜹니다. 주소에 `gtm_debug`라는 파라미터를 확인할 수 있고 우측 하단에 Tag Assistant가 동작 중이라는 안내도 볼 수 있습니다. 좌측에서는 각종 **트리거**가 보입니다. `창 로드`, `컨테이너 로드` 따위가 트리거 이름인데, 한글로 번역되서 좀 요상합니다(Tag Assistant에서 한글 번역을 끄는 방법은 불행히도 찾지 못했네요). 우린 트리거를 설정한 적이 없는데 트리거가 보이고 있죠? 자동으로 발생하는 트리거도 있다는 거고, 이는 세팅에 의해 조금씩 달라지기도 합니다. 예를 들어 `향상된 측정`을 켠 GA를 GTM 태그로 추가했을 때 자동으로 추가되는 트리거도 있습니다.
+
+다시 GA로 돌아가서 관리 - 데이터 표시 - DebugView로 들어갑니다.
+
+<ArticleImage
+  img={ga4}
+  alt="GA4 DebugView 들어가기"
+  border
+  caption="GA4 DebugView 들어가기"
+/>
+
+그러면 아래 이미지와 같이 `page_view` 이벤트가 들어오고 있음을 확인할 수 있어요.
+
+<ArticleImage
+  img={ga5}
+  alt="GA4 DebugView에서 page_view 이벤트 확인"
+  border
+  caption="GA4 DebugView에서 page_view 이벤트 확인"
+/>
+
+마지막으로 GTM에서 `제출`을 눌러 변경사항을 적용합니다.
+
+⚠️ GA의 DebugView에서는 GTM에서 `미리보기`로 테스트하는 이벤트만 잡힙니다. 실제 방문자가 발생시키는 이벤트는 DebugView에서 보이지 않습니다.
+
+## GTM과 GA 활용의 방향성
+
+이제 설치까지 마쳤으니 개발자로서 GA의 활용성을 극대화하기 위해 어떤 마음가짐을 가져야 하는지 짚고 넘어갑시다.
+
+- **협업**: 개발자와 GTM을 관리하는 사람 사이에 소통이 원활해야 합니다. GTM의 문제는 **개발자 입장에서 GTM이 어떤 기준으로 데이터를 수집하는지 알 수 없다**는 겁니다. 예를 들어 GTM에서 `다음` 버튼에 트리거를 걸어놨는데, 개발자가 이 버튼의 텍스트를 `확인`으로 바꿔서 배포한다면 GTM 입장에서는 정보의 소스가 뚝 끊기는 문제가 발생합니다. GA에서도 물론 데이터가 끊기겠죠. 이러한 변경사항을 하나하나 추적하는 것도 무리가 있고 어느정도 합의된 틀이 필요합니다. 후술할 _자동으로_ 클릭을 수집하는 방법은 협업을 고려한 방법이며 문서화하기가 용이합니다.
+- **풍부한 정보 제공**: GA에서 데이터를 분석하기 위해서는 그 서비스에만 존재하는 다양한 정보를 팍팍 주는 게 좋습니다. 예를 들어 변호사를 대상으로 어떤 서비스를 전개하고 있어서 전문 영역(민사, 형사, 노동법 등등)을 사용자로부터 입력받고 있다면, 그를 사용자 정보로서 GA로 넘겨줄 수 있습니다. 그러면 분석할 때 세그먼트로 활용할 수 있어서 좋을 것입니다. 우리는 클릭 이벤트를 만들 때 *페이지 유형*이라는 정보를 추가하는 방법을 후술하겠습니다.
+
+## 자동으로 클릭 이벤트 수집하기
+
+본격적으로 들어가기 전에 협업의 관점에서 아래는 먼저 합의하고 진행하겠습니다.
+
+- 어떤 기능이 잘 쓰이는가? 는 클릭 수로 (어느정도) 판단하겠다.
+- 버튼 하나하나마다 특별한 ID가 있다. 이 ID는 스프레드시트 공유 문서 등으로 관리한다.
+- 버튼을 클릭한다면 `click_{{ ID }}` 이벤트가 발생한다.
+
+실제로 이를 어떻게 구현할 수 있을까요? 여러 가지 방법이 있겠지만, 저는 아래와 같은 방법이 가장 쉽고 간편하다고 생각했고, 그렇게 진행하려고 합니다.
+
+1. 개발에서 `data-gtm-id`라는 속성을 적절하게 추가한다. (버튼 그 자체든 div든 상관 없다)
+2. GTM에서 `data-gtm-id` 속성이 있는 요소의 클릭을 트리거할 수 있도록 한다.
+3. GTM에서 해당 트리거가 감지된다면 그 속성의 값을 이용하여 `click_{{ ID }}` GA 이벤트를 발생시킨다.
+
+시작해볼까요?
+
+우선 제 블로그 메인 화면에서 아래와 같이 `data-gtm-id` 속성을 설정해줬습니다. 값은 GTM 관리자와 합의하여 정하거나 개발자가 먼저 정한 다음 문서를 작성하여 관리자께 전달하면 되겠습니다.
+
+```tsx
+<ul role="list">
+  {items.map(({ summary, title, url, createdAt }, idx) => {
+    const href = url.pathname;
+
+    return (
+      // !mark(1:1)
+      <li key={title} data-gtm-id={`${href}_link`}>
+        <Link href={href}>{title}</Link>
+        <time dateTime={createdAt}>
+          {dayjs(createdAt).format("YYYY.MM.DD.")}
+        </time>
+        <p>{summary}</p>
+      </li>
+    );
+  })}
+</ul>
+```
+
+일단 `data-gtm-id` 값이 동적이지만 `다음` 버튼 처럼 콘텐츠가 고정된 경우 `data-gtm-id="next"` 처럼 정적 값을 넣으면 됩니다.
+
+이제 GTM 설정을 시작하겠습니다.
+
+<ArticleImage
+  img={s1}
+  alt="기본 제공 변수 구성 - Click Element 추가"
+  border
+  caption="기본 제공 변수 구성 - Click Element 추가"
+/>
+
+우선 **변수**로 들어갑니다. 기본 제공 변수 중 `Click Element`를 추가해줍니다. 기본 제공 변수란 GTM에서 골라골라 간단하게 추가할 수 있는 변수 모음입니다. `Click Element`는 클릭하는 순간 해당 `HTMLElement`를 변수로 사용할 수 있습니다. 변수의 실제 타입은 `HTMLElement`이지만 GTM 미리보기 등에서는 string 값처럼 보일 수 있습니다.
+
+사용자 정의 변수에서 `새로 만들기`를 합니다. 변수 유형은 `맞춤 자바스크립트(Custom Javascript)` 입니다. 아래 내용을 넣어줍니다.
+
+```js 변수: GTM Element From Click Element (맞춤 자바스크립트)
+function() {
+  var el = {{Click Element}};
+  if (!(el instanceof Element)) return;
+
+  while (el.nodeType === Node.ELEMENT_NODE) {
+
+    if (el.hasAttribute("data-gtm-id")) {
+      break;
+    }
+    el = el.parentNode;
+  }
+  return el;
+}
+```
+
+클릭 이벤트가 발생했을 때 `Click Element`로 잡히는 `HTMLElement`는 **가장 내부 요소**입니다. 즉 `li` 태그에 `data-gtm-id`를 설정해 놓아도 내부 `a` 태그를 클릭한다면 `data-gtm-id` 값을 읽어올 수 없습니다. 부모를 타고 올라가면서 `data-gtm-id`가 있는 요소를 찾아냅니다.
+
+사용자 정의 변수에서 하나 더 새로 만듭니다. 마찬가지로 `맞춤 자바스크립트(Custom Javascript)` 입니다.
+
+```js 변수: GTM ID From GTM Element (맞춤 자바스크립트)
+function() {
+  var el = {{GTM Element From Click Element}}
+  if (!(el instanceof Element)) return;
+
+  return el.getAttribute("data-gtm-id");
+}
+```
+
+위에서 정의한 `GTM Element From Click Element`로부터 `data-gtm-id` 값을 읽어옵니다.
+
+이제 클릭 트리거를 새로 만듭시다. 아래 이미지와 같습니다.
+
+<ArticleImage
+  img={s2}
+  alt="GTM ID From GTM Element 로부터 클릭 트리거 구성"
+  border
+  caption="GTM ID From GTM Element 로부터 클릭 트리거 구성"
+/>
+
+- 트리거 유형: 클릭 - 모든 요소
+- 일부 클릭, `GTM ID From GTM Element`가 다음과 같지 않음, `undefined`
+
+클릭할 때마다 `GTM ID From GTM Element` 값을 읽어서 뭔가 있다면 트리거를 실행합니다. 그 값이 없다면 아무런 일도 일어나지 않습니다.
+
+이제 태그를 추가하러 갑시다.
+
+<ArticleImage
+  img={s3}
+  alt="GA4 이벤트를 전송하는 태그 추가"
+  border
+  caption="GA4 이벤트를 전송하는 태그 추가"
+/>
+
+- 태그 유형: Google 애널리틱스: GA4 이벤트
+- 측정 ID: 전에 세팅한 것과 동일
+- **이벤트 이름: `click_{{GTM ID From GTM Element}}`**
+- 트리거: Click With GTM ID
+
+이제 해당 트리거가 실행될 때마다 이 태그가 실행됩니다. GA4로 클릭 이벤트를 보내는 것입니다! 이벤트 이름은 `GTM ID From GTM Element`에 따라 동적으로 결정됩니다.
+
+지금까지의 설정은 아래와 같습니다. 우측 상단 `제출`을 누르면 변경사항을 확인할 수 있습니다.
+
+<ArticleImage img={s4} alt="변경사항" border caption="변경사항" />
+
+- 기본 제공 변수 추가
+- 변수 2개 추가
+- 트리거 1개 추가
+- 태그 1개 추가
+
+이제 미리보기를 통해 실제로 잘 동작하는지 살펴봅시다.
+
+<ArticleImage
+  img={s5}
+  alt="테스트 용으로 div에 data-gtm-id 속성 추가하기"
+  border
+  caption="테스트 용으로 div에 data-gtm-id 속성 추가하기"
+/>
+
+미리보기로 Tag Assistant가 활성화된 창에서 임의로 HTML을 수정합니다. 저는 전체 래핑 `div` 태그에 `data-gtm-id`를 `ho`로 설정했습니다.
+
+클릭해보자구요.
+
+<ArticleImage
+  img={s6}
+  alt="Tag Assistant에서 태그가 제대로 실행되고 있는 모습"
+  border
+  caption="Tag Assistant에서 태그가 제대로 실행되고 있는 모습"
+/>
+
+Tag Assistant에서 클릭 트리거가 나타나고 실행된 태그에 `Click With GTM ID`가 보입니다. 성공입니다!
+
+그런데 정말로 GA에 이벤트가 보내졌을까요? 이것도 DebugView에서 즉시 확인할 수 있습니다.
+
+<ArticleImage
+  img={s7}
+  alt="DebugView에서 이벤트가 제대로 들어오고 있는 모습"
+  border
+  caption="DebugView에서 이벤트가 제대로 들어오고 있는 모습"
+/>
+
+`click_ho` 이벤트가 들어오고 있음을 확인할 수 있습니다! 성공입니다.
+
+## 클릭 이벤트에 페이지 유형 정보 추가하기
+
+페이지 유형은 여러모로 편리한 측정기준(Dimension)입니다. 예를 들어 **상품 상세 페이지**에서 발생한 클릭 이벤트를 분석하고 싶다고 가정해봅시다. 그럴려면 클릭 이벤트가 어디서 일어나는지 구별할 수 있어야 합니다. 문제는 GA 단계에서 구별하기 위한 단서는 많지 않습니다. 자동으로 수집되는 파라미터 중 활용해볼 만한 건 `page_location`이나 `page_title` 밖에 없습니다. 머리 아프게 정규식으로 규칙을 만들어 url로부터, 혹은 페이지 제목으로부터 "상품 상세 페이지"임을 유추해야 합니다.
+
+하지만 이벤트를 보내는 단계에서 아예 정보를 제공해준다면 얼마나 편리할까요? 즉 우리는 `page_type` 이라는 **맞춤 측정기준(Custom Dimension)** 을 추가할 것입니다.
+
+```tsx page.tsx
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  other: {
+    "page-type": "home",
+  },
+};
+```
+
+우선 위와 같이 GTM에서 데이터를 읽어올 수 있도록 개발 단계에서 정보를 만들어줍니다. Next.js 예시인데요, 이렇게 하면 아래 `meta` 태그가 자동으로 추가됩니다.
+
+```html
+<meta name="page-type" content="home" />
+```
+
+이제 GTM에서 새로운 **변수**를 만들어줍니다.
+
+<ArticleImage
+  img={t1}
+  alt="GTM에서 Page Type 변수 추가"
+  border
+  caption="GTM에서 Page Type 변수 추가"
+/>
+
+- 변수 유형: DOM 요소
+- 선택 방법: CSS 선택 도구
+- 요소 선택 도구: `meta[name="page-type"]`
+- 속성 이름: `content`
+
+그 다음 다양한 GA4 이벤트 태그에서 일반적으로 활용할 수 있도록 모음집을 만들어줍니다. 지금은 맞춤 측정기준도 하나이고 클릭 이벤트를 보내는 것 하나밖에 없지만 측정 기준이 늘어나고 태그도 여러 개가 된다면 매번 하나하나 추가하는 게 귀찮아집니다.
+
+변수를 하나 더 추가합니다.
+
+<ArticleImage
+  img={t2}
+  alt="GA4 이벤트 설정 변수 추가"
+  border
+  caption="GA4 이벤트 설정 변수 추가"
+/>
+
+이벤트 매개변수로 `page_type`을 넣고 값을 `{{Page Type}}`으로 정합니다. 앞으로 매개변수를 또 추가할 일이 있다면 여기서 마구마구 추가해주시면 되겠습니다.
+
+<ArticleImage
+  img={t3}
+  alt="GA4 이벤트 태그에 Event Settings 변수 설정"
+  border
+  caption="GA4 이벤트 태그에 Event Settings 변수 설정"
+/>
+
+이제 GA4 이벤트를 보내는 태그 - 이벤트 매개변수 - Event Settings Variable 에 금방 만든 변수를 설정해줍니다. 지금까지 2개의 변수를 만들고 기존에 만든 태그를 수정했습니다. 아래 이미지와 같이 변경사항이 나타날 겁니다.
+
+<ArticleImage
+  img={t4}
+  alt="Page Type 추가에 따른 변경사항"
+  border
+  caption="Page Type 추가에 따른 변경사항"
+/>
+
+자 이제 GTM 미리보기로 들어가서 테스트를 진행해봅시다.
+
+<ArticleImage
+  img={t5}
+  alt="실행된 태그의 자세한 내용"
+  border
+  caption="실행된 태그의 자세한 내용"
+/>
+
+`data-gtm-id` 속성이 있는 요소를 클릭한 다음 Tag Assistant를 봅시다. `실행된 태그`의 항목을 클릭하면 위 이미지와 같이 자세한 내역이 뜹니다. 우측 상단에 `변수를 다른 이름으로 표시: 값`로 설정한다면 실제 수집된 값을 볼 수 있습니다. 이벤트 이름과 Event Settings Variable이 잘 보이고 있네요.
+
+그런데 말입니다, 이게 정말로 GA4로 무사히 전달되고 있는 걸까요? 당장 GA4 DebugView로 가서 확인해봅니다.
+
+<ArticleImage
+  img={t6}
+  alt="DebugView 에서 page_type 값이 넘어오고 있는 모습"
+  border
+  caption="DebugView 에서 page_type 값이 넘어오고 있는 모습"
+  width={450}
+/>
+
+제대로 넘어오고 있습니다!
+
+하지만 방심은 금물... DebugView는 정말 디버그 용도일 뿐이고 실제로 데이터가 쌓이려면 별도의 GA4 세팅이 필요합니다. 측정기준을 새로 만드려면 관리 - 맞춤 측정항목에서 `page_type`을 직접 추가해줍시다.
+
+<ArticleImage
+  img={t7}
+  alt="GA4 새 맞춤 측정기준"
+  border
+  caption="GA4 새 맞춤 측정기준"
+/>
+
+실제 보고서에서 확인할 수 있는 데이터는 그 전날까지 쌓인 데이터이므로, 하루 기다려서 데이터를 살펴보세요.
+
+## 정리
+
+저희는 이번 글에서 세 가지를 해봤습니다.
+
+- GA와 GTM의 용어를 살펴보고 간단하게 세팅하기
+- 클릭 이벤트를 자동으로 보내기
+- 클릭 이벤트에 페이지 유형 정보 추가하기
+
+이렇게 시스템을 갖춰놓는다면 다음과 같은 절차로 개발 후 분석이 가능해집니다.
+
+1. **합의**: 개발자와 마케터/기획자가 어떤 요소로부터 클릭 이벤트를 받을 것인가 미리 정하기. 혹은 일단 다 수집하도록 하기. `data-gtm-id` 및 `page_type` 의 실제 값을 미리 정해놓을 수도 있습니다.
+2. **기능 추가 및 개선**: 개발자가 개발을 열심히 합니다.
+3. **`data-gtm-id` 및 `page_type`의 값 설정**: 개발자가 추가/개선한 사항에 대해 GA에 데이터가 쌓일 수 있도록 설정해놓습니다.
+4. **배포 및 문서 갱신**: 개발 내용이 운영에 반영됩니다. 마케터/기획자가 데이터를 확인할 수 있도록 개발자가 문서를 잘 최신화 해놓습니다.
+5. **시간 경과**: 실제 고객이 추가/개선된 기능을 사용하면서 데이터가 수집됩니다.
+6. **분석**: 마케터/기획자가 GA에서 자동 생성된 이벤트 기반으로 데이터를 분석하고 성과를 평가합니다.
+
+여기서의 포인트는 GTM에서 GA로 전송하는 내용이 이미 자동화되어 있어서 **기능이 변경된다 하더라도 GTM을 건드릴 필요가 없다**는 점입니다. **변수**를 적극적으로 활용한 이점이 있는 거죠. 그렇지 않았다면 매번 트리거와 태그를 추가/변경해줘야 하는 불편함이 있었을 겁니다.
+
+이정도면 개발자로서 최선의 GA 환경을 깔아주는 게 아닌가 감히 생각해보면서 글을 마무리해보겠습니다. 모두들 즐거운 협업 되세요!

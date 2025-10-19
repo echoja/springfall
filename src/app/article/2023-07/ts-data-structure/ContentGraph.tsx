@@ -6,7 +6,7 @@ import {
   useSpring,
   useTransform,
   useVelocity,
-} from "framer-motion";
+} from "motion/react";
 import { useRef } from "react";
 import { twMerge } from "tailwind-merge";
 
@@ -40,7 +40,7 @@ const Box: React.FC<{
           transition={{ duration: 0.05 }}
           ref={ref}
           className={twMerge(
-            "flex items-center justify-center w-full rounded shadow h-14 bg-slate-200 dark:bg-slate-700 select-none",
+            "flex items-center justify-center w-full rounded-sm shadow-sm h-14 bg-slate-200 dark:bg-slate-700 select-none",
             className,
           )}
         >
@@ -59,7 +59,7 @@ const Box: React.FC<{
           transition={{ duration: 0.05 }}
           ref={ref}
           className={twMerge(
-            "flex items-center justify-center w-full h-20 bg-yellow-200 rounded shadow dark:bg-yellow-700 select-none",
+            "flex items-center justify-center w-full h-20 bg-yellow-200 rounded-sm shadow-sm dark:bg-yellow-700 select-none",
             className,
           )}
         >
@@ -78,7 +78,7 @@ const Box: React.FC<{
           transition={{ duration: 0.05 }}
           ref={ref}
           className={twMerge(
-            "flex items-center justify-center w-full h-20 bg-blue-200 rounded shadow dark:bg-blue-700 select-none",
+            "flex items-center justify-center w-full h-20 bg-blue-200 rounded-sm shadow-sm dark:bg-blue-700 select-none",
             className,
           )}
         >

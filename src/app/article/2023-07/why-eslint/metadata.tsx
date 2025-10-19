@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 import i1 from "./i1.png";
 
 export const title = "ESLint 가 필요한 이유 (작성중)";
-export const url = "https://springfall.cc/article/2023-07/why-eslint";
+const slug = "article/2023-07/why-eslint";
 export const summary =
   "Node.js 프로젝트에서 많이 사용되는 Lint 도구인 ESLint 가 필요한 이유에 대해 알아봅니다.";
 export const createdAt = dayjs("2023-07-30").toISOString();
@@ -20,7 +20,7 @@ export const item: ArticleItem = {
   imageAlt,
   summary,
   title,
-  url,
+  slug,
   category,
   tags: [],
 };

@@ -6,7 +6,7 @@ import { authorList, authorName } from "./constants";
 export default function getArticleJsonLdProps(
   item: ArticleItem,
 ): ArticleJsonLdProps {
-  const { createdAt, image, summary, title, updatedAt, url } = item;
+  const { createdAt, image, summary, title, updatedAt, slug: url } = item;
 
   return {
     useAppDir: true,

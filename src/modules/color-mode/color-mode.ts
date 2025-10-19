@@ -1,57 +1,83 @@
 import { atom, createStore, useAtom, useStore } from "jotai";
-import { useCallback } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
-type ColorMode = "dark" | "light";
+export type ColorModeSetting = "light" | "dark" | "system";
+export type ResolvedColorMode = "light" | "dark";
 
-const colorModeAtom = atom<ColorMode | null>(null);
+const STORAGE_KEY = "colorMode";
+
+// Stores the user-selected setting (light/dark/system).
+const colorModeSettingAtom = atom<ColorModeSetting | null>(null);
 
 export const store = createStore();
 
-const getInitialColorMode = () => {
-  if (typeof window === "undefined") {
-    return "light";
-  }
-
-  const localStorageValue = window.localStorage.getItem(
-    "colorMode",
-  ) as ColorMode | null;
-
-  if (localStorageValue) {
-    return localStorageValue;
-  }
-
-  if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-    return "dark";
-  }
+const getSystemPreference = (): ResolvedColorMode => {
+  if (typeof window === "undefined") return "light";
+  return window.matchMedia("(prefers-color-scheme: dark)").matches
+    ? "dark"
+    : "light";
 };
 
-const colorModeAtomWithStorage = atom(
-  (get) => {
-    const colorMode = get(colorModeAtom);
-    if (colorMode) {
-      return colorMode;
+const getInitialSetting = (): ColorModeSetting => {
+  if (typeof window === "undefined") return "system";
+
+  const raw = window.localStorage.getItem(
+    STORAGE_KEY,
+  ) as ColorModeSetting | null;
+  if (raw === "light" || raw === "dark" || raw === "system") return raw;
+  return "system";
+};
+
+// Derived atom that returns current setting, falling back to initial.
+const colorModeSettingWithStorageAtom = atom(
+  (get) => get(colorModeSettingAtom) ?? getInitialSetting(),
+  (_get, set, value: ColorModeSetting) => {
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem(STORAGE_KEY, value);
     }
-
-    return getInitialColorMode();
-  },
-
-  (get, set, value: ColorMode) => {
-    window.localStorage.setItem("colorMode", value);
-    set(colorModeAtom, value);
+    set(colorModeSettingAtom, value);
   },
 );
 
 export const useColorMode = () => {
-  const store = useStore();
-  const [colorMode] = useAtom(colorModeAtomWithStorage, { store });
+  const jotaiStore = useStore();
+  const [setting] = useAtom(colorModeSettingWithStorageAtom, {
+    store: jotaiStore,
+  });
 
-  return {
-    colorMode,
-    toggle: useCallback(() => {
-      store.set(
-        colorModeAtomWithStorage,
-        colorMode === "light" ? "dark" : "light",
-      );
-    }, [colorMode, store]),
-  };
+  // Track system preference locally so components re-render on OS theme change.
+  const [systemPref, setSystemPref] = useState<ResolvedColorMode>(() =>
+    getSystemPreference(),
+  );
+
+  useEffect(() => {
+    const mql = window.matchMedia("(prefers-color-scheme: dark)");
+    const handler = (ev: MediaQueryListEvent) =>
+      setSystemPref(ev.matches ? "dark" : "light");
+    mql.addEventListener("change", handler);
+    // Ensure state is accurate on mount.
+    setSystemPref(mql.matches ? "dark" : "light");
+    return () => mql.removeEventListener("change", handler);
+  }, []);
+
+  const resolved: ResolvedColorMode = useMemo(
+    () => (setting === "system" ? systemPref : setting),
+    [setting, systemPref],
+  );
+
+  const setMode = useCallback(
+    (value: ColorModeSetting) => {
+      jotaiStore.set(colorModeSettingWithStorageAtom, value);
+    },
+    [jotaiStore],
+  );
+
+  const toggle = useCallback(() => {
+    // Cycle: light -> dark -> system -> light
+    const next: ColorModeSetting =
+      setting === "light" ? "dark" : setting === "dark" ? "system" : "light";
+    jotaiStore.set(colorModeSettingWithStorageAtom, next);
+  }, [jotaiStore, setting]);
+
+  return { setting, resolved, setMode, toggle };
 };
