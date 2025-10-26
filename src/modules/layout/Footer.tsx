@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { memo } from "react";
+import { twMerge } from "tailwind-merge";
 import ThemeToggle from "./ThemeToggle";
 
 const buttons: Array<{
@@ -67,9 +68,9 @@ const buttons: Array<{
   },
 ];
 
-const Footer = () => {
+const Footer = (props: React.ComponentProps<"footer">) => {
   return (
-    <footer className="text-center">
+    <footer {...props} className={twMerge("text-center", props.className)}>
       <div className="flex items-center justify-center gap-3 mt-10 mb-4">
         {buttons.map(({ link, Icon: icon, newWindow = true, srOnly }) => (
           <Link

@@ -4,9 +4,13 @@ import { HeroUIProvider } from "@heroui/react";
 import { store } from "@modules/color-mode/color-mode";
 import { Provider as JotaiProvider } from "jotai";
 import { useRouter } from "next/navigation";
+import type { ComponentProps } from "react";
 import { useCallback } from "react";
 
-export function Providers({ children }: { children: React.ReactNode }) {
+export function Providers({
+  children,
+  ...props
+}: { children: React.ReactNode } & ComponentProps<"div">) {
   const router = useRouter();
 
   const navigate = useCallback(
@@ -17,7 +21,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
   );
 
   return (
-    <HeroUIProvider navigate={navigate} locale="ko-KR">
+    <HeroUIProvider navigate={navigate} locale="ko-KR" {...props}>
       <JotaiProvider store={store}>{children}</JotaiProvider>
     </HeroUIProvider>
   );

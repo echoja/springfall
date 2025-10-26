@@ -1,8 +1,8 @@
 import items from "@modules/article/items";
-import Header from "@modules/layout/Header";
 import type { Metadata } from "next";
 import { List, ListItem } from "./ListItem";
 import { metadataBase } from "@modules/metadata/constants";
+import Header from "@modules/layout/Header";
 
 export const metadata: Metadata = {
   title: "홈 | 봄가을",
