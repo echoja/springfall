@@ -1,11 +1,8 @@
-import remarkCustomContainer from "@echoja/remark-custom-container";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
 import bundleAnalyzer from "@next/bundle-analyzer";
 import mdx from "@next/mdx";
-import { remarkCodeHike } from "codehike/mdx";
-import rehypeAutolinkHeadings from "rehype-autolink-headings";
-import rehypeSlug from "rehype-slug";
-import remarkGfm from "remark-gfm";
-import remarkToc from "remark-toc";
 
 /** @type {import('codehike/mdx').CodeHikeConfig} */
 const chConfig = {
@@ -13,6 +10,12 @@ const chConfig = {
     code: "Code",
   },
 };
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const remarkCodeHikePluginPath = path.join(
+  __dirname,
+  "mdx-plugins/remark-codehike.mjs",
+);
 
 /** @type {import('next').NextConfig} */
 const config = {
@@ -108,15 +111,15 @@ const withMDX = mdx({
     jsx: true,
 
     remarkPlugins: [
-      [remarkCustomContainer, customContainerOptions],
-      remarkGfm,
-      [remarkCodeHike, chConfig],
-      [remarkToc, { heading: "목차" }],
+      ["@echoja/remark-custom-container", customContainerOptions],
+      "remark-gfm",
+      [remarkCodeHikePluginPath, chConfig],
+      ["remark-toc", { heading: "목차" }],
     ],
     rehypePlugins: [
-      rehypeSlug,
+      "rehype-slug",
       [
-        rehypeAutolinkHeadings,
+        "rehype-autolink-headings",
         {
           properties: {
             ariaHidden: true,

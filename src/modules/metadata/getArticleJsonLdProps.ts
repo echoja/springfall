@@ -9,16 +9,15 @@ export default function getArticleJsonLdProps(
   const { createdAt, image, summary, title, updatedAt, slug: url } = item;
 
   return {
-    useAppDir: true,
+    type: "BlogPosting",
     url,
-    title,
-    images: [image.src],
-    authorName: authorList,
+    headline: title,
+    image: [image.src],
+    author: authorList,
+    publisher: authorName,
     datePublished: createdAt,
     dateModified: updatedAt,
-    publisherName: authorName,
     description: summary,
-    type: "BlogPosting",
     isAccessibleForFree: true,
   };
 }

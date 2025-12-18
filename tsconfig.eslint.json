@@ -11,7 +11,8 @@
     "postcss.config.js",
     "tailwind.config.mjs",
     "next-seo.config.js",
-    "eslint.config.mjs"
+    "eslint.config.mjs",
+    "./mdx-plugins/remark-codehike.mjs"
   ],
   "exclude": ["node_modules"]
 }
