@@ -1,6 +1,5 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-
 import bundleAnalyzer from "@next/bundle-analyzer";
 import mdx from "@next/mdx";
 
