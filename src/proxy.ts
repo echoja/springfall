@@ -29,7 +29,7 @@ function pickLocale(acceptLanguage: string | null): Locale {
   return i18n.defaultLocale;
 }
 
-export default function middleware(req: NextRequest) {
+export default function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
   // Skip static files, API, and already localized paths
   const seg1 = pathname.split("/")[1] ?? "";
