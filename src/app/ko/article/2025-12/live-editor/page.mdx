@@ -13,7 +13,9 @@ import i4 from "./i4.png";
 import i99 from "./i99.png";
 import preamble from "./preamble.png";
 import su from "./su.png";
-import stair from "./stair.png"
+import stair from "./stair.png";
+import t1 from "./t1.png";
+import t2 from "./t2.png";
 
 export const metadata = getArticleMetadata(item);
 
@@ -456,7 +458,7 @@ class BannerLiveLocatorElement extends HTMLElement {
   attributeChangedCallback(
     name: string,
     oldValue: string | null,
-    newValue: string | null
+    newValue: string | null,
   ): void {
     // 중략
   }
@@ -471,7 +473,6 @@ export function defineLiveLocatorElement(): void {
 }
 
 defineLiveLocatorElement();
-
 ```
 
 중요한 건 색깔을 칠했습니다.
@@ -497,7 +498,7 @@ type LiveLocatorAppProps = {
 };
 
 export function LiveLocatorApp({ version, onClose }: LiveLocatorAppProps) {
-  return <div>hello world!</div>
+  return <div>hello world!</div>;
 }
 ```
 
@@ -566,7 +567,7 @@ declare global {
 }
 
 /** BannerLiveLocatorElement  */
-const element = document.createElement("banner-live-locator"); 
+const element = document.createElement("banner-live-locator");
 ```
 
 ---
@@ -595,7 +596,7 @@ React 등의 개발 환경에서는 생산성도 중요하기 때문에 프레�
   ➜  press h + enter to show help
 ```
 
-우리가 `http://localhost:5173/` 라는 경로로 접근하게 되면 로컬에 떠있는 서버는 그 경로를 분석해 대략 다음과 같은 절차로 요청을 처리합니다.
+개발 서버가 두 개 떠있는 모습을 확인할 수 있습니다. 5173 포트는 `main` 쪽 프로젝트이고 5174는 `live-locator` 쪽입니다. 우리가 `http://localhost:5173/` 라는 경로로 접근하게 되면 로컬에 떠있는 서버는 그 경로를 분석해 대략 다음과 같은 절차로 요청을 처리합니다.
 
 1. 브라우저가 `http://localhost:5173` 또는 하위 파일 (`http://localhost:5173/src/main.ts?t=123`)에 접근합니다.
 1. 개발 서버는 해당 경로에 있는 실제 로컬 파일을 읽습니다.
@@ -604,7 +605,7 @@ React 등의 개발 환경에서는 생산성도 중요하기 때문에 프레�
 1. 해당 스크립트는 서버와 WebSocket을 연결합니다.
 1. 또한 브라우저는 **추후 서버로부터 신호가 왔을 때의 동작을 파일별로 미리 정의**해 놓습니다. 이것도 스니펫에 포함되어 있는 내용입니다. 보통 `accept`라는 함수를 미리 정의하는데요, 새롭게 바뀐 요소를 적용한다는 뜻입니다.
 
-자, 그럼 위 `@vitejs/plugin-react can't detect preamble.` 에러는 어디서 발생하는 걸까요? 
+자, 그럼 위 `@vitejs/plugin-react can't detect preamble.` 에러는 어디서 발생하는 걸까요?
 
 ```js LiveLocatorApp.tsx 개발용 빌드 결과물 (네트워크 탭에서 확인 가능)
 import { createHotContext as __vite__createHotContext } from "/@vite/client";
@@ -662,9 +663,9 @@ if (import.meta.hot) {
 
 Vite 입장에서는, `live-locator`를 가져오는 `index.html` 파일에 **미리 스니펫을 잘 끼워 넣어서** 각 파일에서도 준비 과정에 에러가 없어야 하는 게 당연한데, 우리는 `index.html` 파일은 건너뛰고 직접 `live-locator`를 로드했으니 Vite는 이상함을 감지하고 그냥 종료시켜버린 것입니다.
 
-해결법은 간단합니다. 저 preamble 코드를 직접 삽입하면 됩니다.
+해결법은 간단합니다. `main.ts`에서 저 preamble 코드를 직접 삽입하면 됩니다.
 
-```ts
+```ts packages/main/src/main.ts
 if (import.meta.env.DEV) {
   // !diff(1:9) +
   const script = document.createElement("script");
@@ -679,20 +680,18 @@ if (import.meta.env.DEV) {
 
   liveLocatorScriptPromise = loadScript(
     "http://localhost:5174/src/live-locator.tsx",
-    "banner-live-locator-dev"
+    "banner-live-locator-dev",
   );
 } else {
   const url = new URL(
     /* @vite-ignore */ `live-locator/live-locator.js?v=${version}`,
-    import.meta.url
+    import.meta.url,
   ).href;
   liveLocatorScriptPromise = loadScript(url, "banner-live-locator-prod");
 }
 ```
 
-이제 더이상 `@vitejs/plugin-react can't detect preamble` 에러가 발생하지 않는다는 걸 확인할 수 있습니다. 
-
-저 코드가 어디서 어떻게 만들어지는 지는 아래와 같이 Vite 소스코드에서도 확인해볼 수 있습니다.
+이제 더이상 `@vitejs/plugin-react can't detect preamble` 에러가 발생하지 않고 우리의 `LiveLocatorApp` 이 잘 로드된다는 걸 확인할 수 있습니다. 저 코드가 어디서 어떻게 만들어지는 지는 아래와 같이 Vite 소스코드에서도 확인해볼 수 있습니다.
 
 <ArticleImage
   img={preamble}
@@ -710,14 +709,126 @@ if (import.meta.env.DEV) {
 
 ## Tailwind
 
+Tailwind CSS 를 적용하려면 [공식 문서를 일단 따라하면](https://tailwindcss.com/docs/installation/using-vite) 됩니다. 크게 아래 단계로 이루어져 있죠.
 
+1. Tailwind 설치 `npm install tailwindcss @tailwindcss/vite`
+2. `vite.config.ts`에 tailwindcss 플러그인 추가
+3. CSS 파일에 `@import "tailwindcss";` 추가 (CSS 파일은 어디선가 import 되어야 함)
 
+본래 React에서 하던 것처럼 `LiveLocatorApp` 에서 그 css 파일을 import 해봅시다.
+
+```packages/live-locator/src/LiveLocatorApp.tsx
+import "./live-locator.css";
+```
+
+그런데 문제가 생깁니다.
+
+<ArticleImage
+  img={t1}
+  alt="head에 삽입되는 Tailwind style 태그"
+  border
+  caption="head에 삽입되는 Tailwind style 태그"
+/>
+
+**우리의 스타일은 head에 생기면 안 됩니다.** 고객 사이트에 영향을 주면 안되기 때문입니다(심지어 프로덕션 빌드는 그냥 이상하게 동작해서, CSS 파일 진입점 자체가 보이지 않습니다) 고객 사이트와 격리하기 위해 Shadow DOM을을 채택한 만큼, Tailwind도 Shaodw DOM의 바운더리 내에서 동작하게끔 해야 합니다. 문제는 Tailwind는 Shadow DOM에서도 사용할 수 있게끔 만들어지지 않아서, 이를 잘 동작하게끔 하는 건 우리의 미션이라는 겁니다.
+
+다행히도 쉽게 진행할 수 있습니다.
+
+```tsx packages/live-locator/src/LiveLocatorApp.tsx
+// !mark
+import styles from "./live-locator.css?inline";
+
+type LiveLocatorAppProps = {
+  version: string;
+  onClose: () => void;
+};
+
+export function LiveLocatorApp({ version, onClose }: LiveLocatorAppProps) {
+  return (
+    <>
+      {/* !mark */}
+      <style>{styles}</style>
+      <div>hello world!</div>
+    </>
+  );
+}
+```
+
+[Vite 문서](https://vite.dev/guide/features#disabling-css-injection-into-the-page)에 따르면 `?inline`을 붙이면 단순 string 값으로 스타일의 내용을 가져올 수 있다고 합니다.
+
+> **Disabling CSS injection into the page**
+> 
+> The automatic injection of CSS contents can be turned off via the `?inline` query parameter. In this case, the processed CSS string is returned as the module's default export as usual, but the styles aren't injected to the page.
+
+그래서 그걸 스타일에 그대로 넣으면 됩니다. 그럼 아래 이미지와 같이 Shadow DOM 내에 스타일이 삽입되었음을 확인할 수 있습니다. 우리의 `style` 태그는 고객의 사이트에 영향을 줄 수 없습니다.
+
+<ArticleImage
+  img={t2}
+  alt="Shadow DOM 안에 삽입되는 style 태그"
+  border
+  caption="Shadow DOM 안에 삽입되는 style 태그"
+/>
+
+다른 문제도 있습니다. [Shadow DOM 내부에서는 CSS `@property` 기능이 동작하지 않습니다. (tailwindcss#15005)](https://github.com/tailwindlabs/tailwindcss/issues/15005). Tailwind 문제는 아니고 표준이 정해지지 않은 문제라 브라우저에서 구현도 되지 않은 상태입니다. 저는 border 스타일만 정해지지 않아서 문제를 살펴봤었는데요, Tailwind v4는 `border-style`이 `@property`로서 기본값이 정해지는데, 이 기본값 조차 Shadow DOM 내부에서 동작하지 않았기 때문에 아예 안보였던 것입니다!
+
+그래서 아래 내용도 CSS 파일에 추가해줬습니다.
+
+```css packages/live-locator/src/live-locator.css
+:host {
+  --tw-divide-y-reverse: 0;
+  --tw-border-style: solid;
+  --tw-font-weight: initial;
+  --tw-tracking: initial;
+  --tw-translate-x: 0;
+  --tw-translate-y: 0;
+  --tw-translate-z: 0;
+  --tw-rotate-x: rotateX(0);
+  --tw-rotate-y: rotateY(0);
+  --tw-rotate-z: rotateZ(0);
+  --tw-skew-x: skewX(0);
+  --tw-skew-y: skewY(0);
+  --tw-space-x-reverse: 0;
+  --tw-gradient-position: initial;
+  --tw-gradient-from: #0000;
+  --tw-gradient-via: #0000;
+  --tw-gradient-to: #0000;
+  --tw-gradient-stops: initial;
+  --tw-gradient-via-stops: initial;
+  --tw-gradient-from-position: 0%;
+  --tw-gradient-via-position: 50%;
+  --tw-gradient-to-position: 100%;
+  --tw-shadow: 0 0 #0000;
+  --tw-shadow-color: initial;
+  --tw-inset-shadow: 0 0 #0000;
+  --tw-inset-shadow-color: initial;
+  --tw-ring-color: initial;
+  --tw-ring-shadow: 0 0 #0000;
+  --tw-inset-ring-color: initial;
+  --tw-inset-ring-shadow: 0 0 #0000;
+  --tw-ring-inset: initial;
+  --tw-ring-offset-width: 0px;
+  --tw-ring-offset-color: #fff;
+  --tw-ring-offset-shadow: 0 0 #0000;
+  --tw-blur: initial;
+  --tw-brightness: initial;
+  --tw-contrast: initial;
+  --tw-grayscale: initial;
+  --tw-hue-rotate: initial;
+  --tw-invert: initial;
+  --tw-opacity: initial;
+  --tw-saturate: initial;
+  --tw-sepia: initial;
+  --tw-drop-shadow: initial;
+  --tw-duration: initial;
+  --tw-ease: initial;
+}
+```
 
 ## Trouble Shooting
 
+### 빌드 결과물에 process.env.NODE_ENV 가 있어요
 
-
-### HMR이 안돼요
+이 문제는 
 
 ### Tailwind가 맛탱이가 갔어요
 
@@ -734,7 +845,6 @@ Webpack 에는 Module Federation 이라는 개념이 있습니다. 거대한 프
 
 ## 구현 ㄱㄱ
 
-
 이제 준비는 끝났습니다. 파일의 변경사항이 있을 땐 다음과 같은 단계로 진행됩니다.
 
 1. 서버는 로컬 파일들을 지켜봅니다(watch). 변경사항이 감지되면 WebSocket으로 브라우저에게 알립니다.
@@ -742,4 +852,4 @@ Webpack 에는 Module Federation 이라는 개념이 있습니다. 거대한 프
 1. 그 정보를 토대로 어떤 부분을 어떻게 바꿀지 잘 판단해서 `accept` 등의 함수를 적절하게 호출합니다.
 1. `accpet` 함수는 `react-refresh` 함수를 호출합니다.
 
-React 팀이 관리하는 `react-refresh`라는 패키지는 React 개발 환경에서 컴포넌트를 Fast Refresh할 수 있도록 도구를 제공합니다. Vite가 이 도구를 사용하는 거구요. 
+React 팀이 관리하는 `react-refresh`라는 패키지는 React 개발 환경에서 컴포넌트를 Fast Refresh할 수 있도록 도구를 제공합니다. Vite가 이 도구를 사용하는 거구요.
