@@ -54,10 +54,7 @@ export function renderCategoryIcon(Icon: LucideIcon) {
   return <Icon className="w-4 h-4 text-white" />;
 }
 
-export function getCategoryLabel(
-  category: Category,
-  locale: Locale,
-): string {
+export function getCategoryLabel(category: Category, locale: Locale): string {
   if (locale === "ko") return category;
 
   // English labels for categories

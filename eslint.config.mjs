@@ -1,75 +1,61 @@
-import { FlatCompat } from "@eslint/eslintrc";
-import js from "@eslint/js";
-import typescriptEslint from "@typescript-eslint/eslint-plugin";
 import tsParser from "@typescript-eslint/parser";
-import { parser } from "eslint-mdx";
+// import { parser } from "eslint-mdx";
 import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
+import reactPlugin from "eslint-plugin-react";
+import reactHooksPlugin from "eslint-plugin-react-hooks";
+import nextPlugin from "@next/eslint-plugin-next";
 import { defineConfig, globalIgnores } from "eslint/config";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
+import eslint from "@eslint/js";
+import tseslint from "typescript-eslint";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: js.configs.recommended,
-  allConfig: js.configs.all,
-});
+// const mdxFiles = ["**/*.mdx"];
+const scriptFiles = ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "**/*.mjs"];
 
 export default defineConfig([
-  globalIgnores([
-    "**/node_modules",
-    "**/.next",
-    "**/out",
-    "**/vitest.config.ts",
-    "**/next-sitemap.config.js",
-  ]),
+  eslint.configs.recommended,
+  tseslint.configs.recommended,
+
+  eslintPluginPrettierRecommended,
+  // {
+  //   files: mdxFiles,
+
+  //   languageOptions: {
+  //     globals: {
+  //       CH: "readonly",
+  //     },
+
+  //     parser,
+  //   },
+  // },
   {
-    files: ["**/*.mdx"],
-    extends: compat.extends("plugin:mdx/recommended", "prettier"),
-
-    languageOptions: {
-      globals: {
-        CH: "readonly",
-      },
-
-      parser,
-    },
-  },
-  {
-    files: ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "**/*.mjs"],
-
-    extends: compat.extends(
-      "eslint:recommended",
-      "plugin:@typescript-eslint/recommended",
-      "next/core-web-vitals",
-    ),
+    files: scriptFiles,
 
     plugins: {
-      "@typescript-eslint": typescriptEslint,
+      //   "@typescript-eslint": typescriptEslint,
+      react: reactPlugin,
+      "react-hooks": reactHooksPlugin,
+      "@next/next": nextPlugin,
     },
 
     languageOptions: {
       parser: tsParser,
-      ecmaVersion: 5,
-      sourceType: "script",
+      ecmaVersion: "latest",
+      sourceType: "module",
 
       parserOptions: {
         project: "./tsconfig.eslint.json",
+      },
+    },
+    settings: {
+      react: {
+        version: "detect",
       },
     },
 
     rules: {
       "react/prop-types": "off",
       "no-unused-vars": "off",
-
-      "jsx-a11y/label-has-associated-control": [
-        2,
-        {
-          controlComponents: ["input", "select", "textarea"],
-          depth: 3,
-        },
-      ],
+      "no-undef": "off", // Handled by TypeScript
 
       "object-shorthand": "error",
       "no-useless-rename": "error",
@@ -120,5 +106,11 @@ export default defineConfig([
       ],
     },
   },
-  eslintPluginPrettierRecommended,
+  globalIgnores([
+    "**/node_modules",
+    "**/.next",
+    "**/out",
+    "**/vitest.config.ts",
+    "**/next-sitemap.config.js",
+  ]),
 ]);

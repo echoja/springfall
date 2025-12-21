@@ -142,9 +142,9 @@ export function Anchor({
   ...restProps
 }: React.ComponentProps<"a">) {
   const isInternal = href?.startsWith("/article") || href?.startsWith("#");
-  const isHeadingAnchor = (restProps.className || "").split(" ").includes(
-    "heading-anchor",
-  );
+  const isHeadingAnchor = (restProps.className || "")
+    .split(" ")
+    .includes("heading-anchor");
 
   if (isHeadingAnchor) {
     // Preserve exact classes and attributes for heading anchors to keep styles working

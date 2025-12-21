@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/next-script-for-ga */
 import "@common/globals.css";
 import "../../public/pretendard-variable-gov/pretendardvariable-gov-dynamic-subset.css";
 import ColorModeClassNameInjector from "@modules/color-mode/ColorModeClassNameInjector";
