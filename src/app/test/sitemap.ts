@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { i18n } from "@common/config";
 import { articleLocales } from "@modules/i18n/available";
 import items from "@modules/article/items";
 
@@ -22,14 +23,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
       const languages = Object.fromEntries(
         locales.map((l) => [l, `${BASE}/${l}/${item.slug}`]),
       );
-      for (const l of locales) {
-        urls.push({
-          url: `${BASE}/${l}/${item.slug}`,
-          changeFrequency: "monthly",
-          lastModified: item.updatedAt,
-          alternates: { languages },
-        });
-      }
+      const primaryLocale = locales.includes(i18n.defaultLocale)
+        ? i18n.defaultLocale
+        : locales[0];
+      urls.push({
+        url: languages[primaryLocale],
+        changeFrequency: "monthly",
+        lastModified: item.updatedAt,
+        alternates: { languages },
+      });
       continue;
     }
 

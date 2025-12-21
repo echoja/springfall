@@ -9,6 +9,8 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
+      "@app": path.resolve(__dirname, "./src/app"),
+      "@components": path.resolve(__dirname, "./src/components"),
       "@common": path.resolve(__dirname, "./src/common"),
       "@modules": path.resolve(__dirname, "./src/modules"),
     },
