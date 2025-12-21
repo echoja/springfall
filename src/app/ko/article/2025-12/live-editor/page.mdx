@@ -219,6 +219,27 @@ packages/live-locator/src/utils/selector.ts
 
 `pacakge.json`에서 프로젝트 타입은 `type: "module"`로 갑니다. 실제 런타임에도 Node.js와 큰 연관이 있는 서버와 달리 프론트는 `type: "module"` 을 적용해도 이제는 큰 무리가 없어 보입니다. Vite로 새로운 프로젝트를 만들 때 이미 그게 기본값이기도 하구요. 그래서 전부 `type: "module"` 입니다.
 
+### Vite 빌드 설정 (library mode + IIFE)
+
+Vite 기본 빌드는 `index.html` 중심이지만, 우리는 **외부 사이트에 삽입될 단일 스크립트 파일**이 필요합니다. 그래서 각 패키지의 `vite.config`에서 **library mode**를 켜고 출력 포맷을 `iife`로 고정했습니다. 이렇게 하면 스크립트가 로드되는 즉시 실행되는 형태로 떨어집니다.
+
+```ts packages/main/vite.config.mts
+import { defineConfig } from "vite";
+
+export default defineConfig({
+  build: {
+    lib: {
+      entry: "src/main.ts",
+      formats: ["iife"],
+      fileName: () => "main.js",
+      name: "BannerMain",
+    },
+  },
+});
+```
+
+`live-locator`도 같은 패턴으로 `entry`, `name`, `fileName`만 바꿔주면 됩니다.
+
 ## `main` 스크립트
 
 `main` 스크립트는 심플해요. `banner-locations.json` 파일을 갖고 와서 거기의 정보에 맞게 배너를 insert 해주는 게 전부입니다.
@@ -757,7 +778,7 @@ export function LiveLocatorApp({ version, onClose }: LiveLocatorAppProps) {
 [Vite 문서](https://vite.dev/guide/features#disabling-css-injection-into-the-page)에 따르면 `?inline`을 붙이면 단순 string 값으로 스타일의 내용을 가져올 수 있다고 합니다.
 
 > **Disabling CSS injection into the page**
-> 
+>
 > The automatic injection of CSS contents can be turned off via the `?inline` query parameter. In this case, the processed CSS string is returned as the module's default export as usual, but the styles aren't injected to the page.
 
 그래서 그걸 스타일에 그대로 넣으면 됩니다. 그럼 아래 이미지와 같이 Shadow DOM 내에 스타일이 삽입되었음을 확인할 수 있습니다. 우리의 `style` 태그는 고객의 사이트에 영향을 줄 수 없습니다.
@@ -828,28 +849,30 @@ export function LiveLocatorApp({ version, onClose }: LiveLocatorAppProps) {
 
 ### 빌드 결과물에 process.env.NODE_ENV 가 있어요
 
-이 문제는 
+이 문제는 Vite 에서 library mode 를 사용하기 때문에 나오는 문제입니다.
 
-### Tailwind가 맛탱이가 갔어요
+library mode는 말 그대로 **결과물이 라이브러리로 사용되도록 빌드**합니다. 라이브러리는 개발자들이 사용하는 겁니다. 최종 고객에게 전달되는 게 아니기 때문에 개발과 관련된 정보도 남아있어야 합니다. 예를 들어 빌드 포맷을 `es`로 한다면 트리셰이킹과 관련된 정보(`/*@__PURE__*/` 주석 등)를 보존하기 위해 공백을 그대로 남겨놓습니다.
 
-```txt
-define:
+`live-locator`에는 React가 포함되어 있습니다. 그래서 React 개발에 필요한 정보도 함께 담겨져 있고, Node.js에서 `live-locator`가 또다시 빌드될 것을 전제로 하여 `process.env.NODE_ENV` 에 따른 분기 처리도 보존되었습니다. 그런데 live-locator는 브라우저에서 동작하여야 하고 엄밀히 라이브러리가 아니라 최종 결과물입니다. 그러므로 정보를 보존할 필요가 없습니다.
+
+아래와 같이 `build` 명령어라면 `process.env.NODE_ENV`를 `"production"`으로 고정함으로써 빌드 결과물에 `process.env.NODE_ENV`를 전부 날려버릴 수 있습니다.
+
+```ts packages/live-locator/vite.config.mts
+import tailwindcss from "@tailwindcss/vite";
+import react from "@vitejs/plugin-react";
+import { defineConfig } from "vite";
+
+export default defineConfig(({ command }) => ({
+  // 중략
+  define:
     command === "build"
-      ? { "process.env.NODE_ENV": "\"production\"" }
+      ? { "process.env.NODE_ENV": '"production"' }
       : undefined,
+  // 중략
+}));
 ```
 
-## 더 나아가서
+## 마치며 
 
-Webpack 에는 Module Federation 이라는 개념이 있습니다. 거대한 프론트엔드 프로젝트를 한번에 빌드하는 게 아니라 잘게 나누어서 필요한 부분만 빌드한다는 개념인데, 쉽지는 않습니다.
 
-## 구현 ㄱㄱ
-
-이제 준비는 끝났습니다. 파일의 변경사항이 있을 땐 다음과 같은 단계로 진행됩니다.
-
-1. 서버는 로컬 파일들을 지켜봅니다(watch). 변경사항이 감지되면 WebSocket으로 브라우저에게 알립니다.
-1. 브라우저는 WebSocket으로 정보를 받습니다.
-1. 그 정보를 토대로 어떤 부분을 어떻게 바꿀지 잘 판단해서 `accept` 등의 함수를 적절하게 호출합니다.
-1. `accpet` 함수는 `react-refresh` 함수를 호출합니다.
-
-React 팀이 관리하는 `react-refresh`라는 패키지는 React 개발 환경에서 컴포넌트를 Fast Refresh할 수 있도록 도구를 제공합니다. Vite가 이 도구를 사용하는 거구요.
+## 레퍼런스
