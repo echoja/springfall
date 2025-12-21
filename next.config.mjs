@@ -113,7 +113,7 @@ const withMDX = mdx({
       ["@echoja/remark-custom-container", customContainerOptions],
       "remark-gfm",
       [remarkCodeHikePluginPath, chConfig],
-      ["remark-toc", { heading: "목차" }],
+      ["remark-toc", { heading: "목차|Table of Contents" }],
     ],
     rehypePlugins: [
       "rehype-slug",
