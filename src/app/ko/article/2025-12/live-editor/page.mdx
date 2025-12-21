@@ -16,6 +16,7 @@ import su from "./su.png";
 import stair from "./stair.png";
 import t1 from "./t1.png";
 import t2 from "./t2.png";
+import intro from "./intro.png";
 
 export const metadata = getArticleMetadata(item);
 
@@ -46,6 +47,8 @@ export const metadata = getArticleMetadata(item);
 
 모든 빌드는 Vite 기반으로 합니다. 결과물은 S3(+CloudFront) 에 업로드하는 것을 전제로 합니다.
 
+> 이 글은 비즈니스 로직을 구현하고자 하는 목적이 없습니다. 따라서 배너니 실시간 위치 설정이니 하는 건 단순한 예시일 뿐이라는 점을... 미리 말씀드립니다.
+
 ## 요구사항을 보고 이 글의 제목을 해석해보자
 
 제목이 상당히 짬뽕이지요? 이 글은 내용이 길 것 같습니다. 모든 토끼를 잡아야 하거든요.
@@ -53,7 +56,7 @@ export const metadata = getArticleMetadata(item);
 - **고객의 사이트**에서: 우리가 소유한 인프라나 환경에서 동작하는 앱을 개발하는 아니라는 뜻입니다. 제약사항이 이것저것 많아집니다.
 - **React + Tailwind 앱**: 프론트 앱 개발에 있어서 생산성을 극적으로 올려주는 도구입니다. 쓸 수 있다면 쓰면 좋겠죠. 익숙하기도 하구요.
 - **효율적으로**: DX가 좋아야 한다는 말입니다. 개발 환경과 프로덕션 환경 사이에 큰 차이가 없도록 환경을 만들고 HMR도 잘 동작하도록 조치해야 합니다.
-- **Production Ready**: DX뿐만 아니라 실제 고객 입장에서 사이트가 **잘** 동작해야 합니다.
+- **Production Ready**: DX뿐만 아니라 실제 고객 입장에서 사이트가 **문제없이 잘** 동작해야 합니다.
 
 ## 요구사항 분석
 
@@ -75,7 +78,7 @@ export const metadata = getArticleMetadata(item);
 위 이미지만 봤을 때 눈에 띄는 서비스들이 있네요.
 
 - [Beusable](https://www.beusable.net/): 사용자 행동 분석 도구
-- [크리마(CREMA)](https://www.cre.ma/): 리뷰 데이터를 기반 마케팅 플랫폼
+- [크리마(CREMA)](https://www.cre.ma/): 리뷰 데이터 기반 마케팅 플랫폼
 - [Google Tag Manager](https://tagmanager.google.com/): 웹/앱 코드 수정 없이 다양한 마케팅·측정 태그를 한 대시보드에서 배포·관리하는 태그 관리 시스템.
 
 스크립트 설치(삽입)는 쇼핑몰 운영자가 해주기는 해야 합니다. 그 이후는 스크립트의 차례입니다.
@@ -101,7 +104,7 @@ React와 같은 프레임워크는 **내**가 **내 서비스** 만들 때 쓰�
 - live-locator 안에 있는 `div.container` 에만 스타일을 지정하려고 했는데, 고객 사이트에 있던 `div.container`가 영향을 받는다!
 - live-locator는 React를 사용하는데, 고객 사이트도 React를 써서 어떤 글로벌 변수가 서로 충돌한다! (재차 말하지만, React는 본래 **하나**의 완전한 웹앱으로 설계되었습니다.)
 
-때문에 스타일을 격리시키기 쉬운 **Shadow DOM + Custom Element** 방법을 사용하겠습니다. 그 외의 방법도 있을 수 있지만 쉽고 빠르게 적용 가능한 방법을 선택했습니다.
+때문에 스타일을 격리시키기 쉬운 **Shadow DOM + Custom Element** 방법을 사용하겠습니다. 이 방법이 만능은 아니겠지만, 쉽고 빠르게 적용 가능한 방법이라고 생각하고 선택했습니다.
 
 ## 비슷한 사례
 
@@ -155,6 +158,13 @@ Next.js 앱이 Vercel에서 빌드될 때 Vercel Toolbar를 로드하는 코드 
 
 ## 소스코드 및 데모
 
+<ArticleImage
+  img={intro}
+  alt="배너 도구 데모 페이지 모습"
+  border
+  caption="배너 도구 데모 페이지 모습"
+/>
+
 - https://github.com/echoja/mini-multi-scripts
 - https://mini-multi-scripts-live-locator.vercel.app/
 
@@ -168,10 +178,10 @@ packages/main/src/main.ts
 scripts/build.mjs
 packages/main/package.json
 packages/main/index.html
-packages/main/Vite.config.mts
+packages/main/vite.config.mts
 packages/main/public/banner-locations.json
 packages/live-locator/package.json
-packages/live-locator/Vite.config.mts
+packages/live-locator/vite.config.mts
 packages/live-locator/index.html
 packages/live-locator/src/live-locator.tsx
 packages/live-locator/src/LiveLocatorApp.tsx
@@ -185,7 +195,7 @@ packages/live-locator/src/utils/selector.ts
 - packages/live-locator/ 폴더: `live-locator` 스크립트 프로젝트 (Vite + React + Tailwind)
 - scripts/build.mjs: 빌드 스크립트 (`npm run build` 하게 되면 실행됨)
 
-빌드 및 배포 스크립트는 Jenkins로 하든, Github Actions로 하든, 스크립트로 만들어 정의하든 필요하긴 합니다. 최종 산출물은 **자바스크립트 파일**이며 이건 어딘가에 잘 업로드가 되어야 하기 때문입니다. 실제로는 [S3](https://aws.amazon.com/ko/s3)같은 곳에 올려서 CDN을 태우기만 하면 충분합니다.
+빌드 및 배포 스크립트는 Jenkins로 하든, GitHub Actions로 하든, 스크립트로 만들어 정의하든 필요하긴 합니다. 최종 산출물은 **자바스크립트 파일**이며 이건 어딘가에 잘 업로드가 되어야 하기 때문입니다. 실제로는 [S3](https://aws.amazon.com/ko/s3)같은 곳에 올려서 CDN을 태우기만 하면 충분합니다.
 
 이 데모는 Vercel에 간단히 업로드합니다. Vercel 배포 설정에서 output 폴더를 명시하고 그 곳에 빌드 결과물을 모아두기만 하면 Vercel이 알아서 업로드를 해줍니다. `scripts/build.mjs` 스크립트는 각 모노레포를 돌면서 빌드하고 그 쪽으로 복사해주는 역할을 합니다.
 
@@ -684,7 +694,11 @@ if (import.meta.env.DEV) {
 }
 ```
 
-이제 더이상 `@vitejs/plugin-react can't detect preamble` 에러가 발생하지 않고 우리의 `LiveLocatorApp` 이 잘 로드된다는 걸 확인할 수 있습니다. 저 코드가 어디서 어떻게 만들어지는 지는 아래와 같이 Vite 소스코드에서도 확인해볼 수 있습니다.
+`"/@react-refresh"` 가 아니라 `"http://localhost:5174/@react-refresh"`로부터 모듈을 가져온다는 점에 유의하세요. 이제 더이상 `@vitejs/plugin-react can't detect preamble` 에러가 발생하지 않고 우리의 `LiveLocatorApp` 이 잘 로드된다는 걸 확인할 수 있습니다.
+
+---
+
+저 코드가 어디서 어떻게 만들어지는 지는 아래와 같이 Vite 소스코드에서도 확인해볼 수 있습니다.
 
 <ArticleImage
   img={preamble}
@@ -702,7 +716,7 @@ if (import.meta.env.DEV) {
 
 ## Tailwind
 
-Tailwind CSS 를 적용하려면 [공식 문서를 일단 따라하면](https://tailwindcss.com/docs/installation/using-vite) 됩니다. 크게 아래 단계로 이루어져 있죠.
+Tailwind CSS 를 적용하려면 [공식 문서를 일단 따라하면](https://tailwindcss.com/docs/installation/using-vite) 됩니다.
 
 1. Tailwind 설치 `npm install tailwindcss @tailwindcss/vite`
 2. `vite.config.ts`에 tailwindcss 플러그인 추가
@@ -710,7 +724,7 @@ Tailwind CSS 를 적용하려면 [공식 문서를 일단 따라하면](https://
 
 본래 React에서 하던 것처럼 `LiveLocatorApp` 에서 그 css 파일을 import 해봅시다.
 
-```packages/live-locator/src/LiveLocatorApp.tsx
+```tsx packages/live-locator/src/LiveLocatorApp.tsx
 import "./live-locator.css";
 ```
 
@@ -723,7 +737,7 @@ import "./live-locator.css";
   caption="head에 삽입되는 Tailwind style 태그"
 />
 
-**우리의 스타일은 head에 생기면 안 됩니다.** 고객 사이트에 영향을 주면 안되기 때문입니다(심지어 프로덕션 빌드는 그냥 이상하게 동작해서, CSS 파일 진입점 자체가 보이지 않습니다) 고객 사이트와 격리하기 위해 Shadow DOM을을 채택한 만큼, Tailwind도 Shaodw DOM의 바운더리 내에서 동작하게끔 해야 합니다. 문제는 Tailwind는 Shadow DOM에서도 사용할 수 있게끔 만들어지지 않아서, 이를 잘 동작하게끔 하는 건 우리의 미션이라는 겁니다.
+**우리의 스타일은 head에 생기면 안 됩니다.** 고객 사이트에 영향을 주면 안되기 때문입니다(심지어 프로덕션 빌드는 그냥 이상하게 동작해서, CSS 파일 진입점 자체가 보이지 않습니다) 고객 사이트와 격리하기 위해 Shadow DOM을을 채택한 만큼, Tailwind도 Shaodw DOM의 바운더리 내에서 동작하게끔 해야 합니다. 문제는, Shadow DOM에서도 잘 동작하도록 Tailwind가 설계된 건 아니란 것입니다. 이를 문제 없이 잘 동작하도록 하는 건 우리의 미션이라는 겁니다.
 
 다행히도 쉽게 진행할 수 있습니다.
 
@@ -762,7 +776,7 @@ export function LiveLocatorApp({ version, onClose }: LiveLocatorAppProps) {
   caption="Shadow DOM 안에 삽입되는 style 태그"
 />
 
-다른 문제도 있습니다. [Shadow DOM 내부에서는 CSS `@property` 기능이 동작하지 않습니다. (tailwindcss#15005)](https://github.com/tailwindlabs/tailwindcss/issues/15005). Tailwind 문제는 아니고 표준이 정해지지 않은 문제라 브라우저에서 구현도 되지 않은 상태입니다. 저는 border 스타일만 정해지지 않아서 문제를 살펴봤었는데요, Tailwind v4는 `border-style`이 `@property`로서 기본값이 정해지는데, 이 기본값 조차 Shadow DOM 내부에서 동작하지 않았기 때문에 아예 안보였던 것입니다!
+다른 문제도 있습니다. [Shadow DOM 내부에서는 CSS `@property` 기능이 동작하지 않습니다. (tailwindcss#15005)](https://github.com/tailwindlabs/tailwindcss/issues/15005). Tailwind 문제는 아니고 표준이 정해지지 않은 문제라 브라우저에서 구현도 되지 않은 상태입니다. 저는 border 스타일만 정해지지 않아서 문제를 살펴봤었는데요, Tailwind v4는 `border-style`이 `@property`로서 기본값이 정해지는데, 이 기본값 조차 Shadow DOM 내부에서 유효하지 않았기 때문에 아예 안보였던 것입니다!
 
 그래서 아래 내용도 CSS 파일에 추가해줬습니다.
 
@@ -825,7 +839,7 @@ export function LiveLocatorApp({ version, onClose }: LiveLocatorAppProps) {
 
 library mode는 말 그대로 **결과물이 라이브러리로 사용되도록 빌드**합니다. 라이브러리는 개발자들이 사용하는 겁니다. 최종 고객에게 전달되는 게 아니기 때문에 개발과 관련된 정보도 남아있어야 합니다. 예를 들어 빌드 포맷을 `es`로 한다면 트리셰이킹과 관련된 정보(`/*@__PURE__*/` 주석 등)를 보존하기 위해 공백을 그대로 남겨놓습니다.
 
-`live-locator`에는 React가 포함되어 있습니다. 그래서 React 개발에 필요한 정보도 함께 담겨져 있고, Node.js에서 `live-locator`가 또다시 빌드될 것을 전제로 하여 `process.env.NODE_ENV` 에 따른 분기 처리도 보존되었습니다. 그런데 live-locator는 브라우저에서 동작하여야 하고 엄밀히 라이브러리가 아니라 최종 결과물입니다. 그러므로 정보를 보존할 필요가 없습니다.
+`live-locator`에는 React가 포함되어 있습니다. 그래서 React 개발에 필요한 정보도 함께 담겨져 있고, Node.js에서 `live-locator`가 또다시 빌드될 것을 전제로 하여 `process.env.NODE_ENV` 에 따른 분기 처리도 보존되었습니다. 그런데 `live-locator`는 브라우저에서 구동되어야 하고 엄밀히 라이브러리가 아니라 최종 결과물입니다. 그러므로 정보를 보존할 필요가 없습니다.
 
 아래와 같이 `build` 명령어라면 `process.env.NODE_ENV`를 `"production"`으로 고정함으로써 빌드 결과물에 `process.env.NODE_ENV`를 전부 날려버릴 수 있습니다.
 
@@ -844,7 +858,32 @@ export default defineConfig(({ command }) => ({
 }));
 ```
 
-## 마치며 
+## 마치며
 
+Production-Ready 라고 제목에 써넣어두긴 했지만 실제 서비스에 적용할 땐 해야 할 게 더 많긴 합니다. 특히 `live-locator`와 같은 기능이 로드되는 건 권한 체크(관리자 인증)가 필요하죠. 그외 에러/로그 수집과 같은 운영에 필요한 부분도 신경써야 할 것입니다.
+
+다른 사이트에서 동작하는 앱을 만든다는 건, 정말 어렵습니다. 기존 도구들은 그런 상황을 전제해놓지 않았죠, 사이트는 건드리면 안되죠, 또한 사이트로부터 영향을 받아서도 안됩니다. 각종 제약은 많으면서도 개발 생산성도 좋아야 하죠. 이 글에서는 `main`과 `live-locator`를 분리하고, 조건부 로딩, Shadow DOM 격리, Vite HMR 보정 같은 현실적인 문제를 하나씩 해결해봤습니다.
+
+실제로 이런 앱을 만든다면 이 글에 쓰여진 것 말고도 기상천외한 문제들을 많이 겪게 되실 겁니다. 브라우저가 어떤 방식으로 동작하고, Vite와 같은 번들러가 코드를 어떻게 만들고, 프론트 앱의 개발 및 빌드 환경이 어떻게 구성되어 있는지에 대해서 이해를 하고 있다면! 난관을 잘 해쳐나가실 수 있을 겁니다.
 
 ## 레퍼런스
+
+- https://andar.co.kr/
+- https://www.beusable.net/
+- https://www.cre.ma/
+- https://tagmanager.google.com/
+- https://vercel.live/_next-live/feedback/feedback.js
+- https://github.com/echoja/mini-multi-scripts
+- https://mini-multi-scripts-live-locator.vercel.app/
+- https://aws.amazon.com/ko/s3
+- https://developer.mozilla.org/en-US/docs/Web/API/Element/insertAdjacentElement
+- https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry/whenDefined
+- https://mini-multi-scripts-live-locator.vercel.app/main.js
+- https://mini-multi-scripts-live-locator.vercel.app/live-locator/live-locator.js
+- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import.meta
+- https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements
+- https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_shadow_DOM
+- https://github.com/Vitejs/Vite-plugin-react/blob/main/packages/common/refresh-utils.ts
+- https://tailwindcss.com/docs/installation/using-vite
+- https://vite.dev/guide/features#disabling-css-injection-into-the-page
+- https://github.com/tailwindlabs/tailwindcss/issues/15005
