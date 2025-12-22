@@ -66,7 +66,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             }}
           ></script>
         ) : null}
-        <script
+        {/* <script
           dangerouslySetInnerHTML={{
             __html: `
 
@@ -77,7 +77,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   });
 `,
           }}
-        ></script>
+        ></script> */}
       </head>
       <body>
         {process.env.NEXT_PUBLIC_GTM_ID ? (

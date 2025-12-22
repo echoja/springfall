@@ -40,7 +40,7 @@ export function collectHeadingInfo(root: HTMLElement): HeadingInfo[] {
 }
 
 interface FloatingTocProps {
-  targetRef: RefObject<HTMLElement>;
+  targetRef: RefObject<HTMLElement | null>;
   refreshKey?: string | null;
 }
 
@@ -60,7 +60,11 @@ export default function FloatingToc({
 
   useEffect(() => {
     const root = targetRef.current;
-    if (!root) return;
+    if (!root) {
+      console.log("no root found");
+      return;
+    }
+    console.log("collecting headings");
 
     const headingInfo = collectHeadingInfo(root);
     setItems(headingInfo.map(({ id, title, level }) => ({ id, title, level })));
@@ -77,7 +81,9 @@ export default function FloatingToc({
       (entries) => {
         entries.forEach((entry) => {
           const id = sectionToId.get(entry.target);
-          if (!id) return;
+          if (!id) {
+            return;
+          }
           if (entry.isIntersecting) {
             visible.add(id);
           } else {
@@ -85,7 +91,9 @@ export default function FloatingToc({
           }
         });
 
-        if (!order.length) return;
+        if (!order.length) {
+          return;
+        }
 
         const firstVisible = order.find((id) => visible.has(id));
         if (firstVisible) {
@@ -108,9 +116,7 @@ export default function FloatingToc({
           (heading) => heading.section.getBoundingClientRect().top >= 0,
         );
 
-        setActiveId(
-          lastPassed?.id ?? upcoming?.id ?? order[0] ?? null,
-        );
+        setActiveId(lastPassed?.id ?? upcoming?.id ?? order[0] ?? null);
       },
       {
         rootMargin: "-35% 0px -45% 0px",
@@ -128,7 +134,9 @@ export default function FloatingToc({
   }, [refreshKey]);
 
   const tocList = useMemo(() => {
-    if (!items.length) return null;
+    if (!items.length) {
+      return null;
+    }
 
     return (
       <nav aria-label="Floating table of contents" className="text-sm">
@@ -158,7 +166,9 @@ export default function FloatingToc({
     );
   }, [activeId, items]);
 
-  if (!items.length) return null;
+  if (!items.length) {
+    return null;
+  }
 
   return (
     <>

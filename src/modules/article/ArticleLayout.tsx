@@ -2,7 +2,6 @@
 
 import { usePathname } from "next/navigation";
 import { useRef } from "react";
-
 import ArticleFadeIn from "./ArticleFadeIn";
 import FloatingToc from "./FloatingToc";
 
@@ -16,10 +15,7 @@ export default function ArticleLayout({ children }: ArticleLayoutProps) {
 
   return (
     <div className="relative">
-      <ArticleFadeIn
-        articleRef={articleRef}
-        className="mb-20 lg:pr-[260px]"
-      >
+      <ArticleFadeIn articleRef={articleRef} className="mb-20 lg:pr-[260px]">
         {children}
       </ArticleFadeIn>
       <FloatingToc targetRef={articleRef} refreshKey={pathname} />

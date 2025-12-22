@@ -29,10 +29,7 @@ describe("collectHeadingInfo", () => {
 
     const headings = collectHeadingInfo(root);
 
-    expect(headings.map((heading) => heading.id)).toEqual([
-      "intro",
-      "details",
-    ]);
+    expect(headings.map((heading) => heading.id)).toEqual(["intro", "details"]);
     expect(headings[0]?.level).toBe(2);
     expect(headings[1]?.section).toBe(section2);
   });

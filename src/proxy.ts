@@ -10,7 +10,9 @@ const localizedSubpaths = new Set<string>(
 );
 
 function pickLocale(acceptLanguage: string | null): Locale {
-  if (!acceptLanguage) return i18n.defaultLocale;
+  if (!acceptLanguage) {
+    return i18n.defaultLocale;
+  }
   const prefs = acceptLanguage
     .split(",")
     .map((x) => {
@@ -21,10 +23,14 @@ function pickLocale(acceptLanguage: string | null): Locale {
     .sort((a, b) => b.q - a.q);
   for (const { tag } of prefs) {
     const exact = i18n.locales.find((l) => l.toLowerCase() === tag);
-    if (exact) return exact;
+    if (exact) {
+      return exact;
+    }
     const base = tag.split("-")[0] as Locale;
     const byBase = i18n.locales.find((l) => l.startsWith(base));
-    if (byBase) return byBase;
+    if (byBase) {
+      return byBase;
+    }
   }
   return i18n.defaultLocale;
 }
@@ -47,7 +53,9 @@ export default function proxy(req: NextRequest) {
   const match = Array.from(localizedSubpaths).find(
     (p) => pathname === p || pathname.startsWith(p + "/"),
   );
-  if (!match) return NextResponse.next();
+  if (!match) {
+    return NextResponse.next();
+  }
 
   const cookieLocale = (req.cookies.get("locale")?.value || undefined) as
     | Locale
