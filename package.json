@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@echoja/remark-custom-container": "^1.4.0",
+    "@hbsnow/rehype-sectionize": "1.0.7",
     "@heroui/react": "2.8.6",
     "@heroui/theme": "2.4.24",
     "@mdx-js/loader": "^3.1.1",
