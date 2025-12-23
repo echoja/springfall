@@ -10,6 +10,11 @@ import {
   type IRootTarget,
 } from "./basic";
 
+const toNumberOrNull = (value: string) => {
+  const nextValue = Number(value);
+  return Number.isNaN(nextValue) ? null : nextValue;
+};
+
 const ageList: { value: IAgeTarget["operator"]; label: string }[] = [
   { value: "<", label: "미만" },
   { value: "<=", label: "이하" },
@@ -147,11 +152,11 @@ export const Tester: React.FC = () => {
                             aria-label="나이"
                             type="number"
                             className="w-24 rounded-md border border-gray-300 px-2 py-1 text-sm dark:border-gray-600 dark:bg-gray-800"
-                            value={String(target.value)}
+                          value={String(target.value)}
                           onChange={(e) => {
                             const newTargets = [...targets];
-                            const nextValue = Number(e.target.value);
-                            if (Number.isNaN(nextValue)) {
+                            const nextValue = toNumberOrNull(e.target.value);
+                            if (nextValue === null) {
                               return;
                             }
                             newTargets[index] = {
@@ -244,8 +249,8 @@ export const Tester: React.FC = () => {
                           value={String(user.age)}
                           onChange={(e) =>
                             setUser((prev) => {
-                              const nextValue = Number(e.target.value);
-                              if (Number.isNaN(nextValue)) {
+                              const nextValue = toNumberOrNull(e.target.value);
+                              if (nextValue === null) {
                                 return prev;
                               }
                               return { ...prev, age: nextValue };
