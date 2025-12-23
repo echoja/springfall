@@ -9,10 +9,7 @@ const localizedSubpaths = new Set<string>(
   Object.keys(articleLocales).map((k) => `/${k}`),
 );
 
-function pickLocale(acceptLanguage: string | null): Locale {
-  if (!acceptLanguage) {
-    return i18n.defaultLocale;
-  }
+function pickLocale(acceptLanguage: string): Locale {
   const prefs = acceptLanguage
     .split(",")
     .map((x) => {
@@ -60,8 +57,10 @@ export default function proxy(req: NextRequest) {
   const cookieLocale = (req.cookies.get("locale")?.value || undefined) as
     | Locale
     | undefined;
+  const acceptLanguage = req.headers.get("accept-language");
   const detected =
-    cookieLocale ?? pickLocale(req.headers.get("accept-language"));
+    cookieLocale ??
+    (acceptLanguage ? pickLocale(acceptLanguage) : i18n.defaultLocale);
   const url = req.nextUrl.clone();
   url.pathname = `/${detected}${pathname}`;
   return NextResponse.redirect(url);

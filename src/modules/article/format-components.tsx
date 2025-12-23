@@ -34,7 +34,7 @@ const callout: AnnotationHandler = {
         >
           <div
             style={{ left: `${column - 1}ch` }}
-            className="absolute border-l border-t border-zinc-500 w-2 h-2 rotate-45 -translate-y-1/2 -top-[1px] bg-zinc-800"
+            className="absolute border-l border-t border-zinc-500 w-2 h-2 rotate-45 -translate-y-1/2 -top-px bg-zinc-800"
           />
           {annotation.query}
         </div>
