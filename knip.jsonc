@@ -1,0 +1,6 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema-jsonc.json",
+  "ignoreDependencies": ["server-only"],
+  "ignore": ["mdx-plugins/remark-codehike.mjs"],
+  "tags": ["-lintignore"]
+}
