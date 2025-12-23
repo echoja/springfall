@@ -159,6 +159,7 @@ const withMDX = mdx({
           },
         },
       ],
+      "@hbsnow/rehype-sectionize",
     ],
   },
 });

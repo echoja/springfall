@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
+/** @lintignore */
 export type ExpandableTextProps = {
   content: string;
   lineClamp?: number;

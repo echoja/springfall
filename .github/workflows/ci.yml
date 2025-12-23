@@ -22,3 +22,6 @@ jobs:
 
       - name: test
         run: pnpm test:ci
+
+      - name: knip
+        run: pnpm knip

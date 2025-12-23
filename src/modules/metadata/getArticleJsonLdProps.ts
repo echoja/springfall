@@ -1,7 +1,7 @@
 import type { ArticleItem } from "@modules/article/types";
 
 import type { ArticleJsonLdProps } from "next-seo";
-import { authorList, authorName } from "./constants";
+import { authorName, authorUrl } from "./constants";
 
 export default function getArticleJsonLdProps(
   item: ArticleItem,
@@ -13,7 +13,14 @@ export default function getArticleJsonLdProps(
     url,
     headline: title,
     image: [image.src],
-    author: authorList,
+    author: [
+      {
+        "@type": "Person",
+        name: authorName,
+        url: authorUrl,
+        email: "eszqsc112@gmail.com",
+      },
+    ],
     publisher: authorName,
     datePublished: createdAt,
     dateModified: updatedAt,

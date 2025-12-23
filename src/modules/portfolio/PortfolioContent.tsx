@@ -8,8 +8,6 @@ export default function PortfolioContent() {
   const contentRef = useRef<HTMLDivElement>(null);
 
   const handleDownloadPDF = () => {
-    if (typeof window === "undefined") return;
-
     window.print();
   };
 

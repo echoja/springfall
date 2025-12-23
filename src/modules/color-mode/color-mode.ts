@@ -2,6 +2,7 @@ import { atom, createStore, useAtom, useStore } from "jotai";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 export type ColorModeSetting = "light" | "dark" | "system";
+/** @lintignore */
 export type ResolvedColorMode = "light" | "dark";
 
 const STORAGE_KEY = "colorMode";
@@ -12,19 +13,25 @@ const colorModeSettingAtom = atom<ColorModeSetting | null>(null);
 export const store = createStore();
 
 const getSystemPreference = (): ResolvedColorMode => {
-  if (typeof window === "undefined") return "light";
+  if (typeof window === "undefined") {
+    return "light";
+  }
   return window.matchMedia("(prefers-color-scheme: dark)").matches
     ? "dark"
     : "light";
 };
 
 const getInitialSetting = (): ColorModeSetting => {
-  if (typeof window === "undefined") return "system";
+  if (typeof window === "undefined") {
+    return "system";
+  }
 
   const raw = window.localStorage.getItem(
     STORAGE_KEY,
   ) as ColorModeSetting | null;
-  if (raw === "light" || raw === "dark" || raw === "system") return raw;
+  if (raw === "light" || raw === "dark" || raw === "system") {
+    return raw;
+  }
   return "system";
 };
 

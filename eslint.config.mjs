@@ -56,6 +56,7 @@ export default defineConfig([
       "react/prop-types": "off",
       "no-unused-vars": "off",
       "no-undef": "off", // Handled by TypeScript
+      curly: "error",
 
       "object-shorthand": "error",
       "no-useless-rename": "error",
@@ -65,19 +66,6 @@ export default defineConfig([
         {
           varsIgnorePattern: "^_",
           argsIgnorePattern: "^_",
-        },
-      ],
-
-      "@typescript-eslint/naming-convention": [
-        "error",
-        {
-          selector: "interface",
-          format: ["PascalCase"],
-
-          custom: {
-            regex: "^I[A-Z]",
-            match: true,
-          },
         },
       ],
 

@@ -78,7 +78,7 @@ for (const script of tryScripts) {
 const currencies = Intl.supportedValuesOf("currency");
 const currencyNames = new Intl.DisplayNames("ko-KR", { type: "currency" });
 
-export const configs = {
+const configs = {
   currency: Object.fromEntries(
     [...currencies].map((id) => [id, currencyNames.of(id)]),
   ),

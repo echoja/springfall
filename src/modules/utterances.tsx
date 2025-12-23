@@ -15,9 +15,15 @@ const Utterances = () => {
   // Inject both iframes once
   useEffect(() => {
     const repo = getUtterancesRepo();
-    if (loaded.current) return;
-    if (!lightRef || !darkRef) return;
-    if (repo === DEFAULT_UTTERANCES_REPO) return;
+    if (loaded.current) {
+      return;
+    }
+    if (!lightRef || !darkRef) {
+      return;
+    }
+    if (repo === DEFAULT_UTTERANCES_REPO) {
+      return;
+    }
 
     const add = (
       container: HTMLDivElement,
@@ -42,8 +48,12 @@ const Utterances = () => {
       sLight.remove();
       sDark.remove();
       [lightRef, darkRef].forEach((c) => {
-        if (!c) return;
-        while (c.firstChild) c.removeChild(c.firstChild);
+        if (!c) {
+          return;
+        }
+        while (c.firstChild) {
+          c.removeChild(c.firstChild);
+        }
       });
       loaded.current = false;
     };
