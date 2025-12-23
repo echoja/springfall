@@ -148,15 +148,19 @@ export const Tester: React.FC = () => {
                             type="number"
                             className="w-24 rounded-md border border-gray-300 px-2 py-1 text-sm dark:border-gray-600 dark:bg-gray-800"
                             value={String(target.value)}
-                            onChange={(e) => {
-                              const newTargets = [...targets];
-                              newTargets[index] = {
-                                ...target,
-                                value: parseInt(e.target.value),
-                              };
-                              setTargets(newTargets);
-                            }}
-                          />
+                          onChange={(e) => {
+                            const newTargets = [...targets];
+                            const nextValue = Number(e.target.value);
+                            if (Number.isNaN(nextValue)) {
+                              return;
+                            }
+                            newTargets[index] = {
+                              ...target,
+                              value: nextValue,
+                            };
+                            setTargets(newTargets);
+                          }}
+                        />
                           세{" "}
                           <AgeOperatorSelect
                             value={target.operator}
@@ -239,7 +243,13 @@ export const Tester: React.FC = () => {
                           className="w-24 rounded-md border border-gray-300 px-2 py-1 text-sm dark:border-gray-600 dark:bg-gray-800"
                           value={String(user.age)}
                           onChange={(e) =>
-                            setUser({ ...user, age: parseInt(e.target.value) })
+                            setUser((prev) => {
+                              const nextValue = Number(e.target.value);
+                              if (Number.isNaN(nextValue)) {
+                                return prev;
+                              }
+                              return { ...prev, age: nextValue };
+                            })
                           }
                         />
                         세
