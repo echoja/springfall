@@ -2,6 +2,7 @@
 
 import { List, X } from "lucide-react";
 import { useEffect, useMemo, useState, type RefObject } from "react";
+import { twMerge } from "tailwind-merge";
 
 export interface HeadingInfo {
   id: string;
@@ -10,14 +11,12 @@ export interface HeadingInfo {
   section: Element;
 }
 
-const headingSelector = "h2, h3, h4, h5, h6";
-
 const isTocHeading = (title: string) =>
   /^(목차|table of contents)$/i.test(title.trim());
 
 export function collectHeadingInfo(root: HTMLElement): HeadingInfo[] {
   const headings = Array.from(
-    root.querySelectorAll<HTMLElement>(headingSelector),
+    root.querySelectorAll<HTMLElement>("h2, h3, h4, h5, h6"),
   );
 
   return headings
@@ -140,7 +139,7 @@ export default function FloatingToc({
 
     return (
       <nav aria-label="Floating table of contents" className="text-sm">
-        <ul className="space-y-1">
+        <ul>
           {items.map((item) => {
             const depth = Math.max(0, item.level - 2);
             const isActive = item.id === activeId;
@@ -149,11 +148,12 @@ export default function FloatingToc({
                 <a
                   href={`#${item.id}`}
                   onClick={() => setIsOpen(false)}
-                  className={`block rounded-md border border-transparent px-2 py-1 transition-colors ${
+                  className={twMerge(
+                    `block rounded-md border border-transparent px-2 py-1 transition-colors break-all`,
                     isActive
-                      ? "bg-brand-50 text-brand-800 dark:bg-brand-900/50 dark:text-brand-100 dark:border-brand-800"
-                      : "text-gray-600 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-800/60"
-                  }`}
+                      ? "font-bold text-gray-800 dark:text-gray-50"
+                      : "text-gray-600  dark:text-gray-200 ",
+                  )}
                   style={{ paddingLeft: `${8 + depth * 12}px` }}
                 >
                   {item.title}
@@ -172,7 +172,7 @@ export default function FloatingToc({
 
   return (
     <>
-      <div className="hidden lg:block">
+      <div className="hidden lg:block opacity-50 hover:opacity-100 transition">
         <div
           className="fixed z-20 w-64 max-h-[70vh] overflow-y-auto rounded-xl border border-gray-200 bg-white/90 p-3 shadow-md backdrop-blur dark:border-gray-700 dark:bg-gray-900/85"
           style={{
@@ -180,7 +180,7 @@ export default function FloatingToc({
             top: "9rem",
           }}
         >
-          <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+          <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 pl-2">
             목차
           </div>
           {tocList}

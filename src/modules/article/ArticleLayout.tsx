@@ -15,7 +15,10 @@ export default function ArticleLayout({ children }: ArticleLayoutProps) {
 
   return (
     <div className="relative">
-      <ArticleFadeIn articleRef={articleRef} className="mb-20 lg:pr-[260px]">
+      <ArticleFadeIn
+        articleRef={articleRef}
+        className="mb-20 lg:-translate-x-38"
+      >
         {children}
       </ArticleFadeIn>
       <FloatingToc targetRef={articleRef} refreshKey={pathname} />
