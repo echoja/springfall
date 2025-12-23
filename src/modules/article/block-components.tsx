@@ -42,14 +42,6 @@ export function Heading6({ children, ...props }: ComponentProps<"h6">) {
   );
 }
 
-export function Paragraph({ children, ...props }: ComponentProps<"p">) {
-  return (
-    <p {...props} className={twMerge(props.className, style.paragraph)}>
-      {children}
-    </p>
-  );
-}
-
 export function Quote({ children, ...props }: ComponentProps<"blockquote">) {
   return (
     <blockquote {...props} className={twMerge(props.className, style.quote)}>
