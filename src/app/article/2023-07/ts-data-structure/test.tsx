@@ -126,6 +126,7 @@ function renderParagraph(content: IParagraph) {
   return <p>{content.text}</p>;
 }
 
+/** @lintignore */
 export const Post: React.FC<{
   post: IPost;
 }> = ({ post }) => {

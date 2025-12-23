@@ -6,6 +6,7 @@ export interface IRootTarget {
   child: Target;
 }
 
+/** @lintignore */
 export interface ITargetGroup {
   type: "group";
   operator: "and" | "or";
