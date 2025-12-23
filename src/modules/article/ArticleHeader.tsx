@@ -1,37 +1,10 @@
 import type { Category } from "@modules/category";
 import { getCategoryLabel } from "@modules/category";
 import dayjs from "dayjs";
-import { twMerge } from "tailwind-merge";
-import style from "./ArticleHeader.module.css";
 import { i18n, type Locale } from "@common/config";
 import { getLocalesForSlug } from "@modules/i18n/available";
 import { isLocale } from "@modules/i18n/util";
 import Link from "next/link";
-
-const customColor = {
-  "--bgColor": `--color-gray-300 83.3333%`,
-  "--darkBgColor": `--color-gray-700 83.3333%`,
-};
-
-export const HeaderSeparator: React.FC<React.ComponentProps<"div">> = (
-  props,
-) => (
-  <div
-    {...props}
-    role="separator"
-    className={twMerge(
-      "border-none h-5 block",
-      style["header-separator"],
-      props.className,
-    )}
-    style={{
-      ...customColor,
-      ...props.style,
-    }}
-  >
-    {props.children}
-  </div>
-);
 
 export interface IArticleHeaderProps {
   title: string;
