@@ -224,7 +224,7 @@ export const Tester: React.FC = () => {
         </TableBody>
       </Table>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div className="p-4 border border-transparent rounded-large shadow-small dark:border-gray-600">
+        <div className="rounded-large shadow-small border border-transparent p-4 dark:border-gray-600">
           <h3 className="mb-3 font-medium">조건 데이터</h3>
           <pre className="text-xs">{JSON.stringify(root, null, 2)}</pre>
         </div>
@@ -281,14 +281,14 @@ export const Tester: React.FC = () => {
             </TableBody>
           </Table>
 
-          <div className="p-4 mb-4 border border-transparent rounded-large shadow-small dark:border-gray-600">
+          <div className="rounded-large shadow-small mb-4 border border-transparent p-4 dark:border-gray-600">
             <h3 className="mb-2 font-medium">실행</h3>
             <pre className="text-xs whitespace-pre-wrap">{`const result = checkTarget(root, { user });`}</pre>
           </div>
 
           <div
             className={twMerge(
-              "p-4 rounded-large shadow-small transition border ",
+              "rounded-large shadow-small border p-4 transition",
               result.type === "success"
                 ? "border-success-400 dark:border-success-300"
                 : result.type === "failure"

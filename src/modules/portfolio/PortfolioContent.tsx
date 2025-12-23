@@ -113,10 +113,10 @@ export default function PortfolioContent() {
       <div>
         <button
           onClick={handleDownloadPDF}
-          className="no-print fixed top-16 sm:top-20 right-4 sm:right-6 z-10 px-3 sm:px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors flex items-center gap-2 text-xs sm:text-sm font-medium shadow-lg"
+          className="no-print fixed top-16 right-4 z-10 flex items-center gap-2 rounded-lg bg-gray-900 px-3 py-2 text-xs font-medium text-white shadow-lg transition-colors hover:bg-gray-800 sm:top-20 sm:right-6 sm:px-4 sm:text-sm"
         >
           <svg
-            className="w-4 h-4"
+            className="h-4 w-4"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -137,17 +137,17 @@ export default function PortfolioContent() {
           ref={contentRef}
           className="bg-white text-gray-900"
         >
-          <header className="border-b-2 border-gray-900 pb-4 sm:pb-6 mb-6 sm:mb-8">
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 print-title">
+          <header className="mb-6 border-b-2 border-gray-900 pb-4 sm:mb-8 sm:pb-6">
+            <h1 className="print-title mb-3 text-2xl font-bold sm:text-3xl lg:text-4xl">
               포트폴리오
             </h1>
-            <p className="text-base sm:text-lg text-gray-700 print-subtitle leading-relaxed">
+            <p className="print-subtitle text-base leading-relaxed text-gray-700 sm:text-lg">
               사용자 경험과 성능을 중시하는 프로덕트 엔지니어입니다.
             </p>
           </header>
 
           <section className="mb-8 sm:mb-10">
-            <h2 className="text-xl sm:text-2xl font-bold border-b-2 border-gray-300 pb-2 mb-4 sm:mb-5 print-heading">
+            <h2 className="print-heading mb-4 border-b-2 border-gray-300 pb-2 text-xl font-bold sm:mb-5 sm:text-2xl">
               경력
             </h2>
             <div className="space-y-4 sm:space-y-5">
@@ -156,21 +156,21 @@ export default function PortfolioContent() {
                   key={`${exp.company}-${exp.role}`}
                   className="pb-4 sm:pb-5"
                 >
-                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
+                  <div className="mb-2 flex flex-col sm:flex-row sm:items-baseline sm:justify-between">
                     <div>
-                      <h3 className="font-bold text-base sm:text-lg print-subheading">
+                      <h3 className="print-subheading text-base font-bold sm:text-lg">
                         {exp.company}
                       </h3>
-                      <p className="text-sm sm:text-base text-gray-600 print-body">
+                      <p className="print-body text-sm text-gray-600 sm:text-base">
                         {exp.role}
                       </p>
                     </div>
-                    <span className="text-sm sm:text-base text-gray-600 mt-1 sm:mt-0 print-body">
+                    <span className="print-body mt-1 text-sm text-gray-600 sm:mt-0 sm:text-base">
                       {exp.period}
                     </span>
                   </div>
                   {exp.details && (
-                    <ul className="mt-3 ml-5 text-sm sm:text-base text-gray-700 list-disc print-body space-y-1">
+                    <ul className="print-body mt-3 ml-5 list-disc space-y-1 text-sm text-gray-700 sm:text-base">
                       {exp.details.map((detail) => (
                         <li key={detail}>{detail}</li>
                       ))}
@@ -182,41 +182,41 @@ export default function PortfolioContent() {
           </section>
 
           <section className="mb-8 sm:mb-10">
-            <h2 className="text-xl sm:text-2xl font-bold border-b-2 border-gray-300 pb-2 mb-4 sm:mb-5 print-heading">
+            <h2 className="print-heading mb-4 border-b-2 border-gray-300 pb-2 text-xl font-bold sm:mb-5 sm:text-2xl">
               프로젝트
             </h2>
             <div className="space-y-4 sm:space-y-5">
               {projects.map((project) => (
                 <div
                   key={project.title}
-                  className="pb-4 sm:pb-5 border-b border-gray-200 last:border-0"
+                  className="border-b border-gray-200 pb-4 last:border-0 sm:pb-5"
                 >
-                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
-                    <h3 className="font-bold text-base sm:text-lg print-subheading">
+                  <div className="mb-2 flex flex-col sm:flex-row sm:items-baseline sm:justify-between">
+                    <h3 className="print-subheading text-base font-bold sm:text-lg">
                       {project.title}
                     </h3>
                     {project.period && (
-                      <span className="text-sm sm:text-base text-gray-600 mt-1 sm:mt-0 print-body">
+                      <span className="print-body mt-1 text-sm text-gray-600 sm:mt-0 sm:text-base">
                         {project.period}
                       </span>
                     )}
                   </div>
-                  <p className="text-sm sm:text-base text-gray-700 mb-3 print-body leading-relaxed">
+                  <p className="print-body mb-3 text-sm leading-relaxed text-gray-700 sm:text-base">
                     {project.description}
                   </p>
                   {project.highlights && project.highlights.length > 0 && (
-                    <ul className="ml-5 text-sm sm:text-base text-gray-600 list-disc mb-3 print-body space-y-1">
+                    <ul className="print-body mb-3 ml-5 list-disc space-y-1 text-sm text-gray-600 sm:text-base">
                       {project.highlights.map((highlight) => (
                         <li key={highlight}>{highlight}</li>
                       ))}
                     </ul>
                   )}
                   {project.tags && project.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-1.5 mt-3">
+                    <div className="mt-3 flex flex-wrap gap-1.5">
                       {project.tags.map((tag) => (
                         <span
                           key={tag}
-                          className="px-2 sm:px-2.5 py-1 text-xs sm:text-sm border border-gray-400 rounded print-small"
+                          className="print-small rounded border border-gray-400 px-2 py-1 text-xs sm:px-2.5 sm:text-sm"
                         >
                           {tag}
                         </span>
@@ -228,7 +228,7 @@ export default function PortfolioContent() {
             </div>
           </section>
 
-          <footer className="border-t-2 border-gray-300 pt-4 sm:pt-5 text-sm sm:text-base text-gray-600 print-body no-print">
+          <footer className="print-body no-print border-t-2 border-gray-300 pt-4 text-sm text-gray-600 sm:pt-5 sm:text-base">
             <p>협업이나 제안이 있다면 연락 주세요.</p>
           </footer>
         </div>

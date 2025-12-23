@@ -23,7 +23,7 @@ export function List({ children }: { children: React.ReactNode }) {
   return (
     <motion.ul
       role="list"
-      className="mb-20 grid grid-cols-1 sm:grid-cols-2 -mx-4"
+      className="-mx-4 mb-20 grid grid-cols-1 sm:grid-cols-2"
       initial="hidden"
       variants={listVariants}
       whileInView="visible"
@@ -52,7 +52,7 @@ export function ListItem({
     <motion.li
       key={title}
       data-slot="home-list-item"
-      className="relative rounded-md py-6 px-4 sm:p-8 bg-background/0"
+      className="bg-background/0 relative rounded-md px-4 py-6 sm:p-8"
       data-gtm-id={`${href}_link`}
       whileTap={{ scale: 0.99 }}
       // whileHover={{ backgroundColor: "var(--color-background)" }}
@@ -68,9 +68,9 @@ export function ListItem({
         )}
       </div>
 
-      <div className="mb-2 text-xl leading-7 font-bold  break-keep">
+      <div className="mb-2 text-xl leading-7 font-bold break-keep">
         <Link href={href} className="text-gray-900 dark:text-gray-100">
-          <span className="absolute inset-0 transition rounded-md"></span>
+          <span className="absolute inset-0 rounded-md transition"></span>
           {title}
         </Link>
       </div>

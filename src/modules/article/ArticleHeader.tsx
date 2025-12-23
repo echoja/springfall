@@ -67,7 +67,7 @@ export default function ArticleHeader({
         {summary}
       </p>
       {languageLinks.length >= 2 ? (
-        <div className="mt-3 text-xs text-gray-600 dark:text-gray-400 flex gap-2 flex-wrap items-center">
+        <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-gray-600 dark:text-gray-400">
           <span className="opacity-70">Available:</span>
           {languageLinks.map((l) =>
             l.locale === currentLocale ? (

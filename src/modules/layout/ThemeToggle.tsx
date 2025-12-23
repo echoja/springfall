@@ -26,7 +26,7 @@ function ThemeToggle(props: React.HTMLAttributes<HTMLDivElement>) {
       <div
         role="radiogroup"
         aria-label="테마"
-        className="inline-flex items-center rounded-sm border border-gray-400/30 overflow-hidden text-xs"
+        className="inline-flex items-center overflow-hidden rounded-sm border border-gray-400/30 text-xs"
       >
         <SegButton
           label="시스템"
@@ -64,7 +64,7 @@ function SegButton({
       aria-checked={!!checked}
       onClick={onClick}
       className={
-        "px-2.5 py-1 transition whitespace-nowrap " +
+        "px-2.5 py-1 whitespace-nowrap transition " +
         (checked
           ? "bg-gray-900 text-white dark:bg-gray-100 dark:text-gray-900"
           : "hover:bg-gray-400/10")
