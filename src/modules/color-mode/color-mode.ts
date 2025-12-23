@@ -2,6 +2,7 @@ import { atom, createStore, useAtom, useStore } from "jotai";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 export type ColorModeSetting = "light" | "dark" | "system";
+/** @lintignore */
 export type ResolvedColorMode = "light" | "dark";
 
 const STORAGE_KEY = "colorMode";

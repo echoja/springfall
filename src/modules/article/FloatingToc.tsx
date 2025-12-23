@@ -4,6 +4,7 @@ import { List, X } from "lucide-react";
 import { useEffect, useMemo, useState, type RefObject } from "react";
 import { twMerge } from "tailwind-merge";
 
+/** @lintignore */
 export interface HeadingInfo {
   id: string;
   title: string;

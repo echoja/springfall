@@ -1,3 +1,4 @@
+/** @lintignore */
 export type Target = IGenderTarget | IAgeTarget | ITargetGroup | IRootTarget;
 
 export interface IRootTarget {
@@ -22,6 +23,7 @@ export interface IAgeTarget {
   value: number;
 }
 
+/** @lintignore */
 export interface IEnv {
   user: IUser;
 }
