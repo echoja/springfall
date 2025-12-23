@@ -17,7 +17,7 @@
   "dependencies": {
     "@echoja/remark-custom-container": "^1.4.0",
     "@hbsnow/rehype-sectionize": "1.0.7",
-    "@heroui/react": "2.8.6",
+    "@heroui/react": "2.8.7",
     "@mdx-js/loader": "^3.1.1",
     "@mdx-js/react": "^3.1.1",
     "@next/bundle-analyzer": "16.1.0",
