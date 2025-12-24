@@ -5,23 +5,35 @@ on:
   workflow_dispatch:
 
 jobs:
+  verify-lockfile:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: ./.github/actions/setup-pnpm
+
+      - name: verify lockfile unchanged
+        run: git diff --exit-code pnpm-lock.yaml
+
   test:
     runs-on: ubuntu-24.04
 
     steps:
       - uses: actions/checkout@v6
 
-      - uses: actions/setup-node@v6
-        with:
-          node-version: 24
-
-      - uses: pnpm/action-setup@v4
-
-      - name: package install
-        run: pnpm install
+      - uses: ./.github/actions/setup-pnpm
 
       - name: test
         run: pnpm test:ci
+
+  knip:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: ./.github/actions/setup-pnpm
 
       - name: knip
         run: pnpm knip

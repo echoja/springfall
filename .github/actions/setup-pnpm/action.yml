@@ -1,0 +1,22 @@
+name: "Setup Node and install dependencies"
+description: "Configure Node, enable pnpm cache, and install dependencies"
+
+inputs:
+  node-version:
+    description: "Node.js version to use"
+    required: false
+    default: "24"
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/setup-node@v6
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: "pnpm"
+
+    - uses: pnpm/action-setup@v4
+
+    - name: package install
+      run: pnpm install
+      shell: bash
