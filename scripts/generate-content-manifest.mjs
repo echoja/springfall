@@ -204,3 +204,6 @@ const formatted = await prettier.format(manifestContent, {
 });
 
 await fs.writeFile(manifestPath, formatted, "utf-8");
+console.log(
+  `Generated content manifest with ${entries.length} entries at ${manifestPath}`,
+);
