@@ -1,5 +1,8 @@
 import type { Locale } from "@common/config";
 
+/**
+ * 여기 바꾸면 meta.schema.json도 바꿔야 함
+ */
 export type Category = "회고" | "리뷰" | "기술" | "일상" | "기타" | "디자인";
 
 export function getCategoryLabel(category: Category, locale: Locale): string {
