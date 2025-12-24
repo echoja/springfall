@@ -66,230 +66,225 @@ export const metadata = getArticleMetadata(item);
 
 ```typescript
 async function runCampaign() {
-  const checkResult = await checkCanSendMessage(); // 보낸 적이 있는지 체크. `true`면 진행.
-  if (!checkResult) {
+  const sendLogId = await checkAndInsertLog();
+  if (!sendLogId) {
     console.warn("이미 메시지를 보냈어요.");
     return;
   }
 
-  const insertedLogId = await insertLog();
+  let uploadedImage: UploadedImage | null = null;
   try {
-    const uploadedImage = await uploadImage(); // 이미지 업로드
-    try {
-      return await sendMessage();
-    } catch (e) {
-      deleteImage(uploadedImage); // 업로드한 이미지를 삭제합니다.
-      throw e;
-    }
+    uploadedImage = await uploadImage();
+    await sendMessage({ imageUrl: uploadedImage.url });
   } catch (e) {
-    deleteLog(insertedLogId); // 체크를 되돌립니다 (DB Delete)
+    if (uploadedImage) {
+      await deleteImage(uploadedImage);
+    }
+    await deleteLog(sendLogId);
     throw e;
   }
 }
 ```
 
-자자자... 이제 약간 단점이 보입니다.
+## 문제의 핵심: 복잡한 try/catch
 
-1. 예
+아래 두 가지가 가장 크게 아쉬웠습니다.
 
-## 요약
+### 1) 중첩 try/catch로 가독성 급락
 
-sdflaksd
+Step이 늘어날수록 들여쓰기와 예외 처리가 겹겹이 쌓여서 “정상 흐름”을 파악하기가 어렵습니다.
 
-````typescript
-/**
- * Workflow Step 인터페이스
- *
- * @template C 모든 Step에서 공유하는 컨텍스트 타입
- * @template A 이 Step의 action이 반환하는 rollback argument 타입
- */
+```typescript
+async function runCampaign() {
+  const sendLogId = await checkAndInsertLog();
+  if (!sendLogId) {
+    return;
+  }
+  try {
+    const uploadedImage = await uploadImage();
+    try {
+      // !mark
+      const templateId = await createTemplate(); // step이 하나 늘었다고 가정
+      try {
+        await sendMessage();
+      } catch (e) {
+        await deleteTemplate(templateId);
+        throw e;
+      }
+    } catch (e) {
+      await deleteImage(uploadedImage);
+      throw e;
+    }
+  } catch (e) {
+    await deleteLog(sendLogId);
+    throw e;
+  }
+}
+```
+
+### 2) 실패 지점별 롤백 로직 누락/순서 실수 가능
+
+롤백 로직은 “반드시” 넣어야 하는데, 중첩 구조에서는 특정 실패 지점에서 빠뜨리기 쉽습니다.
+
+```typescript
+async function runCampaign() {
+  const sendLogId = await checkAndInsertLog();
+  if (!sendLogId) {
+    return;
+  }
+  try {
+    const uploadedImage = await uploadImage();
+    await sendMessage();
+  } catch (e) {
+    // !mark
+    // 실수: 업로드 이미지 삭제를 누락함
+    await deleteLog(sendLogId);
+    throw e;
+  }
+}
+```
+
+또한 실제 로직과 롤백 로직의 거리가 멀어질수록 놓치기 쉬운데, 위 예시처럼 중간에 early exit 분기(예: 이미 보낸 고객이면 return)가 추가되면 흐름이 더 복잡해져 롤백 로직을 빠뜨리기 쉽습니다. 혹은 순서를 잘못 잡아 도메인 규칙을 깨기도 합니다(예: 메시지 로그를 먼저 지운 뒤 이미지 삭제가 실패하면 추적이 어려워짐).
+
+## 해결 아이디어: Step + rollback
+
+핵심은 “업무 로직(action)과 롤백 로직(rollback)을 하나의 step으로 묶는 것”입니다. 워크플로우 엔진은 단순히 step을 순차 실행하고, 실패 시 역순으로 rollback만 호출합니다.
+
+### Early exit (정상 종료) 사례
+
+조건을 만족하지 않으면 “실패가 아니라 정상 종료”로 처리하고 싶을 때가 있습니다. 예를 들어, **이미 메시지를 보낸 고객**, 혹은 **캠페인 대상이 아닌 고객**이라면 그 즉시 종료하고 rollback은 돌리지 않는 것이 맞습니다.
+
+### 공통 컨텍스트를 쓰는 이유
+
+각 step의 리턴 타입이 다음 step의 인자 타입에 영향을 주도록 만들면 TypeScript에서 유연하게 표현하기가 어렵습니다. 연구가 더 필요한 영역이라, 여기서는 타입 시스템 복잡도를 최소화하기 위해 공통 `ctx` 객체에 결과를 적재/참조하는 방식으로 우회했습니다. 
+
+대신 아래와 같은 구조적인 단점이 생깁니다.
+
+- 타입으로 표현되지 못하는 의존성 증가: 어떤 step이 `ctx.userId`를 **읽기만** 하는지, **쓰는지**를 코드만 보고 즉시 구분하기 어렵습니다. 따라서 어떤 값이 어떤 역할을 하는지 이름으로 잘 표현해야 합니다.
+- 순서 민감: `ctx`가 변경 가능하니 step의 실행 순서가 곧 데이터 흐름이 됩니다. 순서가 바뀌면 결과가 달라질 수 있습니다.
+- 캡슐화 제한: step간 의존성을 표현할 방법이 딱히 없습니다. ctx에 step간 상태 추적을 위한 값이 추가되어야 할 수 있는데요, 이 값 또한 타입으로 노출되므로 Workflow를 사용하는 입장에서는 불필요한 정보를 볼 수 있습니다.
+
+## 구현
+
+아래는 간단 구현입니다. 전체 코드는 GitHub에 공개해 두었습니다. [simple-workflow 저장소](https://github.com/echoja/simple-workflow)
+
+먼저 **Step의 최소 계약**을 정의합니다. action의 결과는 “나중에 롤백에 쓸 수 있는 값”으로 취급합니다.
+
+```typescript
 export interface IStep<C, A> {
-  /**
-   * 실제 업무 로직
-   * - ctx에 결과를 기록하고, rollback에 넘길 값을 리턴
-   * - 타입스크립트가 ctx의 타입과 반환값을 자동으로 추론하도록 구현할 것
-   * @param ctx 공용 컨텍스트 객체
-   * @returns rollback 실행 시 필요한 데이터 (예: 생성된 리소스 ID, 변경 전 상태 등)
-   */
+  // !mark
   action: (ctx: C) => Promise<A> | A;
 
-  /**
-   * 실패 시 롤백 로직 (선택적)
-   * - 이후 step에서 에러 발생 시 역순으로 호출됨
-   * - action의 반환값을 받아서 롤백 작업 수행
-   * @param ctx 공용 컨텍스트 객체
-   * @param arg action에서 반환된 값
-   */
+  // !mark
   rollback?: (ctx: C, arg: A) => Promise<void>;
 }
+```
 
-/**
- * Workflow 조기 종료를 위한 신호 클래스
- *
- * Step의 action에서 이 객체를 반환하면 나머지 step들을 건너뛰고
- * workflow를 정상 종료합니다 (rollback은 실행되지 않음)
- *
- * @example
- * ```typescript
- * const checkConditionStep = createStep(
- *   async (ctx: MyContext) => {
- *     if (ctx.shouldSkip) {
- *       return Workflow.exit("조건이 맞지 않아 워크플로우를 종료합니다");
- *     }
- *     return null;
- *   }
- * );
- * ```
- */
+- `action`: 현재 컨텍스트 `ctx`를 읽고 다음 스텝에 넘길 결과 `A`를 만듭니다.
+- `rollback`: 해당 step이 “성공했을 때의 결과(A)”를 인자로 받아 되돌립니다. 실패 지점이 여기까지 왔을 때만 호출됩니다.
+
+---
+
+다음은 **정상 종료를 표현하는 값**입니다.
+
+```typescript
 export class WorkflowStop {
   constructor(public message?: string) {
-    // Set the prototype explicitly to ensure instanceof works correctly!
     Object.setPrototypeOf(this, WorkflowStop.prototype);
   }
 }
+```
 
-/**
- * 여러 Step을 순차 실행하고, 실패 시 역순으로 rollback을 수행하는 Workflow 클래스
- *
- * **주의사항: rollback이 필요없는 상황에서는 이 Workflow를 사용하지 마세요!**
- * - 단순한 순차 처리만 필요한 경우 일반적인 함수 호출을 사용하세요
- * - 이 클래스는 복잡한 트랜잭션에서 rollback이 필요할 때만 사용하는 것이 목적입니다
- *
- * @template C 모든 Step에서 공유하는 컨텍스트 타입
- *
- * @example
- * ```typescript
- * interface MyContext {
- *   userId: string;
- *   createdResourceIds: string[];
- * }
- *
- * const workflow = new Workflow<MyContext>([
- *   createResourceStep,  // DB에 리소스 생성
- *   uploadFileStep,      // 파일 업로드
- *   sendNotificationStep // 알림 발송
- * ]);
- *
- * try {
- *   await workflow.execute({ userId: "123", createdResourceIds: [] });
- * } catch (error) {
- *   // 실패한 지점부터 역순으로 rollback이 자동 실행됨
- *   console.error("Workflow failed:", error);
- * }
- * ```
- */
+- `message`는 디버깅/로그용입니다.
+- `instanceof WorkflowStop`이 안정적으로 동작하도록 프로토타입을 재설정합니다.
+
+---
+
+이제 **워크플로우 본체**를 만듭니다.
+
+```typescript
 export class Workflow<C> {
-  /**
-   * Workflow 조기 종료를 위한 헬퍼 메서드
-   * @param message 종료 사유 (선택적)
-   * @returns WorkflowStop 인스턴스
-   */
   static exit(message?: string) {
     return new WorkflowStop(message);
   }
 
-  /**
-   * Workflow를 구성하는 Step들의 배열
-   */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private steps: Array<IStep<C, any>>;
 
-  /**
-   * Workflow 생성자
-   * @param steps 순차 실행할 Step들의 배열
-   */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   constructor(steps: Array<IStep<C, any>>) {
     this.steps = steps;
   }
+}
+```
 
-  /**
-   * Workflow 실행 메서드
-   *
-   * 1. Step들을 순차적으로 실행
-   * 2. 각 Step의 action 결과를 rollback 용으로 저장
-   * 3. 실패 시 완료된 Step들을 역순으로 rollback 실행
-   * 4. WorkflowStop이 반환되면 조기 종료 (정상 종료)
-   *
-   * @param ctx 모든 Step에서 공유하는 컨텍스트 객체
-   * @throws 실행 중 발생한 에러 (rollback 실행 후 재전파)
-   */
+- `Workflow.exit(...)`는 “정상 조기 종료”를 명시하는 값입니다. (정적 메소드)
+- `steps`는 실행 순서를 유지하는 단순 배열입니다.
+
+---
+
+마지막으로 **실행 로직**입니다. 구현 순서대로 읽으면 사고하기 쉬워집니다.
+
+```typescript
+export class Workflow<C> {
+  // ...앞부분 생략
   public async execute(ctx: C): Promise<void> {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const completed: Array<{ step: IStep<C, any>; arg: any }> = [];
 
     for (const step of this.steps) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       let res: any;
       try {
         res = await step.action(ctx);
       } catch (err) {
-        // 에러면 rollback만 하고 에러 재전파
         for (const { step: s, arg } of completed.reverse()) {
           try {
             await s.rollback?.(ctx, arg);
           } catch (e) {
-            // rollback 실패는 무시하고 계속 진행
-            // eslint-disable-next-line no-console
             console.error("Rollback failed:", e);
           }
         }
         throw err;
       }
 
-      // early exit 신호면, 그냥 종료
       if (res instanceof WorkflowStop) {
         return;
       }
 
-      // 정상 compArg를 쌓고 다음 스텝으로
       completed.push({ step, arg: res });
     }
   }
 }
+```
 
-/**
- * Step 생성을 위한 헬퍼 함수
- *
- * TypeScript의 타입 추론을 활용하여 action 함수의 매개변수와 반환값을 자동으로 추론합니다.
- *
- * @template C 컨텍스트 타입 (action 함수의 매개변수에서 자동 추론)
- * @template A action 반환값 타입 (action 함수의 반환값에서 자동 추론)
- * @param action Step의 실행 로직
- * @param rollback Step의 롤백 로직 (선택적)
- * @returns IStep 인터페이스를 구현한 객체
- *
- * @example
- * ```typescript
- * // 타입이 자동으로 추론됨: IStep<{ userId: string; resourceId?: string }, string>
- * // \@returns ctx.resourceId
- * export const createResourceStep = createStep(
- *   async (ctx: { userId: string; resourceId?: string }) => {
- *     const resourceId = await createResource(ctx.userId);
- *     ctx.resourceId = resourceId;
- *     return resourceId; // rollback에서 삭제할 때 사용
- *   },
- *   async (ctx, resourceId) => {
- *     await deleteResource(resourceId);
- *   }
- * );
- *
- * // rollback이 없는 단순한 step
- * // @returns ctx.vendorInfo
- * export const getVendorInfoStep = createStep(
- *   async (ctx: { sitePublicId: string; vendorInfo?: VendorInfo }) => {
- *     ctx.vendorInfo = await getVendorInfo(ctx.sitePublicId);
- *     return ctx.vendorInfo;
- *   }
- * );
- * ```
- */
+1. `completed` 배열에 “성공한 step과 결과”를 쌓아 둡니다. 롤백은 이 배열을 **역순**으로 순회합니다.
+2. `action`이 성공하면 결과를 받습니다. 실패하면 `completed`를 역순으로 돌며 롤백합니다.
+3. **rollback 자체 실패**는 로깅만 하고 계속 진행합니다(최대한 되돌리기 우선).
+4. `WorkflowStop`이면 실패가 아닌 정상 종료로 보고 즉시 반환합니다.
+5. 정상 완료한 step은 `completed`에 push합니다.
+
+`execute`는 결과를 반환하지 않는다는 점에 유의하세요(무조건 `Promise<void>`).결과는 step에서 `ctx`의 어떤 값으로 대입하는 식으로 전달되어야 합니다.
+
+---
+
+마지막으로 **Step 생성 헬퍼**입니다. 사용 시 문법을 깔끔하게 해줍니다.
+
+```typescript
 export function createStep<C, A>(
+  // !mark
   action: (ctx: C) => Promise<A> | A,
+  // !mark
   rollback?: (ctx: C, arg: A) => Promise<void>,
 ): IStep<C, A> {
   return { action, rollback };
 }
-````
+```
 
-- https://help.asana.com/s/article/what-is-a-workflow
+- `createStep`을 쓰면 제네릭 추론이 좀 더 잘 되며, 호출부가 간결해집니다.
+
+## 한계 및 의도적으로 하지 않은 것
+
+- **idempotency, 재시도 로직은 고려하지 않음**: 이 글의 구현은 “개념 정리와 최소 구현”이 목적입니다.
+- **운영 안정성까지 다루려면 전문 도구가 더 적합**: 이 수준을 넘어서면 직접 만들기보다 이미 검증된 워크플로우 엔진/라이브러리를 쓰는 것이 낫다고 생각합니다. 특히 저는 [Temporal](https://temporal.io/)을 유의깊게 보고 있습니다.
+
+## 참고
+
+- [simple-workflow 저장소](https://github.com/echoja/simple-workflow)
+- [What is a Workflow? (Asana)](https://help.asana.com/s/article/what-is-a-workflow)
