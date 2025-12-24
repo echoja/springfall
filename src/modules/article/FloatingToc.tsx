@@ -172,13 +172,11 @@ export default function FloatingToc({
                   data-toc-depth={depth}
                   className={twMerge(
                     `relative block rounded-md border border-transparent py-1 break-all transition-colors`,
+                    "pl-[calc(attr(data-toc-depth_px)*12)]",
                     isActive
                       ? "text-black before:absolute before:left-[calc(attr(data-toc-depth_px)*12-10px)] before:content-['·'] dark:text-white"
                       : "text-gray-600 dark:text-gray-400",
                   )}
-                  style={{
-                    paddingLeft: `${depth * 12}px`,
-                  }}
                 >
                   {item.title}
                 </a>
