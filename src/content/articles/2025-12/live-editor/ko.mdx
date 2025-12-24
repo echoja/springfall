@@ -1,28 +1,19 @@
-import ArticleHeader from "@modules/article/ArticleHeader";
 import ArticleImage from "@modules/article/ArticleImage";
-import getArticleHeaderProps from "@modules/metadata/getArticleHeaderProps";
-import getArticleJsonLdProps from "@modules/metadata/getArticleJsonLdProps";
-import getArticleMetadata from "@modules/metadata/getArticleMetadata";
-import { ArticleJsonLd } from "next-seo";
-import { item } from "./metadata";
-import i0 from "./i0.png";
-import i1 from "./i1.jpg";
-import i2 from "./i2.png";
-import i3 from "./i3.png";
-import i4 from "./i4.png";
-import i99 from "./i99.png";
-import preamble from "./preamble.png";
-import su from "./su.png";
-import stair from "./stair.png";
-import t1 from "./t1.png";
-import t2 from "./t2.png";
-import intro from "./intro.png";
+import i0 from "./assets/i0.png";
+import i1 from "./assets/i1.jpg";
+import i2 from "./assets/i2.png";
+import i3 from "./assets/i3.png";
+import i4 from "./assets/i4.png";
+import i99 from "./assets/i99.png";
+import preamble from "./assets/preamble.png";
+import su from "./assets/su.png";
+import stair from "./assets/stair.png";
+import t1 from "./assets/t1.png";
+import t2 from "./assets/t2.png";
+import intro from "./assets/intro.png";
 
-export const metadata = getArticleMetadata(item);
 
-<ArticleJsonLd {...getArticleJsonLdProps(item)} />
 
-<ArticleHeader {...getArticleHeaderProps(item)} />
 
 <ArticleImage img={i1} alt="포스트잇 사진" caption={<>
 

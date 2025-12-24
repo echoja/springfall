@@ -1,5 +1,6 @@
 import type { ArticleItem } from "@modules/article/types";
 import { articleLocales } from "@modules/i18n/available";
+import { isLocale } from "@modules/i18n/util";
 
 import type { Metadata } from "next";
 
@@ -37,10 +38,15 @@ export default function getArticleMetadata(item: ArticleItem): Metadata {
     },
     alternates: (() => {
       const url = new URL(slug, process.env.BASE_URL).toString();
+      const slugParts = slug.split("/").filter(Boolean);
+      const maybeLocale = slugParts[0] ?? "";
+      const baseSlug = isLocale(maybeLocale)
+        ? slugParts.slice(1).join("/")
+        : slug;
       try {
-        const locales = articleLocales[slug];
+        const locales = articleLocales[baseSlug];
         const languages = locales
-          ? Object.fromEntries(locales.map((l) => [l, `/${l}/${slug}`]))
+          ? Object.fromEntries(locales.map((l) => [l, `/${l}/${baseSlug}`]))
           : undefined;
         return { canonical: url, languages };
       } catch {

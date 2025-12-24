@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Article Content Meta",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "slug",
+    "locales",
+    "createdAt",
+    "updatedAt",
+    "image",
+    "title",
+    "summary",
+    "imageAlt"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Optional JSON schema reference."
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^article/\\d{4}-\\d{2}/[a-z0-9-]+$",
+      "description": "Route slug without locale prefix."
+    },
+    "locales": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": ["ko", "en"]
+      }
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date"
+    },
+    "category": {
+      "type": "string",
+      "enum": ["회고", "리뷰", "기술", "일상", "기타", "디자인"]
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true
+    },
+    "image": {
+      "type": "string",
+      "pattern": "^[^\\\\]+\\.(png|jpe?g|webp|gif)$",
+      "description": "Image filename inside the assets folder."
+    },
+    "title": {
+      "$ref": "#/$defs/localizedString"
+    },
+    "summary": {
+      "$ref": "#/$defs/localizedString"
+    },
+    "imageAlt": {
+      "$ref": "#/$defs/localizedString"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "locales": {
+            "contains": { "const": "ko" }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "title": { "required": ["ko"] },
+          "summary": { "required": ["ko"] },
+          "imageAlt": { "required": ["ko"] }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "locales": {
+            "contains": { "const": "en" }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "title": { "required": ["en"] },
+          "summary": { "required": ["en"] },
+          "imageAlt": { "required": ["en"] }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "localizedString": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "patternProperties": {
+        "^(ko|en)$": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
