@@ -63,8 +63,16 @@ const Utterances = () => {
 
   return (
     <>
-      <div ref={setLightRef} style={{ display: isDark ? "none" : "block" }} />
-      <div ref={setDarkRef} style={{ display: isDark ? "block" : "none" }} />
+      <div
+        className="lg:-translate-x-38"
+        ref={setLightRef}
+        style={{ display: isDark ? "none" : "block" }}
+      />
+      <div
+        className="lg:-translate-x-38"
+        ref={setDarkRef}
+        style={{ display: isDark ? "block" : "none" }}
+      />
     </>
   );
 };

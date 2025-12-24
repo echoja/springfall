@@ -6,7 +6,7 @@ import { ArrowLeft } from "lucide-react";
 
 const ArticlePageHeader = () => {
   return (
-    <header className="relative mb-24 flex w-full items-center justify-center lg:-translate-x-38">
+    <header className="relative mb-24 flex items-center justify-center lg:-mx-38">
       <Link
         href="/"
         className="absolute top-1/2 left-0 -translate-y-1/2 rounded-sm p-2 transition hover:bg-gray-400/10 hover:opacity-90"
