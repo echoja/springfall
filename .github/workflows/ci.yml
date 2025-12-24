@@ -37,3 +37,17 @@ jobs:
 
       - name: knip
         run: pnpm knip
+
+  content-manifest:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: ./.github/actions/setup-pnpm
+
+      - name: generate content manifest
+        run: pnpm content:sync
+
+      - name: verify manifest unchanged
+        run: git diff --exit-code src/content/manifest.generated.ts
