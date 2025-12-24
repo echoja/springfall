@@ -1,6 +1,6 @@
 import type { ComponentType } from "react";
 import dayjs from "dayjs";
-import { i18n, type Locale } from "@common/config";
+import { i18n, type Locale } from "@/modules/i18n/types";
 import type { ArticleItem } from "@modules/article/types";
 import {
   contentBySlug,

@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "es2024",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -21,18 +17,11 @@
     "baseUrl": "src",
     "incremental": true,
     "paths": {
-      "@common/*": [
-        "common/*"
-      ],
-      "@modules/*": [
-        "modules/*"
-      ],
-      "@app/*": [
-        "app/*"
-      ],
-      "@components/*": [
-        "components/*"
-      ]
+      "@common/*": ["common/*"],
+      "@modules/*": ["modules/*"],
+      "@app/*": ["app/*"],
+      "@components/*": ["components/*"],
+      "@/*": ["./*"]
     },
     "plugins": [
       {
@@ -49,7 +38,5 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }

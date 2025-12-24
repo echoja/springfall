@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { i18n, type Locale } from "@common/config";
+import { i18n, type Locale } from "@/modules/i18n/types";
 import { articleLocales } from "@modules/i18n/available";
 
 // Incrementally roll out locale prefixes only for these subpaths

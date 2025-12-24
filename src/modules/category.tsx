@@ -1,4 +1,4 @@
-import type { Locale } from "@common/config";
+import type { Locale } from "@/modules/i18n/types";
 
 /**
  * 여기 바꾸면 meta.schema.json도 바꿔야 함

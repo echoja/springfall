@@ -4,9 +4,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
+import { uiText } from "@modules/i18n/strings";
+import { useLocale } from "@modules/i18n/useLocale";
 
 const Header = () => {
   const pathname = usePathname();
+  const locale = useLocale();
+  const text = uiText[locale];
 
   const isPortfolioPage = pathname === "/portfolio";
 
@@ -23,7 +27,7 @@ const Header = () => {
               height={18}
               className="opacity-80 dark:invert"
             />
-            봄가을 블로그
+            {text.headerTitle}
           </Link>
         </h1>
       </div>
@@ -32,7 +36,7 @@ const Header = () => {
         <Link
           href="/"
           className="absolute top-1/2 left-0 -translate-y-1/2 rounded-sm p-2 transition hover:bg-gray-400/10 hover:opacity-90"
-          aria-label="글 목록으로 이동"
+          aria-label={text.backToList}
         >
           <ArrowLeft className="h-4 w-4" />
         </Link>

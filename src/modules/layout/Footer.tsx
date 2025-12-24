@@ -3,12 +3,14 @@
 import Link from "next/link";
 import { memo } from "react";
 import ThemeToggle from "./ThemeToggle";
+import { uiText } from "@modules/i18n/strings";
+import { useLocale } from "@modules/i18n/useLocale";
 
 const buttons: Array<{
   Icon: React.ReactNode;
   newWindow?: boolean;
   link: string;
-  srOnly?: string;
+  labelKey: "footerGithub" | "footerThreads" | "footerLinkedin";
 }> = [
   {
     link: "https://github.com/echoja",
@@ -26,7 +28,7 @@ const buttons: Array<{
         />
       </svg>
     ),
-    srOnly: "블로그 주인에 대한 자세한 정보 보기 (깃허브)",
+    labelKey: "footerGithub",
   },
 
   {
@@ -45,7 +47,7 @@ const buttons: Array<{
         />
       </svg>
     ),
-    srOnly: "스레드",
+    labelKey: "footerThreads",
   },
   {
     link: "https://www.linkedin.com/in/echoja",
@@ -63,15 +65,18 @@ const buttons: Array<{
         />
       </svg>
     ),
-    srOnly: "링크드인",
+    labelKey: "footerLinkedin",
   },
 ];
 
 const Footer = () => {
+  const locale = useLocale();
+  const text = uiText[locale];
+
   return (
     <footer className="text-center">
       <div className="mt-10 mb-4 flex items-center justify-center gap-3">
-        {buttons.map(({ link, Icon: icon, newWindow = true, srOnly }) => (
+        {buttons.map(({ link, Icon: icon, newWindow = true, labelKey }) => (
           <Link
             key={link}
             href={link}
@@ -80,7 +85,7 @@ const Footer = () => {
             className="rounded-sm border border-transparent p-2 transition hover:bg-gray-400/5 hover:opacity-90 hover:shadow-xs"
           >
             {icon}
-            {srOnly ? <span className="sr-only">{srOnly}</span> : null}
+            <span className="sr-only">{text[labelKey]}</span>
           </Link>
         ))}
       </div>

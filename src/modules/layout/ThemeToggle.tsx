@@ -5,11 +5,15 @@ import {
   type ColorModeSetting,
 } from "@modules/color-mode/color-mode";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { uiText } from "@modules/i18n/strings";
+import { useLocale } from "@modules/i18n/useLocale";
 
 function ThemeToggle(props: React.HTMLAttributes<HTMLDivElement>) {
   const { setting, setMode } = useColorMode();
   const rootRef = useRef<HTMLDivElement | null>(null);
   const [mounted, setMounted] = useState(false);
+  const locale = useLocale();
+  const text = uiText[locale];
 
   useEffect(() => setMounted(true), []);
 
@@ -25,21 +29,21 @@ function ThemeToggle(props: React.HTMLAttributes<HTMLDivElement>) {
     <div className="relative" ref={rootRef} {...props}>
       <div
         role="radiogroup"
-        aria-label="테마"
+        aria-label={text.themeLabel}
         className="inline-flex items-center overflow-hidden rounded-sm border border-gray-400/30 text-xs"
       >
         <SegButton
-          label="시스템"
+          label={text.themeSystem}
           checked={selected("system")}
           onClick={select("system")}
         />
         <SegButton
-          label="라이트"
+          label={text.themeLight}
           checked={selected("light")}
           onClick={select("light")}
         />
         <SegButton
-          label="다크"
+          label={text.themeDark}
           checked={selected("dark")}
           onClick={select("dark")}
         />

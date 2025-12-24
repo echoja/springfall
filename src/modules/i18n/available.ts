@@ -1,4 +1,4 @@
-import type { Locale } from "@common/config";
+import type { Locale } from "@/modules/i18n/types";
 import { contentEntries } from "content/manifest.generated";
 
 // Explicit manifest of per-article locale availability.

@@ -1,4 +1,4 @@
-import type { Locale } from "@common/config";
+import type { Locale } from "@/modules/i18n/types";
 import type { Category } from "@modules/category";
 import type { StaticImageData } from "next/image";
 

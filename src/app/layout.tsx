@@ -3,6 +3,8 @@ import "../../public/pretendard-variable-gov/pretendardvariable-gov-dynamic-subs
 import ColorModeClassNameInjector from "@modules/color-mode/ColorModeClassNameInjector";
 import Footer from "@modules/layout/Footer";
 import { metadataBase } from "@modules/metadata/constants";
+import { i18n } from "@/modules/i18n/types";
+import HtmlLangUpdater from "@modules/i18n/HtmlLangUpdater";
 // import "codehike/mdx/dist/index.css";
 import type { Metadata } from "next";
 import { Providers } from "./providers";
@@ -33,7 +35,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ko" suppressHydrationWarning>
+    <html lang={i18n.defaultLocale} suppressHydrationWarning>
       <head>
         {/* Prevent theme flash: set class before hydration */}
         <script
@@ -81,6 +83,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         <Providers>
           <ColorModeClassNameInjector />
+          <HtmlLangUpdater />
           <div className="mx-auto max-w-(--breakpoint-md)">
             <div className="p-4 sm:p-6 md:p-8">
               {children}

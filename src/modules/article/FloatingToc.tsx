@@ -3,6 +3,8 @@
 import { List, X } from "lucide-react";
 import { useEffect, useMemo, useRef, useState, type RefObject } from "react";
 import { twMerge } from "tailwind-merge";
+import { uiText } from "@modules/i18n/strings";
+import { useLocale } from "@modules/i18n/useLocale";
 
 /** @lintignore */
 export interface HeadingInfo {
@@ -54,6 +56,8 @@ export default function FloatingToc({
   targetRef,
   refreshKey,
 }: FloatingTocProps) {
+  const locale = useLocale();
+  const text = uiText[locale];
   const [items, setItems] = useState<TocItem[]>([]);
   const [activeIds, setActiveIds] = useState<string[]>([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -157,7 +161,7 @@ export default function FloatingToc({
     const activeIdSet = new Set(activeIds);
 
     return (
-      <nav aria-label="Floating table of contents" className="text-sm">
+      <nav aria-label={text.tocFloatingLabel} className="text-sm">
         <ul>
           {items.map((item) => {
             const depth = Math.max(0, item.level - 2);
@@ -207,7 +211,7 @@ export default function FloatingToc({
           }}
         >
           <div className="mb-2 text-xs font-semibold tracking-wide text-gray-500 uppercase dark:text-gray-400">
-            목차
+            {text.tocTitle}
           </div>
           {tocList}
         </div>
@@ -222,13 +226,13 @@ export default function FloatingToc({
           className="fixed right-4 bottom-5 z-30 inline-flex items-center gap-2 rounded-full bg-white/90 px-4 py-2 text-sm font-semibold shadow-lg ring-1 ring-gray-200 backdrop-blur dark:bg-gray-800/90 dark:text-gray-50 dark:ring-gray-700"
         >
           <List className="h-4 w-4" aria-hidden />
-          목차
+          {text.tocTitle}
         </button>
 
         {isOpen ? (
           <div className="fixed inset-0 z-40 flex items-end justify-center">
             <button
-              aria-label="Close table of contents"
+              aria-label={text.tocCloseLabel}
               onClick={() => setIsOpen(false)}
               className="absolute inset-0 bg-black/20"
               type="button"
@@ -239,11 +243,11 @@ export default function FloatingToc({
               ref={mobileTocRef}
             >
               <div className="mb-3 flex items-center justify-between text-sm font-semibold">
-                <span>목차</span>
+                <span>{text.tocTitle}</span>
                 <button
                   type="button"
                   onClick={() => setIsOpen(false)}
-                  aria-label="Close table of contents"
+                  aria-label={text.tocCloseLabel}
                   className="rounded-full p-1 hover:bg-gray-200 dark:hover:bg-gray-800"
                 >
                   <X className="h-4 w-4" aria-hidden />

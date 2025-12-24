@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { i18n, type Locale } from "@common/config";
+import { i18n, type Locale } from "@/modules/i18n/types";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);

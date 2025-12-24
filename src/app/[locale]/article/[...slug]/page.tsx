@@ -5,13 +5,13 @@ import ArticleHeader from "@modules/article/ArticleHeader";
 import getArticleHeaderProps from "@modules/metadata/getArticleHeaderProps";
 import getArticleJsonLdProps from "@modules/metadata/getArticleJsonLdProps";
 import getArticleMetadata from "@modules/metadata/getArticleMetadata";
-import { isLocale } from "@modules/i18n/util";
 import {
   contentEntries,
   getContentEntry,
   getContentItem,
   getContentMdx,
 } from "content";
+import { isLocale } from "@modules/i18n/util";
 
 interface IPageParams {
   locale: string;
@@ -31,10 +31,11 @@ export async function generateStaticParams(): Promise<IPageParams[]> {
 }
 
 export async function generateMetadata({
-  params,
+  params: paramsPromise,
 }: {
-  params: IPageParams;
+  params: Promise<IPageParams>;
 }): Promise<Metadata> {
+  const params = await paramsPromise;
   if (!isLocale(params.locale)) {
     return {};
   }

@@ -1,9 +1,10 @@
 import type { Category } from "@modules/category";
 import { getCategoryLabel } from "@modules/category";
 import dayjs from "dayjs";
-import { i18n, type Locale } from "@common/config";
+import { i18n, type Locale } from "@/modules/i18n/types";
 import { getLocalesForSlug } from "@modules/i18n/available";
 import { isLocale } from "@modules/i18n/util";
+import { uiText } from "@modules/i18n/strings";
 import Link from "next/link";
 
 export interface IArticleHeaderProps {
@@ -68,7 +69,9 @@ export default function ArticleHeader({
       </p>
       {languageLinks.length >= 2 ? (
         <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-gray-600 dark:text-gray-400">
-          <span className="opacity-70">Available:</span>
+          <span className="opacity-70">
+            {uiText[currentLocale].availableLabel}
+          </span>
           {languageLinks.map((l) =>
             l.locale === currentLocale ? (
               <span
