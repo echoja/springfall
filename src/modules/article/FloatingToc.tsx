@@ -174,7 +174,7 @@ export default function FloatingToc({
                     `relative block rounded-md border border-transparent py-1 break-all transition-colors`,
                     isActive
                       ? "text-black before:absolute before:left-[calc(attr(data-toc-depth_px)*12-10px)] before:content-['·'] dark:text-white"
-                      : "text-gray-600 dark:text-gray-200",
+                      : "text-gray-600 dark:text-gray-400",
                   )}
                   style={{
                     paddingLeft: `${depth * 12}px`,
