@@ -152,20 +152,20 @@ export const Tester: React.FC = () => {
                             aria-label="나이"
                             type="number"
                             className="w-24 rounded-md border border-gray-300 px-2 py-1 text-sm dark:border-gray-600 dark:bg-gray-800"
-                          value={String(target.value)}
-                          onChange={(e) => {
-                            const newTargets = [...targets];
-                            const nextValue = toNumberOrNull(e.target.value);
-                            if (nextValue === null) {
-                              return;
-                            }
-                            newTargets[index] = {
-                              ...target,
-                              value: nextValue,
-                            };
-                            setTargets(newTargets);
-                          }}
-                        />
+                            value={String(target.value)}
+                            onChange={(e) => {
+                              const newTargets = [...targets];
+                              const nextValue = toNumberOrNull(e.target.value);
+                              if (nextValue === null) {
+                                return;
+                              }
+                              newTargets[index] = {
+                                ...target,
+                                value: nextValue,
+                              };
+                              setTargets(newTargets);
+                            }}
+                          />
                           세{" "}
                           <AgeOperatorSelect
                             value={target.operator}
@@ -220,7 +220,7 @@ export const Tester: React.FC = () => {
         </div>
       </div>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div className="rounded-large border border-transparent p-4 shadow-small dark:border-gray-600">
+        <div className="rounded-large shadow-small border border-transparent p-4 dark:border-gray-600">
           <h3 className="mb-3 font-medium">조건 데이터</h3>
           <pre className="text-xs">{JSON.stringify(root, null, 2)}</pre>
         </div>
@@ -283,14 +283,14 @@ export const Tester: React.FC = () => {
             </div>
           </div>
 
-          <div className="mb-4 rounded-large border border-transparent p-4 shadow-small dark:border-gray-600">
+          <div className="rounded-large shadow-small mb-4 border border-transparent p-4 dark:border-gray-600">
             <h3 className="mb-2 font-medium">실행</h3>
             <pre className="text-xs whitespace-pre-wrap">{`const result = checkTarget(root, { user });`}</pre>
           </div>
 
           <div
             className={twMerge(
-              "rounded-large border p-4 shadow-small transition",
+              "rounded-large shadow-small border p-4 transition",
               result.type === "success"
                 ? "border-success-400 dark:border-success-300"
                 : result.type === "failure"

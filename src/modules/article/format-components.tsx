@@ -30,11 +30,11 @@ const callout: AnnotationHandler = {
         {children}
         <div
           style={{ minWidth: `${column + 4}ch` }}
-          className="relative px-2 py-1 my-1 font-sans border rounded-sm select-none w-fit bg-black/30 border-zinc-500 whitespace-break-spaces text-zinc-200"
+          className="relative my-1 w-fit rounded-sm border border-zinc-500 bg-black/30 px-2 py-1 font-sans whitespace-break-spaces text-zinc-200 select-none"
         >
           <div
             style={{ left: `${column - 1}ch` }}
-            className="absolute border-l border-t border-zinc-500 w-2 h-2 rotate-45 -translate-y-1/2 -top-px bg-zinc-800"
+            className="absolute -top-px h-2 w-2 -translate-y-1/2 rotate-45 border-t border-l border-zinc-500 bg-zinc-800"
           />
           {annotation.query}
         </div>
@@ -62,7 +62,7 @@ const diff: AnnotationHandler = {
   },
   Line: ({ annotation, ...props }) => (
     <>
-      <div className="min-w-[1ch] box-content opacity-70 pl-2 select-none">
+      <div className="box-content min-w-[1ch] pl-2 opacity-70 select-none">
         {annotation?.query}
       </div>
       <InnerLine
@@ -94,7 +94,7 @@ const mark: AnnotationHandler = {
     const color = annotation?.query || "rgb(14 165 233)";
     return (
       <span
-        className="rounded-sm px-0.5 py-0 -mx-0.5"
+        className="-mx-0.5 rounded-sm px-0.5 py-0"
         style={{
           outline: `solid 1px rgb(from ${color} r g b / 0.5)`,
           background: `rgb(from ${color} r g b / 0.13)`,
@@ -112,17 +112,17 @@ export async function Code({ codeblock }: { codeblock: RawCode }) {
   return (
     <div className="relative">
       <div
-        className="relative rounded-sm text-sm my-10 shadow-md overflow-x-scroll leading-[22px] text-gray-300"
+        className="relative my-10 overflow-x-scroll rounded-sm text-sm leading-[22px] text-gray-300 shadow-md"
         style={{ backgroundColor: "#272A30" }}
       >
         {highlighted.meta ? (
-          <div className="px-4 py-3 font-mono text-xs text-gray-400 border-b border-gray-600">
+          <div className="border-b border-gray-600 px-4 py-3 font-mono text-xs text-gray-400">
             {highlighted.meta}
           </div>
         ) : null}
 
         <Pre
-          className="py-3.5 m-0 text-gray-300 bg-transparent"
+          className="m-0 bg-transparent py-3.5 text-gray-300"
           code={highlighted}
           handlers={[callout, className, mark, diff]}
         />
@@ -169,7 +169,7 @@ export function Anchor({
     >
       {children}
       {!isInternal && (
-        <ExternalLink size="0.8em" className=" text-brand-400 ml-0.5 inline" />
+        <ExternalLink size="0.8em" className="text-brand-400 ml-0.5 inline" />
       )}
     </Link>
   );

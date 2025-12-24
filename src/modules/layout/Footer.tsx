@@ -15,7 +15,7 @@ const buttons: Array<{
     Icon: (
       <svg
         role="img"
-        className="w-4 h-4"
+        className="h-4 w-4"
         viewBox="0 0 24 24"
         xmlns="http://www.w3.org/2000/svg"
       >
@@ -34,7 +34,7 @@ const buttons: Array<{
     Icon: (
       <svg
         role="img"
-        className="w-4 h-4"
+        className="h-4 w-4"
         viewBox="0 0 24 24"
         xmlns="http://www.w3.org/2000/svg"
       >
@@ -52,7 +52,7 @@ const buttons: Array<{
     Icon: (
       <svg
         role="img"
-        className="w-4 h-4"
+        className="h-4 w-4"
         viewBox="0 0 24 24"
         xmlns="http://www.w3.org/2000/svg"
       >
@@ -70,14 +70,14 @@ const buttons: Array<{
 const Footer = () => {
   return (
     <footer className="text-center">
-      <div className="flex items-center justify-center gap-3 mt-10 mb-4">
+      <div className="mt-10 mb-4 flex items-center justify-center gap-3">
         {buttons.map(({ link, Icon: icon, newWindow = true, srOnly }) => (
           <Link
             key={link}
             href={link}
             target={newWindow ? "_blank" : "_self"}
             rel="noopener noreferrer"
-            className="p-2 transition border border-transparent rounded-sm hover:shadow-xs  hover:bg-gray-400/5 hover:opacity-90 "
+            className="rounded-sm border border-transparent p-2 transition hover:bg-gray-400/5 hover:opacity-90 hover:shadow-xs"
           >
             {icon}
             {srOnly ? <span className="sr-only">{srOnly}</span> : null}

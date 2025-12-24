@@ -40,7 +40,7 @@ const Box: React.FC<{
           transition={{ duration: 0.05 }}
           ref={ref}
           className={twMerge(
-            "flex items-center justify-center w-full rounded-sm shadow-sm h-14 bg-slate-200 dark:bg-slate-700 select-none",
+            "flex h-14 w-full items-center justify-center rounded-sm bg-slate-200 shadow-sm select-none dark:bg-slate-700",
             className,
           )}
         >
@@ -59,7 +59,7 @@ const Box: React.FC<{
           transition={{ duration: 0.05 }}
           ref={ref}
           className={twMerge(
-            "flex items-center justify-center w-full h-20 bg-yellow-200 rounded-sm shadow-sm dark:bg-yellow-700 select-none",
+            "flex h-20 w-full items-center justify-center rounded-sm bg-yellow-200 shadow-sm select-none dark:bg-yellow-700",
             className,
           )}
         >
@@ -78,7 +78,7 @@ const Box: React.FC<{
           transition={{ duration: 0.05 }}
           ref={ref}
           className={twMerge(
-            "flex items-center justify-center w-full h-20 bg-blue-200 rounded-sm shadow-sm dark:bg-blue-700 select-none",
+            "flex h-20 w-full items-center justify-center rounded-sm bg-blue-200 shadow-sm select-none dark:bg-blue-700",
             className,
           )}
         >
@@ -92,13 +92,13 @@ const ContentGraph: React.FC = () => {
 
   return (
     <div className="relative">
-      <div className="flex flex-col max-w-lg gap-10 mx-auto">
-        <div className="flex justify-between px-10 py-6 rounded-md shadow-inner bg-gray-50 dark:bg-gray-600">
+      <div className="mx-auto flex max-w-lg flex-col gap-10">
+        <div className="flex justify-between rounded-md bg-gray-50 px-10 py-6 shadow-inner dark:bg-gray-600">
           <div className="text-sm font-bold text-gray-400">
             제목, 생성일, 수정일 등등
           </div>
         </div>
-        <div className="px-10 py-6 overflow-hidden rounded-md shadow-inner bg-gray-50 dark:bg-gray-600">
+        <div className="overflow-hidden rounded-md bg-gray-50 px-10 py-6 shadow-inner dark:bg-gray-600">
           <div className="mb-4 text-sm font-bold text-gray-400">콘텐츠</div>
           <div className="flex flex-col gap-5">
             <Box text="paragraph" className="h-14" />

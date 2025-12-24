@@ -1,7 +1,7 @@
 "use client";
 
 import { List, X } from "lucide-react";
-import { useEffect, useMemo, useState, type RefObject } from "react";
+import { useEffect, useMemo, useRef, useState, type RefObject } from "react";
 import { twMerge } from "tailwind-merge";
 
 /** @lintignore */
@@ -55,8 +55,10 @@ export default function FloatingToc({
   refreshKey,
 }: FloatingTocProps) {
   const [items, setItems] = useState<TocItem[]>([]);
-  const [activeId, setActiveId] = useState<string | null>(null);
+  const [activeIds, setActiveIds] = useState<string[]>([]);
   const [isOpen, setIsOpen] = useState(false);
+  const desktopTocRef = useRef<HTMLDivElement | null>(null);
+  const mobileTocRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const root = targetRef.current;
@@ -68,7 +70,7 @@ export default function FloatingToc({
 
     const headingInfo = collectHeadingInfo(root);
     setItems(headingInfo.map(({ id, title, level }) => ({ id, title, level })));
-    setActiveId(headingInfo[0]?.id ?? null);
+    setActiveIds([]);
 
     const order = headingInfo.map((heading) => heading.id);
     const visible = new Set<string>();
@@ -91,36 +93,17 @@ export default function FloatingToc({
           }
         });
 
-        if (!order.length) {
-          return;
-        }
+        const visibleIds = order.filter((id) => visible.has(id));
 
-        const firstVisible = order.find((id) => visible.has(id));
-        if (firstVisible) {
-          setActiveId(firstVisible);
-          return;
-        }
-
-        const viewportHeight =
-          typeof window === "undefined" ? 0 : window.innerHeight;
-
-        const lastPassed = [...headingInfo]
-          .reverse()
-          .find(
-            (heading) =>
-              heading.section.getBoundingClientRect().top <=
-              viewportHeight * 0.45,
-          );
-
-        const upcoming = headingInfo.find(
-          (heading) => heading.section.getBoundingClientRect().top >= 0,
+        setActiveIds((prev) =>
+          prev.length === visibleIds.length &&
+          prev.every((id, index) => id === visibleIds[index])
+            ? prev
+            : visibleIds,
         );
-
-        setActiveId(lastPassed?.id ?? upcoming?.id ?? order[0] ?? null);
       },
       {
-        rootMargin: "-35% 0px -45% 0px",
-        threshold: [0, 0.1, 0.25, 0.5],
+        rootMargin: "-50% 0px -50% 0px",
       },
     );
 
@@ -133,29 +116,67 @@ export default function FloatingToc({
     setIsOpen(false);
   }, [refreshKey]);
 
+  useEffect(() => {
+    const scrollActiveIntoView = (container: HTMLDivElement | null) => {
+      if (!container) {
+        return;
+      }
+
+      const activeItem = container.querySelector<HTMLElement>(
+        '[data-toc-active="true"]',
+      );
+      if (!activeItem) {
+        return;
+      }
+
+      const containerRect = container.getBoundingClientRect();
+      const activeRect = activeItem.getBoundingClientRect();
+      const isAbove = activeRect.top < containerRect.top;
+      const isBelow = activeRect.bottom > containerRect.bottom;
+
+      if (isAbove || isBelow) {
+        activeItem.scrollIntoView({
+          block: "nearest",
+          inline: "nearest",
+          behavior: "smooth",
+        });
+      }
+    };
+
+    scrollActiveIntoView(desktopTocRef.current);
+    if (isOpen) {
+      scrollActiveIntoView(mobileTocRef.current);
+    }
+  }, [activeIds, isOpen]);
+
   const tocList = useMemo(() => {
     if (!items.length) {
       return null;
     }
+
+    const activeIdSet = new Set(activeIds);
 
     return (
       <nav aria-label="Floating table of contents" className="text-sm">
         <ul>
           {items.map((item) => {
             const depth = Math.max(0, item.level - 2);
-            const isActive = item.id === activeId;
+            const isActive = activeIdSet.has(item.id);
             return (
               <li key={item.id}>
                 <a
                   href={`#${item.id}`}
                   onClick={() => setIsOpen(false)}
+                  data-toc-active={isActive ? "true" : undefined}
+                  aria-current={isActive ? "true" : undefined}
+                  data-toc-depth={depth}
                   className={twMerge(
-                    `block rounded-md border border-transparent px-2 py-1 transition-colors break-all`,
+                    `relative block rounded-md border border-transparent py-1 break-all transition-colors`,
+                    "pl-[calc(attr(data-toc-depth_px)*12)]",
                     isActive
-                      ? "font-bold text-gray-800 dark:text-gray-50"
-                      : "text-gray-600  dark:text-gray-200 ",
+                      ? "text-black before:absolute before:left-[calc(attr(data-toc-depth_px)*12-10px)] before:content-['·'] dark:text-white"
+                      : "text-gray-600 dark:text-gray-400",
                   )}
-                  style={{ paddingLeft: `${8 + depth * 12}px` }}
                 >
                   {item.title}
                 </a>
@@ -165,7 +186,7 @@ export default function FloatingToc({
         </ul>
       </nav>
     );
-  }, [activeId, items]);
+  }, [activeIds, items]);
 
   if (!items.length) {
     return null;
@@ -173,15 +194,19 @@ export default function FloatingToc({
 
   return (
     <>
-      <div className="hidden lg:block opacity-50 hover:opacity-100 transition">
+      <div className="z-30 hidden opacity-50 transition hover:opacity-100 lg:block">
         <div
-          className="fixed z-20 w-64 max-h-[70vh] overflow-y-auto rounded-xl border border-gray-200 bg-white/90 p-3 shadow-md backdrop-blur dark:border-gray-700 dark:bg-gray-900/85"
+          className={twMerge(
+            "fixed z-20 max-h-[70vh] w-64 overflow-y-auto rounded-xl bg-white/90 p-3 backdrop-blur dark:bg-gray-900/85",
+            // "border border-gray-200 dark:border-gray-700 shadow-md",
+          )}
+          ref={desktopTocRef}
           style={{
             right: "max(1rem, calc((100vw - 980px) / 2))",
             top: "9rem",
           }}
         >
-          <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 pl-2">
+          <div className="mb-2 text-xs font-semibold tracking-wide text-gray-500 uppercase dark:text-gray-400">
             목차
           </div>
           {tocList}
@@ -194,7 +219,7 @@ export default function FloatingToc({
           onClick={() => setIsOpen((prev) => !prev)}
           aria-expanded={isOpen}
           aria-controls="floating-toc-panel"
-          className="fixed bottom-5 right-4 z-30 inline-flex items-center gap-2 rounded-full bg-white/90 px-4 py-2 text-sm font-semibold shadow-lg ring-1 ring-gray-200 backdrop-blur dark:bg-gray-800/90 dark:text-gray-50 dark:ring-gray-700"
+          className="fixed right-4 bottom-5 z-30 inline-flex items-center gap-2 rounded-full bg-white/90 px-4 py-2 text-sm font-semibold shadow-lg ring-1 ring-gray-200 backdrop-blur dark:bg-gray-800/90 dark:text-gray-50 dark:ring-gray-700"
         >
           <List className="h-4 w-4" aria-hidden />
           목차
@@ -210,7 +235,8 @@ export default function FloatingToc({
             />
             <div
               id="floating-toc-panel"
-              className="relative z-50 mb-16 w-[min(90vw,24rem)] max-h-[65vh] overflow-y-auto rounded-2xl border border-gray-200 bg-white/95 p-4 shadow-2xl backdrop-blur dark:border-gray-700 dark:bg-gray-900/90"
+              className="relative z-50 mb-16 max-h-[65vh] w-[min(90vw,24rem)] overflow-y-auto rounded-2xl border border-gray-200 bg-white/95 p-4 shadow-2xl backdrop-blur dark:border-gray-700 dark:bg-gray-900/90"
+              ref={mobileTocRef}
             >
               <div className="mb-3 flex items-center justify-between text-sm font-semibold">
                 <span>목차</span>

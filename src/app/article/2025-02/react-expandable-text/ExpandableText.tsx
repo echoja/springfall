@@ -56,7 +56,7 @@ export const ExpandableText: React.FC<ExpandableTextProps> = ({
         {content}
         {!isOverflown ? null : !expanding ? (
           <button
-            className="z-1 text-primary absolute bottom-0 right-0 block bg-gradient-to-r from-transparent via-white via-40% to-white pl-8 hover:underline dark:via-gray-900 dark:to-gray-900 cursor-pointer"
+            className="text-primary absolute right-0 bottom-0 z-1 block cursor-pointer bg-gradient-to-r from-transparent via-white via-40% to-white pl-8 hover:underline dark:via-gray-900 dark:to-gray-900"
             onClick={(e) => {
               e.stopPropagation();
               setExpanding((prev) => !prev);
@@ -67,7 +67,7 @@ export const ExpandableText: React.FC<ExpandableTextProps> = ({
           </button>
         ) : (
           <button
-            className="text-primary ml-0.5 hover:underline cursor-pointer"
+            className="text-primary ml-0.5 cursor-pointer hover:underline"
             onClick={(e) => {
               e.stopPropagation();
               setExpanding((prev) => !prev);

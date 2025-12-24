@@ -47,7 +47,7 @@ export default function UI() {
             value={blur}
             step={0.1}
             onChange={(e) => setBlur(Number(e.target.value))}
-            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+            className="h-2 w-full cursor-pointer appearance-none rounded-lg bg-gray-200 dark:bg-gray-700"
           ></input>
         </div>
 
@@ -71,7 +71,7 @@ export default function UI() {
             value={opacity}
             step={0.1}
             onChange={(e) => setOpacity(Number(e.target.value))}
-            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+            className="h-2 w-full cursor-pointer appearance-none rounded-lg bg-gray-200 dark:bg-gray-700"
           ></input>
         </div>
       </div>

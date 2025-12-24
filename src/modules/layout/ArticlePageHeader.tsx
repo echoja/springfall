@@ -6,16 +6,16 @@ import { ArrowLeft } from "lucide-react";
 
 const ArticlePageHeader = () => {
   return (
-    <header className="relative flex items-center justify-center w-full mb-24 lg:-translate-x-38">
+    <header className="relative mb-24 flex items-center justify-center lg:-mx-38">
       <Link
         href="/"
-        className="absolute left-0 p-2 transition -translate-y-1/2 rounded-sm top-1/2 hover:bg-gray-400/10 hover:opacity-90"
+        className="absolute top-1/2 left-0 -translate-y-1/2 rounded-sm p-2 transition hover:bg-gray-400/10 hover:opacity-90"
         aria-label="글 목록으로 이동"
       >
-        <ArrowLeft className="w-4 h-4" />
+        <ArrowLeft className="h-4 w-4" />
       </Link>
       <div>
-        <h1 className="font-semibold leading-none">
+        <h1 className="leading-none font-semibold">
           <Link className="inline-flex items-center gap-1" href="/">
             <Image
               aria-hidden

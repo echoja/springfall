@@ -150,11 +150,11 @@ export function ShowAllCurrency() {
 
   return (
     <main>
-      <form className="rounded border p-4 flex flex-col gap-4">
+      <form className="flex flex-col gap-4 rounded border p-4">
         <div className="flex gap-2">
           <button
             type="button"
-            className="border rounded py-0.5 px-2 bg-background hover:bg-background-muted transition font-medium"
+            className="bg-background hover:bg-background-muted rounded border px-2 py-0.5 font-medium transition"
             onClick={() =>
               setFormData((prev) => ({
                 ...prev,
@@ -171,7 +171,7 @@ export function ShowAllCurrency() {
 
           <button
             type="button"
-            className="border rounded py-0.5 px-2 bg-background hover:bg-background-muted transition font-medium"
+            className="bg-background hover:bg-background-muted rounded border px-2 py-0.5 font-medium transition"
             onClick={() =>
               setFormData((prev) => ({
                 ...prev,
@@ -188,7 +188,7 @@ export function ShowAllCurrency() {
 
           <button
             type="button"
-            className="border rounded py-0.5 px-2 bg-background hover:bg-background-muted transition font-medium"
+            className="bg-background hover:bg-background-muted rounded border px-2 py-0.5 font-medium transition"
             onClick={() =>
               setFormData((prev) => ({
                 ...prev,
@@ -204,12 +204,12 @@ export function ShowAllCurrency() {
           </button>
         </div>
         <label>
-          <p className="m-0 text-foreground-muted">언어 (Language)</p>
+          <p className="text-foreground-muted m-0">언어 (Language)</p>
           <select
             name="language"
             value={formData.language}
             onChange={handleChange}
-            className="border rounded p-1"
+            className="rounded border p-1"
           >
             <Option id="" name="--" />
             {Object.entries(configs.language).map(([id, name]) => (
@@ -234,12 +234,12 @@ export function ShowAllCurrency() {
         </label> */}
 
         <label>
-          <p className="m-0 text-foreground-muted">지역 (Region)</p>
+          <p className="text-foreground-muted m-0">지역 (Region)</p>
           <select
             name="region"
             value={formData.region}
             onChange={handleChange}
-            className="border rounded p-1"
+            className="rounded border p-1"
           >
             <Option id="" name="--" />
             {Object.entries(configs.region).map(([id, name]) => (
@@ -249,12 +249,12 @@ export function ShowAllCurrency() {
         </label>
 
         <label>
-          <p className="m-0 text-foreground-muted">수를 입력하세용</p>
+          <p className="text-foreground-muted m-0">수를 입력하세용</p>
           <p className="not-md:first:xx"></p>
           <input
             type="number"
             name="number"
-            className="border border-solid rounded p-1"
+            className="rounded border border-solid p-1"
             step="0.01"
             value={formData.number}
             onChange={handleChange}
@@ -267,7 +267,7 @@ export function ShowAllCurrency() {
             name="currency"
             value={formData.currency}
             onChange={handleChange}
-            className="border rounded p-1"
+            className="rounded border p-1"
           >
             <Option id="" name="--" />
             {Object.entries(configs.currency).map(([id, name]) => (
@@ -282,7 +282,7 @@ export function ShowAllCurrency() {
             name="currencyDisplay"
             value={formData.currencyDisplay || ""}
             onChange={handleChange}
-            className="border rounded p-1"
+            className="rounded border p-1"
           >
             <Option id="" name="--" />
             {["symbol", "narrowSymbol", "code", "name"].map((id) => (
@@ -292,10 +292,10 @@ export function ShowAllCurrency() {
         </label>
       </form>
 
-      <div className="bg-background-muted leading-4 p-2 rounded my-4">
-        <pre className="text-sm leading-4 ">{codeStr}</pre>
+      <div className="bg-background-muted my-4 rounded p-2 leading-4">
+        <pre className="text-sm leading-4">{codeStr}</pre>
       </div>
-      <div className="font-bold text-2xl mb-4">
+      <div className="mb-4 text-2xl font-bold">
         <output>{output}</output>
       </div>
       <div>
