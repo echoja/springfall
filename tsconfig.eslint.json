@@ -12,7 +12,8 @@
     "tailwind.config.mjs",
     "next-seo.config.js",
     "eslint.config.mjs",
-    "./mdx-plugins/remark-codehike.mjs"
+    "./mdx-plugins/remark-codehike.mjs",
+    "scripts/**/*.m?[jt]s"
   ],
   "exclude": ["node_modules"]
 }
