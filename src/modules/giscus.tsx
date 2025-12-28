@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 
-import { DEFAULT_GISCUS_REPO, getGiscusRepo } from "@common/config";
+import { getGiscusRepo } from "@common/config";
 
 import { useColorMode } from "./color-mode/color-mode";
 
@@ -13,13 +13,7 @@ const Giscus = () => {
 
   useEffect(() => {
     const repo = getGiscusRepo();
-    if (repo === DEFAULT_GISCUS_REPO) {
-      return;
-    }
-    if (!containerRef.current) {
-      return;
-    }
-    if (loaded.current) {
+    if (!repo || !containerRef.current || loaded.current) {
       return;
     }
 
@@ -30,7 +24,6 @@ const Giscus = () => {
     script.crossOrigin = "anonymous";
     script.setAttribute("data-repo", repo);
     script.setAttribute("data-repo-id", process.env.NEXT_PUBLIC_GISCUS_REPO_ID || "");
-    script.setAttribute("data-category", process.env.NEXT_PUBLIC_GISCUS_CATEGORY || "General");
     script.setAttribute("data-category-id", process.env.NEXT_PUBLIC_GISCUS_CATEGORY_ID || "");
     script.setAttribute("data-mapping", "pathname");
     script.setAttribute("data-strict", "0");

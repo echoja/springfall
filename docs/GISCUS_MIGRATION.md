@@ -35,7 +35,6 @@ Giscus는 Utterances와 유사하지만 GitHub Issues 대신 **GitHub Discussion
 Giscus 설정 페이지에서 다음 정보를 확인합니다:
 - **Repository**: 저장소 이름 (예: `echoja/springfall`)
 - **Repository ID**: 저장소의 고유 ID
-- **Category**: Discussion 카테고리 (예: "General" 또는 "Comments")
 - **Category ID**: 카테고리의 고유 ID
 
 ### 2.3 환경 변수 설정
@@ -45,7 +44,6 @@ Giscus 설정 페이지에서 다음 정보를 확인합니다:
 # Giscus 설정
 NEXT_PUBLIC_GISCUS_REPO=owner/repo
 NEXT_PUBLIC_GISCUS_REPO_ID=your-repo-id
-NEXT_PUBLIC_GISCUS_CATEGORY=General
 NEXT_PUBLIC_GISCUS_CATEGORY_ID=your-category-id
 \`\`\`
 
@@ -172,22 +170,12 @@ pnpm start
 | 댓글 정렬 | 제한적 | 다양한 옵션 |
 | 카테고리 | ❌ | ✅ |
 
-## 9. 주의사항
+## 10. 주의사항
 
 - Giscus를 사용하려면 저장소가 **public**이어야 합니다.
 - 댓글 작성자는 GitHub 계정이 필요합니다.
 - GitHub Discussions가 활성화되어 있어야 합니다.
 - 기존 Issues를 Discussions로 변환하는 작업은 되돌릴 수 없으니 주의하세요.
-
-## 10. 롤백
-
-Giscus가 맞지 않는 경우, 다음 단계로 Utterances로 돌아갈 수 있습니다:
-
-1. `src/modules/giscus.tsx` 임포트를 `src/modules/utterances.tsx`로 되돌립니다.
-2. `.env` 파일에서 Giscus 관련 변수를 제거하고 `NEXT_PUBLIC_UTTERANCES_REPO`를 설정합니다.
-3. 변경사항을 커밋하고 재배포합니다.
-
-**참고**: Discussions로 변환한 댓글은 Issues로 되돌릴 수 없으므로, 마이그레이션 전 백업을 권장합니다.
 
 ## 11. 추가 리소스
 
