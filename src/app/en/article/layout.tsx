@@ -1,5 +1,5 @@
 import ArticlePageHeader from "@modules/layout/ArticlePageHeader";
-import Disqus from "@modules/disqus";
+import Giscus from "@modules/giscus";
 import type { Metadata } from "next";
 import ArticleLayout from "@modules/article/ArticleLayout";
 
@@ -14,7 +14,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <>
       <ArticlePageHeader />
       <ArticleLayout>{children}</ArticleLayout>
-      <Disqus />
+      <Giscus />
     </>
   );
 }
