@@ -1,5 +1,5 @@
 import ArticlePageHeader from "@modules/layout/ArticlePageHeader";
-import Utterances from "@modules/utterances";
+import Disqus from "@modules/disqus";
 import ArticleLayout from "@modules/article/ArticleLayout";
 import type { Metadata } from "next";
 
@@ -14,7 +14,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <>
       <ArticlePageHeader />
       <ArticleLayout>{children}</ArticleLayout>
-      <Utterances />
+      <Disqus />
     </>
   );
 }
