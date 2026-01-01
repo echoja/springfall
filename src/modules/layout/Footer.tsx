@@ -88,7 +88,11 @@ const Footer = () => {
             <span className="sr-only">{text[labelKey]}</span>
           </Link>
         ))}
+        <Link href="/ko/til" className="px-2 text-xs font-bold">
+          TIL
+        </Link>
       </div>
+      <div></div>
       <div>
         <ThemeToggle />
       </div>

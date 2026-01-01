@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import type { ComponentProps } from "react";
+import React, { useEffect, useRef } from "react";
 import { useColorMode } from "./color-mode/color-mode";
 import { useLocale } from "./i18n/useLocale";
 
-const Giscus = () => {
+const Giscus: React.FC<ComponentProps<"div">> = (props) => {
   const { resolved } = useColorMode();
   const loaded = useRef(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -60,7 +61,7 @@ const Giscus = () => {
     }
   }, [resolved, locale]);
 
-  return <div className="lg:-translate-x-38" ref={containerRef} />;
+  return <div {...props} ref={containerRef} />;
 };
 
 export default Giscus;

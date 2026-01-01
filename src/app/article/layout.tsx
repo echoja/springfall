@@ -9,12 +9,13 @@ export const metadata: Metadata = {
   },
 };
 
+// TODO: src/app/[locale]/article/[...slug] 쪽으로 모두 이관
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <ArticlePageHeader />
       <ArticleLayout>{children}</ArticleLayout>
-      <Giscus />
+      <Giscus className="lg:-translate-x-38" />
     </>
   );
 }
