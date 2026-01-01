@@ -1,19 +1,17 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-
-import { getGiscusRepo } from "@common/config";
-
 import { useColorMode } from "./color-mode/color-mode";
+import { useLocale } from "./i18n/useLocale";
 
 const Giscus = () => {
   const { resolved } = useColorMode();
   const loaded = useRef(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const locale = useLocale();
 
   useEffect(() => {
-    const repo = getGiscusRepo();
-    if (!repo || !containerRef.current || loaded.current) {
+    if (!containerRef.current || loaded.current) {
       return;
     }
 
@@ -22,27 +20,21 @@ const Giscus = () => {
     script.src = "https://giscus.app/client.js";
     script.async = true;
     script.crossOrigin = "anonymous";
-    script.setAttribute("data-repo", repo);
-    script.setAttribute(
-      "data-repo-id",
-      process.env.NEXT_PUBLIC_GISCUS_REPO_ID || "",
-    );
-    script.setAttribute(
-      "data-category-id",
-      process.env.NEXT_PUBLIC_GISCUS_CATEGORY_ID || "",
-    );
+    script.setAttribute("data-repo", "echoja/springfall-comments");
+    script.setAttribute("data-repo-id", "R_kgDOIWvdzg");
+    script.setAttribute("data-category-id", "DIC_kwDOIWvdzs4C0ctx");
     script.setAttribute("data-mapping", "pathname");
     script.setAttribute("data-strict", "0");
     script.setAttribute("data-reactions-enabled", "1");
     script.setAttribute("data-emit-metadata", "0");
     script.setAttribute("data-input-position", "bottom");
     script.setAttribute("data-theme", resolved === "dark" ? "dark" : "light");
-    script.setAttribute("data-lang", "ko");
+    script.setAttribute("data-lang", locale);
     script.setAttribute("data-loading", "lazy");
 
     containerRef.current.appendChild(script);
     loaded.current = true;
-  }, [resolved]);
+  }, []);
 
   // Update theme when color mode changes
   useEffect(() => {
@@ -59,13 +51,14 @@ const Giscus = () => {
           giscus: {
             setConfig: {
               theme: resolved === "dark" ? "dark" : "light",
+              lang: locale,
             },
           },
         },
         "https://giscus.app",
       );
     }
-  }, [resolved]);
+  }, [resolved, locale]);
 
   return <div className="lg:-translate-x-38" ref={containerRef} />;
 };
