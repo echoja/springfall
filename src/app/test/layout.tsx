@@ -1,12 +1,12 @@
 import ArticlePageHeader from "@modules/layout/ArticlePageHeader";
-import Utterances from "@modules/utterances";
+import Giscus from "@modules/giscus";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <ArticlePageHeader />
       <article className="mb-20">{children}</article>
-      <Utterances />
+      <Giscus />
     </>
   );
 }
