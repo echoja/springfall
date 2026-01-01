@@ -14,7 +14,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <>
       <ArticlePageHeader />
       <ArticleLayout>{children}</ArticleLayout>
-      <Giscus />
+      <Giscus className="lg:-translate-x-38" />
     </>
   );
 }
