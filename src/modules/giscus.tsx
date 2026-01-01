@@ -23,8 +23,14 @@ const Giscus = () => {
     script.async = true;
     script.crossOrigin = "anonymous";
     script.setAttribute("data-repo", repo);
-    script.setAttribute("data-repo-id", process.env.NEXT_PUBLIC_GISCUS_REPO_ID || "");
-    script.setAttribute("data-category-id", process.env.NEXT_PUBLIC_GISCUS_CATEGORY_ID || "");
+    script.setAttribute(
+      "data-repo-id",
+      process.env.NEXT_PUBLIC_GISCUS_REPO_ID || "",
+    );
+    script.setAttribute(
+      "data-category-id",
+      process.env.NEXT_PUBLIC_GISCUS_CATEGORY_ID || "",
+    );
     script.setAttribute("data-mapping", "pathname");
     script.setAttribute("data-strict", "0");
     script.setAttribute("data-reactions-enabled", "1");
@@ -36,7 +42,7 @@ const Giscus = () => {
 
     containerRef.current.appendChild(script);
     loaded.current = true;
-  }, []);
+  }, [resolved]);
 
   // Update theme when color mode changes
   useEffect(() => {
