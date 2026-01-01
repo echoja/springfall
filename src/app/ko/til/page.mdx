@@ -1,0 +1,45 @@
+import ArticleImage from "@modules/article/ArticleImage";
+
+# TIL
+
+## 목차
+
+## 2026-01-01
+
+- 새해가 밝았다. 오...
+- 내 .zshrc를 분석해서 뭔가 프로그램이 설치되어 있는지 아닌지 확인하는 스크립트를 만들었다. https://github.com/echoja/settings 사족을 왕창 달았다면, 쉘 스크립트로 하는 게 아니라 파이썬으로, uv로, typer로 이용해서 했다는 것. 막 로직적으로 특이한 건 없다. 리스트도 스크립트에 하드코딩 되어 있다. `uv`라는 이름이 뭔가 간지나는 것 같다.
+- *앨저넌에게 꽃을*이라는 책을 읽고 있다. 멍청이 주인공이 무슨 수술을 받아서 시한부 똑똑이가 되는 이야기다. 뭔가 아쉽다. 레파토리는 평범한 듯 하고 주인공은 별로 매력이 없다.
+- 이 블로그에서 Giscus로 옮겼다. 
+- 3가지 키워드를 정했다. **글쓰기**, **방심하지마**, **우직**.
+- 영어 공부를 어떻게 하지? 고민
+- 내일 20:00에 렛커 면접이 있다. 약간 부담이 된다. 나는 작업에 거의 참여하지 않는데 사람을 뽑아야 한다니
+- 하루 동안 한 것만 해도 이렇게 정리할 게 많은데 정리라는 건 정말로 할 수 있는 걸까?
+- 2025년 12월 자산정리 완료
+- GitHub 레포지토리 등을 정리했다. 안쓰는 거는 Public Archive 하고, 남겨놓을 의미가 없는 건 삭제했다. 가능하면 renovate는 1달에 한번으로 주기를 늘렸다. 이제 메일이나 읽어야지...
+
+### BuildTalk
+
+[BuildTalk](https://buildtalk.info/) 에 문제가 생겼었다. 너네 Droplet에서 비정상적인 네트워크 트래픽이 발생했고 아마 해킹 당한거 같다. Droplet 싹 지우고 키 같은거 바꿔라. 라더라.
+
+```text
+Following up on ticket 500QP00001BZLtyYAH, we are writing to let you know that your Droplet worker-pool-6hu4o at 165.22.62.121 has continued to contribute to a Distributed Denial of Service attack. To reduce further harm, we have taken action to block the outbound flooding activity from your Droplet.
+
+Details of the Attack:-
+Source IP:- 165.22.62.121
+Total traffic used in attack:-  2,412,164 pps
+worker-pool-6hu4o contribution in attack:-  33,518 pps
+Target of attack:- 185.121.226.110
+Total Number of Droplets involved:- 32
+```
+
+진짜 확인해보니 문제가 있긴 하더만. 네트워크 요청과 별개로 최근 2주간 CPU 100% 찍혀있는 게 엄청 많았다.
+
+이제는 아래 이미지처럼 정상이다.
+
+import i260101_1 from "./2026-01-01-1.png";
+
+<ArticleImage img={i260101_1} alt="" />
+
+원인은 [React2Shell](https://vercel.com/kb/bulletin/react2shell) 취약점 때문인 것 같다. 유출될 만한 키가 없는데 (DOKS로 배포하고 있고 거기에서 쓰는 키는 생성한 적도 없고 써본 적도 없다) Droplet이 개떡처럼 동작한다니. 누가 원격 코드를 어떻게 잘 우회해서 실행한 걸로밖에 보이지 않는다. Sentry에서 뭔가 [의심스러운 POST](https://build-talk-co-ltd.sentry.io/issues/7157194655/) 요청이 오긴 했는데 그게 이건지는 확인하지 않았다.
+
+
