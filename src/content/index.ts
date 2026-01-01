@@ -41,7 +41,7 @@ export function getContentItem(
   };
 }
 
-export function getContentListItem(entry: ContentEntry): ArticleItem {
+function getContentListItem(entry: ContentEntry): ArticleItem {
   const locale = i18n.defaultLocale;
   const title = entry.title[locale] ?? entry.title[i18n.defaultLocale];
   const summary = entry.summary[locale] ?? entry.summary[i18n.defaultLocale];

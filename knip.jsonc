@@ -3,7 +3,7 @@
   "rules": {
     "types": "warn"
   },
-  "ignoreDependencies": ["server-only", "prettier-plugin-tailwindcss"],
+  "ignoreDependencies": ["server-only"],
   "ignore": [
     "mdx-plugins/remark-codehike.mjs",
     "src/app/**/article/**/metadata*.tsx",

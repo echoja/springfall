@@ -10,7 +10,7 @@ import {
   getContentEntry,
   getContentItem,
   getContentMdx,
-} from "content";
+} from "@/content";
 import { isLocale } from "@modules/i18n/util";
 
 interface IPageParams {
