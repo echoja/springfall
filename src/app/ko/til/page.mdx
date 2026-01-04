@@ -8,13 +8,54 @@ import ArticleImage from "@modules/article/ArticleImage";
 
 ## 2026-01-04 (일)
 
-즌비중
+- K 모임: 다들 여전함. 넘쳐나는 혜택 정보에 머리가 어질어질하다. 일단 신용카드부터 만들어야지. (신한카드 hi point) 카카오페이에서 해당 카드사에 카드 처음 만들면 리워드 준단다. 굿. 헤엄은 카드 발급 이벤트 빠삭한 유튜브를 추천해줬다. (https://youtu.be/9VKR8chAiJg?si=YyErKKZAMFXQz55M)
+- 점심으로 중화객잔수 먹었다. 중국집. 짬뽕, 탕수육, 볶음밥, 간짜장 모두 맛있었다. 근본이 있는 집이다.
+- 토플 공부는 꽤 빡셀 예정이다. 조지아 테크를 위한 토플 공부이다. 이거 참 난이도가 장난이 아니네. 무빙 준비랑 함께 진행할 수 있을지 모르겠다. 해커스에서 구유형 프로모션이 오늘까지 진행하길래 내일부터 신유형 프로모션이 진행된다는 걸로 추정된다. 내일 다시 보고 동스리가 연락준단다.
+- direnv는 multi-line env variables를 지원하지 않는다 (https://github.com/direnv/direnv/issues/1028)
+- `codex` 명령어 옵션 세팅하기 힘들다... 왜이렇게 세팅이 꽁꽁 숨겨져있냐. 아마 계속 빠르게 변해서 정리가 잘 안되나보다. (https://developers.openai.com/codex/config-reference)
+- OneSignal 이라는 좋은 서비스가 있네. 모바일 푸시 알림이 무제한이고 월 10,000개의 무료 이메일 보낼 수 있다고? 진짜로? 당장 빌드톡 이걸로 바꾼다.
+- DigitalOcean 에서 alert 추가하는 건 공짜라고 한다... 굿. https://github.com/buildtalkk/infra/commit/554a0285e7f5edabab37b265c9beba5a3cd83af0 
+
+```
+# Monitoring alerts
+resource "digitalocean_monitor_alert" "k8s_node_cpu_80" {
+  alerts {
+    slack {
+      channel = "#알림-배포-인프라"
+      url     = "https://hooks.slack.com/services/..."
+    }
+  }
+
+  description = "buildtalk k8s node CPU > 80%"
+  type        = "v1/insights/droplet/cpu"
+  compare     = "GreaterThan"
+  value       = 80
+  window      = "5m"
+  enabled     = true
+  tags        = ["buildtalk-k8s-node"]
+}
+```
+
+- 아니 근데 OneSignal 사전 승인 절차 귀찮네...
+- 여러모로 english-punch를 실제로 출시하고 싶다. 그렇게 하기 위해선 글로벌하게 해야 한다. **한국어, 영어, 일본어**를 모두 지원하자. 그래서 english-punch react-i18n 으로 번역해달라고 하니까 43m 21s 나 걸렸다. 왠지 오래 걸려서 그만큼 신뢰가 있네... 좀 복잡하긴 하지. 코드 리뷰를 열심히 하진 않겠다.
+- 이번 주말, 글도 써야 하고, 무빙 준비도 하고, 아사나 정리, 렛커 SEO 정리 등도 하지 못했다. english-punch 만 거의 주구장창 만졌다. 만지는 게 재밌긴 하지만 인생은 재미로만 살면 안되는데... 흑흑...
+- GitHub 이슈를 만들어서 copilot에게 시키는 건 생각보다 효율이 안나온다. 찐빠가 약간 나기도 하고 결국 내가 직접 잘 돌아가는지 체크해야 한다. 풀리퀘 왔다갔다 하는 것도 귀찮다. 그런데 이슈를 만드는 방식은 좋다. 왜냐하면 어떤 작업의 정의가 남기 때문이다. 단순히 codex에게 일을 시킨다면 그 프롬프트는 남지가 않는데, 이슈를 prompt로서 사용한다면 그 기록이 남으니 여러모로 유용하다. 하여튼 copilot이 풀리퀘를 만드는 방식은 어차피 직접 확인해야 해서 불편하고, 하지만 이슈는 기록이 남는다는 이점이 있기 때문에, 일단 **이슈를 만든 다음 codex-cli에 GitHub MCP 기능을 붙여서 해당 이슈를 해결해달라는 방식**으로 진행하니까 좀 좋다. 커밋에 이슈 번호를 언급을 하면 Fixes 로 뜨면서 해당 커밋을 메인에 올리면 자동으로 이슈가 close 되니까 이슈 관리도 편하다. 이거 회사 업무에도 활용한다고 하면, 아사나 MCP를 codex-cli에 붙여서 하는 것도 좋은 아이디어일 것 같다.
+
+import i260104_1 from "./2026-01-04-1.png";
+
+<ArticleImage img={i260104_1} alt="" />
+
+- 영어 단어장 단어 개수가 150개를 넘었다. 영단어 공부에 집중이 좀 잘 되는 것 같기도 하다. 시간만 잘 가고 효율이 안나는 것일 수도 있다. 방심하지 말자. 
+- english-punch 삭제하면 바로 hard delete 가 되어 버려서 좀 무섭다. 이거 빠르게 수정해야겠다.
+
 
 ## 2026-01-03 (토)
 
-- [파머스카페] 용님이 백엔드 과제전형에 대해서 설명해주었다. 역시 빡세보인다. 나에게 이직이란 도대체 시간이 얼마나 걸릴까? 초연해진 채로 꾸준히 하는 수밖에 없다.
+- 세끼김밥에서 떡국 먹었다. 아주 든든든든 해지는 기분이다. 포만감 MAX
+- [파머스카페] 용님이 백엔드 과제전형에 대해서 설명해주었다. 역시 빡세보인다. 나에게 무빙이란 도대체 시간이 얼마나 걸릴까? 초연해진 채로 꾸준히 하는 수밖에 없다.
 - english-punch 를 개선하면서 영어 공부에 대해 얕게 생각했다. 개선하면서 [issue](https://github.com/englishpunch/english-punch-app/issues/3)를 영어로 쓰고 Copilot에게 도움을 받고 하니 시간이 배로 걸린다. Should I really write this TIL in English? Let's go! No pain, no gain. Um... 그래도 한글을 조금 더 사랑하자. How about 한글 70%, English 30%?
 - english-punch convex 업데이트했다람쥐 (https://news.convex.dev/db-table-name/) 계속해서 english-punch를 업데이트하고 싶은 욕망이 많이 든다.
+- 소화 산책을 한답시고 뚝섬으로부터 성수까지 좀 걸었는데 사람이 점점점점 많아졌다. 마르헨제이 팝업스토어도 봤는데 엄청 잘 나가는 걸 보니까 신기했담.
 - 노션에서 경력기술서를 살짝 업데이트했다. 기여도를 넣어야 할까? 그런데 업데이트 시간이 어마어마하게 걸린다. 겨우 몇줄 하는 데 몇시간을 쓴다. 이거 가망이 있나? 좀 더 통합을 해봐야겠다...
 - codex에게 rrweb 설명 하랬더니 너무 산만해서 이거 참 AI로 경력기술서 작성하기 어렵다. 아직 효율적인 루틴을 찾지 못했다.
 
