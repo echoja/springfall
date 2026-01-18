@@ -98,7 +98,7 @@ export const Tester: React.FC = () => {
 
   return (
     <div className="space-y-4">
-      <div className="rounded-large border border-transparent shadow-small dark:border-gray-600">
+      <div className="rounded-large shadow-small border border-transparent dark:border-gray-600">
         <div className="flex items-center justify-between gap-4 px-4 pt-4">
           <h3 className="font-medium">립스틱 배너 조건 설정 (AND)</h3>
           <div className="flex gap-2">
@@ -171,7 +171,10 @@ export const Tester: React.FC = () => {
                             value={target.operator}
                             onChange={(value) => {
                               const newTargets = [...targets];
-                              newTargets[index] = { ...target, operator: value };
+                              newTargets[index] = {
+                                ...target,
+                                operator: value,
+                              };
                               setTargets(newTargets);
                             }}
                           />{" "}
@@ -225,7 +228,7 @@ export const Tester: React.FC = () => {
           <pre className="text-xs">{JSON.stringify(root, null, 2)}</pre>
         </div>
         <div>
-          <div className="mb-4 rounded-large border border-transparent shadow-small dark:border-gray-600">
+          <div className="rounded-large shadow-small mb-4 border border-transparent dark:border-gray-600">
             <div className="px-4 pt-4">
               <h3 className="font-medium">방문자</h3>
             </div>
