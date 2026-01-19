@@ -41,7 +41,7 @@ export default function ArticleHeader({
     if (available.length >= 2) {
       languageLinks = available.map((l) => ({
         locale: l,
-        href: `/set-locale?locale=${l}&to=/${l}/${slug}`,
+        href: `/${l}/${slug}`,
       }));
     }
   } catch {

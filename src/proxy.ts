@@ -40,7 +40,6 @@ export default function proxy(req: NextRequest) {
     pathname.startsWith("/_next") ||
     pathname.match(/\.[^/]+$/) ||
     seg1 === "api" ||
-    seg1 === "set-locale" ||
     (i18n.locales as readonly string[]).includes(seg1)
   ) {
     return NextResponse.next();
