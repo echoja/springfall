@@ -6,6 +6,10 @@ export const metadata: Metadata = {
   other: {
     "page-type": "til",
   },
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {
