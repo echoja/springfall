@@ -22,6 +22,11 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     creator: "@springfall_cc",
   },
+  alternates: {
+    types: {
+      "application/rss+xml": "/feed.xml",
+    },
+  },
   other: {
     "naver-site-verification": "392b57225ecb015316d43c362eb6871db10ff17f",
   },
